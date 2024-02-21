@@ -1,0 +1,25 @@
+#ifndef _XMLUTIL_H
+#define _XMLUTIL_H
+
+#include "core/simplexml.h"
+
+class XmlUtil
+{
+public:
+    static XmlElement *GetFirstElement(XmlElement *e);
+    static XmlElement *GetFirstElement(XmlElement *e, const char *name);
+    static XmlElement *GetFirstElementWithKeyValue(XmlElement *e, const char *name, const char *key, const char *value);
+
+    static const char *GetAttributeValue(XmlElement *xml, const char *key, const char *defaultValue = 0);
+    static const char *GetExpectedAttributeValue(XmlElement *xml, const char *name);
+    static const char *GetText(XmlElement *xml);
+
+    static bool        GetBool(XmlElement *xml, const char *name);
+    static bool        GetBool(XmlElement *xml, const char *name, bool defaultValue);
+    static int         GetInt(XmlElement *xml, const char *name);
+    static int         GetInt(XmlElement *xml, const char *name, int defaultValue);
+    static float       GetFloat(XmlElement *xml, const char *name);
+    static float       GetFloat(XmlElement *xml, const char *name, float defaultValue);
+};
+
+#endif // _XMLUTIL_H

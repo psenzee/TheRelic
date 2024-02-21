@@ -1,0 +1,54 @@
+#ifndef _GENERATEDROLEPLAYER_H
+#define _GENERATEDROLEPLAYER_H
+
+#include "core/core.h"
+#include "core/random.h"
+#include "game/IBehavior.h"
+#include "game/IRolePlayer.h"
+
+class GeneratedRolePlayer : public AbstractBehavior, public IRolePlayer
+{
+public:
+
+    CLASS_NEW_DELETE()
+
+    enum { TYPE = 1010 };
+
+    GeneratedRolePlayer(int seed) : AbstractBehavior(TYPE), mSeed(seed), mRandom(seed) {}
+
+    void     Start(Character *self);
+    void     Update(const GameTime &time)  {}
+        
+    void     SetStrength  (unsigned value) {} // no-op
+    void     SetDexterity (unsigned value) {} // no-op
+    void     SetVitality  (unsigned value) {} // no-op
+    void     SetEnergy    (unsigned value) {} // no-op
+
+    void     SetLuck      (float value)    {} // no-op
+    
+    unsigned GetStrength()    const;
+    unsigned GetDexterity()   const;
+    unsigned GetVitality()    const;
+    unsigned GetEnergy()      const;
+
+    float    GetLuck()        const;
+
+    float    GetClassBonus()  const;
+    float    GetRatingBonus() const;
+
+    core::Random &GetRandom() { return mRandom; }
+
+    void     Serialize(IOutStream &s) const
+    {
+        // $TODO
+    }
+
+    static IBehavior *Deserialize(IInStream &s);
+
+private:
+
+    int mSeed;
+    core::Random mRandom;
+};
+
+#endif // _GENERATEDROLEPLAYER_H

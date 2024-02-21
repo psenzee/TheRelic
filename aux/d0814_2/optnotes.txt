@@ -1,0 +1,29 @@
+// possible performance problem areas
+
+Find 'std::' in 'C:\root\d0814_2\render\QuadRenderer.cpp':
+C:\root\d0814_2\render\QuadRenderer.cpp(13):     for (std::map<std::string, ScreenQuadToRender>::iterator i = quads.begin(), e = quads.end(); i != e; ++i)
+Find 'std::' in 'C:\root\d0814_2\render\QuadRenderer.h':
+C:\root\d0814_2\render\QuadRenderer.h(59):     std::map<std::string, ScreenQuadToRender> quads;
+
+C:\root\d0814_2\luautil\LuaThread.cpp(179):     std::string keyString(key.ToString(mState));
+C:\root\d0814_2\core\simplexml.cpp <- probably slow
+Find 'std::' in 'C:\root\d0814_2\core\Profiler.h':
+C:\root\d0814_2\game\LuaFunctions.cpp(850):     const std::string &s = sync->NextLuaMessage();
+C:\root\d0814_2\game\Sync.h(112):     std::deque<std::string>         mLuaMessages;
+C:\root\d0814_2\gamecore\CorePropertySet.cpp(15):     std::map<std::string, std::string>::const_iterator i = mProperties.find(key), e = mProperties.end();
+C:\root\d0814_2\gamecore\CorePropertySet.h(28):     std::map<std::string, std::string> mProperties;
+C:\root\d0814_2\level\Level.h(95):     std::map<std::string, Items> namedItems;
+C:\root\d0814_2\map\MapDescription.cpp(5): bool ReadMapDescription(XmlElement *xml, std::vector<MapDescription> &maps)
+C:\root\d0814_2\map\ObjectTileSet.cpp(62):     for (std::map<std::string, IGameObject *>::iterator i = context->objects.begin(), e = context->objects.end(); i != e; ++i)
+Find 'std::' in 'C:\root\d0814_2\map\MapDescription.h':
+Find 'std::' in 'C:\root\d0814_2\platform\Apple\Audio.cpp':
+C:\root\d0814_2\platform\Apple\Audio.cpp(48):     std::string sn(sourcename);
+C:\root\d0814_2\platform\Apple\Audio.cpp(78):     std::string sn(sourcename);
+C:\root\d0814_2\platform\Apple\Audio.cpp(185):     buffers[std::string(soundname)] = buffer;
+
+Find 'std::' in 'C:\root\d0814_2\xml\XmlReadContext.h':
+C:\root\d0814_2\xml\XmlReadContext.h(25):     std::map<std::string, Event       *>  events;
+C:\root\d0814_2\xml\XmlReadContext.h(26):     std::map<std::string, Texture     *>  textures;
+C:\root\d0814_2\xml\XmlReadContext.h(27):     std::map<std::string, ICollidable *>  colliders;
+C:\root\d0814_2\xml\XmlReadContext.h(28):     std::map<std::string, IGameObject *>  objects;
+C:\root\d0814_2\xml\XmlReadContext.h(29):     std::set<XmlElement *>                xml;

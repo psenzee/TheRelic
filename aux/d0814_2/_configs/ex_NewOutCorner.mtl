@@ -1,0 +1,13 @@
+# Blender3D MTL File: dun_1123_template.blend
+# Material Count: 1
+newmtl ice.001_Tile41.png
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.168812 0.212422 0.229195
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd Tile41.png
+
+

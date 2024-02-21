@@ -1,0 +1,3 @@
+Exception code: DLL Not Found
+Function: EtwLogTraceEvent ?
+Function: LdrInitializeThunk ?

@@ -1,0 +1,23 @@
+# Blender3D MTL File: dun_0830_doorway.blend
+# Material Count: 2
+newmtl Leather_Gate.png
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.115556 0.115556 0.115556
+Ks 0.859231 0.859231 0.859231
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd Gate.png
+
+
+newmtl Leather
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.115556 0.115556 0.115556
+Ks 0.859231 0.859231 0.859231
+Ni 1.000000
+d 1.000000
+illum 2
+
+

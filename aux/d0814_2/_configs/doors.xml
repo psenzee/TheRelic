@@ -1,0 +1,380 @@
+<objects>
+
+  <object name="Door0BlackLock" >
+    <mesh file="DoorMessage1~0" transparent="true" depth-write="false" color="0 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorMessage2~0" transparent="true" depth-write="false" color="0 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorLock~0"><texture file="DoorLockPlain" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide1F0~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide2F0~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+  </object>
+
+  <object name="Door0RedLockF0" >
+    <mesh file="DoorMessage1~0" transparent="true" depth-write="false" color="1 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorMessage2~0" transparent="true" depth-write="false" color="1 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorLock~0"><texture file="DoorLockPlain" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide1F0~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide2F0~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+  </object>
+  <object name="Door0RedLockF1" >
+    <mesh file="DoorMessage1~0" transparent="true" depth-write="false" color="0.88 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorMessage2~0" transparent="true" depth-write="false" color="0.88 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorLock~0"><texture file="DoorLockPlain" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide1F0~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide2F0~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+  </object>  
+  <object name="Door0RedLockF2" >
+    <mesh file="DoorMessage1~0" transparent="true" depth-write="false" color="0.75 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorMessage2~0" transparent="true" depth-write="false" color="0.75 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorLock~0"><texture file="DoorLockPlain" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide1F0~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide2F0~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+  </object>
+  <object name="Door0RedLockF3" >
+    <mesh file="DoorMessage1~0" transparent="true" depth-write="false" color="0.63 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorMessage2~0" transparent="true" depth-write="false" color="0.63 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorLock~0"><texture file="DoorLockPlain" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide1F0~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide2F0~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+  </object>
+  <object name="Door0RedLockF4" >
+    <mesh file="DoorMessage1~0" transparent="true" depth-write="false" color="0.5 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorMessage2~0" transparent="true" depth-write="false" color="0.5 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorLock~0"><texture file="DoorLockPlain" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide1F0~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide2F0~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+  </object>
+  <object name="Door0RedLockF5" >
+    <mesh file="DoorMessage1~0" transparent="true" depth-write="false" color="0.38 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorMessage2~0" transparent="true" depth-write="false" color="0.38 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorLock~0"><texture file="DoorLockPlain" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide1F0~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide2F0~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+  </object>
+  <object name="Door0RedLockF6" >
+    <mesh file="DoorMessage1~0" transparent="true" depth-write="false" color="0.25 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorMessage2~0" transparent="true" depth-write="false" color="0.25 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorLock~0"><texture file="DoorLockPlain" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide1F0~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide2F0~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+  </object>
+  <object name="Door0RedLockF7" >
+    <mesh file="DoorMessage1~0" transparent="true" depth-write="false" color="0.13 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorMessage2~0" transparent="true" depth-write="false" color="0.13 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorLock~0"><texture file="DoorLockPlain" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide1F0~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide2F0~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+  </object>  
+  <object name="Door0RedLockF8" >
+    <mesh file="DoorMessage1~0" transparent="true" depth-write="false" color="0 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorMessage2~0" transparent="true" depth-write="false" color="0 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorLock~0"><texture file="DoorLockPlain" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide1F0~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide2F0~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+  </object>
+  
+  <object name="Door0BlueLockF0" >
+    <mesh file="DoorMessage1~0" transparent="true" depth-write="false" color="0 0 1 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorMessage2~0" transparent="true" depth-write="false" color="0 0 1 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>    
+    <mesh file="DoorLock~0"><texture file="DoorLockPlain" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide1F0~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide2F0~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+  </object>
+  <object name="Door0BlueLockF1" >
+    <mesh file="DoorMessage1~0" transparent="true" depth-write="false" color="0 0 0.88 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorMessage2~0" transparent="true" depth-write="false" color="0 0 0.88 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorLock~0"><texture file="DoorLockPlain" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide1F0~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide2F0~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+  </object>  
+  <object name="Door0BlueLockF2" >
+    <mesh file="DoorMessage1~0" transparent="true" depth-write="false" color="0 0 0.75 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorMessage2~0" transparent="true" depth-write="false" color="0 0 0.75 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorLock~0"><texture file="DoorLockPlain" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide1F0~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide2F0~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+  </object>
+  <object name="Door0BlueLockF3" >
+    <mesh file="DoorMessage1~0" transparent="true" depth-write="false" color="0 0 0.63 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorMessage2~0" transparent="true" depth-write="false" color="0 0 0.63 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorLock~0"><texture file="DoorLockPlain" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide1F0~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide2F0~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+  </object>
+  <object name="Door0BlueLockF4" >
+    <mesh file="DoorMessage1~0" transparent="true" depth-write="false" color="0 0 0.5 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorMessage2~0" transparent="true" depth-write="false" color="0 0 0.5 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorLock~0"><texture file="DoorLockPlain" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide1F0~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide2F0~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+  </object>
+  <object name="Door0BlueLockF5" >
+    <mesh file="DoorMessage1~0" transparent="true" depth-write="false" color="0 0 0.38 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorMessage2~0" transparent="true" depth-write="false" color="0 0 0.38 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorLock~0"><texture file="DoorLockPlain" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide1F0~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide2F0~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+  </object>
+  <object name="Door0BlueLockF6" >
+    <mesh file="DoorMessage1~0" transparent="true" depth-write="false" color="0 0 0.25 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorMessage2~0" transparent="true" depth-write="false" color="0 0 0.25 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorLock~0"><texture file="DoorLockPlain" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide1F0~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide2F0~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+  </object>
+  <object name="Door0BlueLockF7" >
+    <mesh file="DoorMessage1~0" transparent="true" depth-write="false" color="0 0 0.13 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorMessage2~0" transparent="true" depth-write="false" color="0 0 0.13 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorLock~0"><texture file="DoorLockPlain" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide1F0~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide2F0~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+  </object>  
+  <object name="Door0BlueLockF8" >
+    <mesh file="DoorMessage1~0" transparent="true" depth-write="false" color="0 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorMessage2~0" transparent="true" depth-write="false" color="0 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorLock~0"><texture file="DoorLockPlain" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide1F0~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide2F0~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+  </object>  
+  
+  <object name="Door0BlackUnlock" >
+    <mesh file="DoorMessage1~0" transparent="true" depth-write="false" color="0 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorMessage2~0" transparent="true" depth-write="false" color="0 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>  
+    <mesh file="DoorSide1F0~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide2F0~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+  </object>
+
+  <object name="Door0BlackUnlockTriggerClosed" >
+    <mesh file="DoorMessage1~0" transparent="true" depth-write="false" color="0 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorMessage2~0" transparent="true" depth-write="false" color="0 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide1F0~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide2F0~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <event>GoTo "Closed"</event>
+  </object>
+  
+  <object name="Door0BlackUnlockTriggerLocked" >
+    <mesh file="DoorMessage1~0" transparent="true" depth-write="false" color="0 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorMessage2~0" transparent="true" depth-write="false" color="0 0 0 1"><texture file="SeekerBewareWhite" blend-destination="ONE_MINUS_SRC_ALPHA" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide1F0~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide2F0~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <event>GoTo "Locked"</event>
+  </object>  
+  
+  <object name="Door1Lock" ><mesh file="DoorLock~0"><texture file="DoorLockPlain" /></mesh><mesh file="DoorSide1F1~0"><texture file="DoorSide1" /></mesh><mesh file="DoorSide2F1~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh></object>
+  <object name="Door2Lock" ><mesh file="DoorLock~0"><texture file="DoorLockPlain" /></mesh><mesh file="DoorSide1F2~0"><texture file="DoorSide1" /></mesh><mesh file="DoorSide2F2~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh></object>
+  
+  <object name="Door1" ><mesh file="DoorSide1F1~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh><mesh file="DoorSide2F1~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh></object>
+  <object name="Door2" ><mesh file="DoorSide1F2~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh><mesh file="DoorSide2F2~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh></object>  
+  <object name="Door3" ><mesh file="DoorSide1F3~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh><mesh file="DoorSide2F3~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh></object>
+  <object name="Door4" ><mesh file="DoorSide1F4~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh><mesh file="DoorSide2F4~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh></object>
+  <object name="Door5" ><mesh file="DoorSide1F5~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh><mesh file="DoorSide2F5~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh></object>
+  <object name="Door6" ><mesh file="DoorSide1F6~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh><mesh file="DoorSide2F6~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh></object>
+  <object name="Door7" ><mesh file="DoorSide1F7~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh><mesh file="DoorSide2F7~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh></object>
+  <object name="Door8" ><mesh file="DoorSide1F8~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh><mesh file="DoorSide2F8~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh></object>
+  <object name="Door9" ><mesh file="DoorSide1F9~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh><mesh file="DoorSide2F9~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh></object>
+  <object name="Door10"><mesh file="DoorSide1F10~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh><mesh file="DoorSide2F10~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh></object>
+
+  <object name="Door10TriggerOpen">
+    <mesh file="DoorSide1F10~0"><texture file="DoorSide1" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <mesh file="DoorSide2F10~0"><texture file="DoorSide2" /><transform><scale x="1" y="1" z="1.5" /></transform></mesh>
+    <event>GoTo "Open"</event>
+  </object>
+
+  <list name="RedDoor.Closed">
+    <object refers="Door0BlackUnlock" />
+  </list>
+  <list name="RedDoor.Locked">
+    <event>$Reset</event>
+    <event>$FrameTime 160</event>
+    <object refers="Door0RedLockF0" />
+    <object refers="Door0RedLockF1" />      
+    <object refers="Door0RedLockF2" />
+    <object refers="Door0RedLockF3" />       
+    <object refers="Door0RedLockF4" />
+    <object refers="Door0RedLockF5" />    
+    <object refers="Door0RedLockF6" />        
+    <object refers="Door0RedLockF7" />            
+    <object refers="Door0RedLockF8" />
+    <object refers="Door0RedLockF7" />                
+    <object refers="Door0RedLockF6" />            
+    <object refers="Door0RedLockF5" />        
+    <object refers="Door0RedLockF4" />    
+    <object refers="Door0RedLockF3" />           
+    <object refers="Door0RedLockF2" />    
+    <object refers="Door0RedLockF1" />    
+  </list>  
+  <list name="RedDoor.Open">
+    <object refers="Door10" />
+  </list>
+  <list name="RedDoor.DoOpen">
+    <object refers="Door0BlackUnlock" />
+    <object refers="Door1Lock" />
+    <object refers="Door2Lock" />
+    <object refers="Door3" />
+    <object refers="Door4" />
+    <object refers="Door5" />
+    <object refers="Door6" />
+    <object refers="Door7" />
+    <object refers="Door8" />
+    <object refers="Door9" />
+    <object refers="Door10TriggerOpen" />
+  </list>
+  <list name="RedDoor.DoOpenFail">
+    <event>$FrameTime 60</event>
+    <object refers="Door0BlackUnlock" />
+    <object refers="Door1Lock" />
+    <object refers="Door2Lock" />
+    <object refers="Door1Lock" />    
+    <object refers="Door0BlackUnlock" />    
+    <object refers="Door1Lock" />
+    <object refers="Door2Lock" />
+    <object refers="Door1Lock" />
+    <object refers="Door0BlackUnlockTriggerLocked" />
+  </list>  
+  <list name="RedDoor.DoClose">
+    <object refers="Door10" />  
+    <object refers="Door9" />
+    <object refers="Door8" />
+    <object refers="Door7" />
+    <object refers="Door6" />
+    <object refers="Door5" />
+    <object refers="Door4" />
+    <object refers="Door3" />
+    <object refers="Door2Lock" />
+    <object refers="Door1Lock" />
+    <object refers="Door0BlackUnlockTriggerClosed" />    
+  </list>
+
+  <list name="BlueDoor.Closed">
+    <object refers="Door0BlackUnlock" />
+  </list>
+  <list name="BlueDoor.Locked">
+    <event>$Reset</event>  
+    <event>$FrameTime 160</event>  
+    <object refers="Door0BlueLockF0" />
+    <object refers="Door0BlueLockF1" />      
+    <object refers="Door0BlueLockF2" />
+    <object refers="Door0BlueLockF3" />       
+    <object refers="Door0BlueLockF4" />
+    <object refers="Door0BlueLockF5" />    
+    <object refers="Door0BlueLockF6" />        
+    <object refers="Door0BlueLockF7" />            
+    <object refers="Door0BlueLockF8" />                
+    <object refers="Door0BlueLockF7" />                
+    <object refers="Door0BlueLockF6" />            
+    <object refers="Door0BlueLockF5" />        
+    <object refers="Door0BlueLockF4" />    
+    <object refers="Door0BlueLockF3" />           
+    <object refers="Door0BlueLockF2" />    
+    <object refers="Door0BlueLockF1" />    
+  </list>  
+  <list name="BlueDoor.Open">
+    <object refers="Door10" />
+  </list>
+  <list name="BlueDoor.DoOpen">
+    <object refers="Door0BlackUnlock" />
+    <object refers="Door1Lock" />
+    <object refers="Door2Lock" />
+    <object refers="Door3" />
+    <object refers="Door4" />
+    <object refers="Door5" />
+    <object refers="Door6" />
+    <object refers="Door7" />
+    <object refers="Door8" />
+    <object refers="Door9" />
+    <object refers="Door10TriggerOpen" />    
+  </list>
+  <list name="BlueDoor.DoOpenFail">
+    <event>$FrameTime 60</event>
+    <object refers="Door0BlackUnlock" />
+    <object refers="Door1Lock" />
+    <object refers="Door2Lock" />
+    <object refers="Door1Lock" />    
+    <object refers="Door0BlackUnlock" />    
+    <object refers="Door1Lock" />
+    <object refers="Door2Lock" />
+    <object refers="Door1Lock" />
+    <object refers="Door0BlackUnlockTriggerLocked" />
+  </list>    
+  <list name="BlueDoor.DoClose">
+    <object refers="Door10" />  
+    <object refers="Door9" />
+    <object refers="Door8" />
+    <object refers="Door7" />
+    <object refers="Door6" />
+    <object refers="Door5" />
+    <object refers="Door4" />
+    <object refers="Door3" />
+    <object refers="Door2Lock" />
+    <object refers="Door1Lock" />
+    <object refers="Door0BlackUnlockTriggerClosed" />
+  </list>
+  
+  <list name="WhiteDoor.Closed">
+    <object refers="Door0BlackUnlock" />
+  </list>
+  <list name="WhiteDoor.Locked">
+    <event>$Reset</event>
+    <event>$FrameTime 160</event>
+    <object refers="Door0BlackLock" />
+    <!--
+    <object refers="Door0WhiteLockF0" />
+    <object refers="Door0WhiteLockF1" />
+    <object refers="Door0WhiteLockF2" />
+    <object refers="Door0WhiteLockF3" />
+    <object refers="Door0WhiteLockF4" />
+    <object refers="Door0WhiteLockF5" />
+    <object refers="Door0WhiteLockF6" />
+    <object refers="Door0WhiteLockF7" />
+    <object refers="Door0WhiteLockF8" />
+    <object refers="Door0WhiteLockF7" />
+    <object refers="Door0WhiteLockF6" />
+    <object refers="Door0WhiteLockF5" />
+    <object refers="Door0WhiteLockF4" />
+    <object refers="Door0WhiteLockF3" />
+    <object refers="Door0WhiteLockF2" />
+    <object refers="Door0WhiteLockF1" />
+    -->
+  </list>  
+  <list name="WhiteDoor.Open">
+    <object refers="Door10" />
+  </list>
+  <list name="WhiteDoor.DoOpen">
+    <object refers="Door0BlackUnlock" />
+    <object refers="Door1Lock" />
+    <object refers="Door2Lock" />
+    <object refers="Door3" />
+    <object refers="Door4" />
+    <object refers="Door5" />
+    <object refers="Door6" />
+    <object refers="Door7" />
+    <object refers="Door8" />
+    <object refers="Door9" />
+    <object refers="Door10TriggerOpen" />
+  </list>
+  <list name="WhiteDoor.DoOpenFail">
+    <event>$FrameTime 60</event>
+    <object refers="Door0BlackUnlock" />
+    <object refers="Door1Lock" />
+    <object refers="Door2Lock" />
+    <object refers="Door1Lock" />    
+    <object refers="Door0BlackUnlock" />    
+    <object refers="Door1Lock" />
+    <object refers="Door2Lock" />
+    <object refers="Door1Lock" />
+    <object refers="Door0BlackUnlockTriggerLocked" />
+  </list>      
+  <list name="WhiteDoor.DoClose">
+    <object refers="Door10" />  
+    <object refers="Door9" />
+    <object refers="Door8" />
+    <object refers="Door7" />
+    <object refers="Door6" />
+    <object refers="Door5" />
+    <object refers="Door4" />
+    <object refers="Door3" />
+    <object refers="Door2Lock" />
+    <object refers="Door1Lock" />
+    <object refers="Door0BlackUnlockTriggerClosed" />
+  </list>  
+  
+</objects>

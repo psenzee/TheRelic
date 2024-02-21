@@ -1,0 +1,1 @@
+bundler meshes/*.ips meshes.bin

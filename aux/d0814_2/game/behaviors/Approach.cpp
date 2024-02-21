@@ -1,0 +1,30 @@
+#include "Approach.h"
+#include "core/core.h"
+#include "Behaviors.h"
+#include "game/Character.h"
+#include "game/Meter.h"
+
+float Approach::GetDistance() const
+{
+    if (!GetCharacter() || !GetApproachTarget() ||
+        IsDestroyed(const_cast<Character *>(GetCharacter())) || IsDestroyed(const_cast<Character *>(GetApproachTarget())))
+        return FLT_MAX;
+    return GetCharacter()->GetPosition().distance(GetApproachTarget()->GetPosition());
+}
+
+void Approach::SetMeterDistance(float value)
+{
+    if (IsActive())
+    {
+        Character *self  = GetCharacter();
+        Meter     *meter = self->GetMeter();
+        if (meter)
+            meter->SetDistance(value);
+    }
+}
+
+bool Approach::IsActive() const
+{
+    const Character *self = GetCharacter();
+    return self && GetApproachTarget() && self->IsVisible() && GetApproachTarget()->IsVisible();
+}

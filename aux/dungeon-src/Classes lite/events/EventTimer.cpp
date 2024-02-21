@@ -1,0 +1,72 @@
+#include "EventTimer.h"
+#include <algorithm>
+
+unsigned GetCurrentTimeMs();
+
+EventTimer::EventTimer() : elapsed(GetCurrentTimeMs())
+{
+}
+
+void EventTimer::Add(function_t function, void *context, unsigned time)
+{
+    events.push_back(Event(function, context, elapsed + time));
+}
+
+// horrible, but effective
+#define MATCH_TYPE(NAME, EXPRESSION) \
+struct Match##NAME\
+{\
+    EventTimer::Event e;\
+    inline Match##NAME(const EventTimer::Event &e) : e(e) {}\
+    inline bool operator()(const EventTimer::Event &a) const { return (EXPRESSION); }\
+};
+
+namespace // keep these local to this file
+{
+MATCH_TYPE(Function,            (a.function == e.function));
+MATCH_TYPE(Context,             (a.context  == e.context));
+MATCH_TYPE(FunctionAndContext,  (a.function == e.function && a.context == e.context));
+MATCH_TYPE(TimeLess,            (a.time < e.time));
+MATCH_TYPE(TimeMore,            (a.time > e.time));
+}
+
+#undef MATCH_TYPE
+
+void EventTimer::Remove(EventTimer::function_t f)
+{
+    MatchFunction m(Event(f, 0, 0));
+    events.erase(std::remove_if(events.begin(), events.end(), m), events.end());
+}
+
+void EventTimer::Remove(void *context)
+{
+    MatchContext m(Event(0, context, 0));
+    events.erase(std::remove_if(events.begin(), events.end(), m), events.end());
+}
+
+void EventTimer::Remove(EventTimer::function_t f, void *context)
+{
+    MatchFunctionAndContext m(Event(f, context, 0));
+    events.erase(std::remove_if(events.begin(), events.end(), m), events.end());
+}
+
+void EventTimer::RemoveAfter(unsigned time)
+{
+    MatchTimeMore m(Event(0, 0, time));
+    events.erase(std::remove_if(events.begin(), events.end(), m), events.end());
+}
+
+void EventTimer::RemoveBefore(unsigned time)
+{
+    MatchTimeLess m(Event(0, 0, time));
+    events.erase(std::remove_if(events.begin(), events.end(), m), events.end());
+}
+
+void EventTimer::Update(unsigned time)
+{
+    elapsed += time;
+    for (std::vector<Event>::iterator i = events.begin(), e = events.end(); i != e; ++i)
+        if ((*i).time < elapsed && (*i).function)
+            (*i).function((*i).context);
+    RemoveBefore(elapsed);
+}

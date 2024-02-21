@@ -1,0 +1,6 @@
+#ifndef LUACHARACTER_H
+#define LUACHARACTER_H
+
+int luaopen_Character(lua_State *L);
+
+#endif // LUACHARACTER_H

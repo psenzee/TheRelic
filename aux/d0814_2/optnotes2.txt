@@ -1,0 +1,215 @@
+set up ant
+x - started up ant
+change scrape for ps3 snapshot to work
+x - fix character id allocation
+
+trie
+case 'C': return (s[4] == 'o' && s[5] == 'u' && s[6] == 'n' && s[7] == 't' && s[8] == 'T' && s[9] == 'o' && s[10] == 'I' && s[11] == 'n' && s[12] == 'v' && s[13] == 'e' && s[14] == 'n' && s[15] == 't' && s[16] == 'o' && s[17] == 'r' && s[18] == 'y' && !s[19]) ? 26 : -1;
+case 'O': return (s[4] == 'n' && s[5] == 'e' && s[6] == 'T' && s[7] == 'o' && s[8] == 'I' && s[9] == 'n' && s[10] == 'v' && s[11] == 'e' && s[12] == 'n' && s[13] == 't' && s[14] == 'o' && s[15] == 'r' && s[16] == 'y' && !s[17]) ? 27 : -1;
+case 'T': return (s[4] == 'o' && s[5] == 'I' && s[6] == 'n' && s[7] == 'v' && s[8] == 'e' && s[9] == 'n' && s[10] == 't' && s[11] == 'o' && s[12] == 'r' && s[13] == 'y' && !s[14]) ? 28 : -1;
+
+optimize to:
+case 'C': return *(short *)s[4] == 'ou' && ..
+case 'C': return *(int *)s[4] == 'ount' && .. // keep aligned
+
+generate 4 versions for the alignment of the string
+
+
+make ring idrawable
+- eliminate ImmediateRenderer
+make quads idrawable
+make glyph idrawable
+make fx idrawable
+
+opt strategies
+X REMOVE NORMALS
+- MAKE SURE OPAQUE ARE CORRECT
+- CACHE STATE CHANGES
+x glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+x glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+- TEXTURE ATLASES
+- PVRTC
+- STRIP (argh)
+X USE SMALLER TYPES FOR VERTEX ELEMENTS
+- ? SORT RENDERING BY LOCALITY OF SCREEN
+x best performance- interleave in the following order: Position, Normal, Color, TexCoord0, TexCoord1, PointSize, Weight, MatrixIndex.
+
+
+OGLES iP opt
+http://www.stanford.edu/class/cs193p/downloads/OpenGL.pdf
+http://www.imgtec.com/factsheets/SDK/PowerVR%20MBX.3D%20Application%20Development%20Recommendations.1.0.67a.External.pdf
+http://developer.apple.com/iphone/library/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/Introduction/Introduction.html
+http://developer.apple.com/iphone/library/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/GraphicsandDrawing/GraphicsandDrawing.html#//apple_ref/doc/uid/TP40007072-CH10-SW27
+
+1.2. Opaque objects must be correctly flagged as opaque
+Maximum benefit is only possible when GL_ALPHA_TEST, GL_BLEND, GL_LOGIC_OPS (OpenGL ES naming standard) are enabled only when required 
+– specifically when the object is not opaque.
+
+Under normal circumstances the CPU and 2D/3D graphics core work in parallel but some API
+commands can break this parallelism resulting in stalling and wasted cycles for both the CPU and
+graphics core. To avoid this loss of valuable processing cycles avoid accessing colour or depth
+buffers directly. Specifically, in OpenGL ES, avoid glReadPixels(), glCopyTexImage2D() and
+glCopyTexSubImage2D().
+
+1.4. Use PVRTC and bilinear filtering with MIP-mapping
+Always aim to use compressed texture formats such as PVRTC2 and PVRTC4 on POWERVR
+hardware, for best performance (due to reduced bandwidth requirements), optimum image quality,
+minimal storage requirements and distribution size. Palletised textures, while supported, should be
+avoided because they result in a loss of quality compared to PVRTC and a also loss in performance;
+32-bit texture formats, such as RGBA8888, should be avoided since they are generally overkill on
+mobile platforms with 16-bit displays and result in a loss of performance due to increased bandwidth
+usage.
+Always enable bilinear texture filtering with MIP-mapping, bilinear filtering is a free operation and MIPmapping,
+while costing 33% more in terms of required storage, results in better image quality (less
+sparkling effects in the distance) and massively improved cache efficiency and thus a reduction in
+bandwidth usage.
+
+1.5. Minimize mid-scene texture changes
+Allocating and uploading new texture data for usage by the 3D core is a bandwidth intense operation;
+this means that changing the contents of an existing texture or creating a new texture during 3D
+rendering results in a perceptible reduction in performance. Therefore it is highly recommended to
+create and upload all required textures at the start of a game level or when the application loads.
+
+2.3. Optimal Geometry Ordering
+As discussed previously each API call results in a certain amount of overhead. The overhead is
+caused by a translation of standard API calls into commands for the hardware accelerator. The
+amount of overhead can be reduced by minimizing the translation work required by making sure that
+the data submitted to the API is already in a hardware friendly format. A large step in the right
+direction is to follow this simple recommendation when submitting geometry: submit sorted indexed
+triangles, with interleaved per-vertex data.
+Using an indexed triangle list can be much more efficient than using strips. OpenGL ES and D3DM
+require a draw call per strip. For an average 3D model the number of triangles per strip is below 10
+meaning that an object containing 1000 triangles would require 100 draw calls, one for each strip of
+10 triangles. Using indexed triangles this object can be submitted in a single draw call resulting in
+much reduced overhead/CPU-load.
+In addition, for future HW based on a post-vertex-shader cache, indexed triangle lists can provide a
+better vertex to triangle ratio than strips: strips have a best case of 1 new triangle per vertex
+submitted; pure indexing can do better through a higher amount of vertex re-use (the same vertex can
+be used for more than 3 triangles).
+Vertex-sorting is a second step (after sorting the index array) which allows for improved memory
+access patterns and improves the usage of the various data caches. Both these concepts are
+illustrated in Figure 4.
+
+When processing a vertex all per vertex elements are required; OpenGL ES allows these data
+elements to be spread out over memory thus resulting in scattered reads to fetch the required data.
+On the other hand it is also possible to interleave the data, such that data that belongs together is
+already together in memory. By submitting interleaved data, memory access patterns and driver
+overhead are improved. This concept is illustrated in Figure 5. (This is not an issue on D3DM, which
+always uses a single stream of interleaved vertex data in a Vertex Buffer.)
+
+For peak performance use sorted “strip ordered” indexed triangles where connected indexed triangles
+can build strips. This further improves bandwidth efficiency of driver and hardware.
+Triangle sorters to achieve these recommendations are available in the SDKs available from the
+Imagination Technologies website (www.imgtec.com).
+
+2.4. Simplify Geometry
+To further optimise geometry submission consider using a polygon reduction algorithm (e.g. when
+porting a game from PC to Mobile) to reduce the complexity of the object. Consider moving the detail
+from the vertex side to the pixel side e.g. through DOT3 per-pixel lighting or high resolution textures
+representing the finer geometrical details. Look into reducing the size of per vertex components e.g.
+using a byte format instead of a float format. Make sure not to include unused vertex elements, e.g. a
+normal when no lighting is enabled, also do not store constants per vertex, e.g. colour of an object.
+Consider the usage of Level of Detail (LOD) to avoid processing 1000’s of triangles for an object 10’s
+of pixels on the screen. See Figure 6.
+
+2.5. Draw Order and Sorting
+Another major advantage of POWERVR architecture is that the hardware handles Hidden Surface
+Removal (HSR) with peak efficiency irrespective of submission order, and so there is no need to sort
+objects from front to back. It is much better to create batches based on render state to minimize the
+amount of API overhead. The basic recommendation is to draw all opaque objects first, grouping
+them by the number of texture layers. For example first draw all dual textured opaque objects and
+then all single textured opaque objects. Finally draw all alpha blended and alpha tested objects last.
+If possible sort objects by screen locality since this improves efficiency of the Tile Sorting Engine, e.g.
+avoid drawing a triangle bottom left and then top right of the screen. For improved memory access
+patterns aim to keep things together that belong together.
+
+2.8. Texturing and Filtering
+POWERVR hardware supports a special POWERVR Texture Compression (PVRTC) format, an
+advanced form of texture compression based on wavelet principles. Compressing texture data
+reduces storage requirements, bandwidth usage and distribution size of the application.
+There are two levels of compression: PVRTC4 stores 4 bits per pixel while PVRTC2 uses only 2 bits
+per pixel. Whenever possible PVRTC2 should be used, if this highly compressed mode delivers
+unacceptable quality then PVRTC4 should be used. The high quality of PVRTC is illustrated in Figure
+8. In the extremely rare case that PVRTC4 quality is unacceptable a 16 bit uncompressed format can
+be used. A 32-bit texture format is supported but usually this format is overkill given the limited colour
+depth of LCD screens.
+
+POWERVR MBX hardware supports two-layer multi-texturing. POWERVR SGX supports the
+maximum number of layers allowed by the device (usually 8). Multi-texturing should always be
+preferred over multi-pass rendering since this reduces the number of required draw calls, the vertex
+processing work, number of state changes and as a result the overall driver overhead and CPU load
+is also reduced. Using multi-texturing also avoids the risk of Z-fighting often seen with multi-pass
+rendering where the geometry in the two passes ends up at very slightly different depth positions (e.g.
+disabling lighting can result in a different driver path and hence potentially different depth values).
+Multi-texturing is illustrated in Figure 9.
+
+Always use MIP-mapping in your applications: this prevents minified textures from causing “sparkling”
+artefacts. Not only will this result in better image quality there is also improved texture cache
+behaviour and higher performance. You get all this for just 33% more memory usage, which is a great
+trade-off. The best performance/quality filtering mode is bilinear filtering with MIP-mapping. This mode
+can be selected as follows in OpenGL ES:
+
+glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+
+Unlike software 3D engines bilinear filtering has exactly the same performance as point sampling and
+as such should always be used. Trilinear filtering generally has a higher fillrate cost but can be used
+when appropriate.
+
+OpenGL ES keeps track of filtering settings per texture. Hence it is sufficient to set them once per
+texture; else the unnecessary API calls result in increased driver overhead and hence extra CPU
+load. Various filtering modes are illustrated in Figure 10.
+
+2.9. Alpha Blending
+POWERVR hidden surface removal uses opaque objects to reduce rendering cost by not processing
+pixels hidden behind opaque pixels – resulting in very high effective fillrate for the platform. However
+POWERVR HSR can only work when opaque pixels are correctly indicated by the API as being
+opaque, hence alpha blending and alpha testing render states should only be enabled when required.
+Only use alpha testing when necessary since it reduces the efficiency of all early hidden surface
+removal mechanisms, consider using only alpha blending.
+When creating alpha-textures make sure to use a sensible background colour, avoid the usage of a
+very different “colour key.” Usage of a “colour key” will create an unwanted and ugly “halo” or “border”
+effect resulting from the texture filtering operation which bleeds the “colour key” into the visible texture
+area. This issue is illustrated in Figure 11.
+
+x Batch Geometry
+• Texture Atlases
+x Interleaved Arrays
+x Indexed Triangles
+x Floats vs. Shorts
+x Minimize OpenGL draw calls
+– glDrawArrays, glDrawElements
+– Can draw multiple objects in one call
+• Avoid changing state
+– glBindTexture
+– glEnable, glColor, etc.
+– iPhone OpenGLES does not check for redundant state changes!
+• Combine small textures into larger “texture atlases”
+• Useful for animated sprites
+• Or many separate sprite images
+• One large array with each vertex
+x followed by its attributes:
+–x XYZ RGBA UV, XYZ RGBA UV, XYZ RGBA UV…
+• Instead of separate arrays:
+– XYZ XYZ XYZ …
+– RGBA RGBA RGBA …
+– UV UV UV ...
+• Maximizes memory access efficiency
+x Indexed Triangles
+• Can be very memory efficient
+• Multiple triangles can share vertices
+• Souvebrmheita idn “triangle strip order” for minimum driver
+– i.e. triangles adjacent in memory should form triangle strips
+• rNaorte lvye hrya vues ecfouinl icnid Finirge wvoerrtkisc easpp because the particles
+x Floats vs. Shorts
+– iPhone is faster at floating-point math
+x But it draws short (2-byte) geometry faster!
+–xUOspueanlGlyL a gain to convert to short before submitting to
+• Vertex data
+• Colors
+Texture Compression
+• PVRTC: 4-or-2 bit compression
+• Reduces memory use
+• Compressed data = higher throughput
+• Texturetool included with iPhone SDK
+• /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/texturetool

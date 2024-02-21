@@ -1,0 +1,112 @@
+#include "ObjectTileSet.h"
+
+#include "core/strs.h"
+#include "core/global.h"
+#include "xml/XmlReadContext.h"
+#include "xml/XmlUtil.h"
+#include "xml/XmlObjectReader.h"
+#include "render/ContentLoader.h"
+#include "gamecore/IGameObject.h"
+#include "gamecore/IPropertySet.h"
+
+ObjectTileSet::ObjectTileSet(XmlReadContext *context) : context(context), defaultOverheadMapTile(0), defaultWorldTile(0), mMode(WORLD_MAP)
+{
+    XmlElement *xmlsize = XmlObjectReader::GetFirstElement(context->xml, "tile-size");
+    size = core::Size(DEFAULT_TILE_WIDTH, DEFAULT_TILE_HEIGHT);
+    if (!xmlsize)
+        printf("No 'tile-size' specified for tileset - defaulting to (%d, %d)!\n", size.width, size.height);
+    else
+    {
+        Vector2 vsz = XmlObjectReader::ReadSize2(xmlsize);
+        core::Size nsz((int)vsz.x, (int)vsz.y);
+        if (nsz.width <= 0 || nsz.height <= 0)
+            printf("Invalid 'tile-size' specified for tileset - defaulting to (%d, %d)!\n", size.width, size.height);
+        else size = nsz;
+    }
+    XmlElement *tiledefaults = XmlObjectReader::GetFirstElement(context->xml, "defaults");
+    defaultOverheadMapTile = XmlUtil::GetInt(tiledefaults, "overhead-map-tile", 0);
+    defaultWorldTile       = XmlUtil::GetInt(tiledefaults, "world-tile",        0);
+    std::vector<IGameObject *> objects = CreateGameObjects(context);
+    for (size_t i = 0; i < objects.size(); i++)
+        tiles.push_back(new ObjectTile(objects[i], (int)i));
+    printf("Created tile set with %d entries.\n", objects.size());
+}
+
+ObjectTileSet::~ObjectTileSet()
+{
+    for (std::vector<ITile *>::iterator i = tiles.begin(), e = tiles.end(); i != e; ++i)
+        delete (*i);
+    tiles.clear();
+}
+
+int ObjectTileSet::GetCount() const
+{
+    return (int)tiles.size();
+}
+
+core::Size ObjectTileSet::GetTileSize() const
+{
+    return size;
+}
+
+ITile *ObjectTileSet::GetTile(int index)
+{
+    return tiles[index < 0 ? 0 : (index % GetCount())];
+}
+
+std::vector<IGameObject *> ObjectTileSet::CreateGameObjects(XmlReadContext *context)
+{
+    enum { MAXIMUM_TILE_COUNT = 2048 };
+    std::vector<IGameObject *> objects;
+    for (int i = 0; i < MAXIMUM_TILE_COUNT; i++)
+        objects.push_back(0); // $todo, come on - do this the right way
+    const char prefix[] = "Tile.";
+    int prefix_sz = sizeof(prefix) - 1;
+    printf("Found tiles: ");
+    for (std::map<String, IGameObject *>::iterator i = context->objects.begin(), e = context->objects.end(); i != e; ++i)
+    {
+        const char *s = (*i).first.c_str();
+        if (starts(s, prefix, true))
+        {
+            printf("'%s' ", s);
+            s += prefix_sz;
+            int index = atoi(s);
+            if (index > 0)
+            {
+                objects[index] = (*i).second;
+                objects[index]->GetProperties().SetProperty("cull-invisible", "false");
+            }
+        }
+    }
+    return objects;
+}
+
+std::map<std::string, ITileSet *> ObjectTileSetLoader::cache;
+
+void ObjectTileSetLoader::RemoveTileSet(const char *name)
+{
+    ITileSet *ts = cache[name];
+    if (ts)
+    {
+        printf("Removing tileset '%s'\n", name);
+        delete ts;
+        cache[name] = 0;
+    }
+    else
+    {
+        printf("Can't find tileset '%s' for removal\n", name);
+    }
+}
+
+ITileSet *ObjectTileSetLoader::GetTileSet(const char *name, ContentLoader *loader)
+{
+    ITileSet *ts = cache[name];
+    if (!ts)
+    {    
+        XmlReadContext *context = new XmlReadContext(loader);
+        XmlObjectReader::ReadFile(name, context);
+        ts = new ObjectTileSet(context);
+        cache[name] = ts;
+    }
+    return ts;
+}

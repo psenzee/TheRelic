@@ -1,0 +1,43 @@
+Needed things:
+forceful disconnect
+dropped notification
+package files as single entity?
+serialized lua data must include version number
+there can be multiple profiles per device (and there (can be) multiple save games per profile?)
+
+Cinematics
+----------
+Quest Info, Notes
+Introduction
+End Good
+End Evil
+etc..
+
+Special Screens
+---------------
+**HUD**
+Popups
+Player Dialog & Multiplayer Chat
+Quest Complete
+Keyboard Entry
+
+Player Tab Screens
+------------------
+?Profile Create/Edit Screen
+Multiplayer
+Inventory [no weapons, no armor]
+Attributes [including weapon and armor effectiveness, your axe also gains status, better names]
+Level Up
+Quests [completed, in progress, stats?]
+Leaderboards
+?Game Stats (GTA-like) 
+?Achievements
+?Import Character
+
+Menu Overlay Screens
+--------------------
+Main Menu
+Pause Menu
+Profile Select
+Load/Save
+Multiplayer - Host/Join|Drop-In/Out

@@ -1,0 +1,25 @@
+#ifndef _CODEC_H
+#define _CODEC_H
+
+class Codec
+{
+public:
+
+    enum { COMPRESSED = 0xC2, UNCOMPRESSED = 0xC3 };
+
+    enum { MAX_DECODE_SIZE = 65535 };
+
+    static int Decode(const char *in, char *out);
+    static int Encode(const char *in, int size, char *out);
+
+private:
+
+    static int DecodeCompressed(const char *in, char *out);
+    static int DecodeUncompressed(const char *in, char *out);
+    static int EncodeCompressed(const char *in, int size, char *out);
+    static int EncodeUncompressed(const char *in, int size, char *out);
+
+    static bool DoCompress(int size);
+};
+
+#endif // _CODEC_H

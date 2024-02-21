@@ -1,0 +1,89 @@
+/*
+ *  GlyphDrawList.cpp
+ *  GLGravity
+ *
+ *  Created by Paul Senzee on 12/31/08.
+ *  Copyright 2008 __MyCompanyName__. All rights reserved.
+ *
+ */
+
+#include "Glyph.h"
+#include "platform/GLUtils.h"
+#include "core/global.h"
+
+#include "render/OverheadCamera.h"
+#include "render/DeviceTexture.h"
+#include "render/LocalGameServices.h"
+#include "render/Material.h"
+
+GlyphDrawList::GlyphDrawList(LocalGameServices *services, DeviceTexture *texture, const Vector3 &scale, const Vector4 &color) 
+    : services(services), scale(scale), color(color), texture(texture), maximum(FLT_MIN, FLT_MIN, FLT_MIN), minimum(FLT_MAX, FLT_MAX, FLT_MAX)
+{
+}
+
+void GlyphDrawList::Add(const Glyph &glyph)
+{
+    Vector3 p(glyph.position.x, glyph.position.y, 0.0f),
+            s(glyph.scale.x,    glyph.scale.y,    1.0f);
+    
+    static const Vector3 UL(-0.5f, -0.5f, 0.0f), UR( 0.5f, -0.5f, 0.0f),
+                         LL(-0.5f,  0.5f, 0.0f), LR( 0.5f,  0.5f, 0.0f);
+    
+    float u0 = glyph.extent.uv0.x, v0 = glyph.extent.uv0.y,
+          u1 = glyph.extent.uv1.x, v1 = glyph.extent.uv1.y;
+
+    vertices.push_back(p + UL * s); uvs.push_back(Vector2(u0, v0)); colors.push_back(glyph.color);
+    vertices.push_back(p + LL * s); uvs.push_back(Vector2(u0, v1)); colors.push_back(glyph.color);
+    vertices.push_back(p + LR * s); uvs.push_back(Vector2(u1, v1)); colors.push_back(glyph.color);
+            
+    vertices.push_back(p + UL * s); uvs.push_back(Vector2(u0, v0)); colors.push_back(glyph.color);
+    vertices.push_back(p + LR * s); uvs.push_back(Vector2(u1, v1)); colors.push_back(glyph.color);
+    vertices.push_back(p + UR * s); uvs.push_back(Vector2(u1, v0)); colors.push_back(glyph.color);
+}
+
+void GlyphDrawList::SetCursor(const Vector3 &p)
+{
+    cursor = p;
+    if (minimum.x > maximum.x)
+        initial = cursor;    
+    minimum = minimum.minimum(p);
+    maximum = maximum.maximum(p);
+}
+
+void GlyphDrawList::Render(const Matrix &transform, const OverheadCamera &camera, const Vector4 &color)
+{
+    ClearCachedPointers();
+    
+    texture->Set(*(services->device), GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
+    ClearCachedPointers();
+
+    glDisable(GL_CULL_FACE);
+
+    Vector4 clr(color * this->color);
+
+    static Vector4  zeros(0.0f, 0.0f, 0.0f, 1.0f);
+    static Material m(zeros, zeros, zeros, zeros, 0.0f);
+    m.ambient = clr * Vector4(2.0f, 2.0f, 2.0f, 0.0f);
+    m.diffuse = Vector4(1.0f, 1.0f, 1.0f, clr.w);        
+    
+    m.Set(*(services->device));
+    
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisable(GL_DEPTH_TEST);
+    glDepthMask(GL_FALSE);
+    
+    glVertexPointer  (3, GL_FLOAT, 0, (GLfloat *)&vertices[0]);
+    glTexCoordPointer(2, GL_FLOAT, 0, (GLfloat *)&uvs[0]);    
+
+    glLoadMatrixf((GLfloat *)(camera.GetView().data));
+    glMultMatrixf((GLfloat *)transform.data);        
+    
+    glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+    
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);    
+}

@@ -1,0 +1,295 @@
+#include "AnimationBehavior.h"
+#include "Signals.h"
+#include "game/Character.h"
+#include "map/DynamicMap.h"
+#include "math/MathUtil.h"
+
+#include "game/Game.h"
+extern Game *GetGlobalGame();
+
+#include "level/Level.h"
+
+static const char *GetRealAnimationName(const char *key)
+{   
+    struct StringPair
+    {
+        const char *key;
+        const char *value;
+    };
+
+    StringPair animations[] =
+    {
+      { "Run",                "Run" },
+      { "RunTurn",            "Run" },
+      { "RunAttack",          "Attack" },
+      { "RunTurnAttack",      "Attack" },
+      { "RunReceiveHit",      "Walk_ReceiveHit" },
+      { "RunTurnReceiveHit",  "Walk_ReceiveHit" },
+      { "Walk",               "Walk" },
+      { "WalkTurn",           "Walk" },
+      { "WalkAttack",         "Attack" },
+      { "WalkTurnAttack",     "Attack" },
+      { "WalkReceiveHit",     "Walk_ReceiveHit" },
+      { "WalkTurnReceiveHit", "Walk_ReceiveHit" },
+      { "Idle",               "Idle" },
+      { "IdleTurn",           "Turn" },
+      { "IdleAttack",         "Attack" },
+      { "IdleTurnAttack",     "Attack" },
+      { "IdleReceiveHit",     "Walk_ReceiveHit" },
+      { "IdleTurnReceiveHit", "Walk_ReceiveHit" },
+      // ..
+      { 0, 0 }
+    };
+
+    for (StringPair *pair = animations; pair->key; pair++)
+        if (strcmp(pair->key, key) == 0)
+            return pair->value;
+    return 0;
+}
+
+AnimationBehavior::AnimationBehavior() 
+  : AbstractBehavior(TYPE), mAngle(0.f), mTurn(false), mTurnAngle(0.f),
+    mTurnForce(0.f), mCanMove(true), mIsAlive(true), mDirection(0.f, 1.f, 0.f), mInitialized(false), mAccumulatedForce(0.f),
+    mAccumulatedForceChange(0.f, 0.25f), mDisableMoveCount(0), mActionReset(false),//mCenter(0.05f),
+    MIN_TURN_SPEED(1.f), MIN_WALK_SPEED(2.f), MIN_RUN_SPEED(4.5f), MAX_WALK_SPEED(100.f), TURN_DIVISOR(20.f)
+{
+}
+
+void AnimationBehavior::Signal(int signal)
+{
+    if (signal == SIGNAL_DIED)
+    {
+        mIsAlive = false;
+    }
+}
+
+void AnimationBehavior::Update(const GameTime &time)
+{
+    Update(); // just ignore the time, we don't use it here
+}
+
+float AnimationBehavior::GetTurnLean()
+{
+    Character *self = GetCharacter();
+    if (!self) return 0.f;
+//- keep running average of positions
+//- lean toward the average to the degree to which the average is left or right (and not forward or back)
+//  - find this value with combination of cross/dot products
+//    - (pos - prevPos).normal().dot((avPos - prevPos).normal()) tells degree of left/rightness
+//    - (pos - prevPos).cross(avPos - prevPos) tells to which side
+//    - and speed (+ distance from avPos?) tells degree of leaning
+    Vector3 pos(self->GetPosition());
+    mCenter.Input(pos);
+    Vector3 dirCenter(pos - mCenter.Get());
+    if (dirCenter.length() < 1.f || mDirection.length() < 1.f)
+    {
+        mCenter.Set(pos);
+        return 0.f;
+    }
+    Vector3 centerVector((pos - mCenter.Get()).normal()), dirNormal(mDirection.normal());
+
+    float dot   = 1.f - math::clamp(dirNormal.dot  (centerVector),    0.f, 1.f);
+    float cross =       math::clamp(dirNormal.cross(centerVector).z, -1.f, 1.f);
+
+    return /*mAccumulatedForce.Get() * */ dot * cross * 10.f/** 0.25f*/;
+}
+
+void AnimationBehavior::UpdateAccumulatedForce(float force)
+{
+    Character *self = GetCharacter();
+    if (!self) return;
+    if (force == 0.f)
+        mAccumulatedForce.Set(-force * 5.f); // force hard stop
+    else
+        mAccumulatedForce.Input(force);
+    //mAccumulatedTurnForce.Input(mTurnForce);
+    mAccumulatedForceChange.Input(mAccumulatedForce.Get());
+    mAccumulatedTurnForce.Input(math::clamp(GetTurnLean(), -0.25f, 0.25f));
+    const float ANGLE_FACTOR = -0.25f;
+    self->SetLean(Vector2(math::clamp(mAccumulatedForceChange.Get() / 10.f, -1.f, 1.0f) * ANGLE_FACTOR,
+                          /*mAccumulatedTurnForce.Get() * -math::clamp(mAccumulatedCrossProduct.Get(), -1.f, 1.f) * 5.f)*/
+                          /*math::clamp(GetTurnLean(), -0.25f, 0.25f))*/mAccumulatedTurnForce.Get()));
+}
+
+void AnimationBehavior::SetForce(const Vector3 &v)
+{ 
+    Character *self = GetCharacter();
+    if (!self || !mIsAlive)
+        return;
+    float force = v.length();
+    Vector3 dir(v);
+    bool alreadyUpdated = false;
+    Vector3 pos = self->GetPosition();
+    if (force < MIN_WALK_SPEED || !CanMove())
+    {
+        mCenter.Set(self->GetPosition());
+        UpdateAccumulatedForce(0.f);
+        mAccumulatedCrossProduct.Input(0.f);
+        SetMovementType("Idle");
+        alreadyUpdated = true;
+    }
+    else
+    {
+        if (force < MIN_RUN_SPEED)
+            SetMovementType("Walk");
+        else
+            SetMovementType("Run");
+        float dot = 1.f; // mDirection.normal().dot(v.normal());
+        dir *= dot;
+        mAccumulatedCrossProduct.Input(mDirection.cross(v).z);
+        Vector3 newPos(pos + dir);
+        HandleCollision(pos, newPos, true);
+        self->SetPosition(newPos);
+    }
+    if (force > MIN_TURN_SPEED)
+    {
+        float angle = GetOrientationAngle(dir);
+        if (!MathUtil::AreAnglesClose(angle, mAngle, 0.2f))
+            Turn(angle, force);
+        else
+        {
+            mAccumulatedCrossProduct.Input(0.f);
+            ClearTurn();
+        }
+    }
+    if (!alreadyUpdated)
+        UpdateAccumulatedForce(force);
+    mDirection = dir.normal();
+    UpdateTurn(force);
+    Update();
+}
+
+void AnimationBehavior::HandleCollision(const Vector3 &pos, const Vector3 &newpos, bool uncollideAll)
+{
+    Character *self = GetCharacter();
+    if (!self) return;
+    int collides = self->CollidesAt(newpos, self->GetRadius() * 0.5f);
+    if (collides == 0)
+        self->SetPosition(newpos);
+    else if (collides == 512)
+    {
+        self->SetPosition(newpos);
+        if (uncollideAll)
+            UncollideVisible();
+    }
+    else if (!uncollideAll)
+      self->GetDynamicMap()->Uncollide(self);
+}
+
+void AnimationBehavior::UncollideVisible()
+{
+    GetGlobalGame()->GetLevel()->UncollideVisible();
+}
+
+void AnimationBehavior::SetAction(const char *value, bool reset)
+{
+    mActionName = value ? value : "";
+    mActionReset = true;
+}
+
+const char *AnimationBehavior::GetAnimationName() const
+{
+    if (strcmp(mActionName.c_str(), "Die") == 0)
+        return "Die";
+    static char string[256];
+    sprintf(string, "%s%s%s", mMovementName.c_str(), mTurnName.c_str(), mActionName.c_str());
+    return GetRealAnimationName(string);
+}
+
+float AnimationBehavior::GetOrientationAngle(const Vector3 &dir)
+{
+    return MathUtil::GetAngle(Vector3(0.f, 1.f, 0.f), dir, 0.f);    
+}
+
+void AnimationBehavior::SetTurnType(const char *value)
+{ 
+    mTurnName = value ? value : "";
+}
+
+void AnimationBehavior::SetMovementType(const char *value)
+{ 
+    mMovementName = value ? value : "";
+}
+   
+void AnimationBehavior::SetAppropriateAnimation()
+{
+    Character *self = GetCharacter();
+    if (self)
+    {
+        // $NEW
+        if (mAccumulatedForce.Get() < MIN_WALK_SPEED ||
+              self->GetPosition().distancesq(self->GetPreviousPosition()) < MIN_WALK_SPEED * MIN_WALK_SPEED)
+            SetMovementType("Idle");
+        if (mTurn) SetTurnType("Turn");
+        else       SetTurnType("");
+        const char *nextAnimation = GetAnimationName();
+        if (nextAnimation && strcmp(self->GetAnimationName(), nextAnimation) != 0)
+            self->SetAnimation(nextAnimation);
+        if (!mActionName.empty() && mActionReset)
+        {
+            self->ResetAnimation();
+            mActionReset = false;
+        }
+    }
+}
+
+bool AnimationBehavior::IsInAttack() const
+{
+    return strcmp(mActionName.c_str(), "Attack") == 0;
+}
+
+void AnimationBehavior::UpdateTurn(float force)
+{
+    Character *self = GetCharacter();
+    if (!self) return;
+    if (force < MIN_TURN_SPEED)
+    {
+        // give it up, the player doesn't care
+        ClearTurn();
+        return;
+    }
+    float angleForce = mTurnForce;
+    float forceThreshold = angleForce * 2.f;
+    float dta = MathUtil::GetAngleDifference(mTurnAngle, mAngle);
+    if      (dta < -forceThreshold)
+        mAngle -= angleForce;
+    else if (dta >  forceThreshold)
+        mAngle += angleForce;
+    else
+    {
+        mAngle = mTurnAngle;
+        ClearTurn();
+    }
+}
+
+void AnimationBehavior::Update()
+{
+    if (mCanMove) mDisableMoveCount = 0;
+    else          mDisableMoveCount++;
+    enum { MOVE_COUNT_DISABLE_MAX = 20 };
+    if (mDisableMoveCount >= MOVE_COUNT_DISABLE_MAX)
+        mCanMove = true;
+    Character *self = GetCharacter();
+    if (!self) return;
+    if (!mInitialized)
+    {
+        mInitialized = true;
+        self->GetDynamicMap()->Uncollide(self);
+      //UncollideVisible();
+    }
+    SetAppropriateAnimation();
+    self->SetOrientationAngle(mAngle);
+}
+
+void AnimationBehavior::ClearTurn()
+{
+    mTurn = false;
+    mTurnAngle = mTurnForce = 0.f;
+}
+
+void AnimationBehavior::Turn(float angle, float force)
+{
+    mTurn      = true;
+    mTurnAngle = angle;
+    mTurnForce = force / TURN_DIVISOR;
+}

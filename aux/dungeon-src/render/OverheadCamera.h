@@ -1,0 +1,81 @@
+/*
+ *  OverheadCamera_.h
+ *  GLGravity
+ *
+ *  Created by Paul Senzee on 12/17/08.
+ *  Copyright 2008 __MyCompanyName__. All rights reserved.
+ *
+ */
+
+#ifndef _OVERHEADCAMERA_H
+#define _OVERHEADCAMERA_H
+
+#include "core/xna.h"
+#include "math/MathUtil.h"
+
+class LocalGameServices;
+
+class OverheadCamera
+{
+public:
+        
+    OverheadCamera(LocalGameServices *services, float fovDegrees);
+        
+    inline const Vector3   &GetLookAt()                    const { return lookAt; }
+    inline void             SetLookAt(const Vector3 &v)          { lookAt = v; Update(); }
+    inline float            GetFovDegrees()                const { return float(fov * RAD_TO_DEG); }
+    inline void             SetFovDegrees(float v)               { fov = float(v * DEG_TO_RAD); Update(); }    
+    inline float            GetFovRadians()                const { return fov; }    
+    inline void             SetFovRadians(float v)               { fov = v; Update(); }    
+    inline float            GetDepthScale()                const { return depthScale; }
+    inline void             SetDepthScale(float v)               { depthScale = v; Update(); }
+    inline const Vector2   &GetTilt()                      const { return tilt; }
+    inline void             SetTilt(const Vector2 &v)            { tilt = v; Update(); }
+    inline const Vector2   &GetTiltScale()                 const { return tiltScale; }
+    inline void             SetTiltScale(const Vector2 &v)       { tiltScale = v; Update(); }    
+        
+    inline const Vector3   &GetPosition()                  const { return position; }
+    inline const Matrix    &GetView()                      const { return view; }        
+    inline const Matrix    &GetProjection()                const { return projection; }
+    inline const Matrix    &GetViewProjection()            const { return viewProjection; }
+    inline const Matrix    &GetInverseViewProjection()     const { return inverse; }        
+    
+    Ray                     GetRayFromNormalizedScreen(const Vector2 &at) const;
+    bool                    PickPlanePoint(const Vector4 &plane, const Vector2 &from, Vector3 &at) const;
+    
+    Vector3                 GetCameraPosition(const Vector3 &lookAt, float depthScale);
+    Vector3                 GetCameraPositionTilt(const Vector3 &lookAt, const Vector2 &tilt, const Vector2 &tiltScale, float depthScale);
+        
+private:
+        
+    LocalGameServices *services;
+    Vector3            position,
+                       lookAt;
+    Vector2            tilt,
+                       tiltScale;
+    Matrix             view,
+                       projection,
+                       viewProjection,
+                       inverse;
+    float              fov,
+                       depthScale;
+        
+    void               Update();
+};
+
+class VisibleBounds
+{    
+public:
+        
+    bool          valid[4];
+    Vector3       at[4];
+        
+    VisibleBounds(const Vector4 &plane, const OverheadCamera &camera);
+    
+    void Print() const;
+    
+private:
+    const Vector2 LO, HI;    
+};
+
+#endif // _OVERHEADCAMERA_H

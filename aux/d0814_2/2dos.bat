@@ -1,0 +1,1 @@
+mactext -dos *.* -nosave

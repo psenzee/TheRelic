@@ -1,0 +1,20 @@
+//
+//  TextPopup.h
+//  GLGravity
+//
+//  Created by Paul Senzee on 1/19/09.
+//  Copyright 2009 __MyCompanyName__. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+typedef void (*text_callback)(const char *text, void *context);
+
+@class UITextField, UILabel;
+
+@interface TextPopup : UIAlertView <UITextFieldDelegate>
+{
+    UITextField *text;
+}
+
+@end

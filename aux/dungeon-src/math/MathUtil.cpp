@@ -1,0 +1,104 @@
+/*
+ *  MathUtil.cpp
+ *  GLGravity
+ *
+ *  Created by Paul Senzee on 1/19/09.
+ *  Copyright 2009 __MyCompanyName__. All rights reserved.
+ *
+ */
+
+
+#include "MathUtil.h"
+#include <math.h>
+
+bool MathUtil::CloseTo(const Vector3 &a, const Vector3 &b, float epsilon)
+{
+    return CloseTo(a.x, b.x, epsilon) && CloseTo(a.y, b.y, epsilon) && CloseTo(a.z, b.z, epsilon);
+}
+
+bool MathUtil::IsEqualAngle(const Vector3 &a, const Vector3 &b, float epsilon) // normalized vectors only
+{
+    return CloseTo(a.dot(b), 1.0f, epsilon);
+}
+
+Vector4 MathUtil::Unproject(const Vector4 &p, const Matrix &inverseCamera)
+{
+    Vector4 q(p);
+    q.x *= q.w; q.y *= q.w; q.z *= q.w;
+    q = inverseCamera * q;
+    return q;
+}
+
+Vector4 MathUtil::Unproject(const Vector3 &p, const Matrix &inverseCamera)
+{
+    Vector4 v(p.x, p.y, p.z, 0.0f);
+    const float *m = inverseCamera.data;
+    //  v.w is found by solving matrix * vector (just the w component) where w = 1.0 (the projected w must be 1.0):
+    //  w = m[3] * v.x + m[7] * v.y + m[11] * v.z + m[15] * v.w;
+    //  let w = 1.0 and solve for v.w,
+    //  however, we are really solving for v.w where we've already premultiplied by v.w (see the Vector4 unproject function above)
+    //  so that means we're solving:
+    //  1.0 = m[3] * v.x * v.w + m[7] * v.y * v.w + m[11] * v.z * v.w + m[15] * v.w
+    //  which is:
+    v.w = 1.0f / (m[3] * v.x + m[7] * v.y + m[11] * v.z + m[15]);
+    return Unproject(v, inverseCamera);
+}
+
+Ray MathUtil::CreateRayFromNormalizedScreen(const Vector2 &from, const Matrix &inverseCamera)
+{
+    Vector4 a(Unproject(Vector3(from.x, from.y, 0.0f), inverseCamera)),
+            b(Unproject(Vector3(from.x, from.y, 1.0f), inverseCamera)),
+    c(b - a);
+    return Ray(Vector3(a.x, a.y, a.z), Vector3(c.x, c.y, c.z).normalize());
+}
+
+Vector4 MathUtil::CreatePlaneFromVertices(const Vector3 &a, const Vector3 &b, const Vector3 &c)
+{
+    Vector3 n((b - a).cross(c - a));        
+    float   distance = -n.dot(a), m = n.length();
+    if (m == 0.f)
+    {
+        printf("invalid vertices!!\n");
+        return Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+    }
+    m = 1.0f / m; n *= m; distance *= m;
+    return Vector4(n.x, n.y, n.z, distance);
+}
+
+float MathUtil::PlaneDot(const Vector4 &plane, const Vector3 &v)
+{
+    return plane.x * v.x + plane.y * v.y + plane.z * v.z;
+}
+
+// assumes normalized ray and plane
+bool MathUtil::Intersection(const Ray &ray, const Vector4 &plane, Vector3 &at)
+{
+    float denom = PlaneDot(plane, ray.direction),
+    num   = PlaneDot(plane, ray.origin) + plane.w;
+    if (denom == 0.0f) return false;
+    at = ray.origin - ray.direction * (num / denom);
+    return true;
+}
+
+bool MathUtil::Intersection(const Ray &r, const Sphere &s, float *at)
+{
+    // We solve this second-degree equation in t:
+    // distance(p+t*v,center)==radius
+    // If we define w = p-center
+    // we can write that as
+    // <w+t*v,w+t*v> == radius*radius
+    // <w,w> + 2.0f*t*<w,v> + t*t*<v,v> - radius*radius == 0
+    // <v,v>*t*t + 2.0f*<w,v>*t + <w,w>-radius*radius == 0
+    // A*t*t + B*t*t + C*t*t == 0
+    Vector3 w = r.origin - s.center;
+    float A = r.direction.dot(r.direction);
+    float B = 2.0f * w.dot(r.direction);
+    float C = w.dot(w) - s.radius * s.radius;
+    
+    float D = B * B - 4.0f * A * C;
+    if (D < 0.0f)
+        return false;
+    if (at)
+        *at = (-B - sqrt(D)) / (2.0f * A);
+    return true;
+}

@@ -1,0 +1,33 @@
+#include "Channels.h"
+#include "IChannel.h"
+#include "IAddress.h"
+//#include "Udp2Channel.h"
+#include "TcpChannel.h"
+#include "TcpUdpChannel.h"
+#include "BluetoothChannel.h"
+
+IChannel *Channels::Open(const IAddress *address)
+{
+    IChannel *channel = 0;
+    switch (address->GetProtocol())
+    {
+			/*
+    case IAddress::PROTOCOL_UDP:       channel = new Udp2Channel;      break;
+    case IAddress::PROTOCOL_TCP_UDP:   channel = new TcpUdpChannel;    break;
+    case IAddress::PROTOCOL_TCP:       channel = new TcpChannel;       break;
+    case IAddress::PROTOCOL_BLUETOOTH: channel = new BluetoothChannel; break;
+			 */
+    default:
+        // $TODO ERROR HERE!
+        delete address;
+        return 0;
+    }
+    if (!channel->Open(address))
+    {
+        // $TODO ERROR HERE!
+        delete channel;
+        delete address;
+        return 0;
+    }
+    return channel;
+}

@@ -1,0 +1,13 @@
+# Blender3D MTL File: dun_1115_template.blend
+# Material Count: 1
+newmtl Grass_WallTop0.png
+Ns 115.686275
+Ka 0.000000 0.000000 0.000000
+Kd 0.275859 0.500732 0.162412
+Ks 0.227006 0.339190 0.052678
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd WallTop0.png
+
+

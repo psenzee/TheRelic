@@ -1,0 +1,35 @@
+#ifndef _DIEBEHAVIOR_H
+#define _DIEBEHAVIOR_H
+
+#include "core/core.h"
+#include "game/IBehavior.h"
+
+class DieBehavior : public AbstractBehavior
+{
+public:
+
+    typedef bool (*DeathCallback)(void *user);
+
+    enum { TYPE = 1005 };
+
+    DieBehavior() : AbstractBehavior(TYPE), mIsDeathComplete(false), mCallback(0), mUser(0) {}
+
+    void Start(Character *self)   { SetCharacter(self); }
+    void Reset()                  { mIsDeathComplete = false; }
+
+    bool IsDeathComplete() const  { return mIsDeathComplete; }
+    void SetDeathComplete(bool v) { mIsDeathComplete = v; }
+    void SetDeathCallback(DeathCallback callback, void *user) { mCallback = callback; mUser = user; }
+
+protected:
+
+    void CallDeathCallback() { if (mCallback) mCallback(mUser); }
+     
+private:
+
+    bool           mIsDeathComplete;
+    DeathCallback  mCallback;
+    void          *mUser;
+};
+
+#endif // _DIEBEHAVIOR_H

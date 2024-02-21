@@ -1,0 +1,23 @@
+/*
+ *  Visibility.h
+ *  GLGravity
+ *
+ *  Created by Paul Senzee on 1/2/09.
+ *  Copyright 2009 __MyCompanyName__. All rights reserved.
+ *
+ */
+
+#ifndef _VISIBILITY_H
+#define _VISIBILITY_H
+
+#include "core/xna.h"
+#include "core/aabox.h"
+
+class Visibility
+{
+public:
+    
+    static bool IsVisible(const Matrix &viewproj, const Matrix &transform, const AABox &bounds);
+};
+
+#endif // _VISIBILITY_H

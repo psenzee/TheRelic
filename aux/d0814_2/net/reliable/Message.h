@@ -1,0 +1,72 @@
+#ifndef _MESSAGE_93847_H
+#define _MESSAGE_93847_H
+
+#include <string.h>
+
+#include "FunctionContext.h"
+
+#ifdef WIN32
+typedef __int64   int64_t;
+#else
+typedef long long int64_t;
+#endif
+
+enum { MAX_MESSAGE_SIZE = 32768 };
+
+typedef bool (*SendFunction)           (void *user, const char *data, int length);
+typedef int  (*ReceiveFunction)        (void *user, char *data, int length);
+typedef bool (*MessageCompleteFunction)(void *user, int length);
+typedef bool (*SendCompleteFunction)   (void *user);
+
+typedef FunctionContext<SendFunction>            SendFunctionContext;
+typedef FunctionContext<ReceiveFunction>         ReceiveFunctionContext;
+typedef FunctionContext<MessageCompleteFunction> MessageCompleteFunctionContext;
+typedef FunctionContext<SendCompleteFunction>    SendCompleteFunctionContext;
+
+struct Message
+{
+    char *data;
+    int   length;
+
+    inline Message() : data(0), length(0) {}
+    inline Message(char *data, int length) : data(data), length(length) {}
+    inline Message(const Message &m) : data(m.data), length(m.length) {}
+    inline bool operator==(const Message &other) { return data == other.data && length == other.length; }
+
+    void Destroy();
+    void Copy(const char *data, int length);
+};
+
+struct Header
+{
+    enum { MESSAGE_VERSION        = 0x1000,
+           MESSAGE_NOT_GUARANTEED = 0x7a, MESSAGE_GUARANTEED = 0x7b,
+           MESSAGE_NOT_SPLIT      = 0x7c, MESSAGE_SPLIT      = 0x7d };
+
+    unsigned short version;
+    unsigned short time;
+    unsigned       messageid;
+    char           guaranteed;
+    char           split;
+    unsigned short chunk;
+    unsigned short totalChunks;
+};
+
+enum { ACKNOWLEDGE = 0x4c4c4c4c, ACKNOWLEDGE_SIZE = sizeof(Header) + sizeof(unsigned) };
+
+Header   GetHeader(int messageid, int time, bool guaranteed = false, bool split = false, int chunk = 0, int totalChunks = 1);
+
+bool     IsValid(const Header &h);
+bool     IsSplit(const Header &h);
+bool     IsGuaranteed(const Header &h);
+bool     IsAcknowledge(const char *data, int length);
+int      GetMessageId(const char *data);
+int64_t  GetMUID(const char *data);
+
+unsigned GetTimeStamp();
+unsigned GetNetTimeMs();
+
+Message  CreateRandomTestMessage(int size, const Header &header);
+Message  CreateRandomTestMessage(int size);
+
+#endif // _MESSAGE_93847_H

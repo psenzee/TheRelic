@@ -1,0 +1,145 @@
+print "lua:quinotaur.lua"
+
+function Serialize_Quinotaur1(c)
+  local x, y, z = c:GetPosition()
+  return
+  {
+    s_type        = c:GetType(),
+    s_hp          = c:GetMaxHitPoints(),
+    s_speed       = c:GetApproachSpeed(),
+    s_orientation = c:GetOrientation(),  
+    s_x           = x,
+    s_y           = y
+  }  
+end
+
+function Deserialize_Quinotaur1(value)
+  local c = CreateQuinotaur1(value.s_type, value.s_hp, value.s_speed, value.s_x, value.s_y)
+  c:SetPosition(value.s_x, value.s_y, 0)
+  c:ForceOrientation(value.s_orientation)
+end
+
+function Serialize_Quinotaur2(c)
+  local x, y, z = c:GetPosition()
+  return
+  {
+    s_type        = c:GetType(),
+    s_hp          = c:GetMaxHitPoints(),
+    s_speed       = c:GetApproachSpeed(),
+    s_orientation = c:GetOrientation(),  
+    s_x           = x,
+    s_y           = y
+  }  
+end
+
+function Deserialize_Quinotaur2(value)
+  local c = CreateQuinotaur2(value.s_type, value.s_hp, value.s_speed, value.s_x, value.s_y)
+  c:SetPosition(value.s_x, value.s_y, 0)
+  c:ForceOrientation(value.s_orientation)
+end
+
+function Quinotaur1(c)
+   c:SetMeterDistance(0)
+   SetTarget(c)
+end
+
+function Quinotaur1Killed(c)
+  local x, y, z = c:GetPosition() 
+  Audio_PlayAt("SkeletonKill", x, y, z, 3.0)
+  Audio_PlayAt("Hiss1", x, y, z, 1.0)
+  CreateQuinotaur2("Quinotaur2", 500, 4.0, x, y)
+  DestroyCharacter(c)
+  StartSequence(QUINOTAUR_SEQUENCE_1)
+end
+
+function Quinotaur1Hit(c)
+  local xp, yp, zp = c:GetPosition()
+  Audio_PlayAt("SkeletonHit", xp, yp, zp, 0.25)
+end
+
+function CreateQuinotaur1_Character(c, type, hp, speed, x, y)
+
+   c:AddBehavior(NewAnimationBehavior())
+   c:AddBehavior(NewAggressiveApproach())
+   c:AddBehavior(NewKillableBehavior())
+   c:AddBehavior(NewDieCollapseBehavior())
+   c:AddBehavior(NewGeneratedRolePlayer(math.random()))   
+   c:AddBehavior(NewMeleeAttack())
+   c:SetAttackSpeed(15)
+
+   SetAttributes(c, hp, speed)
+   c:SetScale(1.5 * characterScale)
+
+   c:SetRadius(characterRadius)
+   c:SetMeterWidth(3.0)
+   c:SetKnockSpin(0.0)   
+   c:SetApproachMinDistance(0)
+   c:SetWeight(5.0)   
+   c:SetApproachTooFar(600 * math.random() + 100)
+   c:AddSignalHandler(SIGNAL_DIED,         "Quinotaur1Killed")
+   c:AddSignalHandler(SIGNAL_ATTACK_START, "Quinotaur1AttackStart")   
+   c:AddSignalHandler(SIGNAL_RECEIVED_HIT, "Quinotaur1Hit")
+   
+   c:AddParticleEffect(PerpetualFireBigIndependent(x, y), -200)
+end
+
+function CreateQuinotaur1(type, hp, speed, x, y)
+   local c = NewCharacter(-1, "Quinotaur1", "Quinotaur1", x, y, 0.0)
+   CreateQuinotaur1_Character(c, "Quinotaur1", hp, speed, x, y)
+end
+
+-- Quinotaur2, second stage
+
+function Quinotaur2(c)
+   c:SetMeterDistance(0)
+   SetTarget(c)
+end
+
+function Quinotaur2Killed(c)
+  local x, y, z = c:GetPosition() 
+  Audio_PlayAt("SkeletonKill", x, y, z, 3.0)
+  Audio_PlayAt("Hiss1", x, y, z, 1.0)
+  c:CompleteEffects()
+  GiveWhiteKey()  
+ -- DestroyCharacter(c)
+end
+
+function Quinotaur2Hit(c)
+  local xp, yp, zp = c:GetPosition()
+  Audio_PlayAt("SkeletonHit", xp, yp, zp, 0.25)
+end
+
+
+function CreateQuinotaur2_Character(c, type, hp, speed, x, y)
+
+   c:AddBehavior(NewAnimationBehavior())
+   c:AddBehavior(NewAggressiveApproach())
+   c:AddBehavior(NewKillableBehavior())
+   c:AddBehavior(NewDieCollapseBehavior())
+   c:AddBehavior(NewGeneratedRolePlayer(math.random()))     
+   c:AddBehavior(NewMeleeAttack())
+
+   SetAttributes(c, hp, speed)
+   c:SetScale(0.9 * characterScale)
+
+   c:SetRadius(characterRadius)
+   c:SetMeterWidth(3.0)
+   c:SetKnockSpin(0.0)   
+   c:SetApproachMinDistance(0)
+   c:SetWeight(5.0)   
+   c:SetApproachTooFar(600 * math.random() + 100)
+   c:AddSignalHandler(SIGNAL_DIED,         "Quinotaur2Killed")
+   c:AddSignalHandler(SIGNAL_ATTACK_START, "Quinotaur2AttackStart")   
+   c:AddSignalHandler(SIGNAL_RECEIVED_HIT, "Quinotaur2Hit")
+   
+   c:AddParticleEffect(PerpetualFireIndependent(x, y), -128)
+   
+   return c   
+end
+
+function CreateQuinotaur2(type, hp, speed, x, y)
+   local c = NewCharacter(-1, "Quinotaur2", "Quinotaur2", x, y, 0.0)
+   CreateQuinotaur2_Character(c, "Quinotaur2", hp, speed, x, y)
+   return c
+end
+

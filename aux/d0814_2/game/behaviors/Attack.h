@@ -1,0 +1,69 @@
+#ifndef _ATTACK_H
+#define _ATTACK_H
+
+#include "core/core.h"
+#include "game/IBehavior.h"
+#include "game/Character.h"
+
+class Attack : public AbstractBehavior
+{
+public:
+
+    enum { TYPE = 1007 };
+
+    Attack() : AbstractBehavior(TYPE),
+               mAttackSpeed(1.f), mMaxAttackDistance(60.f), mAttackTarget(0),
+               mAttackFrames(0), mMaxFullFrames(0), mFullFrames(0), mAttackMaxFrames(0),
+               mAttackReady(true), mAutoAttack(true), mTriggerAttack(true),
+               mLastAttack(0), mAttackTotalFrames(0) {}
+
+    void                    Start(Character *self)            { SetCharacter(self); }
+
+    // be sure and call this from the subclass
+    void                    Update(const GameTime &time);
+
+    void                    StartAttack();
+
+    inline void             SetAttackSpeed(float speed)       { mAttackSpeed = speed; }
+    inline void             SetAttackTarget(Character *c)     { mAttackTarget = c; }
+    inline void             SetAttackMaxFrames(int frames, int fullframes)    { mAttackMaxFrames = frames; mMaxFullFrames = fullframes; }
+
+    inline bool             IsAttackInProgress() const        { return mAttackFrames > 0; }
+    bool                    IsAttackActive() const;
+    bool                    IsAbleToAttack() const;
+    inline bool             IsAttackReady() const             { return mAttackReady; }
+    inline int              GetAttackCurrentFrame() const     { return (mAttackMaxFrames - mAttackFrames - 1); }
+
+    inline float            GetAttackSpeed() const            { return mAttackSpeed; }
+    inline int              GetAttackFrames() const           { return mAttackFrames; }
+    inline Character       *GetAttackTarget()                 { return (mAttackTarget = Character::GetValidCharacter(mAttackTarget)); }
+    inline const Character *GetAttackTarget() const           { return (mAttackTarget = Character::GetValidCharacter(mAttackTarget)); }
+    float                   GetAttackDistance() const;
+    void                    SetMaxAttackDistance(float d)     { mMaxAttackDistance = d; }
+    float                   GetMaxAttackDistance() const      { return mMaxAttackDistance; }
+
+    void                    SetAutoAttack(bool value)         { mAutoAttack = value; mTriggerAttack = value; }
+    bool                    IsAutoAttack() const              { return mAutoAttack; }
+    void                    TriggerAttack()                   { mTriggerAttack = true; }
+
+protected:
+
+    //void                    SetAttackFrames(int frames, int fullFrames);
+
+private:
+
+    bool               mAttackReady,
+                       mTriggerAttack,
+                       mAutoAttack;
+    int                mAttackFrames,
+                       mAttackMaxFrames,
+                       mLastAttack,
+                       mMaxFullFrames,
+                       mFullFrames,
+                       mAttackTotalFrames;
+    float              mAttackSpeed,
+                       mMaxAttackDistance;
+    mutable Character *mAttackTarget;
+};
+
+#endif // _ATTACK_H

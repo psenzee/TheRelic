@@ -1,0 +1,31 @@
+#ifndef _MESSAGER_293487_H
+#define _MESSAGER_293487_H
+
+#include "core/core_assert.h"
+#include <string.h>
+
+#include "Message.h"
+#include "MessageReceiver.h"
+#include "MessageSender.h"
+
+// messager provides a reliable transport layer
+class Messager
+{
+public:
+
+    Messager(SendFunctionContext send, ReceiveFunctionContext receive);
+
+    int  Receive(char *data, int length);
+    bool Send(const char *data, int length);
+
+    void Update();
+
+public:
+
+    MessageReceiver mReceiver;
+    MessageSender   mSender;
+
+    static bool MessagerSend(void *user, const char *data, int length);
+};
+
+#endif // _MESSAGER_293487_H

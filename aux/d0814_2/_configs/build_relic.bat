@@ -1,0 +1,1 @@
+ipmesh_relic *.obj

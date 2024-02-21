@@ -1,0 +1,29 @@
+#ifndef _ICHANNEL_H
+#define _ICHANNEL_H
+
+#include <set>
+#include <vector>
+
+#include "IAddress.h"
+#include "AddressAcquirer.h"
+
+class IChannel
+{
+public:
+    virtual ~IChannel() {}
+
+    // owns the remote address
+    
+    virtual bool Open(const IAddress *address) = 0;
+    virtual bool Send(const char *data, int length) = 0;
+    virtual bool SendReliable(const char *data, int length) = 0;
+    virtual int  Receive(char *data, int length) = 0;
+
+    // Close() will delete the remote address
+    virtual void Close() = 0;
+
+    virtual const IAddress *GetRemoteAddress() = 0;
+    //virtual const IAddress &GetLocalAddress() = 0;
+};
+
+#endif // _ICHANNEL_H

@@ -1,0 +1,15 @@
+del C:\Dungeon3dArt\ex\anim_barb_run_attack1_*.obj
+pause
+copy C:\Dungeon3dArt\Final\anim_barb_run_attack1_*.obj C:\Dungeon3dArt\ex\
+for %%x in (C:\Dungeon3dArt\ex\anim_barb_run_attack1_body_0000*.obj) do meshtool -transform %%x %%x -scale 10.0 10.0 10.0
+for %%x in (C:\Dungeon3dArt\ex\anim_barb_run_attack1_axe_0000*.obj) do meshtool -transform %%x %%x -scale 10.0 10.0 10.0
+copy C:\Dungeon3dArt\ex\anim_barb_run_attack1_body_0000*.obj C:\root\d4\d0814_2\_configs\
+copy C:\Dungeon3dArt\ex\anim_barb_run_attack1_axe_0000*.obj C:\root\d4\d0814_2\_configs\
+ipmesh_relic anim_barb_run_attack1_body_0000*.obj
+ipmesh_relic anim_barb_run_attack1_axe_0000*.obj
+rem call build3.bat
+rem call build_relic.bat
+copy anim_barb_run_attack1_body_0000*.ips meshes
+copy anim_barb_run_attack1_axe_0000*.ips meshes
+bundler meshes/*.ips meshes.bin
+copy meshes.bin c:\Relic\trunk\data\meshes
