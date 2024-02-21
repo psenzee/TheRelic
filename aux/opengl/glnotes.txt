@@ -1,0 +1,181 @@
+#include <string.h>
+
+struct Buffer
+{
+    unsigned  size,
+              stride;
+    void     *data;
+
+    inline Buffer(void *data = 0, unsigned stride = 0, unsigned count = 0) : stride(stride), size(stride * count), data(data) {}
+    inline unsigned count() const { return size / stride; }
+
+    void copy_to(Buffer &p) const
+    {
+        p.stride = stride; p.size = size;
+        p.data = new unsigned char [size];
+        memcpy(p.data, data, size);
+    }
+    void destroy()
+    {
+        size = stride = 0;
+        delete [] data;
+        data = 0;
+    }
+};
+
+14  struct play3dObjFixed
+15  {
+16      int faceCount;
+17      int vertexCount;
+18      GLfixed *vertexs;
+19      GLfixed *normals;
+20      GLfixed *uvs;
+21      unsigned short *faces;
+22
+23      void loadFromFile(const char * fname);
+24      play3dObjFixed() { vertexs = normals = uvs = 0; faces = 0; }
+25      ~play3dObjFixed() { clean(); }
+26      void clean(void);
+27  };
+
+
+class GeometryType
+{   
+public:
+
+    enum Type { NONE, TRIANGLE_LIST, TRIANGLE_STRIP, TRIANGLE_FAN, LINE_LIST, LINE_STRIP, POINT_LIST, QUAD_LIST };
+
+private:
+    GeometryType();
+    ~GeometryType();
+};
+
+class Geometry
+{    
+public:
+
+    GeometryType::Type  type;
+    Buffer              vertices;
+    Buffer              indices;
+
+    inline Geometry() : type(GeometryType::NONE) {}
+    inline Geometry(GeometryType::Type type, const Buffer &vertices) : type(type), vertices(vertices) {}
+    inline Geometry(GeometryType::Type type, const Buffer &vertices, const Buffer &indices) : type(type), vertices(vertices), indices(indices) {}
+    inline Geometry(const Geometry &u) : type(u.type), vertices(u.vertices), indices(u.indices) {}
+    inline Geometry &operator=(const Geometry &u) { type = u.type; vertices = u.vertices; indices = u.indices; return *this; }
+
+    inline unsigned vertex_count() const { return vertices.count(); }
+
+    void destroy()
+    {
+        type = GeometryType::NONE;
+        vertices.destroy();
+        indices.destroy();
+    }
+    Geometry *copy() const
+    {
+        Geometry *p = new Geometry;
+        p->type = type;
+        vertices.copy_to(p->vertices);
+        indices.copy_to(p->indices);
+        return p;
+    }
+};
+
+13  void play3dObjFixed::loadFromFile(const char * fname)
+14  {
+15      FILE * fp = fopen(fname, "rb");
+16      fread( &faceCount, sizeof(int), 1, fp );
+17      fread( &vertexCount, sizeof(int), 1, fp );
+18
+19      vertexs = (GLfixed *) malloc( sizeof(GLfixed) * vertexCount * 3 );
+20      normals = (GLfixed *) malloc( sizeof(GLfixed) * vertexCount * 3 );
+21      uvs = (GLfixed *) malloc( sizeof(GLfixed) * vertexCount * 2 );
+22      faces = (unsigned short *) malloc( sizeof(unsigned short) * faceCount * 3 );
+23
+24      fread( vertexs, sizeof(GLfixed), vertexCount * 3, fp );
+25      fread( normals, sizeof(GLfixed), vertexCount * 3, fp );
+26      fread( uvs,     sizeof(GLfixed), vertexCount * 2, fp );
+27
+28      fread( faces,   sizeof(unsigned short), faceCount * 3, fp );
+29
+30      fclose(fp);
+31  }
+32
+33  void play3dObjFixed::clean(void)
+34  {
+35      if ( vertexs != 0 ) free(vertexs);
+36      if ( normals != 0 ) free(normals);
+37      if ( uvs != 0 ) free(uvs);
+38      if ( faces != 0 ) free(faces);
+39      vertexs = normals = uvs = 0; faces = 0;
+40  }
+
+
+
+
+// http://www.play3d.net/OpenGLES/app1/objviewer.html
+
+class OpenGLMesh
+{
+public:
+    OpenGLMesh(const Geometry &geometry)
+    {
+    }
+    void Render()
+    {
+    }
+ 37  void draw(HWND hWnd, HDC hdc)
+ 38  {
+ 39      if ( ! g_egl.isInitialized() ) return;
+ 40
+ 41      if ( g_egl.makeCurrent() )
+ 42      {
+ 43          glClear(GL_COLOR_BUFFER_BIT);
+ 44
+ 45          glEnableClientState( GL_VERTEX_ARRAY );
+ 46          glEnableClientState( GL_NORMAL_ARRAY );
+ 47          // glEnableClientState( GL_UV_ARRAY );
+ 48          // 3 means (x,y,z) for one vertex, coord is in fixed number, stride is 0
+ 49          glVertexPointer( 3, GL_FIXED, 0, g_model.vertexs ); 
+ 50          glNormalPointer( GL_FIXED, 0, g_model.normals );
+ 51          // glTexCoordPointer( 3, GL_FIXED, 0, g_model.uvs );
+ 52
+ 53          glDrawElements( GL_TRIANGLES, g_model.faceCount * 3, GL_UNSIGNED_SHORT, g_model.faces );
+ 54
+ 55          g_egl.swapBuffers();
+ 56      }
+ 57
+ 58      reportError();
+ 59  }
+    
+};
+
+
+// pvr..
+114 void draw(HWND hWnd, HDC hdc)
+115 {
+116     if ( ! egl->isInitialized() ) return;
+117 
+118     if ( egl->makeCurrent() )
+119     {
+120     glEnable(GL_DEPTH_TEST);
+121     glDepthFunc(GL_LEQUAL);
+122 
+123     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+124         glPushMatrix();
+125
+126         //glRotatex( g_rx, Float2Fixed(1.0f), 0, 0 );
+127         //glRotatex( g_ry, 0, Float2Fixed(1.0f), 0 );
+128 
+129         glScalex( zoom, zoom, Float2Fixed(1.0f) );
+130 
+131         // draw here
+132         testPVRTC();
+133 
+134         glPopMatrix();
+135         egl->swapBuffers();
+136     }
+137 
+138     reportError();
+139 }

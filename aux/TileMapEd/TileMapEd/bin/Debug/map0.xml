@@ -1,0 +1,4 @@
+<world>
+  <map   file="mp00.emp" />
+  <tiles image="mazetiles.png" file="" size="32" />
+</world>

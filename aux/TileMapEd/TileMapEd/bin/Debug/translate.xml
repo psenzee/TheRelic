@@ -1,0 +1,13 @@
+<translate-map>
+
+  <tile old="0"  new="1"   />  <!-- none -->
+  <tile old="21" new="20"  />  <!-- wall: corner -->
+  <tile old="17" new="193" />  <!-- wall: vertical -->  
+  <tile old="18" new="17"  />  <!-- wall: vertical-end-top -->    
+  <tile old="23" new="22"  />  <!-- wall: vertical-end-bottom -->
+  <tile old="16" new="161" />  <!-- wall: horizontal -->
+  <tile old="19" new="18"  />  <!-- wall: horizontal-end-left -->      
+  <tile old="20" new="19"  />  <!-- wall: horizontal-end-right -->        
+  <tile old="24" new="353" />  <!-- wall: tee -->          
+
+</translate-map>

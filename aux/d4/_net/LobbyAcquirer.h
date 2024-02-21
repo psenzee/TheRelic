@@ -1,0 +1,14 @@
+#ifndef _LOBBYACQUIRER_H
+#define _LOBBYACQUIRER_H
+
+#include "AddressAcquirer.h"
+
+class LobbyAcquirer : public AbstractAddressAcquirer
+{
+public:
+    LobbyAcquirer();
+
+    void Update();
+};
+
+#endif // _LOBBYACQUIRER_H

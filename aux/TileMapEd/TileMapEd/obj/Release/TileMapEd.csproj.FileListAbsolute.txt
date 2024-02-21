@@ -1,0 +1,10 @@
+C:\root\TileMapEd\TileMapEd\bin\Release\TileMapEd.exe
+C:\root\TileMapEd\TileMapEd\bin\Release\TileMapEd.pdb
+C:\root\TileMapEd\TileMapEd\obj\Release\ResolveAssemblyReference.cache
+C:\root\TileMapEd\TileMapEd\obj\Release\TileMapEd.MapEditor.resources
+C:\root\TileMapEd\TileMapEd\obj\Release\TileMapEd.MapEditorControl.resources
+C:\root\TileMapEd\TileMapEd\obj\Release\TileMapEd.Properties.Resources.resources
+C:\root\TileMapEd\TileMapEd\obj\Release\TileMapEd.csproj.GenerateResource.Cache
+C:\root\TileMapEd\TileMapEd\obj\Release\TileMapEd.exe
+C:\root\TileMapEd\TileMapEd\obj\Release\TileMapEd.pdb
+C:\root\TileMapEd\TileMapEd\obj\Release\TileMapEd.MouseClickInfo.resources

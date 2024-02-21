@@ -1,0 +1,180 @@
+TODOS
+
+.xml (or other config) reading code
+
+  - learn blender
+  X rolling ball
+    - need to fix right
+    - learn quats
+  X basic environ map
+  X sphere texture mapping (it's ok)
+  - collision!
+  - bit of clean up
+- figure out how to obtain a x86mac + iphone for use
+  - get will's number
+  - macmini
+  - iphone
+
+// 
+
+class Player
+{   
+    IGameObject GetGameObject // the corresponding physical object
+}
+
+class Level
+{
+    Player                  Player
+    Collection<IGameObject> Objects
+}
+
+class Collision // make this a value type
+{
+    bool    collides
+    Vector3 direction
+}
+
+interface (partial) IGameObject
+{
+    Mover     GetMover()
+    Collision Collides(IGameObject)
+}
+
+class GameContext
+{
+    // game variables, etc..
+    // this is the analog of the current PlatformerGame
+
+    void       GetInput(..)
+    void       Update(..)
+    void       Draw(..)
+    etc..
+}
+
+interface IGameState
+{
+    void       GetInput()
+    void       Update()
+    void       Draw()
+    etc..    
+    
+    IGameState GetNextState(GameContext)
+}
+
+class PlayLevelState       : IGameState {}
+class DieState             : IGameState {}
+class FallState            : IGameState {}
+class LevelTransitionState : IGameState {}
+
+///////// MOVEMENT //////////////
+
+bool Equals(float a, float b)
+{
+    // compare with epsilon
+}
+
+bool CloseTo(float a, float b, float delta)
+{
+}
+
+sealed class Sphere
+{
+    public Vector3    Center
+    public float      Radius
+    
+    public Sphere()
+    public Sphere(Vector3 c, float r)
+}
+
+sealed class Motion : ICloneable // instead of clone, can we make this a value type?
+{
+    public Vector3    Position
+    public Vector3    Direction
+    public Quaternion Orientation
+    public Vector3    Up                 // must be normalized
+    
+    public Motion()
+    public Motion(Vector3 p, Vector3 d, Quaternion o, Vector u)
+    
+    public Motion Clone()
+}
+
+class MotionHelper
+{
+    public static float GetAngle(Vector3 a, Vector3 b)
+    {
+        return Math.Acos(Vector3.Dot(a, b));
+    }
+    public static float GetAngle(Motion a, Motion m)
+    {
+        return GetAngle(m.Direction, a.Direction);
+    }
+    public static Vector3 GetUpAxis(Motion a, Motion m)
+    {
+        Vector3 up = Vector3.Cross(Vector3.Normalize(m.Direction), Vector3.Normalize(this.Motion.Direction));
+        if (!Equals(up.LengthSquared(), 1.0f))
+            up = m.Up;
+        return up;
+    }
+    public static bool Collinear(Vector3 a, Vector b, float delta)
+    {
+        // $todo
+    }
+}
+
+class Mover : ICloneable
+{
+    public Motion Motion    [r]
+    public Sphere Bounds    [r]
+
+    public abstract void Update(Motion m)
+    
+    public Mover(Motion m, Sphere b)
+    
+    public Mover Clone()
+}
+
+class NullMover : Mover
+{
+    public void Update(Motion m) {}
+}
+
+class OrientedMover : Mover
+{
+    public void Update(Motion m)
+    {   
+        Quaternion q = null;
+        if (!MoverHelper.Collinear(m.Direction, this.Motion.Direction, DELTA))
+            q = Quaternion.CreateFromAxisAndAngle(GetUpAxis(m), GetAngle());
+        this.Motion = m.Clone();
+        if (q != null)
+            this.Motion.Orientation = q;
+    }
+}
+
+class RollMover : Mover
+{
+    public void Update(Motion m)
+    {
+        this.previous = this.Motion.Clone();
+        Quaternion q = null;
+        // $todo, check that previous and m directions/positions are in sync, or do nothing!
+        if (!MoverHelper.Collinear(m.Direction, this.Motion.Direction, DELTA))
+        {
+            float angle = m.Direction.Length() / m.Bounds.Radius;
+            if (!CloseTo(angle, 0.0f, DELTA))
+            {
+                Vector3 axis = Vector3.Cross(Vector3.Normalize(m.Direction), 
+                                             MotionHelper.GetUpAxis(this.Motion, m));
+                q = Quaternion.CreateFromAxisAngle(axis, angle);
+                // $todo, now we still have to do the mess with reorienting the quaternion
+                // using the previous..?
+            }
+        }
+        this.Motion = m.Clone();
+        if (q != null)
+            this.Motion.Orientation = q;
+    }
+   
+    private Motion previous;
+}

@@ -1,0 +1,11 @@
+C:\root\TileMapEd\TileMapEd\bin\Debug\TileMapEd.exe
+C:\root\TileMapEd\TileMapEd\bin\Debug\TileMapEd.pdb
+C:\root\TileMapEd\TileMapEd\obj\Debug\ResolveAssemblyReference.cache
+C:\root\TileMapEd\TileMapEd\obj\Debug\TileMapEd.MapEditor.resources
+C:\root\TileMapEd\TileMapEd\obj\Debug\TileMapEd.MapEditorControl.resources
+C:\root\TileMapEd\TileMapEd\obj\Debug\TileMapEd.Properties.Resources.resources
+C:\root\TileMapEd\TileMapEd\obj\Debug\TileMapEd.csproj.GenerateResource.Cache
+C:\root\TileMapEd\TileMapEd\obj\Debug\TileMapEd.exe
+C:\root\TileMapEd\TileMapEd\obj\Debug\TileMapEd.pdb
+C:\root\TileMapEd\TileMapEd\obj\Debug\TileMapEd.MapControl.resources
+C:\root\TileMapEd\TileMapEd\obj\Debug\TileMapEd.MapTabControl.resources

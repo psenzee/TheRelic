@@ -1,0 +1,391 @@
+//-------------------------
+// Begin Microsoft code
+//-------------------------
+
+
+//======================================
+// The game world is represented by a
+// grid of cells. Each cell is a byte
+// containing one of the values in
+// EWorldCellType 
+//======================================
+enum EWorldCellType
+{
+	WC_Open = 0,
+	WC_Cheese,
+	WC_Wall,
+};
+
+//======================================
+// Each game object has an update
+// function called on it which must
+// return one of the EMovementState
+// values representing what that game
+// object wants to do next.
+//======================================
+enum EMovementState
+{
+	STOPPED= 0,
+	MOVING_UP,
+	MOVING_DOWN,
+	MOVING_LEFT,
+	MOVING_RIGHT,
+};
+
+
+//======================================
+// WorldObjects are represented by a 2D
+// position in the world grid of cells,
+// and a movement state
+//======================================
+struct WorldObject
+{
+	int xpos;
+	int ypos;
+	EMovementState state;
+};
+
+//-------------------------
+// end Microsoft code
+//-------------------------
+
+//-------------------------
+// begin Ryan code
+//-------------------------
+
+// Double-ended queue that we use to store cell indices
+typedef std::deque<int> Deque;
+
+// Our "open set" of cells not yet searched via DFS
+static Deque sOpenSet;
+
+// List of cells used during DFS backtracking.
+// Like a trail of breadcrumbs.
+static Deque sBackTrack;
+
+// List of cells that lead the mouse back to where it was
+// before it got chased by cats.
+static Deque sEscapeTrail;
+
+// Encapsulates a bitmask where each cell is represented by a single bit
+class CellMask
+{
+public:
+    // Reserve memory for bitmask
+    inline void Reserve( int size )
+    {
+        mBitfield.reserve(size);
+        mBitfield.resize(size);
+    }
+
+    // Clears n bits to 0 
+    inline void ClearAll( int n ) { mBitfield.assign(n, false); }
+
+    // Returns true if and only if bit i is true
+    inline bool IsSet( int i ) { return mBitfield[i]; }
+
+    // Sets bit i to true
+    inline void Set( int i )  { mBitfield[i] = true; }
+
+    // Sets bit i to false
+    inline void Clear( int i ) { mBitfield[i] = false; }
+
+private:
+    std::vector<bool> mBitfield;  // TODO: maybe bitset would be better, or even char[]
+};
+
+// Indicates whether a given cell has been visited during exploring/backtracking
+static CellMask sCellMaskVisited;
+
+// Used to mark our "open" and "closed" sets in the A* search algorithm.
+static CellMask sCellMaskOpen;
+static CellMask sCellMaskClosed;
+
+
+// State of the mouse during DFS
+enum EMouseState
+{
+    EXPLORING = 0,  // Exploring the maze
+    BACKTRACKING,   // Backtracking during DFS
+    ESCAPING,       // Escaping from cat(s)
+    RETURNING,      // Returning from an escape
+};
+
+// Current mouse state
+static EMouseState sMouseMode = EXPLORING;
+
+// The mouse's state prior to being chased
+static EMouseState sMouseModeBeforeEscaping = EXPLORING;
+
+// The cell the mouse was on prior to being chased
+static int sCellBeforeEscaping = -1;
+
+
+//
+// The following functions return the neighboring cell above/below/left of/right of the given cell
+//
+
+inline int GetTopNeighbor( const GameWorld& World, int cellIdx )
+{
+    int newIdx = cellIdx-World.Width;
+    return (cellIdx >= World.Width && World.Cells[newIdx] != WC_Wall) ? newIdx : -1;
+}
+
+inline int GetBottomNeighbor( const GameWorld& World, int cellIdx )
+{
+    int newIdx = cellIdx+World.Width;
+    return (cellIdx <= (World.Height-1)*World.Width && World.Cells[newIdx] != WC_Wall) ? newIdx : -1;
+}
+
+inline int GetLeftNeighbor( const GameWorld& World, int cellIdx )
+{
+    int newIdx = cellIdx-1;
+    int xpos = cellIdx % World.Width;
+    return ( xpos > 0 && World.Cells[newIdx] != WC_Wall) ? newIdx : -1;
+}
+
+inline int GetRightNeighbor( const GameWorld& World, int cellIdx )
+{
+    int newIdx = cellIdx+1;
+    int xpos = cellIdx % World.Width;
+    return ( xpos < World.Width && World.Cells[newIdx] != WC_Wall) ? newIdx : -1;
+}
+
+// Returns the direction to move order to go from mouseCellIdx to cellIdx.
+// If the cells aren't adjacent, then we return STOPPED.
+inline EMovementState GetDirection( int cellIdx, int mouseCellIdx, int worldWidth )
+{
+    EMovementState nextMove = STOPPED;
+    if ( cellIdx == mouseCellIdx-1 )
+    {
+        nextMove = MOVING_LEFT;
+    }
+    else if ( cellIdx == mouseCellIdx+1 )
+    {
+        nextMove = MOVING_RIGHT;
+    }
+    else if ( cellIdx == mouseCellIdx + worldWidth )
+    {
+        nextMove = MOVING_DOWN;
+    }
+    else if ( cellIdx == mouseCellIdx - worldWidth )
+    {
+        nextMove = MOVING_UP;
+    }
+
+    return nextMove;
+}
+
+
+
+// Gets the so-called "Manhattan" distance between two cells.
+// (That is, deltaX + deltaY)
+inline int ManhattanDistance( int x1, int y1, int x2, int y2 )
+{
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+    return ((dx > 0) ? dx : -dx) + ((dy > 0) ? dy : -dy);
+}
+
+// Returns the sum total of distances from the given position to all cats that are
+// within a certain threshold distance.
+inline int NearCatDistanceSum( int x, int y, const GameWorld& World )
+{
+    // Only care about cats that are 2 cells away or less
+    const int CAT_DIST_THRESHOLD = 2;  
+    int sum = 0;
+
+    // for each cat
+    for ( int i=0; i<World.TotalCats; ++i )
+    {
+        int catDistance = ManhattanDistance( x, y, World.Cats[i].xpos, World.Cats[i].ypos );
+
+        if ( catDistance <= CAT_DIST_THRESHOLD ) // ignore far-away cats
+        {
+            sum += catDistance;
+        }
+    }
+    return sum;
+}
+
+// This struct is used by the A* search algorithm to keep track of "scores"
+// (a representation of the desirability of a certain path, where shorter is better)
+struct Score
+{
+    Score() : idx(-1), prev(-1) {}
+    int idx, g, h, f, prev; // idx is the cell index; prev is the previous cell index in the path
+
+    // we overload operator< because Score is also stored in a priority_queue.
+    // note the "less-than" test is actually ">" because we want to reverse the default ordering of priority_queue.
+    bool operator<( const Score& other ) const
+    {
+        return f > other.f;
+    }
+};
+
+// Maps cell index to Score
+typedef stdext::hash_map<int, Score> ScoreMapT;
+
+// Our mapping of index to Score 
+static ScoreMapT sScoreMap;
+
+// This is our priority queue used by A*.
+//
+// The STL priority_queue appears to be implemented in terms of a binary heap,
+// so insert/removal operations should be O(log N), which is nice because
+// I really didn't want to implement a binary heap or fibbonacci heap myself.
+typedef std::priority_queue< Score > PriorityQueueT;
+
+// This function puts the shortest path found by A* into the given Deque. It's
+// called at the end of the A* algorithm. Basically it walks the list of "prev" indices.
+static int ReconstructBacktrack(int from, int current, Deque* backTrack )
+{    
+    ScoreMapT::iterator i = sScoreMap.find(current);
+    while( i != sScoreMap.end() && current != -1 )
+    {
+        backTrack->push_front(current);
+        current = (*i).second.prev;
+        i = sScoreMap.find( current );
+    }
+    if ( !backTrack->empty() )
+    {
+        return backTrack->front();
+    }
+    return from;
+}
+
+
+//
+// This function performs A* search based on Wikipedia (pseudocode) description of the algorithm: http://en.wikipedia.org/wiki/A-star_algorithm.
+// startCell: index of starting cell
+// endCell:   index of ending cell
+// backtrack: will contain the shortest path between startCell and endCell, as constructed by the A* algorithm
+//
+static EMovementState AStarSearch( const GameWorld& World, int startCell, int endCell, Deque* backTrack )
+{
+    int startCellX = startCell % World.Width;
+    int endCellX = endCell % World.Width;
+
+    // For my implementation of A* searching:
+    //  - We are using "Manhattan" distance as heuristic estimate of distance.
+    //  - The cells belonging to the "open set" are contained by a priority queue (openSetPQ) and marked by
+    //    a bitmask (sCellMaskOpen).
+    //  - The cells belonging to the "closed set" are marked by sCellMaskClosed.
+
+    sCellMaskOpen.ClearAll(World.Width*World.Height);
+    sCellMaskOpen.Set( startCell );
+
+    sCellMaskClosed.ClearAll(World.Width*World.Height);
+
+    backTrack->clear();
+    sScoreMap.clear();
+
+    PriorityQueueT openSetPQ;
+
+    //
+    // First, add the start cell to the open set and initialize its score
+    //
+    {
+        Score score;
+        score.idx = startCell;
+        score.g = 0;
+        score.h = ManhattanDistance( startCellX, startCell / World.Width, endCellX, endCell / World.Width );
+        score.f = score.h;
+        score.prev = -1;
+        sScoreMap[ startCell ] = score;
+        openSetPQ.push( score );
+    }
+
+    //
+    // Repeatedly remove a cell from the open set and examine it...
+    //
+    while( !openSetPQ.empty() )
+    {
+        int x = openSetPQ.top().idx;
+        if ( x == endCell )
+        {
+            //
+            // Found a shortest path between startCell and endCell!
+            // Copy the path into "backTrack", and return to caller.
+            //
+            int nextIdx = ReconstructBacktrack( startCell, endCell, backTrack );
+            return GetDirection( nextIdx, startCell, World.Width );
+        }
+
+        // mark the cell as being in the closed set now, and not in the open set.
+        openSetPQ.pop(); 
+        sCellMaskClosed.Set(x);
+        sCellMaskOpen.Clear(x);
+
+        // examine each neighbor of this cell...
+        int neighbor[4];
+        neighbor[0] = GetTopNeighbor(World, x);
+        neighbor[1] = GetRightNeighbor(World, x);
+        neighbor[2] = GetBottomNeighbor(World, x);
+        neighbor[3] = GetLeftNeighbor(World, x);
+        for ( int neighborIdx = 0; neighborIdx<4; ++neighborIdx )
+        {
+            // y is the current neighbor of the cell x
+            int y = neighbor[ neighborIdx ];
+            if ( y < 0 || sCellMaskClosed.IsSet(y) )
+                continue;
+
+            //
+            // calculate the "g" score of the current neighbor.
+            //
+            int g;
+            ScoreMapT::iterator i = sScoreMap.find( x );
+            if ( i!= sScoreMap.end() )
+            {
+                g = sScoreMap[ x ].g;
+            }
+            else
+            {
+                g = 0x7FFFFFFE;
+            }            
+            int g_score_prime = g + 1;
+            bool use_g_score_prime = true;
+            bool add_to_pq = false;
+
+            if ( !sCellMaskOpen.IsSet(y) )
+            {
+                // this neighbor isn't in the open set yet, so-- add it!
+                add_to_pq = true;
+                sCellMaskOpen.Set( y );
+            }
+            else if ( g_score_prime < sScoreMap[ y ].g )
+            {
+                // g_score_prime is better than the neighbor's g score
+            }
+            else
+            {
+                // g_score_prime is worse than the neighbor's g score
+                use_g_score_prime = false;
+            }
+
+            //
+            // update the g, h and f score of the neighbor and add it to the priority queue 
+            // if the neighbour isn't already in the open set
+            //
+            Score s;
+            s.idx = y;
+
+            s.g = use_g_score_prime ? g_score_prime : g;
+            s.h = ManhattanDistance( y % World.Width, y / World.Width, endCellX, endCell / World.Width );
+            s.f = s.g + s.h;
+            s.prev = x;
+
+            sScoreMap[ y ] = s;
+            if ( add_to_pq )
+            {
+                openSetPQ.push(s);
+            }
+        }
+    }
+    return STOPPED;
+}
+
+
+//-------------------------
+// end of Ryan code
+//-------------------------

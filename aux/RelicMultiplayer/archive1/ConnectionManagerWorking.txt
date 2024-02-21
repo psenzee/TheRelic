@@ -1,0 +1,157 @@
+typedef void (*ReceiveCallback)(int connectionid, const void *data, int length, void *user);
+typedef void (*DisconnectCallback)(int connectionid, int type, void *user);
+
+class IConnection
+{
+public:
+
+    virtual ~IConnection() {}
+   
+    //virtual bool Open() = 0; // Do we want this here?
+    
+    virtual int  GetConnectionId() const = 0;
+    virtual bool Send(const char *data, int length, bool reliable, bool sequenced = true) = 0;
+    virtual void Process() = 0;
+    virtual void Close() = 0;    
+    
+    // for use by connection manager
+    virtual void SetReceive(ReceiveCallback callback, void *user) = 0;
+    virtual void SetDisconnect(DisconnectCallback callback, void *user) = 0;
+};
+
+// bluetooth or enet
+class IClientConnector
+{
+public:
+
+    virtual bool StartConnect()  = 0;
+    virtual void Process()       = 0;    
+    virtual bool FinishConnect() = 0;
+};
+
+class ConnectionManager
+{
+    std::vector<IConnection *>  mConnections;
+    size_t                      mMaxConnections;
+    ReceiveCallback             mReceiveCallback;
+    void                       *mReceiveUser;
+    DisconnectCallback          mDisconnectCallback;
+    void                       *mDisconnectUser;
+    
+    enum { DEFAULT_MAX_CONNECTIONS = 4 };
+    
+    void RejectConnection_Full(IConnection *connection)
+    {
+        connection->Send(/*rejection message*/);
+        Close(connection);
+    }
+    void AcceptConnection(IConnection *connection)
+    {
+        connection->Send(/*accept message*/);
+    }    
+    int GetIndexForConnectionId(int connectionid)
+    {
+        for (size_t i = 0, sz = mConnections.size(); i < sz; i++)
+        {
+            IConnection *connection = mConnections[i];
+            if (connection && connection->GetConnectionId() == connectionid)
+                return static_cast<int>(i);
+        }
+        return -1;
+    }
+
+public:
+
+    ConnectionManager() : mMaxConnections(DEFAULT_MAX_CONNECTIONS) {}
+
+    typedef void (*ConnectionRequestCallback)(int connectionid, const void *data, int length, void *user); // may or may not always be called .. enet?
+    
+    void         SetMaxConnections(size_t max) { mMaxConnections = max; }
+    size_t       GetMaxConnections() const     { return mMaxConnections; }
+
+    bool         AddConnection(IConnection *connection)
+    { 
+        if (IsCapacityFull())
+        {
+            RejectConnection_Full(connection)
+            return false;        
+        }
+        mConnections.push_back(connection);
+        AcceptConnection(connection);        
+        return true;
+    }
+    
+    bool         Close(IConnection *connection)
+    {
+    
+    
+    }
+    
+    bool         IsCapacityFull() const { return GetConnectionCount() >= GetMaxConnections(); }
+    size_t       GetConnectionCount() const { return mConnections.size(); }
+    IConnection *GetConnectionAt(int n) const { return mConnections[n]; }
+    bool         RemoveConnectionAt(int n)
+    {
+        if (n < 0 || n >= static_cast<int>(mConnections.size()))
+            return false;        
+        IConnection *connection = mConnections[n];
+        if (!connection)
+            return false;
+        mConnections.erase(std::remove(mConnections.begin(), mConnections.end(), connection), mConnections.end());
+        return true;
+    }       
+    IConnection *GetConnectionById(int connectionid) const;
+   
+    void Process()
+    {
+        for (std::vector<IConnection *>::iterator i = mConnections.begin(), e = mConnections.end(); i != e; ++i)
+            if (*i) (*i)->Process();
+    }
+
+    void SetReceiveCallback(ReceiveCallback callback, void *user)
+    { 
+        mReceiveCallback = callback; mReceiveUser = user;
+        for (std::vector<IConnection *>::iterator i = mConnections.begin(), e = mConnections.end(); i != e; ++i)
+            if (*i) (*i)->SetReceive(callback, user);        
+    }
+    
+    void SetDisconnectCallback(DisconnectCallback callback, void *user)
+    { 
+        mDisconnectCallback = callback; mDisconnectUser = user;
+        for (std::vector<IConnection *>::iterator i = mConnections.begin(), e = mConnections.end(); i != e; ++i)
+            if (*i) (*i)->SetDisconnect(callback, user);
+    }
+};
+
+// class ENetConnection      : public IConnection
+// class BluetoothConnection : public IConnection
+
+class ENetConnection
+{
+public:
+    
+    typedef void (*ReceiveCallback)(const void *data, int length, void *user);
+    typedef void (*DisconnectCallback)(int type, void *user);
+
+    ENetConnection(const IAddress *address);
+    ~ENetConnection();
+    
+    bool Open();
+    bool Send(const char *data, int length, bool reliable, bool sequenced = true);
+    void Process();
+    void Close();
+    
+    void SetReceive(ReceiveCallback callback, void *user) { mReceiveCallback = callback; mReceiveUser = user; }
+    void SetDisconnect(DisconnectCallback callback, void *user) { mDisconnectCallback = callback; mDisconnectUser = user; }
+
+private:
+
+    const IAddress     *mAddress;
+    ENetAddress        *mENetAddress;
+    ENetHost           *mLocal;
+    ENetPeer           *mPeer;
+    ReceiveCallback     mReceiveCallback;
+    void               *mReceiveUser;
+    DisconnectCallback  mDisconnectCallback;
+    void               *mDisconnectUser;
+};
