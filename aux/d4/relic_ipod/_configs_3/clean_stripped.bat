@@ -1,0 +1,2 @@
+del *.stripe
+del *.ips

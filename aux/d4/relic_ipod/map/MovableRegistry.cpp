@@ -1,0 +1,23 @@
+#include "MovableRegistry.h"
+#include "Movable.h"
+
+#include <stdio.h>
+
+int MovableRegistry::Register(Movable *movable)
+{
+    int index = movable->GetId();
+    if (GetAt(index) == movable)
+        return index; // already registered
+    index = Register(movable->GetId(), movable);
+    if (index < 0)
+    {
+        printf("*** Unable to register movable with id = %d: already occupied! ***\n", movable->GetId());
+    }
+    return index;
+}
+
+void MovableRegistry::Unregister(Movable *movable)
+{
+    Remove(movable->GetId());
+}
+

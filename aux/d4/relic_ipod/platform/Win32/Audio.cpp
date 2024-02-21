@@ -1,0 +1,42 @@
+/*
+ *  Audio.cpp
+ *  GLGravity
+ *
+ *  Created by Paul Senzee on 2/1/09.
+ *  Copyright 2009 __MyCompanyName__. All rights reserved.
+ *
+ */
+ 
+ // $TODO!
+
+#include "audio/Audio.h"
+#include "core/global.h"
+
+Audio::Audio() : device(0), context(0)
+{
+// $TODO
+}
+
+bool Audio::Play(const char *sourcename, float gain, bool loop)
+{
+    return true;
+}
+
+bool Audio::Stop(const char *sourcename)
+{
+    return true;
+}
+
+Audio::~Audio()
+{
+}
+        
+bool Audio::Load(const char *filename, const char *soundname)
+{
+    return true;
+}    
+        
+bool Audio::SetSource(const char *soundname, const char *sourcename)
+{
+    return true;
+}

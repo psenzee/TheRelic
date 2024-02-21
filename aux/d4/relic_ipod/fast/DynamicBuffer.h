@@ -1,0 +1,30 @@
+#ifndef _DYNAMICBUFFER_H
+#define _DYNAMICBUFFER_H
+
+class DynamicBuffer
+{
+public:
+
+    DynamicBuffer(size_t size);
+    DynamicBuffer(const void *data, size_t size);
+    DynamicBuffer(const DynamicBuffer &other);
+    ~DynamicBuffer();
+
+    DynamicBuffer &operator=(const DynamicBuffer &other);
+
+    void               reserve(size_t size);
+    void               clear();
+
+    inline size_t      size()  const { return mSize; }
+    inline const char *data()  const { return mData; }
+    inline char       *data()        { return mData; }
+
+    void               assign(const void *data, size_t size);
+
+private:
+
+    char   *mData;
+    size_t  mSize;
+};
+
+#endif // _DYNAMICBUFFER_H

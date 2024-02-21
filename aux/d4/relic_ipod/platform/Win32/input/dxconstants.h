@@ -1,0 +1,32 @@
+#ifndef _DXCONSTANTS_H
+#define _DXCONSTANTS_H
+
+//#define HAS_DXERR9
+
+// LINK: winmm.lib dsound.lib dinput8.lib dxerr8.lib d3dx8dt.lib d3d8.lib d3dxof.lib dxguid.lib 
+
+#pragma comment(lib, "winmm.lib")
+#pragma comment(lib, "dsound.lib")
+#pragma comment(lib, "dinput8.lib")
+#pragma comment(lib, "dxerr8.lib")
+#pragma comment(lib, "d3dx8dt.lib")
+#pragma comment(lib, "d3d8.lib")
+#pragma comment(lib, "d3dxof.lib")
+#pragma comment(lib, "dxguid.lib")
+#pragma comment(lib, "vfw32.lib")
+
+#include <windows.h>
+#include <mmsystem.h>
+
+#include <d3d8.h>
+#include <d3dx8.h>
+
+#include <d3d8types.h>
+#include <dinput.h>
+
+#ifdef HAS_DXERR9
+#include <dxerr9.h>
+#pragma comment(lib, "dxerr9.lib")
+#endif
+
+#endif  // _DXCONSTANTS_H 

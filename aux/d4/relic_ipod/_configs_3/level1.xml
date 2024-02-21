@@ -1,0 +1,11 @@
+<levels>
+
+<level name="Game" description="Game">
+
+  <map filename="largemap1_0.emp" width="256" height="256" tileset="dl.xml" />
+  <map filename="largemap1_1.emp" width="256" height="256" tileset="dl.xml" />
+  <!--<map filename="largemap1_2.emp" width="256" height="256" tileset="dl.xml" />  -->
+  
+</level>
+
+</levels>

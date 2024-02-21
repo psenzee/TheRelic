@@ -1,0 +1,71 @@
+#ifndef _NETGAMECLIENT_H
+#define _NETGAMECLIENT_H
+
+#include "Address.h"
+#include "NetGame.h"
+
+class UdpChannel;
+
+class NetGameClient : public INetGameParticipant
+{
+public:
+
+    typedef void (*complete_fn_t)(void *user, NetError::Error error);
+
+    typedef bool (*ClientReceiveCallback)(void *userdata, const char *message, int length);
+
+    NetGameClient(UdpChannel *channel);
+    ~NetGameClient();
+
+    void  SetName(const char *s);
+
+    void  Join(const Address &host, complete_fn_t complete, void *user);
+    bool  IsJoined() const;
+    
+    void  SendGameData(const char *data, int length);
+
+    void  SetReceiveCallback(ClientReceiveCallback callback, void *userdata)
+    {
+        mReceiveCallback = callback;
+        mReceiveUserData = userdata;
+    }
+
+    bool  Send(const char *data, int length);
+    int   Receive(char *data, int length);
+
+    bool  Process();
+
+    int   GetId() const { return mId; }
+    
+    int   GetTime() const;
+
+    bool  IsServer() const { return false; }
+
+private:
+
+    bool  ReceiveGameData(const char *message, int length);
+    void  SendError(NetError::Error error);
+    void  SendResponse(NetGameMessage::Type type);
+    void  Complete(NetError::Error error);
+    bool  ProcessTimeouts();
+    void  SendPing();
+    void  SendName();
+
+    bool  ProcessOne();
+
+    UdpChannel            *mChannel;
+    char                  *mMessage;
+    Address                mHost;
+    int                    mId;
+    complete_fn_t          mComplete;
+    void                  *mUser;
+    NetString<NAME_SIZE>   mName;
+
+    int                    mTimestamp;
+    int                    mPingSent;
+
+    ClientReceiveCallback  mReceiveCallback;
+    void                  *mReceiveUserData;
+};
+
+#endif // _NETGAMECLIENT_H

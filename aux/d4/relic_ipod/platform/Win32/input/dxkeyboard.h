@@ -1,0 +1,30 @@
+#ifndef _DXKEYBOARD_H
+#define _DXKEYBOARD_H
+
+#include "dxconstants.h"
+#include "inputdevice.h"
+
+class DXKeyboard : public InputDevice
+{
+public:
+
+    DXKeyboard(HWND hwnd, IDirectInput8 *input);
+    ~DXKeyboard();
+
+private:
+
+	HWND                 m_hwnd;
+	IDirectInput8       *m_input;
+    IDirectInputDevice8 *m_device;
+    char                 m_buffer[256];
+
+public:
+
+    bool initialize(void);
+    bool poll(void);
+
+    bool isPolledKeyDown(int key);
+    bool isKeyDown(int key);
+};
+
+#endif  // _DXKEYBOARD_H

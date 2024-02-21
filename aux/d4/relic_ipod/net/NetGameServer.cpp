@@ -1,0 +1,279 @@
+#include "NetGameServer.h"
+#include "NetGame.h"
+#include "UdpChannel.h"
+#include "Address.h"
+#include "serialize/Codec.h"
+
+#include "time/Timer.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int NetGameServer::GetTime() const
+{
+    return GetCurrentTimeMs();
+}
+
+void NetGameServer::SetName(const char *s)
+{
+    mName.Set(s);
+}
+
+NetGameServer::NetGameServer(UdpChannel *channel) : mChannel(channel), mMessage(0), mPlayerCount(1), mReceiveCallback(0), mReceiveUserData(0)
+{
+    mPlayers[HOST].address   = mChannel->GetAddress();
+    mPlayers[HOST].timestamp = GetTime();
+    mPlayers[HOST].state     = NetPlayerInfo::HOSTING;
+    mMessage = new char [MAX_MESSAGE_SIZE];
+}
+
+NetGameServer::~NetGameServer()
+{
+    delete [] mMessage;
+    mMessage = 0;
+}
+
+int NetGameServer::GetAddressIndex(const Address &address)
+{
+    for (int i = 0; i < PLAYER_COUNT; i++)
+        if (memcmp(address.GetAddress(), mPlayers[i].address.GetAddress(), sizeof(sockaddr_in)) == 0)
+            return i;
+    return -1;
+}
+
+void NetGameServer::SendError(const Address &to, NetError::Error error)
+{
+    NetGameMessage_Error response;
+    response.type  = NetGameMessage::SVR_ERROR;
+    response.error = error;
+    mChannel->SendTo(to, (const char *)&response, sizeof(response));
+}
+
+void NetGameServer::SendName(const Address &to)
+{
+    NetGameMessageId_String<NAME_SIZE> response;
+    response.type     = (unsigned char)(NetGameMessage::NAME_RESPONSE | NetGameMessage::HAS_ID);
+    response.clientId = 0;
+    response.string   = mName;
+    mChannel->SendTo(to, (const char *)&response, sizeof(response));
+}
+
+void NetGameServer::DropClient(int index)
+{
+    if (index < PLAYER_COUNT)
+    {
+        NetPlayerInfo &client = mPlayers[index];
+        if (client.state != NetPlayerInfo::NONE)
+        {
+            SendError(client.address, NetError::ERR_TIMEOUT_DROPPING);
+            client.ResetAll();
+            mPlayerCount--;
+        }
+    }
+}
+
+bool NetGameServer::ProcessClient(const Address &from, const NetGameMessageId &m, int messageSize)
+{
+    if (m.clientId < 0)
+        return false;
+    if (m.clientId != GetAddressIndex(from)) // verify that we're talking to who we think we are..
+    {
+        printf("Mismatch between address and player id, ignoring message!\n");
+        SendError(from, NetError::ERR_UNRECOGNIZED);
+        return false;
+    }
+    NetPlayerInfo &player = mPlayers[m.clientId];
+    player.timestamp = GetTime();
+    switch (m.GetType())
+    {
+    case NetGameMessage::NONE:
+        return false;
+    case NetGameMessage::CLI_JOIN_ACCEPT_ACK:
+        player.state = NetPlayerInfo::JOINED;
+        return true;
+    case NetGameMessage::NAME_REQUEST:
+        SendName(from);
+        return true;
+    case NetGameMessage::CLI_PING:
+        player.timestamp = GetTime();
+        return true;
+    case NetGameMessage::CLI_GAME_DATA:
+        return ReceiveGameData(m.clientId, (const char *)&m + sizeof(NetGameMessageId), messageSize - sizeof(NetGameMessageId));
+    }
+    return true;
+}
+
+bool NetGameServer::IsUnconnected(int i) const
+{
+    if (i >= PLAYER_COUNT)
+        return true;
+    return mPlayers[i].state == NetPlayerInfo::NONE;
+}
+
+int NetGameServer::GetUnconnected() const
+{
+    for (int i = 0; i < PLAYER_COUNT; i++)
+        if (IsUnconnected(i))
+            return i;
+    return -1;
+}
+
+int NetGameServer::Add(const Address &addr, const NetGameMessage *m)
+{
+    int index = GetAddressIndex(addr);
+    if (index >= 0)
+        return index;
+    index = GetUnconnected();
+    NetPlayerInfo &player = mPlayers[index];
+    player.address   = addr;
+    player.state     = NetPlayerInfo::JOINING;
+    player.timestamp = GetTime();
+    if (m)
+    {
+         player.name = ((NetGameMessage_String<NAME_SIZE> *)m)->string;
+    }
+    printf("Adding player '%s' as #%d\n", player.name.string, index);
+    return mPlayerCount++;
+}
+
+NetError::Error NetGameServer::Join(const Address &addr, const NetGameMessage *m)
+{
+printf("** Received JOIN_REQUEST!\n");
+    int index = GetAddressIndex(addr);
+    NetError::Error status = NetError::ERR_NONE;
+    if (index >= 0)
+    {
+        status = NetError::ERR_ALREADY_JOINED;
+        if (mPlayers[index].state >= NetPlayerInfo::JOINED)
+            return status;
+    }
+    else
+    {
+        // not found
+        if (IsGameFull())
+        {
+            SendError(addr, NetError::ERR_SERVER_FULL);
+            return NetError::ERR_SERVER_FULL;
+        }
+        index = Add(addr, m);
+    }
+    NetGameMessage_JoinAccept message;
+    message.type = NetGameMessage::SVR_JOIN_ACCEPT;
+    message.assignedId = (char)(index & 0x7f);
+printf("** Sending JOIN_ACCEPT!\n");
+    if (!mChannel->SendTo(addr, (const char *)&message, sizeof(NetGameMessage_JoinAccept)))
+    {
+        printf("Error sending SVR_JOIN_ACCEPT!\n");
+        // error?
+        return NetError::ERR_CANT_SEND;
+    }
+    return status;
+}
+
+void NetGameServer::ProcessTimeouts()
+{
+    // process timeouts
+    int time = GetTime();
+    for (int i = 0; i < PLAYER_COUNT; i++)
+    {
+        if (mPlayers[i].timestamp < time - TIMEOUT_VALUE)
+        {
+            //mPlayers[i].Reset();
+            DropClient(i);
+            // $TODO, process timeouts more?
+        }
+    }
+}
+
+void NetGameServer::SendPing()
+{
+    int time = GetTime();
+    for (int i = 0; i < PLAYER_COUNT; i++)
+    {
+        NetPlayerInfo &player = mPlayers[i];
+        if (player.state >= NetPlayerInfo::JOINED && 
+            (time - player.pingSent) >= PING_MILLISECONDS)
+        {
+            NetGameMessage message;
+            message.type = NetGameMessage::SVR_PING;
+            SendTo(i, (const char *)&message, sizeof(message));
+            player.pingSent = time;
+        }
+    }
+}
+
+bool NetGameServer::ProcessOne()
+{
+    SendPing();
+    ProcessTimeouts();
+    Address from;
+    int messageSize = mChannel->ReceiveFrom(from, mMessage, MAX_MESSAGE_SIZE);
+    if (messageSize <= 0)
+        return false;
+    NetGameMessage *message = (NetGameMessage *)mMessage;
+    if (message->HasId())
+        return ProcessClient(from, *(NetGameMessageId *)message, messageSize);
+    // set up a client
+    switch (message->GetType())
+    {
+    case NetGameMessage::NONE:                                  break;
+    case NetGameMessage::CLI_JOIN_REQUEST: Join(from, message); break;
+    }
+    return true;
+}
+
+bool NetGameServer::Process()
+{
+    bool processed = false;
+    while (ProcessOne())
+        processed = true;
+    return processed;
+}
+
+bool NetGameServer::ReceiveGameData(int clientId, const char *message, int length)
+{
+    if (!mReceiveCallback)
+        return false;
+    // we should use length to verify or limit the size, right?
+    char out[Codec::MAX_DECODE_SIZE];
+    int size = Codec::Decode(message, out);
+    return mReceiveCallback(mReceiveUserData, clientId, out, size);
+}
+
+bool NetGameServer::SendTo(int player, const char *data, int length)
+{
+    return mChannel->SendTo(mPlayers[player].address, data, length);
+}
+
+bool NetGameServer::SendGameData(int player, const char *data, int length)
+{
+    if (player < 0 || player == HOST || player >= PLAYER_COUNT ||
+        mPlayers[player].state != NetPlayerInfo::JOINED)
+        return false;
+    NetGameMessageId response;
+    response.clientId = (unsigned char)player;
+    response.type     = (unsigned char)(NetGameMessage::SVR_GAME_DATA | NetGameMessage::HAS_ID);
+    memcpy(mMessage, &response, sizeof(response));
+    // here we want to compress data, length first
+    int size = Codec::Encode(data, length, mMessage + sizeof(NetGameMessageId));
+    return mChannel->SendTo(mPlayers[player].address, mMessage, size + sizeof(NetGameMessageId));
+}
+
+bool NetGameServer::BroadcastGameData(const char *data, int length)
+{
+    bool sentToAny = false;
+    for (int i = 0; i < PLAYER_COUNT; i++)
+        sentToAny |= SendGameData(i, data, length);
+    return sentToAny;
+}
+
+int NetGameServer::ReceiveFrom(int *player, char *data, int length)
+{
+    Address addr;
+    *player = -1;
+    int r = mChannel->ReceiveFrom(addr, data, length);
+    if (!r)
+        return 0;
+    *player = GetAddressIndex(addr);
+    return r;
+}

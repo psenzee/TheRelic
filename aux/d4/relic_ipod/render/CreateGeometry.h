@@ -1,0 +1,18 @@
+#ifndef _CREATEGEOMETRY_H
+#define _CREATEGEOMETRY_H
+
+#include "core/core.h"
+
+struct Vertex
+{
+    float x, y, z, u, v;
+};
+
+// number of vertices written will be segments * 6
+bool CreateRing2d(float radius0, float radius1, int segments, Vertex *vertices);
+ // number of vertices written will be segments * 4, number of indices will be segments * 6
+bool CreateRing2d(float radius0, float radius1, int segments, Vertex *vertices, unsigned short *indices);
+
+void Transform(Vertex *data, int count, Matrix &transform);
+
+#endif // _CREATEGEOMETRY_H

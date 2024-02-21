@@ -1,0 +1,225 @@
+#include "dxmouse.h"
+
+DXMouse::DXMouse(HWND hwnd, IDirectInput8 *input) : InputDevice(), m_hwnd(hwnd), m_device(NULL), m_input(input)
+{
+    m_position.x = m_position.y = 0;
+}
+
+DXMouse::~DXMouse()
+{
+	/*
+    if (m_cursorSurface != NULL)
+        m_cursorSurface->Release();*/
+
+    // Unacquire and release the mouse device
+    if (m_device != NULL)
+    {
+        m_device->Unacquire();
+        m_device->Release();
+    }
+}
+/*
+// Toggles cursor display
+void DXMouse::showCursor(bool show)
+{
+    m_showCursor = show;
+}
+
+// Set the position of the cursor, in screen coords
+void DXMouse::setCursorPosition(int x, int y)
+{
+/*    // Make sure the point stays within the screen
+    if (x < 0) x = 0;
+    if (y < 0) y = 0;
+    if (x > DXUniversal::displayWidth - 1)
+        x = DXUniversal::displayWidth - 1;
+    if (y > DXUniversal::displayHeight - 1)
+	y = DXUniversal::displayHeight - 1;
+
+    m_position.x = x;
+    m_position.y = y;
+
+    // Tell Direct3D about the new position
+    DXUniversal::device->SetCursorPosition( x, y, 0 );*//*
+}
+*/
+// Returns the current position of the cursor
+void DXMouse::getCursorPosition(int &x, int &y)
+{
+    x = m_position.x;
+    y = m_position.y;
+}
+
+// Moves the cursor relative to its current position
+void DXMouse::moveCursor(int x, int y)
+{
+    m_position.x += x;
+    m_position.y += y;
+//    DXUniversal::device->SetCursorPosition(x, y, 0);
+}
+
+// Sets the mouse cursor position
+// by tracking how far it has moved
+// since the last update.
+void DXMouse::updateCursorPos()
+{
+	// Get the relative movement
+	// out of the DIMOUSESTATE structure
+	m_position.x += m_mouseState.lX;
+	m_position.y += m_mouseState.lY;
+
+	// Make sure the point is within screen bounds
+	if (m_position.x < 0)
+		m_position.x = 0;
+
+	if (m_position.y < 0)
+		m_position.y = 0;
+/*
+	if (m_position.x > DXUniversal::displayWidth -1)
+		m_position.x = DXUniversal::displayWidth -1;
+
+	if (m_position.y > DXUniversal::displayHeight -1)
+		m_position.y = DXUniversal::displayHeight -1;
+*/
+	// Set the new position into the device
+//	DXUniversal::device->SetCursorPosition(m_position.x, m_position.y, 0);
+}
+
+// Handles the WM_SETCURSOR message
+bool DXMouse::handleSetCursor()
+{
+	// Return if the mouse hasnt been intialized yet
+//	if (!isInitialized())
+//		return false;
+
+	// If the cursor is set to be visible...
+	//if (m_showCursor)
+	//{
+		// Turn off standard cursor
+		SetCursor(NULL);
+		// Show the cursor
+//		DXUniversal::device->ShowCursor(TRUE);
+
+		// Return TRUE, which prevents
+		// windows from messing with the
+		// cursors anymore
+		return true;
+	//}
+
+	// Return FALSE to let windows do
+	// its thing if our cursor is not visible
+	//return false;
+}
+
+POINT DXMouse::getMousePos()
+{
+	// Holds mouse data
+	POINT pos;
+
+	// Get the data from the buffer
+	pos.x = m_mouseState.lX;
+	pos.y = m_mouseState.lY;
+
+	// Return the position
+	return pos;
+}
+
+bool DXMouse::isButtonDown(int button)
+{
+	// Return the button status from the buffer
+	return (m_mouseState.rgbButtons[button] & 0x80) != 0;
+}
+
+bool DXMouse::poll()
+{
+	HRESULT r = 0;
+
+	// Return if the object has not been initialized
+//	if (!isInitialized())
+//		return false;
+
+	// Get the state of the mouse
+	r = m_device->GetDeviceState(sizeof(DIMOUSESTATE), &m_mouseState);
+	if (FAILED(r))
+	{
+		// If the mouse has moved focus
+		if (r == DIERR_INPUTLOST)
+		{
+			// Reacquire the mouse
+			while (r == DIERR_INPUTLOST)
+				r = m_device->Acquire();
+
+			// Try to test the state again
+			if (SUCCEEDED(r))
+			m_device->GetDeviceState(sizeof(DIMOUSESTATE), &m_mouseState);
+			else
+				return false;
+		}
+		else
+			return false;
+	}
+
+	return true;
+}
+
+// Initializes the mouse
+bool DXMouse::initialize()
+{
+	HRESULT r = 0;
+
+	// Return if the DirectInput object does not exist
+	if (m_input == NULL)
+		return false;
+
+	// Release the mouse device if it has already been created
+	if (m_device != NULL)
+		m_device->Release();
+
+	// Create the mouse device
+	r = m_input->CreateDevice(GUID_SysMouse, &m_device, NULL);
+	if (FAILED(r))
+	{
+		//ERR0("Unable to create mouse device");
+		return false;
+	}
+
+	// Set the data format for the mouse
+	r = m_device->SetDataFormat(&c_dfDIMouse);
+	if (FAILED(r))
+	{
+		//ERR0("Unable to set the mouse data format");
+		return false;
+	}
+
+	// Set the cooperative level for the mouse
+	if (m_hwnd != NULL)
+	{
+	    r = m_device->SetCooperativeLevel(m_hwnd,
+		    /*DISCL_EXCLUSIVE*/ DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
+	    if (FAILED(r))
+		{
+		    ///ERR0("Unable to set the cooperative level for the mouse");
+		    return false;
+		}
+	}
+
+	// Acquire the physical mouse into the device
+	r = m_device->Acquire();
+	if (FAILED(r))
+	{
+		//ERR0("Unable to acquire mouse");
+		return false;
+	}
+/*
+	// Create a new surface for the mouse pointer image
+	DXUniversal::device->CreateImageSurface( 32, 64, D3DFMT_A8R8G8B8, &m_pCursorSurf );
+	// Load the image file from disk
+	D3DXLoadSurfaceFromFile( m_pCursorSurf, 0, 0, "ZenCursor.dds", 0, D3DX_FILTER_NONE, 0, 0 );
+	// Set the hotspot for the cursor
+	DXUniversal::device->SetCursorProperties( 0, 0, m_pCursorSurf );
+*/
+	// Set the initialization flag to true
+//	setInitialized(true);
+
+	return true;
+}

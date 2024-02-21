@@ -1,0 +1,37 @@
+#ifndef _POSITIONVELOCITY_H
+#define _POSITIONVELOCITY_H
+
+#include "core/core.h"
+
+// for now - assumes a constant time step in between calls to SetPosition()
+class PositionVelocity
+{
+public:
+
+    typedef bool (*collider_fn)(const Vector3 &p, float radius, Vector3 &resolve, void *user);
+
+    PositionVelocity();
+    explicit PositionVelocity(const Vector3 &position);
+    PositionVelocity(const PositionVelocity &u);
+
+    const Vector3         &SetPositionRaw(const Vector3 &p);
+    void                   SetPosition(const Vector3 &p);
+    inline const Vector3  &GetPosition()                 const { return mPosition; }
+    inline const Vector3  &GetVelocity()                 const { return mVelocity; }
+    void                   SetVelocity(const Vector3 &p);
+    inline const Vector3  &GetLastPosition()             const { return mLast; }
+
+    static void            SetCollider(collider_fn fn, void *user);
+
+private:
+
+    Vector3 mPosition,
+            mLast,
+            mVelocity;
+    float   mFilter;
+
+    static collider_fn  sCollider;
+    static void        *sUser;
+};
+
+#endif // _POSITIONVELOCITY_H

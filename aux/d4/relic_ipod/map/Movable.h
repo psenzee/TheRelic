@@ -1,0 +1,64 @@
+#ifndef _MOVABLE_H
+#define _MOVABLE_H
+
+#include "core/core.h"
+#include "PositionVelocity.h"
+
+class DynamicMap;
+class DynamicMapIterator;
+
+class Movable
+{    
+public:
+
+    inline explicit Movable(const Vector3 &position) : mPositionVelocity(position), mMapPosition(Vector2(position.x, position.y)), mNext(0), mPrev(0), mMap(0), mRadius(sDefaultRadius), mId(-1) {}
+    inline explicit Movable(const PositionVelocity &pv) : mPositionVelocity(pv), mMapPosition(Vector2(pv.GetPosition().x, pv.GetPosition().y)), mNext(0), mPrev(0), mMap(0), mRadius(sDefaultRadius), mId(-1) {}
+    virtual ~Movable() {}
+
+    void                    SetDynamicMap(DynamicMap *dm);
+	DynamicMap             *GetDynamicMap()                            { return mMap; }
+
+    void                    SetPosition(const Vector3 &p)              { MoveTo(p, false); }
+    void                    SetPositionRaw(const Vector3 &p)           { MoveTo(p, true); }
+    void                    SetVelocity(const Vector3 &v)              { mPositionVelocity.SetVelocity(v); }
+    const Vector3          &GetPosition()                        const { return mPositionVelocity.GetPosition(); }
+    const Vector3          &GetLastPosition()                    const { return mPositionVelocity.GetLastPosition(); }
+    const Vector3          &GetVelocity()                        const { return mPositionVelocity.GetVelocity(); }
+    const PositionVelocity &GetPositionVelocity()                const { return mPositionVelocity; }
+
+    int                     Count() const;
+
+    virtual bool            IsVisible()                          const { return true; }
+    virtual bool            IsCollidable()                       const { return true; }
+    virtual bool            IsMovable()                          const { return true; }
+    virtual bool            IsFixed()                            const { return false; }
+
+    float                   GetRadius()                          const { return mRadius; }
+    void                    SetRadius(float v)                         { mRadius = v; }
+
+    void                    MarkChanged();
+    bool                    HasChanged() const;
+
+    int                     GetId()                              const { return mId; }
+    void                    SetId(int id);
+
+    static void             SetDefaultMovableRadius(float r)           { sDefaultRadius = r; }
+
+private:
+
+    friend class DynamicMap;
+    friend class DynamicMapIterator;
+
+    static float sDefaultRadius;
+
+    void             MoveTo(const Vector3 &p, bool raw);
+
+    PositionVelocity mPositionVelocity;
+    Vector2          mMapPosition;
+    Movable         *mNext, *mPrev;
+    DynamicMap      *mMap;
+    float            mRadius;
+    int              mId;
+};
+
+#endif // _MOVABLE_H

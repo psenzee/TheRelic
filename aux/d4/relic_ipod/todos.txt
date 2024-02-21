@@ -1,0 +1,140 @@
+todo
+
+x low-level movable registry
+x - setid with free list
+x - transparent, add on construction and remove on deletion
+    (actually, set on addition/removal to/from dynamic map)
+x - part of dynamicMap? (yes)
+x - keep on with serialization (Completely DONE!) [save games are now free!]
+x - Lua RPCs (Completely DONE!) 
+x - serialize & pack lua table
+X - find font OptimusPrincepSemiBold
+X - improve font capture program
+X - Serialization!
+X - add touch callback to Lua
+X - make sure that we're releasing our LuaTables!
+X - Need to PackCharacters on changed items as well
+X - make sure that the +1 on player id isn't screwing things up
+X - get a good font
+- lua callback from animation - with multiplayer broadcast
+- oh, when processing an RPC, don't process it if it came from itself
+- work out bugs in multiplayer
+- render bucket system
+  - use for
+    - objects, of course
+    - text
+    - quads
+    - particle fx
+    - rings, etc
+- Ring class
+- UI design (minimal, please)
+- way to capture rendered stuff with alpha
+- guaranteed messages
+- check robustness of connection
+- CreateCharacter, DestroyCharacter messages - only the server can create them, destroy them directly, then sends message to clients with clone list
+- program to automatically do outline and drop shadow on text
+- move touch callback to lua into device independent code
+- make a special function to call a lua function with varargs and format specifier
+- more robust connection
+- IAddressAcquirer
+resolve issue when the output message is > the udp output size - THROUGHOUT!
+- make fast_buffer
+fix sync bugs
+ui
+
+optimizations
+-------------
+make textures one-fourth of their size
+fixed_string
+fixed_buffer
+fast_string (fixed_string + std::string for large items)
+fast_buffer (fixed_buffer + dynamically allocation for large items)
+std::hash_map instead of std::map where possible
+FixedSet instead of std::set where possible
+capture and use dead skeletons as a single quad
+ - system to capture in-game renders
+ - use my png tool to capture in-game images with white, then black background
+small object allocator for LuaTableHandle
+small object allocator for lua
+LargeFixedSet: could make FixedList multi-paged, making it usable for the entire int range (this could lead to horrible memory performance for sparse sets, tho)
+     
+////////////////////////////////////////////////
+
+random
+------
+diavolus
+diavolicus
+LOTR
+peregrin(e)
+'there and back again'
+elvish
+bloom
+rf heating weapon
+rf water jet
+runic
+double/single lines above/below text in ui
+quinotaur
+simplify story
+maser
+
+multiplayer
+-----------
+
+diavolus, diavolicus (a weapon required to destroy the relic)
+
+Notes:
+-----
+http://pgl.yoyo.org/luai/i/_
+http://pgl.yoyo.org/luai/i/unpack
+http://pgl.yoyo.org/luai/i/_G
+http://pgl.yoyo.org/luai/i/5.4+String+Manipulation
+http://pgl.yoyo.org/luai/i/5.5+Table+Manipulation
+http://pgl.yoyo.org/luai/i/5.6+Mathematical+Functions
+http://pgl.yoyo.org/luai/i/5.7+Input+and+Output+Facilities
+http://pgl.yoyo.org/luai/i/5.8+Operating+System+Facilities
+http://pgl.yoyo.org/luai/i/5.9+The+Debug+Library
+
+    /*
+    {
+        static DeviceTexture *texture = new DeviceTexture("RunicRing2");
+        static float r = 0.f;
+        enum { SEGMENTS = 16 };
+        Vertex *data = new Vertex [SEGMENTS * 6];
+        CreateRing2d(25.0f, 40.0f, SEGMENTS, data);
+        Matrix rotation, translate;
+        r += 0.025f;
+        rotation.rotationz(r);
+        translate.translate(GetPlayer()->GetPosition());
+
+        Transform(data, SEGMENTS * 6, rotation * translate);
+        ImmediateRenderer ir;
+        ir.SetTexture(texture);
+        ir.SetVertexData(reinterpret_cast<const ImmediateVertex *>(data), SEGMENTS * 6);
+        ir.Render(renderContext);
+        delete [] data;
+    }
+    */
+    
+    
+static bool read_section(FILE *file, char *line, size_t linesz, std::string &name, std::string &data)
+{
+    bool valid = true;
+    if (!section_name(line, linesz, name))
+    {
+        valid = false;
+        while ((valid = (fgets(line, (int)(linesz - 1), file) != 0)))
+            if (section_name(line, linesz, name))
+                break;
+    }
+    if (!valid) return false;
+    data.clear();
+    std::string next;
+    while (fgets(line, (int)(linesz - 1), file))
+    {
+        if (section_name(line, linesz, next))
+            break;
+        data += line;
+    }
+    trim(data);
+    return true; // all done
+}    

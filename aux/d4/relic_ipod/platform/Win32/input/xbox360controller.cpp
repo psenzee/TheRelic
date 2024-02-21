@@ -1,0 +1,69 @@
+#include "xbox360controller.h"
+#include "dxinput.h"
+#include "dxjoystick.h"
+
+#include <stdio.h>
+
+Xbox360Controller::Xbox360Controller()
+{
+}
+
+void Xbox360Controller::poll()
+{
+    DXInput::instance()->poll();
+}
+
+bool Xbox360Controller::active() const
+{
+   return (DXJoystick *)DXInput::instance()->device(DXInput::JOYSTICK) != 0;
+}
+
+//enum { DEADZONE = 8192 };
+enum { DEADZONE = 128 };
+
+int _deadzone(int x)
+{
+    int w = x - 32768;
+    return (w > DEADZONE || w < -DEADZONE) ? x : 32768;
+}
+
+float _deadzone_value(int x)
+{
+    int w = x - 32768;
+    if      (w >  DEADZONE) return (w - DEADZONE) / (float)(32768 - DEADZONE);
+    else if (w < -DEADZONE) return (w + DEADZONE) / (float)(32768 - DEADZONE);
+    return 0.f;
+}
+
+float _rtrigger(int x)
+{
+    if (x > 32767 || x < 127) return 0.f;
+    return 1.0f - ((x - 127) / (32767.f - 127.f));
+}
+
+float _ltrigger(int x)
+{
+    if (x > 65535 - 127 || x < 32768) return 0.f;
+    return ((x - 127) / (65535.f - 127.f));
+}
+
+void Xbox360Controller::get(float &x, float &y, float &rx, float &ry, float &ltrigger, float &rtrigger)
+{
+    DXJoystick *js = (DXJoystick *)DXInput::instance()->device(DXInput::JOYSTICK);
+    if (js)
+    {
+        /*
+        x  = (_deadzone(js->getX())  - 32768) / 32768.f;  y = (_deadzone(js->getY())  - 32768) / 32768.f;
+        rx = (_deadzone(js->getRX()) - 32768) / 32768.f; ry = (_deadzone(js->getRY()) - 32768) / 32768.f;
+        */
+         x = _deadzone_value(js->getX());   y = _deadzone_value(js->getY());
+        rx = _deadzone_value(js->getRX()); ry = _deadzone_value(js->getRY());
+        rtrigger = _rtrigger(js->getZ()); ltrigger = _ltrigger(js->getZ());
+    }
+}
+
+bool Xbox360Controller::isButtonDown(int button) const
+{
+    DXJoystick *js = (DXJoystick *)DXInput::instance()->device(DXInput::JOYSTICK);
+    return !js ? false : js->isButtonDown(button);
+}

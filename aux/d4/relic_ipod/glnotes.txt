@@ -1,0 +1,197 @@
+get rid of toggle
+get rid of text/dev
+get rid of UIController
+
+class BoolStateSetter
+{
+public:
+    inline BoolStateSetter(int state) : mState(state) {}
+    inline void Set(bool value) { if (value) glEnable(mState); else glDisable(mState); }
+private:
+    int mState;
+};
+
+class BoolClientStateSetter
+{
+public:
+    inline BoolClientStateSetter(int state) : mState(state) {}
+    inline void Set(bool value) { if (value) glEnableClientState(mState); else glDisableClientState(mState); }
+private:
+    int mState;
+};
+
+class LightScalarSetter
+{
+public:
+    inline LightScalarSetter(int light, int state) : mId(light), mState(state) {}   
+    inline void Set(float value) { glLightf(mId, mState, value); }
+private:
+    int mId, mState;
+};
+
+template <typename T>
+class LightVectorSetter
+{
+public:
+    LightVectorSetter(int light, int state) : mId(light), mState(state) {}   
+    inline void Set(const T &value) { glLightfv(mId, mState, static_cast<const float *>(&value)); }
+private:
+    int mId, mState;
+};
+
+class MaterialScalarSetter
+{
+public:
+    inline MaterialScalarSetter(int state) : mState(state) {}
+    inline void Set(float value) { glMaterialf(GL_FRONT_AND_BACK, mState, value); }
+private:
+    int mState;
+};
+
+template <typename T>
+class MaterialVectorSetter
+{
+public:
+    MaterialVectorSetter(int state) : mState(state) {}   
+    inline void Set(const T &value) { glMaterialfv(GL_FRONT_AND_BACK, mState, static_cast<const float *>(&value)); }
+private:
+    int mState;
+};
+
+typename <typename SetterT, typename T>
+class State
+{
+public:
+    inline State(const SetterT &setter, const T &initial) : mSetter(setter), mState(state) { ForceSet(initial); }
+    
+    inline void Set(const T &v)             { if (v != mValue) ForceSet(v); }
+    inline void ForceSet(const T &v)        { mSetter.Set(value); mValue = v; }
+    inline bool Get()                 const { return mValue; }    
+
+private:
+    SetterT mSetter;
+    T       mState;
+    bool    mValue;
+};
+
+class GLBoolState            : public State<BoolStateSetter, bool>               { public: inline GLBoolState(int state, bool initial) : State<BoolStateSetter, bool>(BoolStateSetter(state), initial) {} };
+class GLBoolClientState      : public State<BoolClientStateSetter, bool>         { public: inline GLBoolClientState(int state, bool initial) : State<BoolClientStateSetter, bool>(BoolClientStateSetter(state), initial) {} };
+class GLLightScalarState     : public State<LightScalarSetter, bool>             { public: inline GLLightScalarState(int light, int state, float initial) : State<LightScalarSetter, float>(LightScalarSetter(light, state), initial) {} };
+class GLLightVector4State    : public State<LightVectorSetter<Vector4>, bool>    { public: inline GLLightVector4State(int light, int state, const Vector4 &initial) : State<LightVectorSetter<Vector4>, Vector4>(LightVectorSetter<Vector4>(light, state), initial) {} };
+class GLMaterialScalarState  : public State<MaterialScalarSetter, bool>          { public: inline GLMaterialScalarState(int state, float initial) : State<MaterialScalarSetter, float>(MaterialScalarSetter(state), initial) {} };
+class GLMaterialVector4State : public State<MaterialVectorSetter<Vector4>, bool> { public: inline GLMaterialVector4State(int state, const Vector4 &initial) : State<MaterialVectorSetter<Vector4>, Vector4>(MaterialVectorSetter<Vector4>(state), initial) {} };
+
+/*
+class BoolGLState
+{
+public:
+    
+    inline BoolGLState(int state, bool initial) : mState(state) { ForceSet(initial); }
+    
+    inline void Set(bool value)       { if (value != mValue) ForceSet(value); }
+    inline bool Get()           const { return mValue; }
+    inline int  GetStateId()    const { return mState; }
+    
+    void        ForceSet(bool value);
+
+private:
+
+    int  mState;
+    bool mValue;
+};
+
+void BoolGLState::ForceSet(bool value)
+{
+    if (!value) glDisable(mState);
+    else        glEnable (mState);
+    mValue = value;
+}
+
+class BoolGLClientState
+{
+public:
+    
+    inline BoolGLClientState(int state, bool initial) : mState(state) { ForceSet(initial); }
+    
+    inline void Set(bool value)       { if (value != mValue) ForceSet(value); }
+    inline bool Get()           const { return mValue; }
+    inline int  GetStateId()    const { return mState; }
+    
+    void        ForceSet(bool value);
+
+private:
+
+    int  mState;
+    bool mValue;
+};
+
+void BoolGLClientState::ForceSet(bool value)
+{
+    if (!value) glDisableClientState(mState);
+    else        glEnableClientState (mState);
+    mValue = value;
+}
+
+*/
+
+struct GLLightState
+{
+    int                 light;
+    GLBoolState         enabled;
+    GLLightScalarState  attenuation;
+    GLLightVector4State ambient;
+    GLLightVector4State diffuse;
+    GLLightVector4State position;
+    
+
+    GLLightState(int light) 
+        : light(light), 
+          enabled(light, false),
+          attenuation(light, DEFAULT_ATTEN_STATE, DEFAULT_ATTEN_VALUE) {}
+};
+
+GLBoolState       mBlend(GL_BLEND, false);
+GLBoolState       mCullFace(GL_CULL_FACE, true);
+GLBoolState       mDepthTest(GL_DEPTH_TEST, true);
+                                
+GLBoolState       mLighting(GL_LIGHTING, false);
+GLBoolState       mTexture(GL_TEXTURE_2D, true);
+GLBoolState       mNormalize(GL_NORMALIZE, false);
+GLBoolState       mRescaleNormal(GL_RESCALE_NORMAL, false);
+
+GLBoolClientState mColors(GL_COLOR_ARRAY, false);
+GLBoolClientState mNormals(GL_NORMAL_ARRAY, false);
+GLBoolClientState mTexCoors(GL_TEXTURE_COORD_ARRAY, true);
+
+
+GLLightState      mLight[]  = { GLLightState(GL_LIGHT0), GLLightState(GL_LIGHT1),
+                                GLLightState(GL_LIGHT2), GLLightState(GL_LIGHT3),
+                                GLLightState(GL_LIGHT4), GLLightState(GL_LIGHT5),
+                                GLLightState(GL_LIGHT6), GLLightState(GL_LIGHT7) };
+
+glGetError 
+glIsTexture
+
+glLightf(GL_LIGHT0,GL_QUADRATIC_ATTENUATION,0.00001f); 
+glLightfv(GL_LIGHT0,GL_AMBIENT,lightAmbient);          
+glLightfv(GL_LIGHT0,GL_DIFFUSE,lightDiffuse);          
+glLightfv(GL_LIGHT0,GL_POSITION,lightPosition);        
+glLightfv(GL_LIGHT0,GL_SPECULAR,lightDiffuse);         
+glLightfv(id,GL_AMBIENT,(constfloat*)&light.ambient);  
+glLightfv(id,GL_DIFFUSE,(constfloat*)&light.diffuse);  
+glLightfv(id,GL_POSITION,position);                    
+glLightfv(id,GL_SPECULAR,(constfloat*)&light.specular);
+
+glLoadIdentity
+glLoadMatrixf 
+
+glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,m.shininess);             
+glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,(GLfloat*)&ambient);       
+glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,(GLfloat*)&diffuse);       
+glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,(constfloat*)&m.diffuse);  
+glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,(constfloat*)&m.emissive);
+glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,(constfloat*)&m.specular);
+glMatrixMode(GL_MODELVIEW);                                          
+glMatrixMode(GL_PROJECTION);
+
+glShadeModel(GL_SMOOTH);
