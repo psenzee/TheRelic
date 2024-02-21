@@ -1,0 +1,32 @@
+print "lua:shield.lua"
+
+function Shield(c)
+   if c:IsVisible() then
+     local frames = GetGameStateFrames()
+     local max = 100
+     frames = frames % max
+     c:SetAlpha(math.sin(frames / max) * 0.5 + 0.5)
+   end
+end
+
+function CreateShield_Character(c)
+
+   c:SetStatic(true)
+   c:SetPersistent(true)
+   c:AddBehavior(NewAnimationBehavior())
+   c:AddBehavior(NewKillableBehavior())   
+
+   SetAttributes(c, 10000000.0, 0)
+   c:SetScale(characterScale)
+
+   c:SetRadius(characterRadius)
+   c:SetCollidable(false)
+   return c
+end
+
+function CreateShield()
+   local c = NewCharacter(-1, "Shield", "Shield", 0.0, 0.0, 0.0)
+   CreateShield_Character(c)
+   return c
+end
+

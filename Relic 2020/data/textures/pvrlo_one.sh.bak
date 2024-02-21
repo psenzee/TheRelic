@@ -1,0 +1,3 @@
+#!/bin/sh
+#
+/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/texturetool -m -e PVRTC --bits-per-pixel-4 -f PVR -o $1.pvrtc $1

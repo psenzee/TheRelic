@@ -1,0 +1,417 @@
+print "Lua:player.lua"
+
+playerRadius = characterRadius
+speedDepth   = 0.0625 -- was 0.5,0.25
+
+INITIAL_MANA_MAX = 100
+MANA_ATOMIC_TOUCH = 0.5 * INITIAL_MANA_MAX
+
+function PlayerAttackStart(c)
+  local xp, yp, zp = c:GetPosition()
+  Audio_PlayAt("PlayerWhoosh", xp, yp, zp, 0.0625)
+end
+
+function PlayerLandedHit(c)
+  if c ~= nil then
+    local data = c:data()
+    if data ~= nil and data.hitcount ~= nil then
+      data.hitcount = data.hitcount + 1
+    end
+  end
+end
+
+function PlayerReceiveHit(c)
+  if c ~= nil then
+    local xp, yp, zp = c:GetPosition()
+    Audio_PlayAt("SkeletonHit", xp, yp, zp, 0.25)
+  end
+end
+
+function PlayerEvadedHit(c)
+  if c ~= nil then
+    local shield = SHIELDS[c:GetId()]
+    if shield ~= nil then
+      EnqueueReceiveHitInMotion(shield, c, 1.0, 0.0)
+    end  
+  end
+end
+
+function GetClosest()
+  local player = GetPlayer()
+  if player ~= nil then
+    local closest = GetPlayer():GetClosestFacing(playerRadius * 2.5)
+    return closest
+  end
+  return nil
+end
+
+function ResurrectPlayer(c, hpFractionToRestore)
+  if IsCharacterValid(c) then
+    c:ResetBehaviors()
+    c:SetHitPoints(c:GetMaxHitPoints() * hpFractionToRestore, c)
+    EnableMovement(c)
+    c:SetCollidable(true)
+    c:AddSignalHandler(SIGNAL_ATTACK_START, "PlayerAttackStart")
+    c:AddSignalHandler(SIGNAL_RECEIVED_HIT, "PlayerReceiveHit")
+    c:AddSignalHandler(SIGNAL_LANDED_HIT,   "PlayerLandedHit")
+    c:AddSignalHandler(SIGNAL_EVADED_HIT,   "PlayerEvadedHit")
+  end
+end
+
+function SetShieldEnabled(c, enabled)
+  if c == nil then return end
+  local shield = SHIELDS[c:GetId()]
+  if shield ~= nil then
+    shield:SetVisible(enabled)    
+  end
+end
+
+function SetShieldButtonEnabled(enabled)
+  local button = INDICATORS["ShieldButton"]
+  local instance = nil 
+  if button ~= nil then
+    instance = button.instance
+  end
+  if instance ~= nil then        
+    --button.visibilityOverride = true --enabled
+    --_SetVisible(instance, enabled)
+    SetIndicatorVisibility("ShieldButton", enabled)
+  end
+end
+
+function CreateNewPlayer(id)
+
+   local xs, ys, zs = GetNamedPoint("Start" .. id, 0)
+   if GetNamedPointCount("Start" .. id) == 0 then
+     if GetNamedPointCount("Start") > 0 then
+       xs, ys, zs = GetNamedPoint("Start", 0)
+     elseif GetNamedPointCount("DownStairs") > 0 then
+       xs, ys, zs = GetNamedPoint("DownStairs", 0)
+       xs = xs - 150
+       ys = ys - 80 * id + 160
+     else
+       xs = 0
+       ys = 0
+       zs = 0
+     end
+   end
+
+   local player = NewCharacter(id, "Player", "Player", xs, ys, 0.0)
+
+   player:SetStatic(true)
+   player:SetPersistent(true)
+   player:SetSelector("blank", 16, 10.0, 35.0, 0.025)
+   SetCharacterId(player, id)
+   
+   player:SetFilterPosition(false)
+   player:AddBehavior(NewAnimationBehavior())
+   player:AddBehavior(NewKillableBehavior())
+   player:AddBehavior(NewDieCollapseBehavior())
+   player:AddBehavior(NewRolePlayer())
+   player:AddBehavior(NewMeleeAttack())
+   player:SetMeterWidth(1.5)
+   player:SetRolePlayerDefaultAttributes()
+   player:SetAutoAttack(false)
+   player:SetKnockSpin(0.0)
+   player:SetAttackSpeed(0)
+   player:SetAttackTypeCount(2)
+   player:SetWalkAndAttack(true)
+   player:SetUpdateFrequency(1)
+   
+   player:SetWeight(2.0)
+      
+   SetAttributes(player, 2000, 15.0)
+   player:SetScale(0.9 * characterScale)
+   player:SetMovable(false)
+   player:SetVisible(false)
+   player:SetRadius(playerRadius)
+   
+   local data = player:data()
+   data.kills = 0
+   data.isBoltEnabled = false
+   data.isShieldEnabled = false
+   data.isImmolateEnabled = false
+   data.isAtomicTouchEnabled = false
+   data.isDivineTouchEnabled = false
+   data.unspentKills = 0
+   data.skeletonsKilled = 0
+   data.spidersKilled = 0
+   data.necromancersKilled = 0
+   data.quinotaursKilled = 0   
+   data.isMagicEnabled = false
+   data.manaMax = 100
+   data.mana = 100
+   data.hitcount = 1
+   data.lastAttackFrames = 0
+   data.boltDamage = 20.0
+   
+   -- $temporary
+   data.invulnerable  = false
+   data.isLocalPlayer = false
+   
+   player:AddSignalHandler(SIGNAL_ATTACK_START, "PlayerAttackStart")
+   player:AddSignalHandler(SIGNAL_RECEIVED_HIT, "PlayerReceiveHit")
+   player:AddSignalHandler(SIGNAL_LANDED_HIT,   "PlayerLandedHit")  
+   player:AddSignalHandler(SIGNAL_EVADED_HIT,   "PlayerEvadedHit")
+   
+   local shield = CreateShield()
+   SHIELDS[id] = shield
+   shield:SetVisible(false)
+   
+   return player
+end
+
+local lastClosest = nil
+local lastFootstep = 0
+local footstepInterval = 10
+
+SHIELDS = {}
+
+SHIELD_MANA = 0.25
+
+function ClearItem(c)
+  c:CompleteEffects()
+  c:data().selectEvent = nil
+  c:data().noSelect = true
+end
+
+function OverlapsOtherPlayers(c)
+  for i = 1, #PLAYERS do
+    local p = PLAYERS[i]
+    if p ~= c and p:IsVisible() and CharacterDistance(c, p) < characterRadius * 3.0 then
+      return true
+    end
+  end
+  return false
+end
+
+function Highlight(c)
+  local data = c:data()
+  if data and data.selector then
+    data.selector(c)
+  else
+--  c:SetSelector("ring11", 16, 10.0, 30.0, 0.025)  
+    c:SetSelector("red2", 16, 20.0, 30.0, 0.025)
+  end
+end
+
+function StartAttack(c)
+  local data = c:data()
+  data.lastAttackFrames = 0
+end
+
+function GetClosestToPlayer(c)
+  local data = c:data()
+--local radius = playerRadius * 2.5
+  local radius = 1000.0
+  if data.lastAttackFrames ~= nil and data.lastAttackFrames > 30 then
+    return c:GetClosestFacing(radius) 
+  else 
+    return c:GetClosestFacingAndAttackable(radius) 
+  end
+end
+
+function Player(c)
+
+  UpdateErrorOccurred("\\#ff8000")
+
+  local data = c:data()
+  
+  GenericUpdate(c, data)
+  
+  if c:IsDestroyed() then
+    return
+  end
+  
+  local scale = 8.0
+  local xi, yi, zi = 0.0, 0.0, 0.0
+  local closest = nil
+ 
+  data.lastAttackFrames = data.lastAttackFrames + 1
+
+  if data.isLocalPlayer then
+--[[  $MULTIPLAYER
+if GetGameStateFrames() % 50 == 0 then
+print("OverlapsOtherPlayers(c)=" .. tostring(OverlapsOtherPlayers(c)))
+end
+  if not OverlapsOtherPlayers(c) then
+    c:SetAlpha(1.0)  
+  else
+    c:SetAlpha(0.25)
+  end
+]]--
+
+--  c:SetMeterDistance(10000) -- hide player meter
+  
+    Update_InputDirection(c)
+
+    closest = GetClosestToPlayer(c)
+    if closest ~= lastClosest then
+      if lastClosest ~= nil then
+        lastClosest:RemoveSelector()
+      end
+      if closest ~= nil then
+        local selectEvent = closest:data().selectEvent
+        local noSelect    = closest:data().noSelect
+        local distance    = CharacterDistance(c, closest)
+        if (selectEvent == nil and noSelect ~= true) or (selectEvent ~= nil and distance < characterRadius * 3.0) then
+          Highlight(closest)
+          local selectClose = closest:data().selectClose            
+          if selectEvent ~= nil and selectClose == true then
+            FireEvent(selectEvent, "")
+            local selectClear = closest:data().selectClear
+            if selectClear ~= nil and selectClear(closest) == true then
+              ClearItem(closest)
+            end
+          end
+        else
+          closest = nil
+        end
+      end
+      lastClosest = closest
+    end
+    
+    if data.isMagicEnabled then
+      data.mana = data.mana + 0.1
+      if data.mana > data.manaMax then
+        data.mana = data.manaMax
+      end
+    end    
+    
+    if data.hitcount   == nil then data.hitcount   = 0 end
+    if data.multiplier == nil then data.multiplier = 1 end
+
+    if data.hitcount > 1.0 then
+      data.hitcount = data.hitcount - 0.005 * (2 ^ data.multiplier)
+    elseif data.hitcount < 1.0 then
+      data.hitcount = 1.0
+    end    
+    
+    local multiplier = Math_Log2(data.hitcount * 2.1)
+    data.multiplier = multiplier
+    GetPlayer():SetAttackMultiplier(math.floor(multiplier))
+
+    if GetInventoryItemCount(c, "Ring") ~= 0 then
+      data.isMagicEnabled = true
+    end
+  
+    local xp, yp, zp = c:GetPosition()
+    local radius = playerRadius
+    local shield = SHIELDS[c:GetId()]
+    if not data.isMagicEnabled or not data.isShieldEnabled then
+      SetShieldButtonEnabled(false)
+    elseif shield ~= nil then
+      shield:SetPosition(xp, yp, zp)    
+      local enabled = shield:IsVisible()
+      SetShieldButtonEnabled(true)      
+      if enabled and data.mana < SHIELD_MANA then
+        enabled = false
+        SetShieldEnabled(c, enabled)
+      end      
+      --[[
+      if data.mana < SHIELD_MANA * 10 then
+        SetShieldButtonEnabled(false)
+      end
+      ]]--
+      c:SetInvulnerable(enabled)
+      if enabled then
+        data.mana = data.mana - SHIELD_MANA
+        print("shield anim: " .. shield:GetAnimationName())
+      end
+    end    
+
+    Audio_SetListenerPosition(xp, yp, zp)
+
+    if ButtonPressed(0) then 
+    --MultiplayerAttack(c)
+      if closest ~= nil then
+        c:SetAttackTarget(closest)
+        local selectEvent = closest:data().selectEvent
+        if selectEvent ~= nil and CharacterDistance(c, closest) < characterRadius * 3.0 then
+          FireEvent(selectEvent, "")
+        else
+          StartAttack(c)
+          closest = GetClosestToPlayer(c)
+          if IsCharacterValid(closest) then
+            c:SetAttackTarget(closest)          
+            local distance = CharacterDistance(c, closest)
+            if distance > characterRadius * 2.5 and data.isBoltEnabled then
+              LaunchPlayerProjectile(closest, "Fire", data.boltDamage)
+            else
+              c:TriggerAttack()
+            end
+          end
+        end
+      else
+        c:TriggerAttack()
+      end      
+    end
+  
+    if ButtonPressed(1) then
+      InvokeHealPotion()
+    end
+  
+    if ButtonPressed(2) and data.isMagicEnabled then
+      if     multiplier >= 4.0 and data.mana >= MANA_ATOMIC_TOUCH and data.isAtomicTouchEnabled then
+      --if     multiplier >= 4.0 and data.mana >= MIN_MAGIC_ATTACK_COST * 4.0 then 
+        MessageRise("\\#40ff40atomic touch\\#ffffff ", 0)
+        KillCircle1000Spell()
+      --data.mana = data.mana - MIN_MAGIC_ATTACK_COST * 4.0
+        data.mana = data.mana - MANA_ATOMIC_TOUCH
+      elseif multiplier >= 3.0 and data.mana >= MIN_MAGIC_ATTACK_COST * 3.0 and data.isImmolateEnabled then
+        MessageRise("\\#40ff40immolate\\#ffffff ", 0)
+        ImmolateCircleSpell()        
+        data.mana = data.mana - MIN_MAGIC_ATTACK_COST * 3.0
+      elseif multiplier >= 2.0 and data.mana >= MIN_MAGIC_ATTACK_COST * 2.0 and data.isDivineTouchEnabled then
+        MessageRise("\\#40ff40divine touch\\#ffffff ", 0)
+        KillCircle100Spell()
+        data.mana = data.mana - MIN_MAGIC_ATTACK_COST * 2.0
+      elseif data.mana >= MIN_MAGIC_ATTACK_COST then
+        MultiplayerAreaAttack(c)
+        Audio_PlayAt("Magic", xp, yp, zp, 1.0)
+        data.mana = data.mana - MIN_MAGIC_ATTACK_COST
+      end
+    end
+      
+    local xv, yv, zv = c:GetVelocity()
+    local speedDepthScalar = v3Length(xv, yv, zv)    
+    local adjustedFootstepInterval = math.floor(footstepInterval * (1.0 / FPS_FACTOR))
+
+    if speedDepthScalar < 1 then
+      lastFootstep = adjustedFootstepInterval * 1000
+    elseif speedDepthScalar > 1 and lastFootstep > (adjustedFootstepInterval * 1.5) then
+      lastFootstep = adjustedFootstepInterval
+    end 
+    
+    if lastFootstep == 0 then      
+      if speedDepthScalar < 4.0 and speedDepthScalar > 0.8 then
+        Audio_PlayAt("Step", xp, yp, zp, 1.0)
+      end
+      lastFootstep = adjustedFootstepInterval
+    end
+    lastFootstep = lastFootstep - 1
+    
+    local speedDepthFilter = 0.05
+    if data.speedDepthScalar == nil then
+      data.speedDepthScalar = 1.0
+    end
+    data.speedDepthScalar = (data.speedDepthScalar * (1.0 - speedDepthFilter)) + speedDepthScalar * speedDepthFilter
+    if data.speedDepthScalar > 3.0 then
+      data.speedDepthScalar = 3.0
+    end
+    
+    SetSpeedDepthScalar(data.speedDepthScalar, speedDepth)
+    
+    local hp = c:GetHitPoints()
+    local redThreshold = 0.25 * c:GetMaxHitPoints()
+    
+    if  hp < redThreshold then
+      SetFadeColor(1.0, 0.0, 0.0)
+      SetLightnessOverride(((redThreshold - hp) / redThreshold) * 0.25)
+    else
+      SetFadeColor(1.0, 1.0, 1.0)
+      SetLightnessOverride(0.0)    
+    end    
+  end
+  
+end

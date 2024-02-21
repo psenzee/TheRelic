@@ -1,0 +1,2 @@
+server = true
+dofile (MakeReadOnlyPath("game.lua"))

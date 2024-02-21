@@ -1,0 +1,5 @@
+#!/bin/sh
+#
+for fname in ./*.png; do
+   /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/texturetool -m -e PVRTC --bits-per-pixel-2 -f PVR -o $fname.pvrtc $fname
+done

@@ -1,0 +1,438 @@
+print "Lua:Starting Game Script"
+print "Lua:game.lua"
+
+dofile (MakeReadOnlyPath("globals.lua"))
+dofile (MakeReadOnlyPath("common.lua"))
+dofile (MakeReadOnlyPath("achievements.lua"))
+dofile (MakeReadOnlyPath("strings.lua"))
+dofile (MakeReadOnlyPath("serialize.lua"))
+dofile (MakeReadOnlyPath("portal.lua"))
+dofile (MakeReadOnlyPath("savepoint.lua"))
+dofile (MakeReadOnlyPath("store.lua"))
+dofile (MakeReadOnlyPath("saveload.lua"))
+dofile (MakeReadOnlyPath("inventory.lua"))
+dofile (MakeReadOnlyPath("fx.lua"))
+dofile (MakeReadOnlyPath("animation.lua"))
+dofile (MakeReadOnlyPath("characters.lua"))
+dofile (MakeReadOnlyPath("heal.lua"))
+dofile (MakeReadOnlyPath("player.lua"))
+dofile (MakeReadOnlyPath("shield.lua"))
+dofile (MakeReadOnlyPath("enemies.lua"))
+dofile (MakeReadOnlyPath("loot.lua"))
+dofile (MakeReadOnlyPath("door.lua"))
+dofile (MakeReadOnlyPath("level.lua"))
+dofile (MakeReadOnlyPath("load.lua"))
+dofile (MakeReadOnlyPath("multiplayer.lua"))
+dofile (MakeReadOnlyPath("input.lua"))
+dofile (MakeReadOnlyPath("uidraw.lua"))
+dofile (MakeReadOnlyPath("hud.lua"))
+dofile (MakeReadOnlyPath("indicators.lua"))
+dofile (MakeReadOnlyPath("intro.lua"))
+dofile (MakeReadOnlyPath("ui.lua"))
+dofile (MakeReadOnlyPath("buttons.lua"))
+dofile (MakeReadOnlyPath("menus.lua"))
+dofile (MakeReadOnlyPath("upgrades.lua"))
+dofile (MakeReadOnlyPath("loadsavemenus.lua"))
+dofile (MakeReadOnlyPath("dialogtext.lua"))
+dofile (MakeReadOnlyPath("dialog.lua"))
+dofile (MakeReadOnlyPath("gamestate.lua"))
+dofile (MakeReadOnlyPath("preload.lua"))
+dofile (MakeReadOnlyPath("overheadmap.lua"))
+dofile (MakeReadOnlyPath("relic-dictionary.lua"))
+
+GAME_LISTENERS = {}
+
+function ShowAmaranthRingQuestComplete()
+  ShowAchievement('Ring')
+  ShowGenericDialog_Dismiss("\nThe \\#8080ffAmaranth Ring\\#ffffff is found!\t\n\nYou are now able to use magic.\n\n\\#808080Use the new ring icon to the right\nto perform magic attacks.", "Quest Complete!")
+end
+
+function ShowDestroyGen1QuestComplete()
+  ShowGenericDialog_Dismiss("\nCongratulations!\nYou have destroyed a\n\\#8080ffGenerator of Souls\\#ffffff!\n\nYou may yet find more like it in\nyour quest..", "Quest Complete!")
+end
+--[[
+function SaveListener(info, data)
+  if info == 'SELECTED' then
+    SavePrimaryPlayer()
+  end
+end
+]]--
+
+-- not ideal way to do this..
+function FirstAcquiredListener(info, data)
+  if data.name == 'FirstAcquired_Ring' then
+    -- here we need to complete the amaranth ring quest
+    if GetInventoryItemCount(GetPlayer(), "RingQuest") > 0 then
+      RetrieveFromInventory(GetPlayer(), "RingQuest", 1)
+      ShowAmaranthRingQuestComplete()
+      ClearAmaranthRingQuestDialog()
+    end
+  end
+end
+
+FPS_FACTOR = 1.0
+ANIMATION_FRAME_INTERVAL = 2
+
+if IsHiResDevice() then
+  ANIMATION_FRAME_INTERVAL = 1 -- try to do 60 fps on iPhone 4+
+end
+
+SetIsLowEndDevice(GetPlatformIsFirstGen())
+SetAnimationFrameInterval(ANIMATION_FRAME_INTERVAL)
+
+BASE_DEPTH_SCALE = 1.5
+
+if IsIPhone() then
+  if IsLowEndDevice() then
+    BASE_DEPTH_SCALE = 1.0
+  elseif IsHiResDevice() then
+    BASE_DEPTH_SCALE = 1.5
+  elseif GetPlatformIsiPad() then
+    BASE_DEPTH_SCALE = 1.75
+  else
+    BASE_DEPTH_SCALE = 1.25
+  end
+end
+
+FIRST_VISIT_LISTENER = nil
+
+function CompleteEntireGame()
+  StartSequence(COMPLETED_GAME_SEQUENCE)
+  LOCAL_GAME_STATE.CompletedGame = true
+  DeferByTimeMs(32000, "EndGameReturnToCredits")
+end
+
+A_LIGHT = nil
+
+function GameStateInitialize(instance)
+
+  print("Lua:GameStateInitialize")
+  StartSerialization()
+  StartUi()
+  StartMenus()
+
+  DeferByGameStateId(GAMESTATE_MENU,         "IntroComplete")
+  DeferByGameStateId(GAMESTATE_STARTNEW,     "MainMenu_StartNewGame")
+  DeferByGameStateId(GAMESTATE_LOAD,         "MainMenu_LoadGame")
+  DeferByGameStateId(GAMESTATE_JOIN,         "MainMenu_JoinGame")
+  --PROCESS_BUTTONS = false  
+  
+  RegisterUiListener("SaveGameEvent",  "SaveGameListener", {})  
+
+--SetLightingEnabled(true)
+--A_LIGHT = CreateLight()
+--SetLight(1, A_LIGHT)
+
+end
+
+function StartGame(instance)
+
+  print("Lua:StartGame") 
+  SetBaseUvTransform()
+
+  table.insert(GAME_LISTENERS, RegisterListener  ("OnFirstVisit",                  "OnFirstVisitListener", {}))
+  table.insert(GAME_LISTENERS, RegisterListener  ("OnTrueFirstVisit",              "OnTrueFirstVisitListener", {}))  
+  table.insert(GAME_LISTENERS, RegisterListener  ("FirstAcquired_Ring",            "FirstAcquiredListener", { name = "FirstAcquired_Ring" }))
+  table.insert(GAME_LISTENERS, RegisterListener  ("CompleteDestroyGeneratorEvent", "GeneratorDestroyedListener", {}))
+  table.insert(GAME_LISTENERS, RegisterListener  ("Select_Guide",                  "GuideListener", {}))
+  table.insert(GAME_LISTENERS, RegisterListener  ("Select_Door",                   "DoorListener", {}))
+  table.insert(GAME_LISTENERS, RegisterListener  ("Select_SavePoint",              "SavePointListener", {}))
+  table.insert(GAME_LISTENERS, RegisterUiListener("LoadGameEvent",                 "LoadGameListener", {}))
+--table.insert(GAME_LISTENERS, RegisterUiListener("SaveGameEvent",                 "SaveGameListener", {}))
+
+  CreatePlayers(4)
+
+  SetCameraFovDegrees(30)
+  SetBaseDepthScale(BASE_DEPTH_SCALE)
+
+  SetDefaultMovableRadius(characterRadius)
+
+  StartPlayerGameState()
+  StartMultiplayer(server)
+  StartHud()
+  StartEnemies()
+  
+ --TurnEnemies(5)
+
+  --PROCESS_BUTTONS = true
+
+end
+
+function EndGame(instance)
+  print("Lua:EndGame")
+  for i = 1,#GAME_LISTENERS do
+    UnregisterListener(GAME_LISTENERS[i])
+  end
+  GAME_LISTENERS = {}
+end
+
+local lightingType = 0
+
+function TestRpc(method, ...)
+local packed = PackRpc(0, method, arg)
+print ('>> packed message length ' .. tostring(#packed) .. '; unpacking for test ..')
+print ('>> unpacked ' .. tostring(ReadRpc(packed)))
+end
+
+IS_STARTED = false
+JOURNAL_INDEX = 1
+
+function JournalTest()
+  if GENERIC_DIALOG ~= nil then
+    HideGenericDialog()
+  else
+    --ShowDestroyGen1QuestComplete()
+    local text = LOG_ENTRIES[JOURNAL_INDEX]
+    if text == '-END-' then
+      JOURNAL_INDEX = 1
+      text = LOG_ENTRIES[JOURNAL_INDEX]
+    end
+    if text == '-RELIC-TEXT-' then
+      QueueImageDialog_Dismiss("relictext") --(LOCAL_GAME_STATE.DIALOG_TEXT.Relic_Terminal, "Biogenerative Weapon Prototype\n")             
+    else
+      QueueJournalDialog_Dismiss(text, "Journal Entry #" .. tostring(JOURNAL_INDEX) .. "\n")
+    end
+    JOURNAL_INDEX = JOURNAL_INDEX + 1
+  end
+end
+
+function SavePrimaryPlayer(filename)
+  print("SavePrimaryPlayer!")
+  local player = GetPlayer()
+  if player ~= nil and player:GetHitPoints() <= 0 then
+    print("Not saving, player is dead!")
+  else
+    SaveGame(player, filename)
+  end
+end
+
+function LoadPrimaryPlayer(filename)
+  print("LoadPrimaryPlayer!")
+  LoadGame(GetPlayer(), filename)
+end
+
+LAST_PRINTED_TEXTURES = 0
+GS_FRAME              = 0
+
+function UpdateGameState(instance)
+
+  UpdateHudGlobals()
+ 
+  FPS_FACTOR = GetFpsAverage() / 30.0
+--  print(string.format("FPS av: %.02f FACTOR %.02f", GetFpsAverage(), FPS_FACTOR))
+--[[
+  if (GetTime() - LAST_PRINTED_TEXTURES) > 10000 then
+    LAST_PRINTED_TEXTURES = GetTime()
+	PrintLoadedTextures()
+  end
+]]--
+  ProcessInput()
+  --[[
+  if GetPlayer() ~= nil then
+    local x, y, z = GetPlayer():GetPosition()
+    SetLightPosition(A_LIGHT, x, y, (-1 + (GetGameStateFrames() % 2) * 2) * 128, 0)
+    SetLightDiffuse(A_LIGHT, 1.0, 1.0, 1.0, 1000.0)
+    SetLightAmbient(A_LIGHT, 1.0, 1.0, 1.0, 1.0)	
+  end
+  ]]--
+  
+  IS_STARTED = false
+  if not IS_STARTED and not PreloadAndStart() then
+    return
+  end
+  IS_STARTED = true
+  --print("\nIS_STARTED=true\n")
+  
+  UpdateMap()
+  UiInventoryUpdate(player)
+  
+  GS_FRAME = GS_FRAME + 1
+  if GS_FRAME % 100 == 0 then
+    collectgarbage("collect")
+  end
+  
+end
+
+LEVEL = 1
+
+hasErrorOccurred = false
+
+function UpdateErrorOccurred(color) 
+  if HasLuaErrorOccurred() then --and ((not hasErrorOccurred) or (GetGameStateFrames() % 30) == 0) then
+    MessageRise(color .. "LUA ERROR\\#ffffff", 0)
+  --  hasErrorOccurred = true
+  end
+end
+
+function MultiplayerPlayerUpdate()
+  if GetPlayer() ~= nil then 
+    Sync_SendDataMessage(GetPlayer():GetCharacterPositionPacket())
+  end
+  for i = 1, 4 do
+    local player = PLAYERS[i]
+    local packet = CHARACTER_POSITI198ON_PACKETS[i]
+    if player ~= nil and packet ~= nil and not player:data().isLocalPlayer then
+      player:SetFilterAngle(false)
+      player:SetFilterPosition(true)
+      if i ~= player:GetId() or GetCharacterIdFromPositionPacket(packet) ~= player:GetId() then
+        breakpoint("packet id, character id, player table index not equal!")
+      end
+      player:SetCharacterPositionPacket(packet)      
+      if not IS_CLIENT then
+        Sync_SendDataMessage(packet)      
+      end
+    end
+  end
+end
+
+GAME_ENDED = false
+
+function SafePlayerData(fn)
+  local player = GetPlayer()
+  if player ~= nil then
+    local data = player:data()
+    if data ~= nil then  
+      return fn(data)
+    end
+  end
+end
+
+function EndGameReturnToMenu()
+  EndSequence()
+  SetSuppressHud(true)
+  UnloadGame()
+  DoFlash(4000)  
+  DeferByGameStateId(GAMESTATE_UNLOADED, 'ShowMainMenu')
+end
+
+function Respawn()
+  EndSequence()
+  DoFlash(4000)
+  GAME_ENDED = false  
+  ResurrectPlayer(GetPlayer(), 0.5)
+end
+
+function EndGameReturnToCredits()
+  EndSequence()
+  SetSuppressHud(true)
+  UnloadGame()
+  DoFlash(4000)
+  DeferByGameStateId(GAMESTATE_UNLOADED, 'ShowCredits')
+end
+
+function EndGameConnectFailed()
+  IS_STARTING_CLIENT = false
+  IS_CLIENT = false
+  IS_MULTIPLAYER = false
+  ACCEPTED = false
+  
+  EndSequence()
+  SetSuppressHud(true)
+  if GetGameStateId() ~= GAMESTATE_UNLOADED then
+    UnloadGame()
+    DoFlash(4000)
+    DeferByGameStateId(GAMESTATE_UNLOADED, 'ShowConnectFailed')
+  elseif not UiControl_IsVisible(CONNECTFAILED_SCREEN) then
+    ShowConnectFailed()
+  end
+end
+
+function TestLowEndDevice()
+  local islowend = IsLowEndDevice()
+  if islowend == false then islowend = true else islowend = false end
+  SetIsLowEndDevice(islowend)
+end
+
+function TestSequence()
+  ACTIVE_SEQUENCE = ACTIVE_SEQUENCE + 1
+  StartSequence(ACTIVE_SEQUENCE % (GetSequenceCount() + 1))
+end
+
+ACTIVE_SEQUENCE = 0
+
+local button_down_5 = false
+local lastPlaceName = ''
+local sstime = 0
+
+function CaptureScreenAtInterval()
+  local tm = GetTime()
+  if tm - sstime > 5000 then
+    CaptureScreen()
+    sstime = tm
+  end 
+end
+
+function DisplayPlaceName()
+  local placeName = GetPlaceName(GetPlayer():GetPosition())
+  if placeName ~= lastPlaceName then
+    MessageRise("\\#80ff80Entering", 100)
+    MessageRise(placeName, 104)
+    lastPlaceName = placeName
+  end  
+end
+
+function UpdateGame(instance)
+
+ -- local b5x, b5y = Ui_DrawToScreenPosition((478 + 436) * 0.5, (305 + 265) * 0.5)
+  local b5y, b5x = (478 + 436) * 0.5, 320 - (305 + 265) * 0.5
+  if IsButtonDown(5) and not button_down_5 then
+    print('buttondown5 ' .. "x " .. b5x .. ", y " .. b5y)
+    button_down_5 = true
+    Ui_NotifyInput("CLICK_BEGAN", 100, b5x, b5y)
+  elseif not IsButtonDown(5) and button_down_5 then
+    print('buttonup5 ' .. "x " .. b5x .. ", y " .. b5y)
+    button_down_5 = false
+    Ui_NotifyInput("CLICK_ENDED", 100, b5x, b5y)
+  end
+
+  ProcessReceiveHitQueue()
+
+  UpdateErrorOccurred("\\#ff0000")
+  --UpdateMultiplayer()
+
+--SafePlayerData(function (data) data.unspentKills = data.unspentKills + 1000; end)
+  --[[
+  if true then
+  --if ButtonPressed(3) then
+    --SetSuppressHud(true)
+    --TestSequence()
+    --StartSequence(MARKETING_SEQUENCE)
+    local player = GetPlayer()
+    if player ~= nil then
+      local data = player:data()
+      if data ~= nil then
+        data.isBoltEnabled = true
+        data.isImmolateEnabled = true
+        data.isShieldEnabled = true
+        data.isAtomicTouchEnabled = true
+        data.isDivineTouchEnabled = true
+      end
+    end
+  end
+  if not server then
+    GetCharactersFromServer()
+  end
+  ]]--
+  
+  if not GAME_ENDED and GetPlayer():GetHitPoints() <= 0 then
+    GAME_ENDED = true  
+    SetFadeColor(1.0, 1.0, 1.0)	
+    StartSequence(GAME_OVER_SEQUENCE)
+    SetLightnessOverride(0.0)   
+    -- $TODO should be AreOtherPlayersConnected() instead of IsMultiplayer()
+    if IsMultiplayer() then
+      DeferByTimeMs(10000, "Respawn")      
+    else
+      DeferByTimeMs(10000, "EndGameReturnToMenu")
+    end
+  end
+
+--  UpdatePlayerList()
+--  UpdatePortals()
+--  MultiplayerPlayerUpdate()
+  
+    UpdateAchievements()
+  
+  -- DisplayPlaceName()
+  -- CaptureScreenAtInterval() -- for marketing purposes
+end
