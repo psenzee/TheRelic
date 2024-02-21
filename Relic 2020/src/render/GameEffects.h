@@ -1,0 +1,32 @@
+/*
+ *  GameEffects.h
+ *  GLGravity
+ *
+ *  Created by Paul Senzee on 1/10/09.
+ *  Copyright 2009 __MyCompanyName__. All rights reserved.
+ *
+ */
+
+#ifndef _GAME_EFFECTS_H
+#define _GAME_EFFECTS_H
+
+#include "time/GameClock.h"
+
+class GameEffects
+{
+public:
+    
+    Fader black,
+          white,
+          background;
+
+    void Darken(int time = -1);
+    void UnDarken(int time = -1);
+    void Lighten(int time = -1);
+    void UnLighten(int time = -1);
+    void Flash(int time = -1);
+    void FadeGameToBackground(int time = -1);
+    void FadeBackgroundToGame(int time = -1);    
+};
+
+#endif // _GAME_EFFECTS_H

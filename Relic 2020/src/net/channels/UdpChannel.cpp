@@ -1,0 +1,41 @@
+#include "UdpChannel.h"
+#include "IAddress.h"
+#include "IpAddress.h"
+
+bool UdpChannel::Open(const IAddress *address)
+{
+    if (address->GetProtocol() != IAddress::PROTOCOL_UDP)
+    {
+        // $TODO ERROR HERE
+        return false;
+    }
+    mAddress = static_cast<const IpAddress *>(address);
+    // ..
+
+
+    return false;
+}
+
+bool UdpChannel::Send(const char *data, int length)
+{
+    // $TODO
+    return false;
+}
+
+int UdpChannel::Receive(char *data, int length)
+{
+    // $TODO
+    return 0;
+}
+
+bool UdpChannel::SendReliable(const char *data, int length)
+{
+    // it's UDP, no guarantees regardless
+    // and no extra checking code right here
+    return Send(data, length);
+}
+
+void UdpChannel::Close()
+{
+    // $TODO
+}

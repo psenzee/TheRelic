@@ -1,0 +1,19 @@
+Relic to Finish 01/17/2010
+
+bug saving generator - Still a problem with generator save partial destroyed
+Save quinotaur/keys/ring (specials) bug, allow them to be saved, then don't recreate at load (don't I already do this?). They are just not saving or loading I guess; BUG: the save game bug with transient objects: keys, quinotaur, etc.
+track texture usage, leakage, especially for older devices
+optimize older devices!
+Throttle visible characters (didn't I already do this?) (for older devices, create fewer characters for older devices)
+make crystal icon smaller/pvr
+Make sure everything is properly cleared on unload/reload
+Sort saves
+Make sure right timestamp
+Mark autosave and autosave every 30 seconds or so
+Thin out pfx (where possible, older devices)
+Skin crystal nicely (w/Lucy)
+Chillingo QA checklist
+Door/selectable bug
+magic bolt needs to use mana
+Save status of guide activation?
+Green skel bug on deserialization [is this fixed? I think it might have been related to things not dying]

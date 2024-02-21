@@ -1,0 +1,12 @@
+#include "IAddress.h"
+#include "BonjourAcquirer.h"
+
+BonjourAcquirer::BonjourAcquirer() 
+  : AbstractAddressAcquirer(IAddress::DOMAIN_LOCAL, IAddress::PROTOCOL_TCP_UDP)
+{
+} 
+
+void BonjourAcquirer::Update()
+{
+    // $TODO
+}

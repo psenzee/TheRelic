@@ -1,0 +1,47 @@
+#include "Meter.h"
+
+#include "core/core.h"
+#include "core/gametime.h"
+#include "render/RenderContext.h"
+#include "render/ContentLoader.h"
+#include "render/QuadRenderer.h"
+
+Meter::Meter(float width, float value) 
+    : mSize(30.0f, 7.5f), mValue(value), mWidth(width), mVisible(false), mForeTexture(0), mBackTexture(0), mDistance(0.f)
+{ 
+    mBackTexture = ContentLoader::GetInstance()->GetTexture("health_bar_7");
+    mForeTexture = ContentLoader::GetInstance()->GetTexture("health_small_shadow3");
+}
+
+Meter::~Meter()
+{ 
+}
+
+void Meter::Update(const GameTime &time)
+{
+    // ..
+}
+
+void Meter::Render(RenderContext &context)
+{
+    if (!mVisible)
+        return;
+        
+    const float FADE_DISTANCE =  1024.f;//256.f;
+    const float ELEVATION     = -150.f;
+
+    float attenuation = 1.f - math::clamp(mDistance, 0.f, FADE_DISTANCE) / FADE_DISTANCE;
+
+    const Vector2 OFFSET(0.f, 10.f);
+    const Vector3 MARGIN(1.f, 1.f, 0.f);
+
+    if (true)//(attenuation > 0.1f && mValue < 0.95f)
+    {
+        Vector4 color(1.f, 1.f, 1.f, attenuation);
+        Vector3 start(mPosition.x + OFFSET.x, mPosition.y + OFFSET.y, ELEVATION),
+                end  (start.x + (mSize.x * mWidth * attenuation), start.y + (mSize.y * attenuation), start.z);
+       // QuadRenderer::RenderScreenAlignedQuadDeferred(mBackTexture, color, start, end, Vector2(1.f, 0.f), Vector2(0.f, 1.f));
+        QuadRenderer::RenderScreenAlignedQuadDeferred(mForeTexture, color, start + MARGIN, end - MARGIN, Vector2(1.f, mValue), Vector2(0.f, mValue));
+    }
+}
+

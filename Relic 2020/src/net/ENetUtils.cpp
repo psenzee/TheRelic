@@ -1,0 +1,82 @@
+#ifdef WIN32
+#define NOMINMAX 1
+#endif
+
+#include "ENetUtils.h"
+#include "IConnection.h"
+#include "ConnectionManager.h"
+#include "ENetConnection.h"
+#include "BluetoothConnection_serveronly.h"
+#include "Sockets.h"
+#include "luautil/LuaInterpreter.h"
+#include "luautil/LuaValue.h"
+#include "luautil/LuaCall.h"
+
+extern int  InitializeSockets();
+extern void ShutdownSockets();
+
+static void _ShutdownENet()
+{
+    enet_deinitialize();
+    ShutdownSockets();
+}
+
+bool gIsENetStarted = false;
+
+static bool StartENet()
+{
+    if (gIsENetStarted)
+        return true;
+    InitializeSockets();
+    if (enet_initialize () != 0)
+    {
+        fprintf(stderr, "An error occurred while initializing ENet.\n");
+        return false;
+    }
+    gIsENetStarted = true;
+    atexit(_ShutdownENet);
+    return true;
+}
+
+void OnReceiveBluetoothConnectionLua(void *user)
+{
+    LuaCall(LuaInterpreter::GetInstance()->GetState(), "OnReceiveBluetoothConnection", 0, 0);
+}
+
+Connection::ConnectionManager *CreateENetClientConnectionManager(const char *address, int port)
+{
+    StartENet();
+    Connection::ConnectionManager *cm = new Connection::ConnectionManager;
+    Connection::ENetClientConnector *cc = new Connection::ENetClientConnector;
+    cc->SetAddress(address, port);
+    cm->SetClientConnector(cc);
+    return cm;
+}
+
+Connection::ConnectionManager *CreateENetServerConnectionManager(int port)
+{
+    StartENet();
+    Connection::ConnectionManager *cm = new Connection::ConnectionManager;
+    Connection::ENetServerConnector *sc = new Connection::ENetServerConnector;
+    sc->Open(port);
+    cm->SetServerConnector(sc);
+    return cm;
+}
+
+Connection::ConnectionManager *CreateBluetoothClientConnectionManager()
+{
+    Connection::ConnectionManager *cm = new Connection::ConnectionManager;
+    Connection::BluetoothClientConnector *cc = new Connection::BluetoothClientConnector;
+    // $TODO do our connector setup stuff here
+    cm->SetClientConnector(cc);
+    return cm;
+}
+
+Connection::ConnectionManager *CreateBluetoothServerConnectionManager()
+{
+    Connection::ConnectionManager *cm = new Connection::ConnectionManager;
+    Connection::BluetoothServerConnector *sc = new Connection::BluetoothServerConnector;
+    // $TODO do our connector setup stuff here
+    cm->SetServerConnector(sc);
+    return cm;
+}

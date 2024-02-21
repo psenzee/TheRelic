@@ -1,0 +1,76 @@
+#ifndef _OPENGLESMESH_H
+#define _OPENGLESMESH_H
+
+#include "core/core.h"
+#include "core/aabox.h"
+#include "fast/Allocator.h"
+
+//#define NORMALS 1 // no
+
+class GLVertex
+{
+public:
+
+    Vector3 position;
+#ifdef NORMALS
+    Vector3 normal;
+#endif
+    Vector2 uv;
+};
+
+class GLVertexSmall
+{
+public:
+
+  //char    x, y, z, w;
+    short   x, y, z, w;
+    Vector2 uv;
+};
+
+class OpenGLESMesh
+{
+public:
+    
+    CLASS_NEW_DELETE()
+
+    enum NormalAction { NONE, RESCALE, NORMALIZE };
+        
+    OpenGLESMesh();
+    ~OpenGLESMesh();
+        
+    bool                Read(const char *filename, bool asCompact);
+    void                Clear();
+    void                Render();
+
+    // Note if you use ReadFromData, the data MUST continue to exist,
+    // OpenGLESMesh does NOT copy it
+    bool                ReadFromData(const char *data, int size, bool asCompact);
+    inline void         SetNormalAction(NormalAction action) { mNormalAction = action; }
+    inline const AABox &GetBounds() const { return mBounds; }
+
+private:
+
+    enum Type { NONINTERLEAVED_LIST = 0, INTERLEAVED_LIST = 1, INTERLEAVED_STRIP = 2, _ = 0x7fffffff };
+    enum Usage { USE_NO_BUFFERS = 0, USE_BUFFERS };
+    
+    static const Usage usage;
+    
+    unsigned        mVb, mIb;
+    bool            mOwner;
+    void           *mData;
+    Type            mType;
+    NormalAction    mNormalAction;
+    GLVertexSmall  *mCompact; // this is for smaller geometry
+    GLVertex       *mInterleaved;
+    unsigned short *mIndices;
+    size_t          mVerticesCount,
+                    mIndicesCount;
+    AABox           mBounds;
+
+    void CreateBuffers(int dataSize, int indicesSize);
+    void DestroyBuffers();
+    void Compact();
+    void CalculateBounds();
+};
+
+#endif  // _OPENGLESMESH_H

@@ -1,0 +1,32 @@
+#ifndef _DIECOLLAPSEBEHAVIOR_H
+#define _DIECOLLAPSEBEHAVIOR_H
+
+#include "core/core.h"
+#include "DieBehavior.h"
+
+class DieCollapseBehavior : public DieBehavior
+{
+public:
+
+    CLASS_NEW_DELETE()
+
+    DieCollapseBehavior();
+
+    void Reset();
+    void Update(const GameTime &time);
+    void Signal(int signal);
+
+    void Serialize(IOutStream &s) const;
+
+    static IBehavior *Deserialize(IInStream &s);
+
+private:
+
+    enum { DIE_FRAMES = 30 };
+    enum DeathState { ALIVE, DEATH_INPROGRESS, DEATH_COMPLETE };
+
+    int        mDieFrames;
+    DeathState mDeathState;
+};
+
+#endif // _DIECOLLAPSEBEHAVIOR_H

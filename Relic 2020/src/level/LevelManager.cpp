@@ -1,0 +1,84 @@
+#include "LevelManager.h"
+#include "Level.h"
+
+#include "core/core.h"
+#include "core/random.h"
+#include "core/global.h"
+
+#include "map/Map.h"
+#include "map/MapLoader.h"
+#include "render/ContentLoader.h"
+#include "map/MapDescription.h"
+#include "events/Event.h"
+#include "luautil/LuaThread.h"
+#include "luautil/LuaCall.h"
+
+class XmlElement;
+
+LevelManager::LevelManager(Multiplayer *multiplayer) 
+  : mRandom(354668), mIndex(0), mLuaThread(0), mLevel(0), mMultiplayer(multiplayer)
+{
+}
+    
+void LevelManager::RunEvents(const Vector3 &position, IEventListener &listener)
+{
+    if (mLevel)
+        mLevel->RunEvents(position, listener);
+}
+        
+void LevelManager::LoadLevel(int level)
+{
+    UnloadLevel();
+    mLevel = Load(level);
+    printf("level ptr %p for level#%d\n", mLevel, level);
+    mIndex = level;
+    if (mLuaThread)
+        LuaCall(mLuaThread->GetLuaState(),  "LevelLoad");
+    for (std::vector<Character *>::iterator i = mPersistent.begin(), e = mPersistent.end(); i != e; ++i)
+        mLevel->AddCharacter(*i);
+    mPersistent.clear();
+}
+
+void LevelManager::UnloadLevel()
+{
+    if (mLevel)
+    {
+        if (mLuaThread)
+            LuaCall(mLuaThread->GetLuaState(), "LevelUnload");
+        mLevel->DestroyCharacters(mPersistent);
+        delete mLevel;
+        mLuaThread->Collect();
+    }
+    mLevel = 0;    
+}
+        
+void LevelManager::ReloadLevel()
+{
+    UnloadLevel();
+    LoadLevel(mIndex);
+}
+
+void LevelManager::Draw(RenderContext &context, const GameTime &time, const PauseState &paused)
+{
+    if (mLevel)
+        mLevel->Draw(context, time, paused);
+}
+        
+void LevelManager::Update(RenderContext &context, const GameTime &time, const PauseState &paused, IEventListener &listener)
+{
+    if (mLevel)
+    {
+        mLevel->Update(context, time, paused, listener);
+        if (mLuaThread)
+            LuaCall(mLuaThread->GetLuaState(), "LevelUpdate");
+    }
+}
+    
+Level *LevelManager::Load(int index)
+{
+    if (index < 0)
+        return 0;
+    char filename[1024]; // should be plenty
+    sprintf(filename, "level%d.xml", index);
+    return new Level(ContentLoader::GetInstance(), filename, index, mMultiplayer);
+}

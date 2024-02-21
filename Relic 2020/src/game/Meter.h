@@ -1,0 +1,54 @@
+#ifndef _METER_H
+#define _METER_H
+
+#include "core/core.h"
+#include "fast/Allocator.h"
+
+class GameTime;
+class RenderContext;
+class DeviceTexture;
+
+class Meter
+{
+public:
+
+    CLASS_NEW_DELETE()
+
+    Meter(float width = 1.f, float value = 1.f);
+    ~Meter();
+
+    inline void           SetPosition(const Vector3 &pos) { mPosition = pos; }
+    inline const Vector3 &GetPosition() const             { return mPosition; }
+
+    inline void           SetSize(const Vector2 &sz)      { mSize = sz; }
+    inline const Vector2 &GetSize() const                 { return mSize; }
+
+    inline void           SetValue(float value)           { mValue = value; if (mValue > 0.99f) mValue = 0.99f; }
+    inline float          GetValue() const                { return mValue; }
+
+    inline void           SetDistance(float distance)     { mDistance = distance; }
+    inline float          GetDistance() const             { return mDistance; }
+
+    inline void           SetWidth(float width)           { mWidth = width; }
+    inline float          GetWidth() const                { return mWidth; }
+
+    inline void           SetVisible(bool visible)        { mVisible = visible; }
+    inline bool           IsVisible() const               { return mVisible; }
+
+    void                  Update(const GameTime &time);
+
+    void                  Render(RenderContext &context);
+
+private:
+
+    Vector3        mPosition;
+    Vector2        mSize;
+    float          mValue,
+                   mWidth,
+                   mDistance;
+    bool           mVisible;
+    DeviceTexture *mBackTexture,
+                  *mForeTexture;
+};
+
+#endif // _METER_H

@@ -1,0 +1,317 @@
+#include "BluetoothConnection_serveronly.h"
+#include "luautil/LuaInterpreter.h"
+#include "luautil/LuaCall.h"
+
+#include <stdio.h> // printf
+#include <string.h> // memset
+
+#include "time/Timer.h"
+
+typedef void (*OnCancelCallback)(void *user);
+typedef void (*OnPickerConnectCallback)(void *user);
+
+extern "C" void StartBluetoothPicker();
+extern "C" void SendBluetoothData(const void *data, int length, bool reliable);
+extern "C" void SetBluetoothOnReceiveCallback(Connection::OnReceiveCallback callback, void *user);
+extern "C" void SetBluetoothOnCancelCallback(OnCancelCallback callback, void *user);
+extern "C" void SetBluetoothOnPickerConnectCallback(OnPickerConnectCallback callback, void *user);
+
+namespace Connection
+{
+
+BluetoothClientConnection::BluetoothClientConnection(BluetoothClientConnector *connector) 
+    :  mId(0), mClientConnector(connector), mReceiveCallback(0), mReceiveUser(0), 
+       mDisconnectCallback(0), mDisconnectUser(0)
+{
+//  SetBluetoothOnReceiveCallback(OnBluetoothReceiveCallback, this);
+}
+
+BluetoothClientConnection::~BluetoothClientConnection()
+{
+    Close();
+}
+
+BluetoothPeerConnection *BluetoothServerConnector::CreatePeerConnection()
+{
+    BluetoothPeerConnection *c = new BluetoothPeerConnection(/*this*/);
+    c->SetId(ConnectionIdAssigner::GetNewId());
+    mConnection = c;
+    return c;
+}
+
+BluetoothPeerConnection *BluetoothClientConnector::CreatePeerConnection()
+{
+    BluetoothPeerConnection *c = new BluetoothPeerConnection(/*this*/);
+    c->SetId(ConnectionIdAssigner::GetNewId());
+    mConnection = c;
+    return c;
+}
+
+BluetoothPeerConnection *BluetoothServerConnector::GetPeerConnection()
+{
+    return mConnection;
+}
+
+BluetoothPeerConnection *BluetoothClientConnector::GetPeerConnection()
+{
+    return mConnection;
+}
+
+bool BluetoothClientConnection::Close()
+{
+    // $TODO
+    return false;
+}
+
+enum { TOTAL_TIME = 5 };
+
+static void ReportSentBandwidth(int bytes)
+{
+    static unsigned total = 0, lastTime = GetCurrentTimeMs();
+    total += bytes;
+    if (GetCurrentTimeMs() > lastTime + TOTAL_TIME * 1000)
+    {
+        lastTime = GetCurrentTimeMs();
+        printf("Data rate (bytes sent) last %d seconds = %.2fkbps\n", TOTAL_TIME, total * 8 / static_cast<float>(TOTAL_TIME * 1024));
+        total = 0;
+    }
+}
+
+static void ReportReceivedBandwidth(int bytes)
+{
+    static unsigned total = 0, lastTime = GetCurrentTimeMs();
+    total += bytes;
+    if (GetCurrentTimeMs() > lastTime + TOTAL_TIME * 1000)
+    {
+        lastTime = GetCurrentTimeMs();
+        printf("Data rate (bytes received) last %d seconds = %.2fkbps\n", TOTAL_TIME, total * 8 / static_cast<float>(TOTAL_TIME * 1024));
+        total = 0;
+    }
+}
+
+bool BluetoothClientConnection::Send(const char *data, int length, bool reliable, bool sequenced)
+{
+// $TODO currently disabled
+//  SendBluetoothData(data, length, reliable);
+    ReportSentBandwidth(length);
+    return true;
+}
+
+void BluetoothClientConnection::OnBluetoothReceiveCallback(int connectionid, const void *data, int length, void *user)
+{
+	BluetoothClientConnection *connection = static_cast<BluetoothClientConnection *>(user);
+	if (connection && connection->mReceiveCallback)
+	{
+        ReportReceivedBandwidth(length);		
+		connection->mReceiveCallback(connectionid, data, length, connection);
+	}
+}	
+
+void BluetoothClientConnection::Process()
+{
+    // OnConnect
+    /*
+    mClientConnector->ConnectInternal(this);
+    */
+
+    // OnReceive
+    /*
+    ReportReceivedBandwidth(dataLength);
+    if (mReceiveCallback)
+        mReceiveCallback(mId, data, dataLength, mReceiveUser);
+    */
+
+    // OnDisconnect
+    /*
+    if (mDisconnectCallback)
+        mDisconnectCallback(mId, 0, mDisconnectUser);
+    */
+}
+
+
+BluetoothPeerConnection::BluetoothPeerConnection(/*BluetoothServerConnector *serverConnector*/) 
+    :  mId(0), mServerConnector(0/*serverConnector*/), mReceiveCallback(0), mReceiveUser(0), 
+       mDisconnectCallback(0), mDisconnectUser(0)
+{
+// $TODO currently disabled
+//    SetBluetoothOnReceiveCallback(OnBluetoothReceiveCallback, this);	
+}
+	
+void BluetoothPeerConnection::OnBluetoothReceiveCallback(int connectionid, const void *data, int length, void *user)
+{
+	BluetoothPeerConnection *connection = static_cast<BluetoothPeerConnection *>(user);
+	if (connection)
+		connection->ReceiveInternal(data, length);
+}
+
+BluetoothPeerConnection::~BluetoothPeerConnection()
+{
+    Close();
+}
+
+void BluetoothPeerConnection::ReceiveInternal(const void *data, int length)
+{
+    ReportReceivedBandwidth(length);
+    if (mReceiveCallback)
+        mReceiveCallback(mId, data, length, mReceiveUser);
+}
+
+void BluetoothPeerConnection::DisconnectInternal()
+{
+    if (mDisconnectCallback)
+        mDisconnectCallback(mId, 0, mDisconnectUser);
+}
+
+bool BluetoothPeerConnection::Close()
+{
+    // $TODO
+    return true;
+}
+
+bool BluetoothPeerConnection::Send(const char *data, int length, bool reliable, bool sequenced)
+{
+// $TODO currently disabled
+//  SendBluetoothData(data, length, reliable);
+    ReportSentBandwidth(length);
+    return true;
+}
+
+void BluetoothPeerConnection::Process()
+{
+    // $NOTE do we need anything here?
+}
+
+void BluetoothServerConnector::Start()
+{
+// $TODO currently disabled	
+//  StartBluetoothPicker();
+    mState = WAITING_FOR_PICKER;
+//  SetBluetoothOnCancelCallback(OnBluetoothPickerCancelCallback, this);
+//  SetBluetoothOnPickerConnectCallback(OnBluetoothPickerConnectCallback, this);
+}	
+
+BluetoothServerConnector::~BluetoothServerConnector()
+{
+    mState = UNCONNECTED;
+    // $TODO
+}
+
+BluetoothClientConnector::~BluetoothClientConnector()
+{
+    mState = UNCONNECTED;
+    // $TODO
+}
+
+void BluetoothServerConnector::Process()
+{
+    BluetoothPeerConnection *connection = 0;	
+    lua_State *lua = LuaInterpreter::GetInstance()->GetState();
+    switch (mState)
+    {
+    case CONNECTING:
+        connection = CreatePeerConnection();
+        if (mConnectCallback)
+            mConnectCallback(connection, mConnectCallbackUser);
+//      LuaCall(lua, "MultiplayerConnectSucceeded", 0, 0);
+        mState = CONNECTED;
+        break;
+    case PICKER_CANCELLED:
+        connection = GetPeerConnection();
+        if (connection)
+            connection->DisconnectInternal();
+        LuaCall(lua, "MultiplayerConnectCancelled", 0, 0);			
+        mState = UNCONNECTED;
+        break;
+    }
+
+    // OnReceive
+    /*
+    connection = GetPeerConnection();
+    if (connection)
+        connection->ReceiveInternal(data, dataLength);
+    */
+}
+
+void BluetoothServerConnector::SetOnConnect(OnConnectCallback callback, void *user)
+{
+    mConnectCallback = callback;
+    mConnectCallbackUser = user;
+}
+
+void BluetoothClientConnector::SetOnConnect(OnConnectCallback callback, void *user)
+{
+    mConnectCallback = callback;
+    mConnectCallbackUser = user;
+}
+
+void BluetoothClientConnector::SetOnAbortConnect(OnAbortConnectCallback callback, void *user)
+{
+    mAbortConnectCallback = callback;
+    mAbortConnectCallbackUser = user;
+}
+
+void BluetoothClientConnector::Process()
+{
+    BluetoothPeerConnection *connection = 0;	
+    lua_State *lua = LuaInterpreter::GetInstance()->GetState();
+    switch (mState)
+    {
+    case CONNECTING:
+        connection = CreatePeerConnection();
+        if (mConnectCallback)
+            mConnectCallback(connection, mConnectCallbackUser);
+//      LuaCall(lua, "MultiplayerConnectSucceeded", 0, 0);
+        mState = CONNECTED;
+        break;
+    case PICKER_CANCELLED:
+        connection = GetPeerConnection();
+        if (connection)
+            connection->DisconnectInternal();			
+        LuaCall(lua, "MultiplayerConnectCancelled", 0, 0);			
+        mState = UNCONNECTED;
+        break;
+    }
+
+    // OnReceive
+    /*
+    connection = GetPeerConnection();
+    if (connection)
+        connection->ReceiveInternal(data, dataLength);
+    */
+}
+
+bool BluetoothClientConnector::Connect()
+{
+  //StartBluetoothPicker();
+    mState = WAITING_FOR_PICKER;
+  //SetBluetoothOnCancelCallback(OnBluetoothPickerCancelCallback, this);
+  //SetBluetoothOnPickerConnectCallback(OnBluetoothPickerConnectCallback, this);
+    OnBluetoothPickerConnectCallback(this);
+    return true;
+}
+
+void BluetoothClientConnection::SetOnReceive(OnReceiveCallback callback, void *user)
+{ 
+    mReceiveCallback = callback;
+    mReceiveUser = user;
+}
+
+void BluetoothClientConnection::SetOnDisconnect(OnDisconnectCallback callback, void *user)
+{ 
+    mDisconnectCallback = callback;
+    mDisconnectUser = user;
+}
+
+void BluetoothPeerConnection::SetOnReceive(OnReceiveCallback callback, void *user)
+{ 
+    mReceiveCallback = callback;
+    mReceiveUser = user;
+}
+
+void BluetoothPeerConnection::SetOnDisconnect(OnDisconnectCallback callback, void *user)
+{ 
+    mDisconnectCallback = callback;
+    mDisconnectUser = user;
+}
+
+}

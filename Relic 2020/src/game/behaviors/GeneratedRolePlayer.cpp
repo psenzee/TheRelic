@@ -1,0 +1,88 @@
+#include "GeneratedRolePlayer.h"
+
+#include "core/core.h"
+#include "core/random.h"
+#include "Behaviors.h"
+
+static inline core::Random GetRandomAtField(int seed, int field)
+{
+    core::Random r = core::Random(seed);
+    for (int i = 0; i < field + 1; i++)
+        r.integer();
+    return r;
+}
+
+struct Range
+{
+    float lo, hi;
+};
+
+struct CharacterClass
+{
+    enum { STRENGTH = 0, DEXTERITY, VITALITY, ENERGY, LUCK, MAX_FIELDS };
+    Range range[MAX_FIELDS];
+};
+
+CharacterClass classes[] =
+{
+    { {
+        { 15.f,  50.f  },
+        { 10.f,  40.f  },
+        { 12.f,  45.f  },
+        {  5.f,  20.f  },
+        { -0.5f,  0.8f } }
+    },
+};
+
+static float CalculateValue(int seed, int field, int level, int charClass) // memoize?, or just pregen tables?
+{
+    core::Random r = GetRandomAtField(seed, field);
+    Range range = classes[charClass].range[field];
+    return ((range.hi - range.lo) * ((level - 1) * 0.1f)) * r.real() + range.lo;
+}
+
+static float CalculateValue(int seed, int field, const IBehavior *self)
+{
+    const Character *character = self->GetCharacter();
+    return CalculateValue(seed, field, GetLevel(const_cast<Character *>(character)), 0/* fornow,$TODO GetCharacterClass(character)*/);
+}
+
+void GeneratedRolePlayer::Start(Character *self)
+{ 
+    SetCharacter(self);
+}
+    
+unsigned GeneratedRolePlayer::GetStrength() const
+{
+    return CalculateValue(mSeed, CharacterClass::STRENGTH, this);
+}
+
+unsigned GeneratedRolePlayer::GetDexterity() const
+{ 
+    return CalculateValue(mSeed, CharacterClass::DEXTERITY, this);
+}
+
+unsigned GeneratedRolePlayer::GetVitality() const
+{ 
+    return CalculateValue(mSeed, CharacterClass::VITALITY, this);
+}
+
+unsigned GeneratedRolePlayer::GetEnergy() const
+{ 
+    return CalculateValue(mSeed, CharacterClass::ENERGY, this);
+}
+
+float GeneratedRolePlayer::GetLuck() const
+{ 
+    return CalculateValue(mSeed, CharacterClass::LUCK, this);
+}
+
+float GeneratedRolePlayer::GetClassBonus() const
+{ 
+    return 0.f;
+}
+
+float GeneratedRolePlayer::GetRatingBonus() const
+{ 
+    return 0.f;
+}

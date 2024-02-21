@@ -1,0 +1,17 @@
+#ifndef _LUACALL_H
+#define _LUACALL_H
+
+#include "LuaValue.h"
+
+#include <vector>
+
+bool LuaDoesFunctionExist(lua_State *state, const char *function);
+
+int LuaCall(lua_State *state, const char *function, const LuaValue *arguments, int argCount);
+int LuaCall(lua_State *state, const char *function);
+int LuaCall(lua_State *state, const char *function, std::vector<LuaValue> &arguments);
+int LuaCall(lua_State *state, LuaFunction function, const LuaValue *arguments, int argCount);
+int LuaCall(lua_State *state, LuaFunction function);
+int LuaCall(lua_State *state, LuaFunction function, std::vector<LuaValue> &arguments);
+
+#endif // _LUACALL_H

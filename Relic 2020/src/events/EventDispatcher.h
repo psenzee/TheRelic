@@ -1,0 +1,51 @@
+#ifndef _EVENTDISPATCHER_H
+#define _EVENTDISPATCHER_H
+
+#include "core/core.h"
+
+#include <map>
+#include <string>
+#include <vector>
+
+class EventDispatcher
+{
+public:
+
+    typedef bool (*function_t)(const char *info, void *context);
+
+    EventDispatcher();
+
+    void Register  (const char *event, function_t function, void *context);
+
+    void Unregister(const char *event);
+    void Unregister(const char *event, function_t function, void *context);
+    void Unregister(const char *event, function_t function);
+    void Unregister(const char *event, void *context);
+
+    void Unregister(function_t function, void *context);
+    void Unregister(function_t function);
+    void Unregister(void *context);
+
+    void Fire(const char *event, const char *info);
+
+    void Update();
+
+    int  GetQueuedEvents() const { return (int)mEvents.size(); }
+
+    struct EventHandler
+    {
+        function_t  function;
+        void       *context;
+
+        inline EventHandler(function_t f, void *c) : function(f), context(c) {}
+    };
+
+private:
+
+    bool FireInternal(const String &event, const char *info);
+
+    std::map<String, std::vector<EventHandler> > map;
+    std::vector< std::pair<String, String> >     mEvents;
+};
+
+#endif // _EVENTDISPATCHER_H

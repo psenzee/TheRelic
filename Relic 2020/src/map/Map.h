@@ -1,0 +1,74 @@
+#ifndef _MAP_PDS_H
+#define _MAP_PDS_H
+
+#include "core/core.h"
+#include "core/random.h"
+#include "core/aabox.h"
+
+class XmlElement;
+class ITileMapModel;
+class RenderContext;
+class IRenderable;
+class OverheadCamera;
+class ITile;
+class BitMap2d;
+
+#include "gamecore/ICollidable.h"
+
+class Map
+{
+public:
+    
+    Map(ITileMapModel *model);
+    ~Map();    
+    
+    inline ITileMapModel       *GetMapModel() { return MapModel; }
+    
+    Vector3                     GetStartPoint() const;  // returns world - Position
+        
+    void                        SetPlayerTile(const Vector2 &position, int id);
+    void                        SetEndTile(int32_t id);
+    
+    void                        ClearPickup(const Vector2 &position);
+    void                        ClearEndArea();
+                
+    core::Point                 FindEvent(const char *name) const;
+    Vector3                     GetLookAt(const Vector2 &player) const; // returns world
+    Vector3                     GetSize() const;
+  
+    ITile                      *GetTileAt(const Vector2 &p);
+    void                        SetTileIdAt(const Vector2 &p, int id);
+    int32_t                     GetTileIdAt(const Vector2 &p) const;
+    core::Point                 GetTileLocationAt(const Vector2 &p) const; // expects world coordinates
+    Vector2                     GetWorldLocationAtTile(const core::Point &p) const;
+    
+    void                        Draw(RenderContext &context, const GameTime &time, bool renderDefaults, const BitMap2d *mask = 0);
+    void                        Update(RenderContext &context, const GameTime &time);
+  
+    const AABox                &GetBounds() const { return bounds; }
+    const Vector3              &GetPosition() const { return Position; }
+    void                        SetPosition(const Vector3 &position);
+    void                        MovePosition(const Vector3 &offset);
+
+    ICollidable::Classification Collision(const Vector3 &p, float radius, Vector3 &resolve);
+
+    const core::Rectangle      &GetRenderRange() { return mRenderRange; }
+
+    bool                        GetRandomSpot(core::Random &r, float radius, const Vector3 &lo, const Vector3 &hi, Vector3 &at);
+   
+private:
+    
+    Vector3                     GetNormalizedPosition(const Vector3 &at) const;
+
+        
+    ITileMapModel              *MapModel;
+    core::Point                 Start;
+
+    Vector3                     Position;
+    AABox                       basebounds,
+                                bounds;
+
+    core::Rectangle             mRenderRange;
+};
+
+#endif // _MAP_PDS_H

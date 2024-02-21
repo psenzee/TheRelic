@@ -1,0 +1,98 @@
+#ifndef _LUACHARACTERMACROS_H
+#define _LUACHARACTERMACROS_H
+
+#define CHECK_CHARACTER_RETURN_VOID(INSTANCE, FUNCTION)           if (!(INSTANCE)) { InvalidCharacterCall(FUNCTION); return 0; }
+#define CHECK_CHARACTER_RETURN_NIL(INSTANCE, FUNCTION)            if (!(INSTANCE)) { InvalidCharacterCall(FUNCTION); lua_pushnil(lua); return 1; }
+#define CHECK_CHARACTER_RETURN_BOOL(INSTANCE, FUNCTION, VALUE)    if (!(INSTANCE)) { InvalidCharacterCall(FUNCTION); lua_pushboolean(lua, (VALUE) ? 1 : 0); return 1; }
+#define CHECK_CHARACTER_RETURN_NUMBER(INSTANCE, FUNCTION, VALUE)  if (!(INSTANCE)) { InvalidCharacterCall(FUNCTION); lua_pushnumber(lua, (VALUE)); return 1; }
+#define CHECK_CHARACTER_RETURN_VECTOR3(INSTANCE, FUNCTION, VALUE) if (!(INSTANCE)) { InvalidCharacterCall(FUNCTION); lua_pushnumber(lua, (VALUE).x); lua_pushnumber(lua, (VALUE).y); lua_pushnumber(lua, (VALUE).z); return 3; }
+
+#define BEHAVIOR_METHOD_VOID_VOID(FUNCTION)   \
+static int FUNCTION(lua_State *lua)           \
+{                                             \
+    Character *instance = GetCharacter(lua);  \
+    CHECK_CHARACTER_RETURN_VOID(instance, #FUNCTION "()");     \
+    FUNCTION(instance);                       \
+    return 0;                                 \
+}
+
+#define BEHAVIOR_METHOD_VOID_NUMBER(FUNCTION, NUMBER_TYPE)     \
+static int FUNCTION(lua_State *lua)                            \
+{                                                              \
+    Character *instance = GetCharacter(lua);                   \
+    CHECK_CHARACTER_RETURN_VOID(instance, #FUNCTION "()");     \
+    luaL_checktype(lua, -1, LUA_TNUMBER);                      \
+    FUNCTION(instance, (NUMBER_TYPE)lua_tonumber(lua, -1));    \
+    return 1;                                                  \
+}
+
+#define BEHAVIOR_METHOD_NUMBER_NUMBER(FUNCTION, NUMBER_TYPE)      \
+static int FUNCTION(lua_State *lua)                               \
+{                                                                 \
+    Character *instance = GetCharacter(lua);                      \
+    luaL_checktype(lua, -1, LUA_TNUMBER);                         \
+    lua_pushnumber(lua,                                           \
+        FUNCTION(instance, (NUMBER_TYPE)lua_tonumber(lua, -1)));  \
+    return 1;                                                     \
+}
+
+#define BEHAVIOR_METHOD_BOOLEAN_NUMBER(FUNCTION, NUMBER_TYPE)     \
+static int FUNCTION(lua_State *lua)                               \
+{                                                                 \
+    Character *instance = GetCharacter(lua);                      \
+    luaL_checktype(lua, -1, LUA_TNUMBER);                         \
+    lua_pushboolean(lua,                                          \
+        FUNCTION(instance,                                        \
+                 (NUMBER_TYPE)lua_tonumber(lua, -1)) != 0);       \
+    return 1;                                                     \
+}
+
+#define BEHAVIOR_METHOD_NUMBER_VOID(FUNCTION)                  \
+static int FUNCTION(lua_State *lua)                            \
+{                                                              \
+    Character *instance = GetCharacter(lua);                   \
+    lua_pushnumber(lua, FUNCTION(instance));                   \
+    return 1;                                                  \
+}
+
+#define BEHAVIOR_METHOD_BOOLEAN_VOID(FUNCTION)                    \
+static int FUNCTION(lua_State *lua)                               \
+{                                                                 \
+    Character *instance = GetCharacter(lua);                      \
+    CHECK_CHARACTER_RETURN_BOOL(instance, #FUNCTION "()", false); \
+    lua_pushboolean(lua, FUNCTION(instance));                     \
+    return 1;                                                     \
+}
+
+#define BEHAVIOR_METHOD_VOID_BOOLEAN(FUNCTION)                 \
+static int FUNCTION(lua_State *lua)                            \
+{                                                              \
+    Character *instance = GetCharacter(lua);                   \
+    CHECK_CHARACTER_RETURN_VOID(instance, #FUNCTION "()");     \
+    luaL_checktype(lua, -1, LUA_TBOOLEAN);                     \
+    FUNCTION(instance, lua_toboolean(lua, -1) != 0);           \
+    return 0;                                                  \
+}
+
+#define BEHAVIOR_METHOD_NUMBER_NUMBER_NUMBER(FUNCTION, NUMBER_TYPE1, NUMBER_TYPE2)                   \
+static int FUNCTION(lua_State *lua)                                                                  \
+{                                                                                                    \
+    Character *instance = GetCharacter(lua);                                                         \
+    luaL_checktype(lua, -1, LUA_TNUMBER);                                                            \
+    luaL_checktype(lua, -2, LUA_TNUMBER);                                                            \
+    lua_pushnumber(lua,                                                                              \
+        FUNCTION(instance,                                                                           \
+            (NUMBER_TYPE1)lua_tonumber(lua, -2), (NUMBER_TYPE2)lua_tonumber(lua, -1)));              \
+    return 1;                                                                                        \
+}
+
+#define BEHAVIOR_METHOD_NUMBER_CHARACTER(FUNCTION)   \
+static int FUNCTION(lua_State *lua)                  \
+{                                                    \
+    Character *instance = GetCharacter(lua);         \
+    Character *from = GetCharacter(lua, -1);         \
+    lua_pushnumber(lua, FUNCTION(instance, from));   \
+    return 1;                                        \
+}
+
+#endif // _LUACHARACTERMACROS_H
