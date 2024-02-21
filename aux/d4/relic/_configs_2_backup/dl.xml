@@ -1,0 +1,747 @@
+<!--
+
+ex_WallRockBack0 = Tile24.png
+ex_Wall3Light = Tile24.png
+ex_Wall3 = Tile15.png
+ex_Wall2 = Tile17.png
+ex_Wall1Light = Tile22.png
+ex_Wall1 = Tile18.png
+ex_Wall0 = Tile19.png
+ex_OutCorner3 = Tile18.png
+ex_OutCorner2 = Tile18.png
+ex_OutCorner1 = Tile18.png
+ex_OutCorner0 = Tile18.png
+ex_Lamp0 = Lamp.png
+ex_InCorner3 = Tile21.png
+ex_InCorner = Tile14.png
+ex_InCorner1 = Tile12.png
+ex_InCorner0 = Tile20.png
+ex_Floor1 = Tile23.png
+ex_Floor0 = Tile16.png
+
+-->
+
+<objects>
+
+  <tile-size width="256" height="256" />
+
+  <object name="Tile.1">
+    <mesh file="ex_Floor1">
+      <texture file="Tile23" />
+    </mesh>
+  </object>
+
+  <object name="Tile.2">
+    <mesh file="ex_Top0">
+      <texture file="Tile40" />
+    </mesh>
+  </object>
+  
+  <object name="Tile.6">
+    <mesh file="ex_Top0">
+      <texture file="Tile40" />
+    </mesh>
+    <collider file="IN" />
+  </object>
+  
+  <object name="Tile.7"> <!-- wall with arch, no barrels -->
+    <mesh file="ex_Wall1Arc">
+      <texture file="Tile33" />
+    </mesh>
+    <collider file="collide_Wall1" />    
+  </object>  
+  
+  <object name="Tile.8"> <!-- wall with arch and barrels -->
+    <mesh file="ex_Wall1Arc">
+      <texture file="Tile33" />
+    </mesh>
+    <collider file="collide_Wall1" />
+    <event>BarrelsEastWall</event>
+  </object>   
+  
+  <!-- START INCORNERS -->  
+  <object name="Tile.11">
+    <mesh file="ex_InCorner3">
+      <texture file="Tile21" />
+    </mesh>
+    <collider file="collide_InCorner3" />
+  </object>
+
+  <object name="Tile.12">
+    <mesh file="ex_InCorner0">
+      <texture file="Tile20" />
+    </mesh>
+    <collider file="collide_InCorner0" />    
+  </object>  
+  
+  <object name="Tile.13">
+    <mesh file="ex_InCorner1">
+      <texture file="Tile12" />
+    </mesh>
+    <collider file="collide_InCorner1" />    
+  </object>  
+  
+  <object name="Tile.14">
+    <mesh file="ex_InCorner2">
+      <texture file="Tile14" />
+    </mesh>
+    <collider file="collide_InCorner2" />    
+  </object>
+  <!-- END INCORNERS -->
+
+  <object name="Tile.15">
+    <mesh file="ex_UpStairs">
+      <texture file="UpStairs" />
+    </mesh>
+    <collider file="collide_UpStairs" />
+  </object>  
+  
+  <object name="Tile.16">
+    <event>Spawnable</event>
+    <mesh file="ex_Floor1">
+      <texture file="Tile23" />
+    </mesh>
+    <event>BarrelsFloor</event>    
+  </object>  
+
+  <object name="Tile.17">
+    <mesh file="ex_DownStairs">
+      <texture file="DownStairs" />
+    </mesh>
+    <event>OffsetX-</event>
+    <collider file="collide_DownStairs" />
+  </object>
+
+  <!-- START WALL TYPES -->  
+  <object name="Tile.20">
+    <mesh file="ex_OutCorner3">
+      <texture file="Tile41" />
+    </mesh>
+    <collider file="collide_OutCorner3" />
+  </object>
+  
+  <object name="Tile.21">
+    <mesh file="ex_OutCorner2">
+      <texture file="Tile42" />
+    </mesh>  
+    <collider file="collide_OutCorner2" />
+  </object>  
+       
+  <object name="Tile.22">
+    <mesh file="ex_OutCorner1">
+      <texture file="Tile43" />
+    </mesh>
+    <collider file="collide_OutCorner1" />
+  </object>
+  
+  <object name="Tile.23">
+    <mesh file="ex_OutCorner0">
+      <texture file="Tile30" />
+    </mesh>  
+    <collider file="collide_OutCorner0" />
+  </object>
+  
+  <object name="Tile.24">
+    <mesh file="ex_Wall1Light">
+      <texture file="Tile22" />
+    </mesh>
+    <mesh file="ex_Lamp0">
+      <texture file="Lamp" />
+    </mesh>
+    <collider file="collide_Wall1Light" />
+  </object>  
+
+  <object name="Tile.25">
+    <mesh file="ex_Wall0">
+      <texture file="Tile19" />
+    </mesh>
+    <collider file="collide_Wall0" />
+  </object>
+
+  <object name="Tile.26">
+    <mesh file="ex_Wall3">
+      <texture file="Tile15" />
+    </mesh>
+    <mesh file="ex_CrateSimple">
+      <texture file="Crate3" />
+    </mesh>    
+    <collider file="collide_CrateWall" />
+  </object>    
+   
+  <object name="Tile.27">
+    <mesh file="ex_Wall2">
+      <texture file="Tile17" />
+    </mesh>
+    <collider file="collide_Wall2" />    
+  </object>  
+  
+  <object name="Tile.28">
+    <mesh file="ex_Wall3Light">
+      <texture file="Tile24" />
+    </mesh>
+    <mesh file="ex_Lamp0">
+      <texture file="Lamp" />
+    </mesh>    
+    <collider file="collide_Wall3Light" />    
+  </object>
+  <!-- END WALL TYPES -->
+  
+  <!-- START WALL TYPES WITH BARRELS -->  
+  <object name="Tile.30">
+    <mesh file="ex_OutCorner3">
+      <texture file="Tile41" />
+    </mesh>
+    <collider file="collide_OutCorner3" />
+    <event>Barrels</event>    
+  </object>
+  
+  <object name="Tile.31">
+    <mesh file="ex_OutCorner2">
+      <texture file="Tile42" />
+    </mesh>  
+    <collider file="collide_OutCorner2" />
+    <event>Barrels</event>    
+  </object>  
+       
+  <object name="Tile.32">
+    <mesh file="ex_OutCorner1">
+      <texture file="Tile43" />
+    </mesh>
+    <collider file="collide_OutCorner1" />
+    <event>Barrels</event>    
+  </object>
+  
+  <object name="Tile.33">
+    <mesh file="ex_OutCorner0">
+      <texture file="Tile30" />
+    </mesh>  
+    <collider file="collide_OutCorner0" />
+    <event>Barrels</event>    
+  </object>
+  
+  <object name="Tile.34">
+    <mesh file="ex_Wall1Light">
+      <texture file="Tile22" />
+    </mesh>
+    <mesh file="ex_Lamp0">
+      <texture file="Lamp" />
+    </mesh>
+    <collider file="collide_Wall1Light" />
+    <event>BarrelsEastWall</event>    
+  </object>  
+
+  <object name="Tile.35">
+    <mesh file="ex_Wall0">
+      <texture file="Tile19" />
+    </mesh>
+    <collider file="collide_Wall0" />
+    <event>BarrelsNorthWall</event>    
+  </object>
+
+  <object name="Tile.36">
+    <mesh file="ex_Wall3">
+      <texture file="Tile15" />
+    </mesh>
+    <mesh file="ex_CrateSimple">
+      <texture file="Crate3" />
+    </mesh>    
+    <collider file="collide_CrateWall" />
+    <event>BarrelsWestCrateWall</event>
+  </object>    
+   
+  <object name="Tile.37">
+    <mesh file="ex_Wall2">
+      <texture file="Tile17" />
+    </mesh>
+    <collider file="collide_Wall2" />    
+    <event>Barrels</event>    
+  </object>  
+  
+  <object name="Tile.38">
+    <mesh file="ex_Wall3Light">
+      <texture file="Tile24" />
+    </mesh>
+    <mesh file="ex_Lamp0">
+      <texture file="Lamp" />
+    </mesh>    
+    <collider file="collide_Wall3Light" />    
+    <event>BarrelsWestWall</event>
+  </object>
+  <!-- END WALL TYPES WITH BARRELS-->  
+  
+  <!-- START INCORNERS WITH BARRELS -->
+  <object name="Tile.41">
+    <mesh file="ex_InCorner3">
+      <texture file="Tile21" />
+    </mesh>
+    <collider file="collide_InCorner3" />
+    <event>Barrels</event>    
+  </object>
+
+  <object name="Tile.42">
+    <mesh file="ex_InCorner0">
+      <texture file="Tile20" />
+    </mesh>
+    <collider file="collide_InCorner0" />    
+    <event>Barrels</event>    
+  </object>  
+  
+  <object name="Tile.43">
+    <mesh file="ex_InCorner1">
+      <texture file="Tile12" />
+    </mesh>
+    <collider file="collide_InCorner1" />    
+    <event>Barrels</event>    
+  </object>  
+  
+  <object name="Tile.44">
+    <mesh file="ex_InCorner2">
+      <texture file="Tile14" />
+    </mesh>
+    <collider file="collide_InCorner2" />    
+    <event>Barrels</event>    
+  </object>  
+  <!-- END INCORNERS WITH BARRELS -->  
+  
+  <object name="Tile.50"> <!-- column, no barrels -->
+    <mesh file="ex_Column0">
+      <texture file="Tile51" />
+    </mesh>
+    <collider file="collide_Column0" />   
+  </object>
+  
+  <object name="Tile.51"> <!-- column WITH barrels -->
+    <mesh file="ex_Column0">
+      <texture file="Tile51" />
+    </mesh>
+    <collider file="collide_Column0" />
+    <event>Barrels</event>
+  </object>
+  
+  <!-- START INCORNERS WITH RED KEY-->  
+  <object name="Tile.52">
+    <mesh file="ex_InCorner3">
+      <texture file="Tile21" />
+    </mesh>
+    <collider file="collide_InCorner3" />
+    <event>KeyRedNW</event>
+  </object>
+
+  <object name="Tile.53">
+    <mesh file="ex_InCorner0">
+      <texture file="Tile20" />
+    </mesh>
+    <collider file="collide_InCorner0" />    
+    <event>KeyRedNE</event>    
+  </object>  
+  
+  <object name="Tile.54">
+    <mesh file="ex_InCorner1">
+      <texture file="Tile12" />
+    </mesh>
+    <collider file="collide_InCorner1" />    
+    <event>KeyRedSE</event>    
+  </object>  
+  
+  <object name="Tile.55">
+    <mesh file="ex_InCorner2">
+      <texture file="Tile14" />
+    </mesh>
+    <collider file="collide_InCorner2" />
+    <event>KeyRedSW</event>
+  </object>
+  <!-- START INCORNERS WITH RED KEY-->
+  
+  <!-- START INCORNERS WITH BLUE KEY-->  
+  <object name="Tile.56">
+    <mesh file="ex_InCorner3">
+      <texture file="Tile21" />
+    </mesh>
+    <collider file="collide_InCorner3" />
+    <event>KeyBlueNW</event>    
+  </object>
+
+  <object name="Tile.57">
+    <mesh file="ex_InCorner0">
+      <texture file="Tile20" />
+    </mesh>
+    <collider file="collide_InCorner0" />    
+    <event>KeyBlueNE</event>    
+  </object>  
+  
+  <object name="Tile.58">
+    <mesh file="ex_InCorner1">
+      <texture file="Tile12" />
+    </mesh>
+    <collider file="collide_InCorner1" />    
+    <event>KeyBlueSE</event>    
+  </object>  
+  
+  <object name="Tile.59">
+    <mesh file="ex_InCorner2">
+      <texture file="Tile14" />
+    </mesh>
+    <collider file="collide_InCorner2" />
+    <event>KeyBlueSW</event>
+  </object>
+  <!-- END INCORNERS WITH BLUE KEY-->    
+  
+  <object name="Tile.60">
+    <mesh file="ex_ColumnCorner0">
+      <texture file="Tile60" />
+    </mesh>
+    <collider file="collide_ColumnCorner0" />    
+  </object>
+  
+  <object name="Tile.61">
+    <mesh file="ex_ColumnCorner3">
+      <texture file="Tile61" />
+    </mesh>
+    <collider file="collide_ColumnCorner3" />    
+  </object>  
+  
+  <object name="Tile.62">
+    <mesh file="ex_ColumnCorner1">
+      <texture file="Tile62" />
+    </mesh>
+    <collider file="collide_ColumnCorner1" />    
+  </object>    
+  
+  <object name="Tile.63">
+    <mesh file="ex_ColumnCorner2">
+      <texture file="Tile63" />
+    </mesh>
+    <collider file="collide_ColumnCorner2" />    
+  </object>
+
+  <!-- START RED DOORWAYS -->  
+  <object name="Tile.64">
+    <mesh file="ex_ColumnCorner0">
+      <texture file="Tile60" />
+    </mesh>
+    <collider file="collide_DoorYCorner0" />
+    <event>RedDoorWay1</event>
+  </object>
+  
+  <object name="Tile.65">
+    <mesh file="ex_ColumnCorner3">
+      <texture file="Tile61" />
+    </mesh>
+    <collider file="collide_DoorYCorner3" />    
+  </object>  
+  
+  <object name="Tile.66">
+    <mesh file="ex_ColumnCorner1">
+      <texture file="Tile62" />
+    </mesh>
+    <collider file="collide_DoorYCorner1" />    
+  </object>    
+  
+  <object name="Tile.67">
+    <mesh file="ex_ColumnCorner2">
+      <texture file="Tile63" />
+    </mesh>
+    <collider file="collide_DoorYCorner2" />
+    <event>RedDoorWay3</event>    
+  </object>  
+  
+  <object name="Tile.68">
+    <mesh file="ex_ColumnCorner0">
+      <texture file="Tile60" />
+    </mesh>
+    <collider file="collide_DoorXCorner0" />    
+  </object>
+  
+  <object name="Tile.69">
+    <mesh file="ex_ColumnCorner3">
+      <texture file="Tile61" />
+    </mesh>
+    <collider file="collide_DoorXCorner3" />
+    <event>RedDoorWay2</event>
+  </object>  
+  
+  <object name="Tile.70">
+    <mesh file="ex_ColumnCorner1">
+      <texture file="Tile62" />
+    </mesh>
+    <collider file="collide_DoorXCorner1" />
+    <event>RedDoorWay0</event>
+  </object>    
+  
+  <object name="Tile.71">
+    <mesh file="ex_ColumnCorner2">
+      <texture file="Tile63" />
+    </mesh>
+    <collider file="collide_DoorXCorner2" />    
+  </object>
+  <!-- END RED DOORWAYS -->
+  
+  <!-- START BLUE DOORWAYS -->  
+  <object name="Tile.74">
+    <mesh file="ex_ColumnCorner0">
+      <texture file="Tile60" />
+    </mesh>
+    <collider file="collide_DoorYCorner0" />
+    <event>BlueDoorWay1</event>
+  </object>
+  
+  <object name="Tile.75">
+    <mesh file="ex_ColumnCorner3">
+      <texture file="Tile61" />
+    </mesh>
+    <collider file="collide_DoorYCorner3" />    
+  </object>  
+  
+  <object name="Tile.76">
+    <mesh file="ex_ColumnCorner1">
+      <texture file="Tile62" />
+    </mesh>
+    <collider file="collide_DoorYCorner1" />    
+  </object>    
+  
+  <object name="Tile.77">
+    <mesh file="ex_ColumnCorner2">
+      <texture file="Tile63" />
+    </mesh>
+    <collider file="collide_DoorYCorner2" />
+    <event>BlueDoorWay3</event>    
+  </object>  
+  
+  <object name="Tile.78">
+    <mesh file="ex_ColumnCorner0">
+      <texture file="Tile60" />
+    </mesh>
+    <collider file="collide_DoorXCorner0" />    
+  </object>
+  
+  <object name="Tile.79">
+    <mesh file="ex_ColumnCorner3">
+      <texture file="Tile61" />
+    </mesh>
+    <collider file="collide_DoorXCorner3" />
+    <event>BlueDoorWay2</event>
+  </object>  
+  
+  <object name="Tile.80">
+    <mesh file="ex_ColumnCorner1">
+      <texture file="Tile62" />
+    </mesh>
+    <collider file="collide_DoorXCorner1" />
+    <event>BlueDoorWay0</event>
+  </object>    
+  
+  <object name="Tile.81">
+    <mesh file="ex_ColumnCorner2">
+      <texture file="Tile63" />
+    </mesh>
+    <collider file="collide_DoorXCorner2" />
+  </object>
+  <!-- END BLUE DOORWAYS -->
+  
+  <!-- START WHITE DOORWAYS -->  
+  <object name="Tile.84">
+    <mesh file="ex_ColumnCorner0">
+      <texture file="Tile60" />
+    </mesh>
+    <collider file="collide_DoorYCorner0" />
+    <event>WhiteDoorWay1</event>
+  </object>
+  
+  <object name="Tile.85">
+    <mesh file="ex_ColumnCorner3">
+      <texture file="Tile61" />
+    </mesh>
+    <collider file="collide_DoorYCorner3" />    
+  </object>  
+  
+  <object name="Tile.86">
+    <mesh file="ex_ColumnCorner1">
+      <texture file="Tile62" />
+    </mesh>
+    <collider file="collide_DoorYCorner1" />    
+  </object>    
+  
+  <object name="Tile.87">
+    <mesh file="ex_ColumnCorner2">
+      <texture file="Tile63" />
+    </mesh>
+    <collider file="collide_DoorYCorner2" />
+    <event>WhiteDoorWay3</event>    
+  </object>  
+  
+  <object name="Tile.88">
+    <mesh file="ex_ColumnCorner0">
+      <texture file="Tile60" />
+    </mesh>
+    <collider file="collide_DoorXCorner0" />    
+  </object>
+  
+  <object name="Tile.89">
+    <mesh file="ex_ColumnCorner3">
+      <texture file="Tile61" />
+    </mesh>
+    <collider file="collide_DoorXCorner3" />
+    <event>WhiteDoorWay2</event>
+  </object>  
+  
+  <object name="Tile.90">
+    <mesh file="ex_ColumnCorner1">
+      <texture file="Tile62" />
+    </mesh>
+    <collider file="collide_DoorXCorner1" />
+    <event>WhiteDoorWay0</event>
+  </object>    
+  
+  <object name="Tile.91">
+    <mesh file="ex_ColumnCorner2">
+      <texture file="Tile63" />
+    </mesh>
+    <collider file="collide_DoorXCorner2" />
+  </object>
+  <!-- END WHITE DOORWAYS -->
+  
+  <object name="Tile.100">
+    <event>Start</event>
+    <mesh file="ex_Floor1">
+      <texture file="Tile23" />
+    </mesh>
+  </object>
+  
+  <object name="Tile.101">
+    <event>End</event>
+    <mesh file="ex_Floor1">
+      <texture file="Tile23" />
+    </mesh>
+    <mesh file="ex_Done">
+      <texture file="Done" />
+    </mesh>    
+  </object>  
+  
+  <!-- START COLLIDABLE DOORWAYS W/O DOORS -->
+  <object name="Tile.104">
+    <mesh file="ex_ColumnCorner0">
+      <texture file="Tile60" />
+    </mesh>
+    <collider file="collide_DoorYCorner0" />
+  </object>
+  
+  <object name="Tile.105">
+    <mesh file="ex_ColumnCorner3">
+      <texture file="Tile61" />
+    </mesh>
+    <collider file="collide_DoorYCorner3" />    
+  </object>  
+  
+  <object name="Tile.106">
+    <mesh file="ex_ColumnCorner1">
+      <texture file="Tile62" />
+    </mesh>
+    <collider file="collide_DoorYCorner1" />    
+  </object>    
+  
+  <object name="Tile.107">
+    <mesh file="ex_ColumnCorner2">
+      <texture file="Tile63" />
+    </mesh>
+    <collider file="collide_DoorYCorner2" />
+  </object>  
+  
+  <object name="Tile.108">
+    <mesh file="ex_ColumnCorner0">
+      <texture file="Tile60" />
+    </mesh>
+    <collider file="collide_DoorXCorner0" />    
+  </object>
+  
+  <object name="Tile.109">
+    <mesh file="ex_ColumnCorner3">
+      <texture file="Tile61" />
+    </mesh>
+    <collider file="collide_DoorXCorner3" />
+  </object>  
+  
+  <object name="Tile.110">
+    <mesh file="ex_ColumnCorner1">
+      <texture file="Tile62" />
+    </mesh>
+    <collider file="collide_DoorXCorner1" />
+  </object>    
+  
+  <object name="Tile.111">
+    <mesh file="ex_ColumnCorner2">
+      <texture file="Tile63" />
+    </mesh>
+    <collider file="collide_DoorXCorner2" />
+  </object>
+  <!-- END COLLIDABLE DOORWAYS W/O DOORS -->  
+
+  <!-- START TELEPORT SOURCES -->
+  <object name="Tile.150"><event>Teleport1_Source</event></object>
+  <object name="Tile.151"><event>Teleport2_Source</event></object>
+  <object name="Tile.152"><event>Teleport3_Source</event></object>
+  <object name="Tile.153"><event>Teleport4_Source</event></object>
+  <object name="Tile.154"><event>Teleport5_Source</event></object>
+  <object name="Tile.155"><event>Teleport6_Source</event></object>
+  <object name="Tile.156"><event>Teleport7_Source</event></object>
+  <object name="Tile.157"><event>Teleport8_Source</event></object>
+  <object name="Tile.158"><event>Teleport9_Source</event></object>
+  <object name="Tile.159"><event>Teleport10_Source</event></object>
+  <object name="Tile.160"><event>Teleport11_Source</event></object>
+  <object name="Tile.161"><event>Teleport12_Source</event></object>
+  <object name="Tile.162"><event>Teleport13_Source</event></object>
+  <object name="Tile.163"><event>Teleport14_Source</event></object>
+  <object name="Tile.164"><event>Teleport15_Source</event></object>
+  <object name="Tile.165"><event>Teleport16_Source</event></object>
+  <object name="Tile.166"><event>Teleport17_Source</event></object>
+  <object name="Tile.167"><event>Teleport18_Source</event></object>
+  <object name="Tile.168"><event>Teleport19_Source</event></object>
+  <object name="Tile.169"><event>Teleport20_Source</event></object>
+  <!-- END TELEPORT SOURCES -->
+
+  <!-- START TELEPORT TARGETS -->  
+  <object name="Tile.180"><event>Teleport1_Target</event></object>
+  <object name="Tile.181"><event>Teleport2_Target</event></object>
+  <object name="Tile.182"><event>Teleport3_Target</event></object>
+  <object name="Tile.183"><event>Teleport4_Target</event></object>
+  <object name="Tile.184"><event>Teleport5_Target</event></object>
+  <object name="Tile.185"><event>Teleport6_Target</event></object>
+  <object name="Tile.186"><event>Teleport7_Target</event></object>
+  <object name="Tile.187"><event>Teleport8_Target</event></object>
+  <object name="Tile.188"><event>Teleport9_Target</event></object>
+  <object name="Tile.189"><event>Teleport10_Target</event></object>
+  <object name="Tile.190"><event>Teleport11_Target</event></object>
+  <object name="Tile.191"><event>Teleport12_Target</event></object>
+  <object name="Tile.192"><event>Teleport13_Target</event></object>
+  <object name="Tile.193"><event>Teleport14_Target</event></object>
+  <object name="Tile.194"><event>Teleport15_Target</event></object>
+  <object name="Tile.195"><event>Teleport16_Target</event></object>
+  <object name="Tile.196"><event>Teleport17_Target</event></object>
+  <object name="Tile.197"><event>Teleport18_Target</event></object>
+  <object name="Tile.198"><event>Teleport19_Target</event></object>
+  <object name="Tile.199"><event>Teleport20_Target</event></object>  
+  <!-- END TELEPORT TARGETS -->  
+  
+  <!-- START TWO-WAY TELEPORTS PART 1 -->
+  <object name="Tile.210"><event>Teleport32_Source</event><event>Teleport33_Target</event></object>
+  <object name="Tile.211"><event>Teleport33_Source</event><event>Teleport32_Target</event></object>
+  <object name="Tile.212"><event>Teleport34_Source</event><event>Teleport35_Target</event></object>
+  <object name="Tile.213"><event>Teleport35_Source</event><event>Teleport34_Target</event></object>
+  <object name="Tile.214"><event>Teleport36_Source</event><event>Teleport37_Target</event></object>
+  <object name="Tile.215"><event>Teleport37_Source</event><event>Teleport36_Target</event></object>
+  <object name="Tile.216"><event>Teleport38_Source</event><event>Teleport39_Target</event></object>
+  <object name="Tile.217"><event>Teleport39_Source</event><event>Teleport38_Target</event></object>
+  <object name="Tile.218"><event>Teleport40_Source</event><event>Teleport41_Target</event></object>
+  <object name="Tile.219"><event>Teleport41_Source</event><event>Teleport40_Target</event></object>
+  <object name="Tile.220"><event>Teleport42_Source</event><event>Teleport43_Target</event></object>
+  <object name="Tile.221"><event>Teleport43_Source</event><event>Teleport42_Target</event></object>
+  <object name="Tile.222"><event>Teleport44_Source</event><event>Teleport45_Target</event></object>
+  <object name="Tile.223"><event>Teleport45_Source</event><event>Teleport44_Target</event></object>
+  <object name="Tile.224"><event>Teleport46_Source</event><event>Teleport47_Target</event></object>
+  <object name="Tile.225"><event>Teleport47_Source</event><event>Teleport46_Target</event></object>
+  <object name="Tile.226"><event>Teleport48_Source</event><event>Teleport49_Target</event></object>
+  <object name="Tile.227"><event>Teleport49_Source</event><event>Teleport48_Target</event></object>
+  <object name="Tile.228"><event>Teleport50_Source</event><event>Teleport51_Target</event></object>
+  <object name="Tile.229"><event>Teleport51_Source</event><event>Teleport50_Target</event></object>
+  <!-- END TWO-WAY TELEPORTS PART 1-->
+
+</objects>
