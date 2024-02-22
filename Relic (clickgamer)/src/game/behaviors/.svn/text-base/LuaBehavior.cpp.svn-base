@@ -1,0 +1,44 @@
+#include "LuaBehavior.h"
+
+#include <stdio.h>
+
+#include "luautil/LuaThread.h"
+
+LuaBehavior::LuaBehavior(int behaviorTypeId, const String &function) : AbstractBehavior(behaviorTypeId), mFunction(function)
+{
+}
+
+void LuaBehavior::Start(Character *self)
+{
+    SetCharacter(self);
+    char function[128];
+    sprintf(function, "%s_Start", mFunction.c_str());
+    Execute(String(function));
+}
+
+void LuaBehavior::Stop()
+{
+    char function[128];
+    sprintf(function, "%s_Stop", mFunction.c_str());
+    Execute(String(function));
+    AbstractBehavior::Stop();
+}
+
+void LuaBehavior::Update(const GameTime &time)
+{
+    Execute(mFunction);
+}
+              
+bool LuaBehavior::Execute(const String &function)
+{
+    if (GetCharacter())
+    {
+        LuaThread *thread = GetCharacter()->GetLuaThread();
+        if (thread)
+        {
+            thread->Execute(mFunction.c_str());
+            return true;
+        }
+    }
+    return false;
+}

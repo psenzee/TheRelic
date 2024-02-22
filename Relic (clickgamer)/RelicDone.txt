@@ -1,0 +1,733 @@
+Relic Done
+
+X Trie
+X In immolate, make sure isalive first
+X Immolate
+X Adjust distance for touch spells
+X Fill in textual gaps
+X - the quinotaur!
+X Fades in/out of text scenes
+X - Aos: for that kind of life to exist, I must be destroyed
+X - introduce how the world was destroyed before Aos's role
+X At level 10, the ghost says "find the relic" - too soon, should be on level 12
+X Missing savepoint/oracle device textures
+X Missing flaming bad guy textures
+X Fire rings for potions; atomic touch ring
+X Highlighted magic button is missing
+X Missing amaranth wall texture
+X Where's the blue key on level six?
+X Blue key lvl 9?
+X Is there a missing red key on 9?
+X Amaranth ring should be serializable
+X Keys should not migrate
+X Doesn't end when the Relic is destroyed, need cutscene, then credits
+X Issues with rings sometimes not showing up.  Is it because they migrate?
+X Correctly handle saving/loading generators..
+X Between level 8-9 we need background cut scene
+X Redo end text/scene
+X Handle case of no save file
+X - gray out Continue Saved Game if there isn't one.
+x Propagate messages from clients to all in Multiplayer::ReceiveMessage()
+x Performance issues in Trie - just too big?
+x Can we join at the same time? (yes)
+x Fix fail to connect screen
+x Performance issues in CharacterSync::Update() ?
+x In CharacterSync::Pack/UnpackCharacterSyncCompact() make sure all animations are accounted for
+X Throttle back sends
+X Update only 15fps
+x Tips should be independent
+X Inventory handled correctly
+Z Level MUST be included and filtered by.
+X Fix barrels
+X Bug - Quinotaur must be serializable
+X Fix door serialization
+X Fix the hitting to the south!
+Z Quinotaur as a particle fx
+X Make mode to capture rendered entities - glReadPixels()
+X Get HUD hooked up to touch
+X Then promo vid
+X - pass 1
+X Particle system rotatable quads
+X Better quad system
+X Optimization strategies Barrel, Item, Skeleton to C++
+X Glowing circle under feet of players, targetted enemies
+X Add script animation tag
+X In animation, make sure that events are triggered even when frames
+are skipped - verify this
+X Guaranteed messages
+X Then port to ipod
+Z Fully test luaclassgen
+X Some lua conversions
+X doors
+Z chests
+X Gold
+X barrels/vases
+X stairs
+Z trap doors (oubliettes)
+X potions/food
+Z weapons/enhancements
+X Simulator perf vs. Ifon
+X Tully minster
+X You have food in the work fridge
+X OpenGL flip textures
+X Low bit depths
+X .pvr
+X Get it on iPod!
+Z - only show fred's hp meter when he's getting hit
+Z I8- big fish games, reflIxeve
+Z I8 open source
+X Ape escape 3 + ps2
+X Pan's Labyrinth
+X Wolverine origins
+X The Beatles Rock Band
+X The Office - Season 5
+X Mindstorms
+X Ui runs on a separate thread and yields when waiting
+X ILuaObject
+X Character : ILuaObject
+X - Set/GetLuaReference
+X - Set/GetLuaData
+X UiInstance : ILuaObject->Execute("UiUpdateAndRender") Updates and
+renders ui stuff
+X *Text/UI
+x add lighting back to text
+Z 'StoryEngine'?
+Z - need a lua thread per net connection (4)
+X Break out online features
+Z - view character stats in fb
+X Make HUD
+X *Multiplayer/Network
+X Lua Network
+X Serialize Lua State for save game and net sync
+X Cinematic support
+X intro cinematic
+X Add multiplayer support in lua
+X  - Lua Rpcs
+X Cpp to lua callback code
+X Call touch callback in Lua from C++
+X Lua  Entire Ui?
+X  Ui animations
+Z Lua for UIController
+Z  - set up menus
+Z  - implement menu callbax
+Z  - lua enter/exit frontend
+X  - lua time
+X  - general ui/HUD
+X Add easy text interface for lua
+X Make really nice looking text
+X Ui - Do text like Hero of Sparta
+X Ui - Image on text/ui plane(s)
+X Fix ipmesh asap
+X Get hobbit pb
+X Test ps2 (Bekka)
+X Lua net support
+X Check occurennces of new/delete
+X Add Allocator to uncompress
+X - also avoid std::string conversions in set animation
+X Luavalue string type - faststring -or- string that uses soa allocator
+X Make sure animation does not use std::strings!
+X Use Soa for compressor and lua
+X Soa
+X Fastbiffer like faststring
+X Lua rpc types
+X Robust serialization
+X Need to recreate a character perfectly from a serialized table - so
+just dump the constructor args into the table
+X Fix compression reporting
+X Read global table for functions
+X Look up domion poem
+X Answer eric's email
+X Use function names instead of actual functions in lua pieces to
+allow serialization
+X Fix immediate rendered/create ring
+X Iterate changed queue for sending
+X Mma - asynchronous saving of texture
+X Make culling correct throughout
+X Replace GetCompleteList with iterator over GetRegistry
+X changed queue
+X Investigate loadstring for rpcs
+X Zip network data
+X Dictionary of strings
+X - avoid std::string temp conversions
+X Check PTO remaining
+X Get meds
+X Mail contract
+X Mma - Need to build again
+X Mma - build for Ps3
+X Mma - Set up Ps3 dev
+X culling now works fine
+X multiplayer initial code
+X complete contract negotiations
+X mailed contract to chillingo
+X relic preview went live
+X made relic logo
+X Each character has to have an ID known across the network.
+X Stairs
+X Overlay maps!!
+X Stairs work perfectly
+X Respond to jasson
+X Start working with overlays
+X make stairs work perfectly
+X Routine to generate a thick circle
+X - send home
+X Reinstate gameeffects, need light
+X Wp: fractal compression
+X Clean up sloppy combat
+X Fix downstairs uvs
+X Get downstairs in game
+X Make teleport lua code
+X Meet Self
+X finally fixed offset issue - and the game feels SO Much Better! -
+ie, really fun!!
+X Make door more openable
+X Wp:content addressable mem
+X Make the door open/close
+X Make colliders for door, figure out collisions with doors
+X Careermode planning meeting
+X Improve TileMapEd, support overlays and/or arbitrary placement of
+things, npcs.
+X Edit video HTML, send update to Chris
+X make upstairs
+X get upstairs in game
+X make downstairs
+X Make stairs - finally!!
+X She blinded me..
+X Get biotene
+X Count gold, potions, spell books in inventory.
+X Colored keys/doors
+X Get a door/key quest in
+X Animation states
+- transistions ie
+-- Attack -> Idle
+-- ReceiveHit -> (previous saved state)
+-- DoOpenFail -> Locked
+-- DoOpen -> Opened
+-- DoClose -> Closed
+-- AtEnd <anim>
+-- Loop/NoLoop
+-- ResetAtStart
+-- FrameTime <n>
+-- AtRandom <n> <m> <anim>
+-- for <anim> can have $previous
+-- player.Idle : AtRandom .. TurnLeftRight : AtEnd Idle
+-events like audio tags, maybe particle tags, lua execute tags?
+X Bubbling text
+X Add colliders for door, get working..
+X Update all doors to the character based door
+X Assemble rock band pieces
+X Get the office
+X Send p2p and LCg home
+X Make playable puzzle
+X Fix typecomp
+X Missyhiggins
+X wiki - The mcguire sisters
+X Ask Rebekka for Mom -
+X  Dylan - super sleuth e. Brown?
+X  Clothes for Kayla?
+X Get rock band from company store
+X fix knockback - from attribute
+X fix excessive knockback on barrels
+X Make all doors flap
+X Make colored keys
+X Get gas
+X Send fonts home
+X Prototype a title
+X Associate barrels with certain wall types that can be handled in the
+editor
+X Ability to place barrels through editor
+X Open/close door animation
+X Prepare for poster design meeting
+X Set up a mtg with Will about poster system design
+X Self Meet
+X Door as character
+X Named (events) tile sections accessible in lua
+X Smooth collisions
+X Check for the Office (9/8)
+X Look up crucible
+X Look up rf water jet
+X Scrumworks
+X Father/daughter time
+X Fill prescription
+X Knock back enemies more
+X Split the door
+X - add in death animations
+X - ensure consistency between dynamic map offsets and map offsets
+X Get skeleton die in
+X Drop treasure at death - potions, magic items, gold
+X Pickup treasure
+X Rooms full of skeletons
+X Dying animation - pile of bones?
+X Spawning characters from other characters
+X Make key(s)
+X Make scrolls/books
+X Make colliders for ColumnCorners
+X Fix not swinging when can't hit
+X - do attack animation even if it's going to be a miss
+X Make potions
+X Make gold
+X Jury Duty 9/1
+X Jury Duty 9/2
+X Jury Duty 9/3
+X Jury Duty 9/4
+X Fix GetClosestAttackable
+X add keyboard button support
+X fix controller polling slowdown
+X Make a nice barrel, get it in game
+X Fix seams in geometry as possible
+X Use TileMapEd to edit maps
+X Separate du tasks into required, optional
+X Meet w/Judy
+X Only spawn in empty spaces
+X luapack/unpack
+X first pass on lua binding generator
+X Make a nice crate, get it in game
+X - improve collision, make spherical
+X - Exporter objects prefixed with ext#_..
+X Iterate on Dungeon
+X - Use stucci shader
+X - Possibly add noise for dirt, etc.
+X - grimier look
+X Meet self
+X father/son time
+X cleaned desktop
+X move to new team
+X Part2 - the tester
+D Tester- Add any test fiLes
+X Test with tiger files, NCAA files
+X Get prescription (in the purple notebook in the car)
+X Art - Add detail to dungeon, rubble, broken walls, grime, dirt, moss
+X Check out the good materials lib in blender
+X Make a door!!!
+X Make columncorners
+X Make, Rebake grimier, better lit dungeon
+X Finish up crates on one wall
+X Call amdur's office
+X Set up new appt.
+X run mma
+X build mma
+X get mma synced
+X get mma permissions
+D Get blaze server up running again
+D Finish presentation
+D Bring jury duty paper to work
+X - make sure there is complete consistency with tile maps and their
+offsets
+X  - currently, some sport offset of (0, 0), others +/- (tileSize.x,
+tileSize.y) [centered]
+X  - the geometry is centered..
+X Add crates to some wall types
+X Rebekka sign, scan & send NDA
+X Submit
+X Finish code review
+X Submit to perforce
+X Continue contact w/Gos
+X Meet self
+X Regen franchiselua* and resubmit
+X - fix skeltons attack rate
+X Make crate
+X Make spider radius larger
+X Wait to pan out when walking
+X Separate out enemies.lua into types
+X Refactor GameState dynamic map stuff into Level
+X Make more elegant collisions for player
+X Spawn only in clear spaces
+X Make more elegant collisions for enemies
+X Only attack when facing
+X Fix column collision
+X - write code to mark the current tile that the player is on
+X Get spider in
+X Clean dungeon geometry
+X Make clip of NM + spider for mark
+X Get necromancer in
+X Fix code review issues
+X Review code reviews
+X - test column collider in bsp tool
+X Why is 0,0 at the edge of the tile? (it's not)
+X - improve collision
+X Replace battery in car
+X - fix bsp issue with ex_OutCornerN
+X Need general in/out colliders
+X Fix outcorner
+X made, added Column collider
+X fixed rotation issue with all colliders
+X Email Chris back - details of publisher relationship
+X Meet Self
+X - fix text orientation
+X Log PTO, set in Hansoft
+X IM penso, blomberg
+X-  mass export & load bsp trees
+  collide with sphere (crap! Left at home) (may not be necessary)
+X- Bsp pipeline
+X Art - Fix walls to have solid part
+X Art - make/bake column
+X Art - Bake outer corners
+X Email back Jorge
+X Email back Joe raschke
+X Change around perspective, not straight overhead
+X - finish bsp collider
+X Finish collision
+X Simple Collider VM
+X Start sharing with gos
+X Vasectomy 8/14
+X Tell work about jury duty
+X Get someone to do (large) code review
+X bake barbarian
+X Flip texture in png reader
+X Contact Mark about doing characters instead of dungeon
+X More Art - possible fund through stock sales
+X Add hansoft task for developing a presentation (or two) on the lua
+framework
+X Wiki
+X Submit for code review
+X Contact Blaze Guys
+X - merge wf2 from home with work wf2
+X - Up ambient occlusion? (both +/-),
+X Meet self
+X Explode - circle of destruction
+X Work on Dungeon Art (part4)
+X Finish, get new dungeon in game
+X - set up for easy iteration
+X Make full dungeon
+X Fix baking issues!!
+X Tester - Separate LuaValue
+X Tester- ensure coding stds
+X Tester - check ifs
+X Tester - comment
+X Tester - clean up MAX_SIZE
+X Tester - Ensure that all sprintfs are snprintfs
+X Tester - Ensure that all strcpy's are strnzcpys
+X Tester - Check strcats - strncats
+X Tester - Submit to reviews
+X Tester- Make new stress tester directory
+X Break down submit tasks (part2)
+X Submit typecomp/rpccomp for code review
+X - ensure coding stds
+X - check ifs
+X - comment
+X - clean up MAX_SIZE
+X - Ensure that all sprintfs are snprintfs
+X - Ensure that all strcpy's are strnzcpys
+X - Check strcats - strncats
+X - Submit to reviews
+X - Add generated files to review
+X Make nice floor (scallopped)
+X Check boa again
+X Work on Dungeon Art (part3)
+X Haircut
+X Pay Mark when money received
+X Ask Chris if piracy is a big issue; Kali
+X Ask him about Crystal
+X Find out if vasectomy costs mummy ($150-200) $154.86
+X Work on Dungeon Art (fan floor)
+X Work on Dungeon Art (dungeon inner corner)
+X Search for munkres on 1. Old pc, 2. Shuffle, 3. New pc
+X Get money from stock
+X Check etrade
+X Update Hansoft
+X - ensure a/c resolution
+X Doxygen source level docs
+X Break down submit tasks (part1)
+X Get screenshots ready for Chris Byatte
+X Send screenshots/video to Chris
+X Figure out how to get php code on axo
+X  - lua fx
+X Break down remaining items
+X Small Generalization tasks
+X Don't include paths in generated cpp files
+X Don't include paths in html hrefs
+X Learn how to put non-prod stuff in Hansoft
+X Flaming skeleton type
+X Particle systems optionally autodelete
+X Make perpetual particle systems
+X Make tool to generate animation xmls
+X Receive final skel pieces from Mark
+X Make white dust gray or mixture white/gray
+X Make fire
+X Make initial pass of fan-brick floor
+X Health Orbs
+X Respond to Chris Roberts
+X Ericpicture
+X Set up correct printer
+X Send d link to guys here
+X Get water
+X Put in ticket for a/c issue
+X Wolfram alpha
+X Autogenerate user docs
+X Meet self
+X Fill prescription
+X Mow lawn
+X Trim lawn
+X  Fx- Vapor engine - remember that vapor needs shadows too
+X Make splash when orbs ate created, consumed
+X Make splash when orbs ate created, consumed
+X Particle system - based on font code
+X  - circular particle explosion
+X  - dust/steam/smoke
+X Make health meters look good
+X Line up Fred's vector with the tip of his axe blade
+X Draft up proposal for dungeon
+- stairs, columns, floor types, wall types, inward corners, outward
+corners, shadowed walls, lit areas, drain floor types
+X Flash enemy on hit
+X LuaStressInstance
+X LuaStressModule
+X Get tester up and running with LuaStress*
+X Sx book
+X Get stress tester running again
+X Fix combat sloppiness
+X Modify Draw/UpdateDynamicMap to only update,draw visible characters
+X Detect collision nearest enemy in direction
+X Meet w/Malone
+X Sell stock
+X Drop powerups at death - health beads (glow blue) like hulk or fable
+X Work on making shields less angular + different colors - using
+transparency (looks better the way it is and it looks fine once
+shadows were added)
+X Shadows
+X (unnecessary) - tool to create shadow textures?
+X Move to new desk
+X - get packed up
+X Check cost of 3ds max
+X Email mark about shorter sword
+X Receive new skel anims from mark
+X Dr appointment Wed 7/29 8am
+Check price on 3ds max
+3ds 2010 is $3500! but- student version is ~$200.  I should get that.
+Who could get it for me?
+X enemies
+X Combat
+X - modify ipmesh to export multiple files
+X Get weapons in
+X - single .obj file multiple objects into multiple ipi fiLes
+X New lthread home
+X Pay google for senzee5 domain
+X Adiel 7/27 7pm
+X Urologist 28th
+X Font page generator
+X Celtic font
+X docs tdf generation
+x Meet with self
+X rebekka does not need to come to vasectomy doc with me
+X post pictures of bs sign and pheasant to facebook
+X email Simon
+X email mark
+X Play baldur's gate to get an idea of what's missing
+X lua scaling and translation of characters, make Fred smaller
+X basic heal
+X Put in die animation for Fred
+X - allow Hp transparency as a function of distance - size is better
+X - make fred's hpmeter wider
+X Split up Lia code in logical file parts
+X Fix attack animation
+X - allow double speed
+X - allow finer control over Animation in Lua
+X - loop/no loop
+X lua vector ops
+X Lua Character Methods/Callbax
+X  - lua death
+X  - lua attack/hit
+X  - lua receive blow
+X receive hit, die
+X Refine font page generation
+X Add Life bar above heads
+X Fix collision w/walls issue
+X Powerwash the house
+X - rent a powerwasher
+X Home depot #407 865 5410
+X Game Story Notes - find on hard drive work Pc
+X Fix Lua issues!!
+X Attack, hit
+X Detect collision nearest enemy
+x - hp/attributes
+X Character to full user data
+    X - determine closest other player/enemy for hitting
+    X - find a way to return a character
+x lua table and add a type field
+    X look into full user data!
+X Start running the test script
+X Generate Enums
+X Generate Maps
+X Generate Unions
+X Function to clamp a vector based on the collision mask
+X Dr appointment Wed 2pm
+X Respond to Simon
+X Email Mark Jones
+X 7/20 - convert character (and possible other classes) to full userdata
+X mow back yard
+X mow front yard
+X DynamicMapIterator
+X Font page generation
+X Send qg home
+X Complete plan for this week
+X Dr appointment Tues 9am
+X Meet w/self (today)
+X Animated fov in projection matrix
+X Finish doctor to talk about notes
+x Lua integration
+  x Get multiple pcs/enemies working
+  x Use UnxUtils on main computer
+X Integrate lua into Character
+  x fix rotating character
+X get collision working
+X Collision
+X Enemies
+X PCs
+X Combat (breakout)
+  x Get multiple Characters working
+  x Show correct animations at appropriate times
+  x Show hitting animation and a trigger
+  x Appropriately collide multiple characters
+X Dynamic Map instead of Actors
+x lua get input
+x lua get/set position, velocity
+X Lia controller
+x lua char spawning
+x lua ResetCharacterAnimation
+X Add controller support to game
+X Great gameplay progress
+x Lua funcs for character,ui,gamestate X Organize bookshelf
+X SetCharacterPosition
+X SetCharacterAnimation
+X Followup with Kern's referrence
+X Lookups zoom
+X Investigate compiling Lua to c++
+X Investigate combatting iPhone piracy
+X Signapore
+X Architectural game diagram (hilevel)
+X Receive i8 numbers
+X Shuttle
+X Map out high level of detail (SE1,2)
+x Integrate LuaThreads (Character)
+X Get sunpass
+X  Investigate truck for $5500
+X Movie - everything is illuminated
+X Movie - the prestige
+X Get access to NCAA codebase
+X zoom lens? (no - $600!)
+X How to calculate launch windows
+X Kiki Dee YouTube
+X Remove jira tasks 67 371 125 123 119 65
+X Look up bryant's on wp and adobo (paprika)
+X Clean desk at work
+X Go thru email
+X Send LuaThreads tech home
+X Email GSS about i8 numbers
+X Song -mad world - Adam lambert
+X Song -don't let me go - fray
+X Song -diamonds on the floor - rob
+X Move code from Animation to Character
+X Replace Actors with DynamicMap
+X Download/install unxutils
+X Download/install ultraedit
+  x verify stripping
+x fix direction of chars
+  x rudimentary collision
+  x make it work better/more correctly
+x fix find start point
+X Cancel RDV
+X Send ipmesh home (imcc)
+X Make plans for week 7/14
+x Get 3gs
+X Strippage
+X Bundler/.zip
+Zx Random Dungeons
+X Bluetooth
+X Wifi - Tcp channel for rpcs
+X Fix animation!
+X State caching
+Z HUD text - inventory
+Z Add text characters for keys, potions, books, gold for HUD
+ZX Support bosses that own predefined items and barrels that have
+predefined contents. (EZ)
+X Prerendered skeleton bones
+- change camera, magenta floor
+X Implement skeleton logic as C++
+Z Fix issues with spider's larger radius
+Z Particle fx must be a renderable
+X Code to generate cpp 'hash' trie
+X Use this code where possible 5-30x faster than map<const char *>, time
+map<string> too
+X OpenAL
+X In animation, make sure that events are triggered even when frames
+are skipped - verify this
+X Robust cleanup/destruction
+X Particle system rotatable quads
+X Better quad system
+Z Icons are in text page
+X Optimization strategies
+X Barrel, Item, Skeleton to C++
+X Audio tags in animation, hit callback in animation
+X Glowing circle under feet of players, targetted enemies
+X Add script animation tag
+X Audio hookup
+z Allow serializing/deserializing cpp data just like lua data
+z Intro in separate thread pthreads
+Get objc + cocoa book
+Z Enemy walk Vector selection from tile
+x Meter in C++
+x Add back in PC flashing
+Z Add spawn point as character (obelisk -maybe pulsating)
+Z Make spawning animation?
+X Averse to walls
+X Fix transparency
+x Get audio into the pc version
+X  - join code in Lua?
+X  - lobby code in lua
+X  - http get/post
+X Lua create menu, populate menu, lua ui
+X Ui - Lobby
+X Ui transistions
+X Lua GameState Methods
+x Turn off and on rendering, turn off and on updating (exception for ui)
+z Icons are in text page
+z Audio tags in animation, hit callback in animation
+Z Move collidable/movable characters out of the way when shutting
+(verify that this still happens)
+Z Door still needs special handling to open (or a highlite circle)
+Rework, rethink walking
+Z  - fx attachment:Particle effects
+z associated with 'characters' including visibility tests
+Z - particle fx bounding z boxes/spheres/cylinders
+Z Render only visible particle fx
+Z    - associate particle systems with a character in C++
+Z    - if attached to a character or a wall, only emit when that
+character, wall is visible
+Z      - each PS has update/render flag, and attached flag : check
+each frame
+Z - quads should be done the same way as particle systems
+X Expose a unique numeric id for movable
+Z Add BarrelsSouthWall, BarrelsColumn, BarrelsInCorner(N),
+BarrelsOutCorner(n)
+X Axe - motion blur, glowing motion lines, flaming;
+X Fix any skating
+Z Rename:
+Z - Character -> Entity
+Z - <event> -> <tag>, Event -> Tag
+Z Cut scenes?
+Z Add wireframe drawmode, if possible
+X Make alternate dungeons?? (stretch goal)
+X Autogenerate some dungeons (Luke diablo?)
+X - make floor size multiple of 6
+X Smashed barrel animation, wobbling, debris remains, etc.
+X Bonjour
+X Bluetooth
+X Net Lua integration
+X Of course - multiplayer
+X Drawlist can use buckret grouping insted of sorting
+Z Necessary to update drawlist completely every frame?
+Z GLES 2.0 for 3gs
+X Full Stripping Pipeline
+Z Use a numeric id instead of a string in QuadRenderer
+X Limit number of skels per dynamicmap cell
+X Make quad rendering more efficient
+X Lua networking code - rpcs, use dictionary of some type for
+compression, possibly zipped
+Z Ask Mark for Rigging Pose of barb and skel, necromancer
+Xz *Lighting
+Xz Lua controlled lites
+Xz Light Manager - Lua based - set up lights from lua
+Z 3gs graphics
+X Fix attack rates
+X pathfinding + vector fields
+X Health Potions
+

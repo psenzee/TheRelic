@@ -1,0 +1,220 @@
+<objects>
+  
+  <object name="Empty">
+  <!--
+    <mesh file="ex_Floor1~0" depth-write="false" test-visible="false" render-tag="level-floor">
+      <texture file="Black" />
+      <transform><scale x="0" y="0" z="0" /></transform>
+    </mesh>
+  -->
+      <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="blank" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+  </object>  
+  
+  <object name="Ring">
+    <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="amaranthring" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+  </object>
+  
+  <list name="Ring.Idle"><object name="RingIdle0" refers="Ring" /></list>
+  <list name="Ring.Die"><object name="RingDie0" refers="Ring" /></list>
+  <list name="Ring.Walk_ReceiveHit"><object name="RingWalkHit0" refers="Ring" /></list>
+  <list name="Ring.Walk"><object name="RingWalk0" refers="Ring" /></list>
+  <list name="Ring.Attack"><object name="RingAttack0" refers="Ring" /></list>  
+  
+  <object name="Gold">
+    <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="goldpieces5" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+  </object>
+  
+  <object name="Save">
+    <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="CD1" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+  </object>
+  
+  <object name="Clock">
+    <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="clock" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+  </object>  
+  
+  <list name="Gold.Idle"><object name="GoldIdle0" refers="Gold" /></list>
+  <list name="Gold.Die"><object name="GoldDie0" refers="Gold" /></list>
+  <list name="Gold.Walk_ReceiveHit"><object name="GoldWalkHit0" refers="Gold" /></list>
+  <list name="Gold.Walk"><object name="GoldWalk0" refers="Gold" /></list>
+  <list name="Gold.Attack"><object name="GoldAttack0" refers="Gold" /></list>
+  
+  <list name="Portal.Idle"><object refers="Empty" /></list>
+  <list name="Portal.Die"><object refers="Empty" /></list>
+  <list name="Portal.Walk_ReceiveHit"><object refers="Empty" /></list>
+  <list name="Portal.Walk"><object refers="Empty" /></list>
+  <list name="Portal.Attack"><object refers="Empty" /></list>  
+
+  <object name="KeyWhite0"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="keySq128White" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh></object>  
+  <object name="KeyRed0"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="keySq128Red" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh></object>  
+  <object name="KeyGreen0"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="keySq128Green" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh></object>    
+  <object name="KeyYellow0"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="keySq128Yellow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh></object>
+  <object name="KeyBlue0"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="keySq128Blue" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh></object>  
+  
+  <object name="Book0">
+    <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="ShadowPotion" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <!--<mesh file="Book~0"><texture file="Book11" /></mesh>-->
+    <mesh file="Book~0"><texture file="BookIce" /></mesh>
+  </object>
+  
+  <object name="Book1">
+    <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="ShadowPotion" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <!--<mesh file="Book~0"><texture file="Book10" /></mesh>-->
+    <mesh file="Book~0"><texture file="BookFire" /></mesh>
+  </object>   
+  
+  <object name="Book2">
+    <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="ShadowPotion" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <mesh file="Book~0"><texture file="Book9" /></mesh>
+  </object>
+  
+  <object name="Book3">
+    <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="ShadowPotion" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <mesh file="Book~0"><texture file="Book8" /></mesh>
+  </object>
+  
+  <object name="Book4">
+    <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="ShadowPotion" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <mesh file="Book~0"><texture file="Book7" /></mesh>
+  </object>
+  
+  <object name="BookQuest">
+    <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="ShadowPotion" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <mesh file="Book~0"><texture file="BookQuest" /></mesh>
+  </object>    
+  
+  <list name="KeyWhite.Idle"><object refers="KeyWhite0" /></list>
+  <list name="KeyRed.Idle"><object refers="KeyRed0" /></list>  
+  <list name="KeyBlue.Idle"><object refers="KeyBlue0" /></list>    
+  
+  <list name="Book0.Idle"><object name="Book0Idle0" refers="Book0" /></list>
+  <list name="Book0.Die"><object name="Book0Die0" refers="Book0" /></list>
+  <list name="Book0.Walk_ReceiveHit"><object name="Book0WalkHit0" refers="Book0" /></list>
+  <list name="Book0.Walk"><object name="Book0Walk0" refers="Book0" /></list>
+  <list name="Book0.Attack"><object name="Book0Attack0" refers="Book0" /></list>
+  
+  <list name="Book1.Idle"><object name="Book1Idle0" refers="Book1" /></list>
+  <list name="Book1.Die"><object name="Book1Die0" refers="Book1" /></list>
+  <list name="Book1.Walk_ReceiveHit"><object name="Book1WalkHit0" refers="Book1" /></list>
+  <list name="Book1.Walk"><object name="Book1Walk0" refers="Book1" /></list>
+  <list name="Book1.Attack"><object name="Book1Attack0" refers="Book1" /></list>
+  
+  <list name="Book2.Idle"><object name="Book2Idle0" refers="Book2" /></list>
+  <list name="Book2.Die"><object name="Book2Die0" refers="Book2" /></list>
+  <list name="Book2.Walk_ReceiveHit"><object name="Book2WalkHit0" refers="Book2" /></list>
+  <list name="Book2.Walk"><object name="Book2Walk0" refers="Book2" /></list>
+  <list name="Book2.Attack"><object name="Book2Attack0" refers="Book2" /></list>
+  
+  <list name="Book3.Idle"><object name="Book3Idle0" refers="Book3" /></list>
+  <list name="Book3.Die"><object name="Book3Die0" refers="Book3" /></list>
+  <list name="Book3.Walk_ReceiveHit"><object name="Book3WalkHit0" refers="Book3" /></list>
+  <list name="Book3.Walk"><object name="Book3Walk0" refers="Book3" /></list>
+  <list name="Book3.Attack"><object name="Book3Attack0" refers="Book3" /></list>
+  
+  <list name="Book4.Idle"><object name="Book4Idle0" refers="Book4" /></list>
+  <list name="Book4.Die"><object name="Book4Die0" refers="Book4" /></list>
+  <list name="Book4.Walk_ReceiveHit"><object name="Book4WalkHit0" refers="Book4" /></list>
+  <list name="Book4.Walk"><object name="Book4Walk0" refers="Book4" /></list>
+  <list name="Book4.Attack"><object name="Book4Attack0" refers="Book4" /></list>  
+ 
+  <object name="Potion0">
+    <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="ShadowPotion" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>      
+    <mesh file="Potion0~0" transparent="false" depth-write="true"><texture file="PotionRed" /></mesh>
+  </object>
+  
+  <object name="Potion1">
+    <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="ShadowPotion" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>      
+    <!--<mesh file="Potion0~0" transparent="false" depth-write="true"><texture file="PotionBlue" /></mesh>  -->
+    <mesh file="Potion0~0" transparent="false" depth-write="true"><texture file="PotionIce" /></mesh>
+  </object>
+  
+  <object name="Potion2">
+    <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="ShadowPotion" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>      
+    <mesh file="Potion0~0" transparent="false" depth-write="true"><texture file="PotionGreen" /></mesh>  
+  </object>  
+  
+  <object name="Potion3">
+    <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="ShadowPotion" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>      
+    <mesh file="Potion0~0" transparent="false" depth-write="true"><texture file="PotionYellow" /></mesh>  
+  </object>
+  
+  <object name="Potion4">
+    <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="ShadowPotion" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>      
+    <mesh file="Potion0~0" transparent="false" depth-write="true"><texture file="PotionPurple" /></mesh>  
+  </object>
+  
+  <object name="Potion5">
+    <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="ShadowPotion" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>      
+    <!--<mesh file="Potion0~0" transparent="false" depth-write="true"><texture file="PotionOrange" /></mesh>  -->
+    <mesh file="Potion0~0" transparent="false" depth-write="true"><texture file="PotionFire" /></mesh>
+  </object>
+  
+  <object name="Potion6">
+    <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="ShadowPotion" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>      
+    <mesh file="Potion0~0" transparent="false" depth-write="true"><texture file="PotionCyan" /></mesh>  
+  </object>
+  
+  <object name="Potion7">
+    <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="ShadowPotion" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <mesh file="Potion0~0" transparent="false" depth-write="true"><texture file="PotionWhite" /></mesh>
+  </object>
+  
+  <object name="Potion8">
+    <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="ShadowPotion" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <mesh file="Potion0~0" transparent="false" depth-write="true"><texture file="PotionBlack" /></mesh>
+  </object>  
+
+  <list name="Potion0.Idle"><object name="PotionIdle0" refers="Potion0" /></list>
+  <list name="Potion0.Die"><object name="PotionDie0" refers="Potion0" /></list>
+  <list name="Potion0.Walk_ReceiveHit"><object name="PotionWalkHit0" refers="Potion0" /></list>
+  <list name="Potion0.Walk"><object name="PotionWalk0" refers="Potion0" /></list>
+  <list name="Potion0.Attack"><object name="PotionAttack0" refers="Potion0" /></list>
+  
+  <list name="Potion1.Idle"><object name="PotionIdle1" refers="Potion1" /></list>
+  <list name="Potion1.Die"><object name="PotionDie1" refers="Potion1" /></list>
+  <list name="Potion1.Walk_ReceiveHit"><object name="PotionWalkHit1" refers="Potion1" /></list>
+  <list name="Potion1.Walk"><object name="PotionWalk1" refers="Potion1" /></list>
+  <list name="Potion1.Attack"><object name="PotionAttack1" refers="Potion1" /></list>
+  
+  <list name="Potion2.Idle"><object name="PotionIdle2" refers="Potion2" /></list>
+  <list name="Potion2.Die"><object name="PotionDie2" refers="Potion2" /></list>
+  <list name="Potion2.Walk_ReceiveHit"><object name="PotionWalkHit2" refers="Potion2" /></list>
+  <list name="Potion2.Walk"><object name="PotionWalk2" refers="Potion2" /></list>
+  <list name="Potion2.Attack"><object name="PotionAttack2" refers="Potion2" /></list>  
+  
+  <list name="Potion3.Idle"><object name="PotionIdle3" refers="Potion3" /></list>
+  <list name="Potion3.Die"><object name="PotionDie3" refers="Potion3" /></list>
+  <list name="Potion3.Walk_ReceiveHit"><object name="PotionWalkHit3" refers="Potion3" /></list>
+  <list name="Potion3.Walk"><object name="PotionWalk3" refers="Potion3" /></list>
+  <list name="Potion3.Attack"><object name="PotionAttack3" refers="Potion3" /></list>    
+  
+  <list name="Potion4.Idle"><object name="PotionIdle4" refers="Potion4" /></list>
+  <list name="Potion4.Die"><object name="PotionDie4" refers="Potion4" /></list>
+  <list name="Potion4.Walk_ReceiveHit"><object name="PotionWalkHit4" refers="Potion4" /></list>
+  <list name="Potion4.Walk"><object name="PotionWalk4" refers="Potion4" /></list>
+  <list name="Potion4.Attack"><object name="PotionAttack4" refers="Potion4" /></list>    
+  
+  <list name="Potion5.Idle"><object name="PotionIdle5" refers="Potion5" /></list>
+  <list name="Potion5.Die"><object name="PotionDie5" refers="Potion5" /></list>
+  <list name="Potion5.Walk_ReceiveHit"><object name="PotionWalkHit5" refers="Potion5" /></list>
+  <list name="Potion5.Walk"><object name="PotionWalk5" refers="Potion5" /></list>
+  <list name="Potion5.Attack"><object name="PotionAttack5" refers="Potion5" /></list>      
+  
+  <list name="Potion6.Idle"><object name="PotionIdle6" refers="Potion6" /></list>
+  <list name="Potion6.Die"><object name="PotionDie6" refers="Potion6" /></list>
+  <list name="Potion6.Walk_ReceiveHit"><object name="PotionWalkHit6" refers="Potion6" /></list>
+  <list name="Potion6.Walk"><object name="PotionWalk6" refers="Potion6" /></list>
+  <list name="Potion6.Attack"><object name="PotionAttack6" refers="Potion6" /></list>        
+  
+  <list name="Potion7.Idle"><object name="PotionIdle7" refers="Potion7" /></list>
+  <list name="Potion7.Die"><object name="PotionDie7" refers="Potion7" /></list>
+  <list name="Potion7.Walk_ReceiveHit"><object name="PotionWalkHit7" refers="Potion7" /></list>
+  <list name="Potion7.Walk"><object name="PotionWalk7" refers="Potion7" /></list>
+  <list name="Potion7.Attack"><object name="PotionAttack7" refers="Potion7" /></list>          
+  
+  <list name="Potion8.Idle"><object name="PotionIdle8" refers="Potion8" /></list>
+  <list name="Potion8.Die"><object name="PotionDie8" refers="Potion8" /></list>
+  <list name="Potion8.Walk_ReceiveHit"><object name="PotionWalkHit8" refers="Potion8" /></list>
+  <list name="Potion8.Walk"><object name="PotionWalk8" refers="Potion8" /></list>
+  <list name="Potion8.Attack"><object name="PotionAttack8" refers="Potion8" /></list>          
+
+</objects>

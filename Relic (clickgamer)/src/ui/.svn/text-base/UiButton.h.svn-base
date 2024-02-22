@@ -1,0 +1,28 @@
+#ifndef _UIBUTTON_H
+#define _UIBUTTON_H
+
+#include "core/core.h"
+#include "fast/Allocator.h"
+#include "UiBasicControl.h"
+
+class UiButton : public UiBasicControl
+{
+public:
+    
+    CLASS_NEW_DELETE()
+
+    inline UiButton(const char *name, const char *filename, float alpha, float size) 
+        : UiBasicControl(name ? name : ""), mFilename(filename), mAlpha(alpha), mSize(size)
+      { SetTransition(new UiTransition(this)); }
+
+    int      Render(UiCore &core);
+    UiBounds GetFocusedBounds() const;
+
+private:
+
+    String mFilename;
+    float  mAlpha;
+    float  mSize;
+};
+
+#endif // _UIBUTTON_H

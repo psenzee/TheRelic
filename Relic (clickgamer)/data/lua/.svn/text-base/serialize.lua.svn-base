@@ -1,0 +1,203 @@
+print "Lua:serialize.lua"
+
+function NewCharacter(id, name, type, x, y, z)
+  if x == nil then x = 0 end
+  if y == nil then y = 0 end
+  local c = Character.new(id, name, type, x, y, z)
+  local data = c:data()
+  data.constructor = { name = name, type = type, x = x, y = y, z = z, id = c:GetId() }
+  return c
+end
+
+function SetCharacterId(character, id)
+   character:SetId(id)
+   character:data().constructor.id = id
+end
+
+function Copy(table, data)
+  for k, v in pairs(table) do
+    if (k ~= 'data') then
+      data[k] = v
+    end
+  end
+end
+
+function SerializeItemAndPrint_(v, depth, quoteStrings, state)
+  local data = SerializeItem_(v, depth, quoteStrings, state)
+  return data
+end
+
+function SerializeTableAndPrint_(v, depth, state)
+  local data = SerializeTable_(v, depth, state)
+--  print(data)
+  return data
+end
+
+function SerializeItem_(v, depth, quoteStrings, state)
+  if v == nil then
+    return "nil"
+  else
+    local tv = type(v)
+    if tv == "table" then
+      return SerializeTableAndPrint_(v, depth, state)
+    elseif tv == "string" then
+      if quoteStrings then
+        return "'" .. v .. "'"
+      else
+        return v
+      end
+    elseif tv == "function" then
+      return "<function>"
+    elseif tv == "number" then
+      return tostring(v)
+    elseif tv == "bool" then
+      return tostring(v)      
+    else
+      return "?"
+    end
+  end
+end
+
+function SerializeTable_(table, depth, state)
+  if IsSerialized(table) then
+    return "<recurse>"
+  end
+  MarkSerialized(state, table)
+  print ("depth", depth)
+  local data = "{"
+  if #table ~= 0 then
+    for i, v in ipairs(table) do
+      data = data .. SerializeItemAndPrint_(v, depth + 1, true, state) .. ","    
+    end
+  else
+    for k, v in pairs(table) do
+      print (k)
+      if v ~= nil then
+        data = data .. SerializeItem_(k, 0, false, state) .. "=" .. SerializeItemAndPrint_(v, depth + 1, true, state) .. ","
+      end
+    end
+  end
+  return data .. "}"
+end
+
+function IsTable(value)
+  return type(value) == "table"
+end
+
+function MarkSerialized(state, value)
+  if IsTable(value) and not IsSerialized(state, value) then
+    state[#state + 1] = value
+  end
+end
+
+function IsSerialized(state, value)
+  local tv = type(value)
+  if tv ~= "table" then
+    return false
+  end
+  for i, v in ipairs(state) do
+    if v == value then
+      return true
+    end
+  end
+  return false
+end
+
+function SerializeItem(value)
+  local state = {}
+  return SerializeItem_(value, 0, true, state)
+end
+
+function PrintTable(table, indent)
+  print (SerializeItem(table))
+end
+
+SERIALIZERS   = {}
+DESERIALIZERS = {}
+
+function RegisterSerializers(type, serializer, deserializer)
+  DESERIALIZERS[type] = deserializer
+  SERIALIZERS[type]   = serializer
+end
+
+function RegisterSerializers0_9(type, serializer, deserializer)
+  RegisterSerializers(type, serializer, deserializer)
+  for i = 0, 9 do
+    RegisterSerializers(type .. tostring(i), serializer, deserializer)
+  end
+end
+
+function InitializeSerialization()
+  if next(SERIALIZERS) == nil then
+    RegisterSerializers0_9("Skeleton",    Serialize_Skeleton,    Deserialize_Skeleton)
+    RegisterSerializers0_9("Spider",      Serialize_Spider,      Deserialize_Spider)
+    RegisterSerializers   ("Quinotaur",   Serialize_Quinotaur1,  Deserialize_Quinotaur1)
+    RegisterSerializers   ("Quinotaur1",  Serialize_Quinotaur1,  Deserialize_Quinotaur1)
+    RegisterSerializers   ("Quinotaur2",  Serialize_Quinotaur2,  Deserialize_Quinotaur2)
+    RegisterSerializers   ("Arachnarex",  Serialize_Arachnarex,  Deserialize_Arachnarex)
+    RegisterSerializers0_9("Necromancer", Serialize_Necromancer, Deserialize_Necromancer)
+    RegisterSerializers   ("Barrel",      Serialize_Barrel,      Deserialize_Barrel)
+    RegisterSerializers   ("Door",        Serialize_Door,        Deserialize_Door)
+    RegisterSerializers   ("Item",        Serialize_Item,        Deserialize_Item)
+    RegisterSerializers   ("Gold",        Serialize_Item,        Deserialize_Item)
+    RegisterSerializers   ("KeyWhite",    Serialize_Item,        Deserialize_Item)
+    RegisterSerializers   ("KeyRed",      Serialize_Item,        Deserialize_Item)
+    RegisterSerializers   ("Ring",        Serialize_Item,        Deserialize_Item)
+    RegisterSerializers   ("KeyBlue",     Serialize_Item,        Deserialize_Item)
+    RegisterSerializers0_9("Potion",      Serialize_Item,        Deserialize_Item)
+    RegisterSerializers0_9("Book",        Serialize_Item,        Deserialize_Item)
+  end
+end
+
+function DeserializeCharacter(data)
+  if data == nil then return nil end
+  InitializeSerialization()
+  local fn = DESERIALIZERS[data.s_type]
+  if fn == nil then
+    print ("deserialize failed")
+    return nil
+  end
+  return fn(data)
+end
+
+function SerializeCharacter(c)
+  InitializeSerialization()
+  if not IsCharacterValid(c) then
+    return nil
+  end
+  local fn = SERIALIZERS[c:GetType()]
+  if fn == nil then
+    return nil
+  end
+  return fn(c)
+end
+
+function UpdateCharacterData(id, data)
+  local c = GetCharacterById(id)
+  Copy(data, c:data())
+end
+
+function SerializeCharacterList()
+  InitializeSerialization()
+  print ">>> serializing characters.."
+  local chars = GetAllCharacters()
+  local list = {}
+  for i, v in ipairs(chars) do  
+    --if v:GetId() > 16 then
+      local data = SerializeCharacter(v)
+      if data ~= nil then
+        table.insert(list, data)
+      end      
+      --table.insert(list, v:data())
+    --end
+  end
+  return list
+end    
+
+function DeserializeCharacterList(chars)
+  InitializeSerialization()
+  for i, v in ipairs(chars) do
+    DeserializeCharacter(v)
+  end
+  print ("Deserialized ", #chars, " characters")
+end    

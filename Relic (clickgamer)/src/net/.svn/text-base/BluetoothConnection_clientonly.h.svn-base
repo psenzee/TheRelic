@@ -1,0 +1,92 @@
+#ifndef _BLUETOOTHCONNECTION_H
+#define _BLUETOOTHCONNECTION_H
+
+#include "IConnection.h"
+#include <map>
+#include <string>
+
+namespace Connection
+{
+
+class BluetoothPeerConnection;
+class BluetoothClientConnection;
+
+class BluetoothServerConnector : public IServerConnector
+{
+public:
+
+    // IServerConnector implementation
+    void Start();
+    void Process();
+
+    // only to be set by ConnectionManager!
+    void SetOnConnect(OnConnectCallback callback, void *user);
+    void SetOnAbortConnect(OnAbortConnectCallback callback, void *user);
+
+    // only to be called by BluetoothClientConnection
+    void ConnectInternal(BluetoothClientConnection *connection);
+
+private:
+
+    OnConnectCallback       mConnectCallback;
+    void                   *mConnectCallbackUser;
+    OnAbortConnectCallback  mAbortConnectCallback;
+    void                   *mAbortConnectCallbackUser;
+};
+
+class BluetoothClientConnector : public IClientConnector
+{
+public:
+
+    // IClientConnector implementation
+    bool Connect();
+    void Process();
+
+    // only to be set by ConnectionManager!
+    void SetOnConnect(OnConnectCallback callback, void *user);
+    void SetOnAbortConnect(OnAbortConnectCallback callback, void *user);
+
+    // only to be called by BluetoothClientConnection
+    void ConnectInternal(BluetoothClientConnection *connection);
+
+private:
+
+    OnConnectCallback       mConnectCallback;
+    void                   *mConnectCallbackUser;
+    OnAbortConnectCallback  mAbortConnectCallback;
+    void                   *mAbortConnectCallbackUser;
+};
+
+class BluetoothClientConnection : public IConnection
+{
+public:
+    
+    BluetoothClientConnection(BluetoothClientConnector *connector);
+    ~BluetoothClientConnection();
+
+    // IConnection implementation
+    void        SetId(int id) { mId = id; }
+    int         GetId() const { return mId; }
+    bool        Send(const char *data, int length, bool reliable, bool sequenced = true);
+    void        Process();
+    bool        Close();   
+
+    // only to be set by ConnectionManager!
+    void        SetOnReceive(OnReceiveCallback callback, void *user);
+    void        SetOnDisconnect(OnDisconnectCallback callback, void *user);
+
+private:
+
+    static void OnBluetoothReceiveCallback(int connectionid, const void *data, int length, void *user);		
+
+    BluetoothClientConnector  *mClientConnector;
+    OnReceiveCallback          mReceiveCallback;
+    void                      *mReceiveUser;
+    OnDisconnectCallback       mDisconnectCallback;
+    void                      *mDisconnectUser;
+    int                        mId;
+};
+
+}
+
+#endif // _BLUETOOTHCONNECTION_H

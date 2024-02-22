@@ -1,0 +1,32 @@
+#ifndef _MESSAGE_SENDER_454235_H
+#define _MESSAGE_SENDER_454235_H
+
+#include <map>
+#include "Message.h"
+
+class SendHandler;
+
+// this class resends a message at decaying intervals until it is acknowledged or times out
+class MessageSender
+{
+public:
+
+    MessageSender(SendFunctionContext send);
+    ~MessageSender();
+
+    bool Send(const char *data, int length);
+
+    void Acknowledge(int64_t muid);
+    void Abandon(int64_t muid);
+
+    void Update();
+
+private:
+
+    typedef std::map<int64_t, SendHandler *> map_t;
+
+    SendFunctionContext mSend;
+    map_t               mSenders;
+};
+
+#endif // _MESSAGE_SENDER_454235_H

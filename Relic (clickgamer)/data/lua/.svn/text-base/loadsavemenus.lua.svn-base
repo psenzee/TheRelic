@@ -1,0 +1,157 @@
+print "Lua:loadsavemenus.lua"
+
+SAVE_LIST_MENU = nil
+LOAD_LIST_MENU = nil
+SAVE_FILENAME  = "autosave.bin"
+SAVE_LIST_TITLE_INSTANCE = nil
+
+IS_IN_SAVE = false
+
+SAVE_GAME_LIST = 
+{
+    { name="Autosave", file="autosave.bin",     metadata="None", valid=false },
+    { name="Save #1",  file="saveprofile1.bin", metadata="None", valid=false },
+    { name="Save #2",  file="saveprofile2.bin", metadata="None", valid=false },    
+    { name="Save #3",  file="saveprofile3.bin", metadata="None", valid=false },
+    { name="Save #4",  file="saveprofile4.bin", metadata="None", valid=false },
+    { name="Save #5",  file="saveprofile5.bin", metadata="None", valid=false }
+}
+
+function DoesAnySavedGameExist()
+  for i, save in ipairs(SAVE_GAME_LIST) do
+    if DoesFileExist(save.file) then return true end  
+  end
+  return false
+end
+
+function UpdateFileList(forSave)
+  for i, save in ipairs(SAVE_GAME_LIST) do
+    local text = 'None'
+    if DoesFileExist(save.file) then
+      save.valid = true
+      local data = ReadTable(save.file)
+      text = 'Level ' .. data.gameLevel
+      time = data.dateTime
+      if time ~= nil then
+        text = text .. ' ' .. os.date("%m/%d/%Y %I:%m %p", time)
+      end
+    end
+    if save.button ~= nil then
+      local color = '\\#ffffff'
+      local valid = forSave or save.valid
+      if not valid then color = '\\#404040' end
+      UiControl_SetText(save.button, color .. text)
+      UiControl_SetActive(save.button, valid)
+    end    
+  end
+  if forSave then
+    UiControl_SetText(SAVE_LIST_TITLE_INSTANCE, "Save Game")
+  else
+    UiControl_SetText(SAVE_LIST_TITLE_INSTANCE, "Load Game")  
+  end
+  UiControl_LayoutVertical(SAVE_LIST_MENU)
+end
+
+function ReadTable(filename)
+  local path = MakeReadWritePath(filename)
+  local f = io.open(path, 'rb')
+  local data = f:read("*all")
+  f:close()
+  data = Decompress(data)
+  return Deserialize(data)
+end
+
+
+function WriteTable(table, filename)
+  local path = MakeReadWritePath(filename)
+  local f = io.open(path, 'wb')
+  f:write(Compress(table))
+  io.close(f)
+end
+
+function HideLoadSaveMenus()
+  _SetVisible(SAVE_LIST_MENU, false)
+  _SetVisible(LOAD_LIST_MENU, false)
+end
+
+function Autosave()
+  SavePrimaryPlayer(SAVE_GAME_LIST[1].file)
+end
+
+function HandleSaveLoadEvent(name)
+  for i, save in ipairs(SAVE_GAME_LIST) do
+    if name == ('SaveLoad_' .. i) then 
+      SAVE_FILENAME = save.file    
+      if IS_IN_SAVE then
+        HideMenusRestoreHud()
+        ShowReallySaveMenu()
+      else
+        EndTitleSequence()
+        CloseMenus()
+        HideMenusRestoreHud()      
+        SetGameStateId(GAMESTATE_LOADING_OUT_OF_MENU)        
+        LoadGame(save.file)
+      end
+      return true
+    end
+  end
+  return false
+end
+
+local function _AddFileButton(parent, name, text, width)
+  local button = Ui_CreateButton(name, "darkborder", text, 0, 0, width, 25, 1.0, 20)
+  UiControl_SetMargin(button, 2, 2)
+  UiControl_AddChild(parent, button)
+  RegisterUiListener(name, "MenuListener", { name = name })
+  return button
+end
+
+local function CreateSaveListMenu()
+  local width = MENUS_WIDTH
+  local halfWidth = width * 0.5
+  local top = 50
+  local height = 20
+  local size = 23
+  local dividerHeight = 15  
+  SAVE_LIST_MENU = Ui_CreateMenu("SaveListMenu", "border3", "..", 240 - halfWidth, top, 240 + halfWidth, top, 1.0, 22.5)
+  SAVE_LIST_TITLE_INSTANCE = AddTextLine(SAVE_LIST_MENU, "Select Save Game", height * 2.0, size * 1.5)
+  AddTextLine(SAVE_LIST_MENU, "", dividerHeight, size)
+  for i, save in ipairs(SAVE_GAME_LIST) do  
+    save.button = _AddFileButton(SAVE_LIST_MENU, "SaveLoad_" .. i, save.metadata, width)
+  end
+  AddTextLine(SAVE_LIST_MENU, "", dividerHeight, size)
+  AddMenuButton(SAVE_LIST_MENU, "Resume", "Cancel", width)
+  UiControl_LayoutVertical(SAVE_LIST_MENU)
+  UiControl_AddChild(CANVAS, SAVE_LIST_MENU)
+  UiControl_SetVisible(SAVE_LIST_MENU, false)
+end
+
+function CreateSaveLoadMenus()
+  CreateSaveListMenu()
+  -- ..
+end
+
+local function _ShowGenericMenu(instance)
+  HideMenus()
+  SetPaused(true)
+  PROCESS_BUTTONS = false
+  SetSuppressHud(true)
+  SetDarkness(0.5)
+  ClearButtonPresses()
+  LockInputForTimeMs(2000)
+  _SetVisible(SAVE_LIST_MENU, true)
+end
+
+function ShowSaveListMenu()
+  IS_IN_SAVE = true
+  UpdateFileList(IS_IN_SAVE)
+  _ShowGenericMenu(SAVE_LIST_MENU)
+end
+
+function ShowLoadListMenu()
+  SetDarkness(0.0)
+  StartTitleSequence()
+  IS_IN_SAVE = false  
+  UpdateFileList(IS_IN_SAVE)
+  _ShowGenericMenu(SAVE_LIST_MENU)
+end

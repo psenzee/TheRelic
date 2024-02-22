@@ -1,0 +1,17 @@
+#ifndef _IMAPFACTORY_H
+#define _IMAPFACTORY_H
+
+class Map;
+class MapDescription;
+class ContentLoader;
+
+class IMapFactory
+{
+public:
+        
+    virtual ~IMapFactory() {}
+        
+    virtual Map *Create(const MapDescription &description, ContentLoader *loader) = 0;
+};
+
+#endif // _IMAPFACTORY_H

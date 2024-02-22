@@ -1,0 +1,96 @@
+#ifndef _UIBASICCONTROL_H
+#define _UIBASICCONTROL_H
+
+#include "core/core.h"
+#include "fast/Allocator.h"
+#include "Ui.h"
+#include "IUiControl.h"
+#include "UiTransition.h"
+
+// types: UiText, UiButton, UiImage, UiList, etc..
+
+class UiBasicControl : public IUiControl
+{
+public:
+    
+    CLASS_NEW_DELETE()
+
+    inline UiBasicControl(const char *name) : mName(name ? name : ""), mText(""), mVisible(true), mActive(true), mParent(0), mData(0), mAnimationTime(0.f), mTransition(0), mJustify(JUSTIFY_CENTER) {}
+    inline ~UiBasicControl() { if (mTransition) delete mTransition; }
+
+    const char *GetName()                             const { return mName.c_str(); }
+    void        SetName(const char *name)                   { mName = name; }
+
+    const char *GetText()                             const { return mText.c_str(); }
+    void        SetText(const char *text)                   { mText = text; }
+
+    UiTextJustify  GetJustification()                      const { return mJustify; }
+    void           SetJustification(UiTextJustify justify)       { mJustify = justify; }
+
+    void       *GetData()                                   { return mData; }
+    void        SetData(void *data)                         { mData = data; }
+
+    UiState    &GetState()                                  { return mState; }
+    const UiState &GetState()                         const { return mState; }
+
+    float       GetAnimationTime()                    const { return mAnimationTime; }
+    void        SetAnimationTime(float value)               { mAnimationTime = value; }
+
+    void        SetVisible(bool visible)                    { if (mVisible != visible) NotifyVisible(visible); mVisible = visible; }
+    bool        IsVisible()                           const { return mVisible; }
+    void        SetActive(bool active)                      { mActive = active; }
+    bool        IsActive()                            const { return mActive; }
+
+    UiBounds    GetBounds()                           const { return mBounds; }
+    UiBounds    GetFocusedBounds()                    const { return mBounds; }
+    void        RequestBounds(const UiBounds &bounds)       { SetBounds(bounds); }
+
+    void        SetMargin(const Vector2 &margin)            { mMargin = margin; }
+    Vector2     GetMargin()                           const { return mMargin; }
+
+    bool        Notify(UiCore &core, const UiEvent &event);
+
+    int         RenderRenderable(UiCore &core)              { return 0; }
+    int         Render(UiCore &core)                        { return 0; }
+    void        Update(/*..*/)                              { if (mTransition) mTransition->Update(); }
+
+    bool        IsCollection()                        const { return false; }
+    void        AddChild(IUiControl *control)               {}
+    bool        RemoveChild(IUiControl *control)            { return false; }
+    int         GetChildrenCount()                    const { return 0; }
+    IUiControl *GetChildAt(int at)                          { return 0; }
+    void        SetParent(IUiControl *control)              { mParent = control; }
+    IUiControl *GetParent()                                 { return mParent; }
+
+    void        NotifyVisible(bool visible)                 { if (mTransition) mTransition->NotifyVisible(visible); }
+    void        DestroyChildren()                           {}
+
+    UiTransition *GetTransition()                           { return mTransition; }
+
+    // transition stuff
+    void          SetTransition(UiTransition *transition)   { mTransition = transition; }
+
+    float         GetTransitionAdditiveScale() const        { return mTransition ? mTransition->GetAdditiveScale() : 0.f; }
+    float         GetTransitionAlpha() const                { return mTransition ? mTransition->GetAlpha() : 1.f; }
+//  void          UpdateTransition()
+    bool          ShouldRender() const                      { return (mTransition && mTransition->ShouldRender()) || IsVisible(); }
+
+private:
+
+    void          SetBounds(const UiBounds &bounds)         { mBounds = bounds; }
+
+    String                     mName;
+    String                     mText;
+    IUiControl                *mParent;
+    UiTransition              *mTransition;
+    UiBounds                   mBounds;
+    UiState                    mState;
+    Vector2                    mMargin;
+    void                      *mData;
+    float                      mAnimationTime;
+    bool                       mVisible,
+                               mActive;
+    UiTextJustify              mJustify;
+};
+
+#endif // _UIBASICCONTROL_H

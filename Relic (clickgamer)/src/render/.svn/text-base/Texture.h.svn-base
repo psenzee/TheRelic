@@ -1,0 +1,46 @@
+#ifndef _TEXTURE_H
+#define _TEXTURE_H
+
+#include "core/core.h"
+#include "fast/Allocator.h"
+
+class ContentLoader;
+class DeviceTexture;
+class GraphicsDevice;
+
+class Texture
+{
+public:
+    
+    CLASS_NEW_DELETE()
+
+    String         filename,
+                   combineFilename;
+    DeviceTexture *texture,
+                  *combineTexture;
+    unsigned       blendSrc, blendDst,
+                   colorOp, alphaOp; // these two are for combined textures only
+    
+    Texture(ContentLoader *content, const char *filename, const char *blendSrc, const char *blendDst);
+    Texture(ContentLoader *content, const char *filename, const char *combine,
+            const char *colorOp, const char *alphaOp, const char *blendSrc, const char *blendDst);
+    Texture(ContentLoader *content, const char *filename, unsigned blendSrc, unsigned blendDst);
+    Texture(ContentLoader *content, const char *filename, const char *combine,
+            unsigned colorOp, unsigned alphaOp, unsigned blendSrc, unsigned blendDst);
+    ~Texture();
+    
+    void Set(GraphicsDevice &device);
+
+    void Retain();
+    void Release();
+
+private:
+
+    void Initialize(ContentLoader *content, const char *filename, const char *combineFilename,
+                    const char *colorOp, const char *alphaOp, const char *blendSrc, const char *blendDst);
+    void Initialize(ContentLoader *content, const char *filename, const char *combineFilename,
+                    unsigned colorOp, unsigned alphaOp, unsigned blendSrc, unsigned blendDst);
+    int mRef;
+};
+    
+#endif // _TEXTURE_H

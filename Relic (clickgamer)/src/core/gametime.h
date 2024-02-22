@@ -1,0 +1,13 @@
+#ifndef _GAMETIME_H
+#define _GAMETIME_H
+    
+class GameTime
+{
+public:    
+
+    int elapsed;
+
+    inline GameTime(int ms) : elapsed(ms) {}
+};
+    
+#endif // _GAMETIME_H

@@ -1,0 +1,13 @@
+<levels>
+
+<level name="Game" description="Game">
+
+  <map filename="level-generator-dylan.emp" width="256" height="256" tileset="dl-stonewall-4.xml" />
+  <map filename="level6-floor0.emp" width="256" height="256" tileset="dl-stonewall-4.xml" />
+  <map filename="level6-floor1.emp" width="256" height="256" tileset="dl-stonewall-4.xml" />
+  <map filename="level6-floor2.emp" width="256" height="256" tileset="dl-stonewall-4.xml" />    
+  <map filename="level6-floor3.emp" width="256" height="256" tileset="dl-stonewall-4.xml" render="false" events="false" />
+  
+</level>
+
+</levels>

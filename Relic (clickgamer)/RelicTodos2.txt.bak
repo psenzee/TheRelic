@@ -1,0 +1,463 @@
+Relic Todos [new]
+
+bug saving generator
+track texture usage, leakage, especially for older devices
+make crystal icon smaller/pvr
+Make sure everything is properly cleared on unload/reload
+Sort saves
+Make sure right timestamp
+Mark autosave and autosave every 30 seconds or so
+Thin out pfx (where possible, older devices)
+Skin crystal nicely (Lucy)
+Send stuff to Chillingo
+Door/selectable bug
+Save quinotaur/keys/ring (specials) bug, allow them to be saved, then don't recreate at load (don't I already do this?). They are just not saving or loading I guess; BUG: the save game bug with transient objects: keys, quinotaur, etc.
+magic bolt needs to use mana
+
+add wall projectile trap as new character, VERY powerful projectiles
+
+r todos (1/10/11)
+
+x find psp 7 disc and install it!
+z barrels destroyed achievement?
+x add direct achievement button into front menu and in-game
+x add direct leaderboard button into front menu and in-game
+x fix crystal splash into intro
+x fix splash screen
+x heavy in intro, indigo winter in credits
+x only do crystal splash once
+x make quick axolotl studios movie from the one i made before
+x make simple white Default.png (with 'Loading..' in light grey text)
+x get rid of 'Send Score' and 'Invite a Friend'
+z Turn, Turn, Turn - turn spell achievement
+x Audio bug (reencoding the video worked - how weird!)
+x Fix delay about picking up gold, killing dudes
+x remove place name again
+x Crystal icon
+x 60fps rocks!
+x 60fps iP 4 only
+x Reduce number of enemies
+x Fix 60fps issues by tying speed footsteps not to frames, look at where we tie things to frames, generalize (virtual frames?)
+z Nice to have: VoiceOver 
+X Crystal achievements
+X Crystal leaderboards
+z Crystal challenges?
+z Time player
+x Teaser trailer 
+x Unloading .XML bug
+x get apple promo art done
+x use crystal logo
+x use chillingo stingers
+x crystal! (set up crystal with a test project)
+x get welcome pack done
+x do PR questionaire
+z set up game on pc side to render much larger screen area and without hud for promotional images
+z somewhere display current magic bolt damage and hit damage (in upgrade menu!)
+x BUG: the reload bug with images - has to do with not unloading images i think
+x remove canvas from the map
+x get the most recent build set up with the canvas and other hi res stuff
+x turn off every 5-sec save screenshot
+x indigo winter as title theme, rlc.mp4 as main theme
+x fix up credits
+z - like popup video for help
+x - integrate chillingo intro video
+x - hooks for crystal leaderboards, high scores, fb like, etc.
+x - integrate crystal
+z - loading icon
+z - sound when talking to ghost
+- projectile sound
+- sound picking up important object
+
+- The contrast is much better now but could you change some of the flooring into a variety of earthy / brick tones to add some variety to different sections?
+- The attack system does need some work on as I often found myself pressing hit and moving forwards and getting into a situation where the character no longer attacked.  or the targeting and aiming system missed the character too often, or certain enemies just ran away and it was very hard to catch them.
+- It also might be nice to give the player a small nav arrow after a number of minutes helping them to find their goal if they go the wrong way etc.
+
+- Working on the game to just make the progression for a new player better is what would work now.  Lets get it out and then work on updates later, I hope this makes sense and you are happy?
+
+ m - minor point the character could do with some vocals / phrases
+ H+- killer feature (I think overall it is a solid RPG, but it lacks the killer feature / really cool thing that I would tell my friends about.  What makes it different, what makes it original?  Tough, but needs to be thought about.)
+x variable length health/mana bars
+z MP: Need up to 4 keys, rings
+x Animation variety.
+x Redden the screen when close to death.
+z Heartbeat sound close to death.
+z Enemies won't enter open door. 
+Also, there's no way to personalize the character - even if you could color the shirt and choose between sword and axe - even if both worked exactly the same - it would feel more personal.
+There could be environmental effects that you could cleverly use for strategy.  Get them to chase you over a booby trap or something.  Bottlenecks to make combat 1v1 might work, dangerous terrain that costs life to cross, maybe?  With a bridge that the player can utilize better than the bogies?  A zone that gives you a bonus while you stand on it?
+Player entering open door enters a mob, but attacking near door is just as likely to open/shut door as it is to attack enemies.
+z MP: Fix shields in MP
+Still a problem with generator save partial destroyed
+Save status of guide activation
+x Savepoint/oracle should also be proximity activated
+z Save status of popup help dialogs so that they don't come up again after saving
+x Figure out when keys disappear
+Vary number of bad guys based on level
+Throttle visible characters (didn't I already do this?)
+Expand reset perimeter
+Some bad guys (ie bosses) shoot really nasty projectiles, you must use shield
+MP: Disable reset perimeter for MP
+Arachnarex not dropping keys
+Somehow explain the shield
+Make sure all the keys can be found
+Sound on projectiles
+Somehow put kills back
+Rising text on entering area? Area name
+Smarter enemies?
+Have enemies use magic attacks
+Shaman behavior, summoning, healing
+
+x fix issue with things not properly dying
+Green skel bug on deserialization
+x how to make guy move and hit same time?
+x new anims for player attack?; Flourishes
+x Credits need tap to dismiss
+z MP: check Create character message & Destroy charcter message
+z Somehow make the spell name look better
+x Have enemies use magic attacks
+Shaman behavior, summoning, healing; Shamans (that heal other skels)
+z MP: Different players glow with different colors (feet circles)
+Make health meter glow when replenished
+z MP: Add text captions to characters
+x [Projectiles] Archer/arrows?
+z MP: Other players show a (thot) caption when they are paused or in inventory -or does everyone pause?
+z MP: Calculate priority separate function - including changed stuff
+z Spawning
+Multilevel goals, maintain todo lists for player if necessary : for 30s, 5m of fun or hours; Like you're navigating a tricky task with increasing levels of difficulty and additional things to juggle
+x Achievements
+God of War elements like hero of Sparta
+
+Spells
+------
+Thief/Drain (Life, Mana)
+Fire wall, barrier, fire wall
+Skeleton slave, slave suicide bomber
+Control hordes
+Period of invulnerability
+Period of invisibility
+Lightning?
+Destroy world? (like i8)
+Spawn/Own
+
+deferred multiplayer
+--------------------
+
+MP: Items not properly serialized (destruction esp.?)
+MP: Clear keys at new level
+MP: Properly serialize/deserialize on next level
+MP: Properly synchronize characters
+MP: Fix level 4 LUA ERROR and disconnect after generator
+MP: Why are some animations (exploding barrels, wobble) not working?
+MP: Weed out any char ids that are not synced
+MP: Players must collide with each other
+MP: Handle disconnects; etc. - disconnect server, client
+MP: Are there allocation issues on the iPod/iPhone side for Bluetooth?
+MP: Bluetooth is so slow on the iPod
+MP: We need to handle level changes correctly, the first one in a new level populates it and serializes it..
+MP: Try different skins for barbarian
+MP: Spell: Switch - swaps you w/another player
+
+
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+-----------------------------------------------------------------------
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+--- 
+-----------------------------------------------------------------------
+
+Notes
+-----
+
+- 7 ways games reward the brain:
+1. Experience bars measuring progress
+2. Multiple long and short term goals
+3. Rewards for effort
+4. Rapid, frequent, clear feedback
+5. An element of uncertainty
+6. Windows of enhanced attention
+7. Other people
+
+
+Maybe
+-----
+Baldur's Gate - timed smoke plumes (damaging) fire, arrows could work too
+IPod Library as background music
+Email sheets - email a friend with hi scores
+Magic is item based - your ability to use them is based on a stat
+FX - flickering torch; Make torches with fx; Make flaming torch
+God Slide - use the accelerometer to slide all enemies (+ other  
+players) around but not self
+Social - facebook + status (breakout)
+Social - Twitter (breakout)
+Social - email hi scores (3.0)
+z Need merchants to transform gold into useful items/attributes
+Bezier streaking..
+Make flaming Axe
+
+Totally Deferred
+----------------
+Magic Boots - fast
+blood? on receiving Hit
+Baldur's Gate The art?
+Better weapons
+Small number of enemies compared to gauntlet or Relic
+Beautiful graphics - Much detail
+Baldur's Gate - blood
+Baldur's Gate - vases
+Baldur's Gate - flickering lamps (locally)
+Baldur's Gate - wall shadows
+Baldur's Gate - grain sacks
+Baldur's Gate - levers for doors (several doors in sequence)
+Baldur's Gate - cylindrical tunnels
+Baldur's Gate - skeletons look much better than in dungeon
+Magic Axe
+  - particle billboarding
+  - fx make them use mesh emitters
+    - fx store origin vertex (index), normal (index) in particle
+    - fx pointer to emmiter mesh
+  - fx should be refcounted?
+Level - character level
+Luck - likelihood of being hit
+z Text on planes in world
+Strength - how hard you hit
+Toughness - armor
+Health - max hp
+Agility - how fast you hit
+Magic - how powerful your magic attacks are
+Mana - how many magic attacks you get
+Exp - experience pnts
+Big pieces - run sequence+
+Big pieces - spellvm+
+Copy Prot
+Net Chat
+Design own spells, weapons
+- spell vm with runes
+Share spells local network
+z Kali copy protection
+Chicken fox corn chickenhawk puzzle
+7 balls puzzle
+Have Dylan think up puzzles?
+Rss?
+z *Pipeline
+z Howich would it cost for another related archer?
+z Pipe - ipmesh+wf+lua=pipe
+z Pipe - Iteration over files issues
+z (that iterating '*.obj' also returns *.objx)
+z  iterator tool $path $ext $file q$modified-time
+z Pipe - Can use UnxUtils instead?
+z - use placeholder objects (identified by name) for model annotation  
+- ex.: where to put particle fx
+z Pipe - wf changes
+z Pipe - munkres on object sizes, to match objects
+z Use munkres to precompute interpolated frames?
+z Integrate particle fx into XmlObjectReader
+z - a*
+z - Wf+ipmesh+Lua into pipe
+z Fast matrix - generated
+z Use hash_map instead of map where possible
+z Bloom tool?
+z Make a nice vase, get it in game
+z Use lua to fully parameterize fx
+z Use hash_map instead of map
+z Skills- Critical - likelihood of a critical hit
+z - lua into wf2
+z - visibility - now using non-square render area
+z - using scanline fill to determine renderable areas
+z - make sure we're not overrendering!
+z - GameState->mVisibleRegion now becomes a list of 'scanlines', not
+z Animate camera
+z A free camera
+z Skeletons explosively breaking
+z Wooden sign
+xz World Lights
+z FX - glow
+z FX - pulsating glow
+z Ascension engine like i8
+Z Require lifting finger to retrigger magic
+Z Somehow make the spell name look better
+z Consider again adding treasure chests, vases
+z Lobby
+z Glowing weapons - or particle fx
+z *Camera Picking
+z Secret doors
+z Trap doors
+z Ask about joining - wait
+zx Support material changing for characters - add variety, and  
+differentiate easier from harder characters
+z Tooltips for door opening
+z Some elixirs that can be dropped can give : experience, hp, or stats  
+increases - the player decides
+z More enemy types
+z Texture remapper
+
+done
+----
+
+X Fix clock image
+X Fix fx when translated to only translate newly created items, so  
+that it smears
+X Mana restore should only restore part
+X Atomic touch takes 80% of mana and requires x5?
+X Fix terrible shield button
+X Make sure shield always works
+X Fix map issue
+X Fix power decay
+X Get rid of gold messages
+X Radius hit should destroy barrels
+X MP: After respawn, can't move guy
+Z Optionally use fast GL bitmap copy for text
+X MP: OnFirstVisit mp-compatible
+xe - the red door should be slightly redder etc, 
+xH - The game did get quite repetitive, you need to vary the enemies more, make some more vulnerable to magic etc.  They should attack and think in different ways.  Variation is key here
+x multipliers - count combos
+x add mana potions
+Xe - the magic ability was overpowerful, i could continually press it when in a fight with no negative.  It should cooldown.
+xe - the white spectre that helps you should activate when you walk into it, not when you hit it.  You shouldn't be hitting a helpful character
+x fix map issue
+x shield button should disappear when no mana or magic is not enabled
+x MP: Fix visibility of player characters in multiplayer, only have as many visible as are connected
+Xm - The contrast is a tad too dark, could you bring some greater differentiation to the character and background
+xH - With only one form of hit the attack gets very repetitive, try and vary it somewhat with different animations or powers
+X Make necromancer cast spells, particle fx
+Z PFx as renderables
+x Combos (without being hit), multipliers like fable, guitar hero
+ZX Combos
+x Big pieces - story
+x A 'tragically effective' instead of 'extraordinarily effective'
+x Big pieces - animations
+x Big pieces - multiplayer end to end
+x Robust cleanup/destruction
+x MP: solve targetting issues
+x MP: fix connected list, propagate to all clients
+x Projectiles
+x Flashing when Hit
+x Character much smaller than environment
+x Big pieces - polish/bug fixing
+x Big pieces - new dungeon art
+xz MP: Fix player name list (have names above chars?) + health?
+x Baldur's Gate - dust around skeletons when they're hit and bone pieces fly off
+x MP: Only have as many player characters visible as are connected
+x Baldur's Gate - skeletons are yellowish
+zx Big pieces - dungeon gen
+x - We need to work on the icon.  Can you make it simpler and more iconic.  Pehaps the relic sword on a simple solid background, I need 512x512.
+x - There was no warning to the player when their health is low, can you put some form of warning / reminder in.
+x - The fact that the character has only a single attack can get repetitive.  Is there any way to add in extra attacks or possibly put in a super bar that would charge up and provide a super attack after a while?
+x - When you attack your character either stops or moves slightly backward, can you make it so that they move towards the enemy.  This is important because when certain enemies run away, it can be really frustrating running after them and not being able to get a number of attacks in.
+X EventDispatcher/timer exposed in lua
+x Pipe - ipmesh fix up
+x Pipe - Stripping pipeline
+x - need intelligent behavior from baddies
+x Smarter enemies
+x Projectiles, arrows, firebolts
+x - move lua update code to c++ so can use yield? or remove many lua  
+X Move multiplier to above
+X Green skel bug on deserialization
+threads?
+x Lua iterator for DynamicMap
+x Bluetooth Bonjour +TCP
+xz Experience, strength, leveling, hp cycle
+x Require lifting finger to retrigger magic
+x blocking logic and button
+x Bugs
+x Baldur's Gate - barrels
+x Baldur's Gate - projectile weapons - spears, arrows, fireballs
+z Use fewer 'lua threads'
+x DestroyCharacter
+xz Attributes (rpg) ?n
+x Start easy
+x *Optimizations/Refactoring
+x Make sure turn is explicitly stated
+x Immolate
+x Block, block sphere
+MP: Other players must have health bar
+x Create character message
+x Destroy charcter message
+z Fable 2 trails
+x Don't walk slowly, just stop
+z Bullet time
+Xm - every attack pauses the character. The character should be able to continually attack as moving forward, but move at a slower rate
+x Make spider spit venom
+z - don't think i need lights at this point..
+xz Teleport/Teleporter
+x Pickups/powers
+x MP: Projectiles
+z simple rect - skip recomputing if no change
+x Put filter between character movement and camera position
+X Expose the visibility rectangle to Lua
+X Revisit stripping but I don't have current version of ipmesh need to  
+revisit at home
+x Spawn points (as characters)
+x Return closest Movables as a sorted array
+z Use lua to be able to create scene objects in addition to XML object reader
+z Blender multibake script
+z -  Exporter transformed & converted to ipmesh format
+z - exporter writes .XML
+x - have a cpp timer dispatcher (to lua callback) per character, global
+x  - verify stripping
+x Animation
+x Stripping/Capture Dead
+x Story
+x Events/Markers (on enter, on screen)
+xz Dungeon Gen
+z Encapsulate global variables - singletons?
+x Ui
+xz Rpg+Items
+z Canabalt!
+z Flexible Pipeline
+z CPture screens & upload them
+x make door locks colors
+x blocking - sphere display
+
+
+Sent from my iPhone
+
+
+----------
+
+
+marketing issues
+
+AdHoc Builds - How to produce builds for Chillingo to test + QA Checklist
+Chillingo Assets - Logos, Videos, Crystal images and other Chillingo files
+Documents - Explanatory, legal, schedule and process documents
+Game Assets - A series of art assets that need to be completed to help marketing and PR
+
+Each of those folders will help you create assets for your game.  The most important folder is the game asset folder which has a number of art assets that are the highest priority.  The game asset folder is split into the following sections :-
+
+App Store - Highest priority.  Make sure you follow naming conventions.  This art is required by apple to feature your game.  You need to create two assets the title and background images which must be layered .psd files 
+Crystal Banner - needed to market game on crystal
+High Quality Art - Not required but very useful.  This is artwork that would be suitable for press i.e 300 DPI+.  Any assets you have are useful
+Video - If you have raw video or gameplay footage please send it through.  If you have youtube links send those over also
+Website -  There are a number of banner assets that are needed to create your Chillingo Gamepage.
+----

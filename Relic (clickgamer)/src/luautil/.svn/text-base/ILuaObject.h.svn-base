@@ -1,0 +1,23 @@
+#ifndef _ILUAOBJECT_H
+#define _ILUAOBJECT_H
+
+class LuaInterpreter;
+
+#include "LuaThread.h"
+#include "LuaTable.h"
+
+class ILuaObject
+{
+public:
+
+    virtual ~ILuaObject() {}
+
+    virtual void       SetLuaReference(int id)        = 0;
+    virtual int        GetLuaReference() const        = 0;
+
+    virtual LuaThread *GetLuaThread()                 = 0;
+    virtual LuaTable   GetLuaTable() const            = 0;
+    virtual void       SetLuaTable(const LuaTable &t) = 0;
+};
+
+#endif // _ILUAOBJECT_H

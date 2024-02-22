@@ -1,0 +1,185 @@
+print "Lua:common.lua"
+
+PI     = 3.141592653589793
+TWOPI  = PI * 2.0
+HALFPI = PI * 0.5
+
+SIGNAL_NONE = 0
+SIGNAL_DELETE = 1
+    
+SIGNAL_DIED = 2
+SIGNAL_DEATH_COMPLETE = 3
+SIGNAL_ABSORBED = 4
+SIGNAL_RECEIVED_HIT = 5
+SIGNAL_ATTACK_START = 6
+SIGNAL_ATTACK_COMPLETE = 7
+SIGNAL_LANDED_HIT = 8
+SIGNAL_EVADED_HIT = 9
+
+BASE_EXPERIENCE_MULTIPLIER = 2
+
+CONSTRAINED_COUNT_ENEMY_TYPE = 1111
+
+function GetRandomSpeed(hispeed)
+  local lospeed = hispeed * 0.5
+  if lospeed < 2.5 then -- we have a minimum speed
+    lospeed = 2.5
+  end
+  return RandomBetween(lospeed, hispeed)
+end
+
+function GetRandomSpeedSeeded(seed, hispeed)
+  local lospeed = hispeed * 0.5
+  if lospeed < 2.5 then -- we have a minimum speed
+    lospeed = 2.5
+  end
+  return RandomBetweenSeeded(seed, lospeed, hispeed)
+end
+
+math.randomseed(0)
+
+_buttons = { false, false, false, false, 
+             false, false, false, false, 
+             false, false, false, false, 
+             false, false, false, false }
+
+_nextFrameButtons = { false, false, false, false, 
+                      false, false, false, false, 
+                      false, false, false, false, 
+                      false, false, false, false }
+
+function ClearButtonPresses()
+  TOUCHED = false
+  LOW_LEVEL_TOUCHED = false
+  _G.THUMBSTICK_MOVEMENTS = {}
+  touchBeganPoint = { 0, 0 }
+  for i = 1,#_buttons do _buttons[i] = false end
+  for i = 1,#_nextFrameButtons do _nextFrameButtons[i] = false end
+end
+
+function IsLocalButtonDown(index)
+  return IsButtonDown(index) or _G._nextFrameButtons[index] or _G._buttons[index]
+end
+
+function ButtonPressed(index)
+  local pressed = false
+  if IsButtonDown(index) or _G._nextFrameButtons[index] then
+    pressed = true
+    _G._nextFrameButtons[index] = false
+  end
+  local buttons = _G._buttons;
+  if not pressed then
+    buttons[index] = false
+  elseif buttons[index] then
+    pressed = false
+  else
+    pressed = true
+    buttons[index] = true
+  end
+  return pressed
+end
+
+function SetButtonPressed(index)
+--_G._buttons[index] = true
+  _G._nextFrameButtons[index] = true
+end
+
+function Random(variance)
+  return math.random() * variance - (variance * 0.5)
+end
+
+function RandomSeeded(seed, variance)
+  return Random_NextReal(seed) * variance - (variance * 0.5)
+end
+
+function RandomBetween(a, b)
+  return math.random() * (b - a) + a
+end
+
+function RandomBetweenSeeded(seed, a, b)
+  return Random_NextReal(seed) * (b - a) + a
+end
+
+-- this (or some variant) should be in C++
+function GetWeighted(array, value)
+  local count = #array
+  local weight = 0.0
+  for i = 1, count do
+    weight = weight + array[i].weight
+    if value <= weight then
+        return array[i]
+    end
+  end
+  return array[count]
+end
+
+function Nothing(a, b)
+end
+  
+INPUT_FRAME = 0
+VECTOR_INPUT_THIS_FRAME = { 0.0, 0.0, 0.0 }
+INTERNAL_VECTOR_INPUT = nil
+INPUT_SCALE = 8.0
+
+function SetInputDirection(x, y, z)
+  local scale = _G.INPUT_SCALE
+  if _G.INPUT_FRAME ~= GetGameStateFrames() then 
+    _G.VECTOR_INPUT_THIS_FRAME = { x * scale, y * scale, z * scale }
+    _G.INPUT_FRAME = GetGameStateFrames()
+    _G.INTERNAL_VECTOR_INPUT = nil
+  else
+    _G.INTERNAL_VECTOR_INPUT = { x * scale, y * scale, z * scale }
+  end
+end
+
+function GetInputDirection()
+  if _G.INPUT_FRAME ~= GetGameStateFrames() then
+    local scale = _G.INPUT_SCALE
+    if _G.INTERNAL_VECTOR_INPUT ~= nil then
+      _G.VECTOR_INPUT_THIS_FRAME = _G.INTERNAL_VECTOR_INPUT
+      _G.INTERNAL_VECTOR_INPUT = nil
+    else
+      local x, y, z = GetVectorInput()	
+      _G.VECTOR_INPUT_THIS_FRAME = { x * scale, y * scale, z * scale }
+    end
+    _G.INPUT_FRAME = GetGameStateFrames()
+  end
+  local inp = _G.VECTOR_INPUT_THIS_FRAME
+  return v3Clamp(inp[1], inp[2], inp[3], -10.0, 10.0)  
+end
+
+function deepcopy(object)
+    local lookup_table = {}
+    local function _copy(object)
+        if type(object) ~= "table" then
+            return object
+        elseif lookup_table[object] then
+            return lookup_table[object]
+        end
+        local new_table = {}
+        lookup_table[object] = new_table
+        for index, value in pairs(object) do
+            new_table[_copy(index)] = _copy(value)
+        end
+        return setmetatable(new_table, getmetatable(object))
+    end
+    return _copy(object)
+end
+
+function deepcopyinto(object, into)
+  for index, value in pairs(object) do
+    into[deepcopy(index)] = deepcopy(value)
+  end
+  return setmetatable(into, getmetatable(object))
+end
+
+LOMEM = 1000000000
+
+function UpdateMemoryStats()
+  local free = GetFreeMemory()
+  if ReceivedLowMemoryWarning() then
+    if free < LOMEM then
+	  LOMEM = free
+	end    
+  end
+end

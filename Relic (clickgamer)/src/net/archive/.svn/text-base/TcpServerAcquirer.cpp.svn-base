@@ -1,0 +1,68 @@
+#include "IAddress.h"
+#include "TcpServerAcquirer.h"
+#include "TcpSocketAddress.h"
+#include "Sockets.h"
+
+TcpServerAcquirer::TcpServerAcquirer() 
+  : AbstractAddressAcquirer(IAddress::DOMAIN_LOCAL, IAddress::PROTOCOL_TCP), mSocket(-1), mLocalPort(-1)
+{
+}
+
+bool TcpServerAcquirer::Listen(int port)
+{
+    mSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (mSocket < 0)
+    {
+        printf("Cannot create socket, error %d\n", (int)mSocket);
+        Close();
+        return false;
+    }
+
+    mLocalPort = port;
+    unsigned long enabled = 1;
+    IoctlSocket(mSocket, FIONBIO, &enabled);
+
+    // bind port locally
+    sockaddr_in addr;
+    addr.sin_family = AF_INET;
+    addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    addr.sin_port = htons(mLocalPort);
+    mLocal.SetAddress(addr);
+
+    int rc = bind(mSocket, (struct sockaddr *)&addr, sizeof(addr));
+    if (rc < 0)
+    {
+        printf("Cannot bind port, error %d (%s)\n", rc, GetSocketErrorDescription());
+        Close();
+        return false;
+    }
+
+    rc = listen(mSocket, SOMAXCONN);
+    if (rc < 0)
+    {
+        printf("Cannot listen, error %d (%s)\n", rc, GetSocketErrorDescription());
+        Close();
+        return false;
+    }
+    return true;
+} 
+
+void TcpServerAcquirer::Close()
+{
+    if (mSocket >= 0)
+        CloseSocket(mSocket);
+    mSocket = -1;
+    mLocalPort = -1;
+    mLocal.Zero();
+}
+
+void TcpServerAcquirer::Update()
+{
+    SOCKET socket = accept(mSocket, NULL, NULL);
+    if (socket < 0)
+    {
+        printf("Cannot accept, error (%s)\n", GetSocketErrorDescription());
+        return;
+    }
+    Notify(new TcpSocketAddress(socket));
+}

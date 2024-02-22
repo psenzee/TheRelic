@@ -1,0 +1,600 @@
+#include "XmlObjectReader.h"
+
+#include "core/core.h"
+#include "core/format.h"
+#include "core/file.h"
+#include "core/strs.h"
+#include "core/global.h"
+
+#include "XmlUtil.h"
+#include "XmlReadContext.h"
+
+#include "events/Event.h"
+#include "render/ContentLoader.h"
+#include "render/Texture.h"
+#include "render/RenderStates.h"
+#include "render/Transform.h"
+#include "render/Drawable.h"
+#include "gamecore/ObjectList.h"
+#include "gamecore/IGameObject.h"
+#include "gamecore/ICollidable.h"
+#include "render/Object.h"
+#include "physics/Collider.h"
+
+#include <string.h>
+#include <vector>
+
+static int IndexOf(const char *s, const char **list)
+{
+    const char **p = list;
+    for (int i = 0; *p; i++, p++)
+        if (strcmp(s, *p) == 0)
+            return i;
+    return -1;        
+}
+
+// Here type T is assumed to have a method:
+// bool SetProperty(const char *key, const char *value);
+template <typename T>
+void SetProperties(T &object, XmlElement *xml, const char **ignore)
+{
+    if (!xml) return;
+    for (int i = 0, sz = xml->attributeCount; i < sz; i++)
+    {
+        XmlAttribute *a = xml->attributes[i];
+        if (IndexOf(a->key, ignore) == -1 && !object.SetProperty(a->key, a->value))
+        {
+            //printf("Property %s=%s unrecognized here\n", a->key, a->value);
+        }
+    }    
+}
+
+XmlElement *XmlObjectReader::GetFirstElement(std::set<XmlElement *> &xml, const char *name)
+{
+    for (std::set<XmlElement *>::iterator i = xml.begin(), e = xml.end(); i != e; ++i)
+    {
+        if (!*i)
+        {
+            printf("** null xml element: is XML malformed?\n");
+            continue;
+        }
+        XmlElement *found = XmlUtil::GetFirstElement(*i, name);
+        if (found)
+            return found;
+    }
+    return 0;
+}
+
+Vector3 XmlObjectReader::ReadVector3(XmlElement *xml, const char *name0, const char *name1, const char *name2)
+{
+    return Vector3(XmlUtil::GetFloat(xml, name0), XmlUtil::GetFloat(xml, name1), XmlUtil::GetFloat(xml, name2));
+}
+
+bool XmlObjectReader::ReadInlineVector(XmlElement *xml, const char *name, int count, float *value, const float *defaultValue)
+{
+    float v[128]; // .. plenty
+    const char *data = XmlUtil::GetAttributeValue(xml, name);
+    const float *source = &v[0];
+    bool result = true;
+    if (!data || !read_array(&data, (float *)&v, count))
+    {
+        if (!defaultValue)
+        {
+            printf("'%s' %d-component vector unable to be read!\n", name, count);
+            return false;
+        }
+        result = false;
+        source = defaultValue;
+    }
+    for (int i = 0; i < count; i++)
+        value[i] = source[i];
+    return result;
+}
+
+Vector3 XmlObjectReader::ReadPoint3(XmlElement *xml)
+{
+    return ReadVector3(xml, "x", "y", "z");
+}
+
+Vector3 XmlObjectReader::ReadSize3(XmlElement *xml)
+{
+    return ReadVector3(xml, "width", "height", "depth");
+}
+
+Vector2 XmlObjectReader::ReadVector2(XmlElement *xml, const char *name0, const char *name1)
+{
+    return Vector2(XmlUtil::GetFloat(xml, name0), XmlUtil::GetFloat(xml, name1));
+}
+
+Vector2 XmlObjectReader::ReadPoint2(XmlElement *xml)
+{
+    return ReadVector2(xml, "x", "y");
+}
+
+Vector2 XmlObjectReader::ReadSize2(XmlElement *xml)
+{
+    return ReadVector2(xml, "width", "height");
+}
+
+Event *XmlObjectReader::ReadEvent(XmlElement *xml, XmlReadContext *context)
+{
+    if (strcmp(xml->name, "event") != 0) 
+        return 0;
+    const char *name = XmlUtil::GetAttributeValue(xml, "name");
+    if (name && strlen(name) > 0)
+    {
+        Event *u = context->events[name];
+        if (u) return u;
+    }
+    Event *o = new Event(XmlUtil::GetText(xml));
+    if (name)
+        context->events[name] = o;
+    return o;
+}
+
+std::vector<Event *> XmlObjectReader::ReadEvents(XmlElement *xml, XmlReadContext *context)
+{
+    std::vector<Event *> objects;
+    for (int i = 0, sz = xml->childrenCount; i < sz; i++)
+        if (strcmp(xml->children[i]->name, "event") == 0)
+            objects.push_back(ReadEvent(xml->children[i], context));
+    return objects;
+}
+
+Texture *XmlObjectReader::ReadTexture(XmlElement *xml, XmlReadContext *context)
+{
+    if (strcmp(xml->name, "texture") != 0) 
+        return 0;
+    const char *name = XmlUtil::GetAttributeValue(xml, "name");
+    if (name && strlen(name) > 0)
+    {
+        Texture *u = context->textures[name];
+        if (u) { u->Retain(); return u; }
+    }
+    const char *filename = XmlUtil::GetAttributeValue(xml, "file", name);
+    if (!filename)
+    {
+        printf("ERROR: Neither file nor name found in <texture /> element!\n");
+        return 0;
+    }
+    const char *combine = XmlUtil::GetAttributeValue(xml, "combine", 0);
+    Texture *o = 0;
+    if (combine)
+    {
+        const char *colorOp = XmlUtil::GetAttributeValue(xml, "color-op");
+        o = new Texture(context->loader,
+                        filename,
+                        combine,
+                        colorOp,
+                        XmlUtil::GetAttributeValue(xml, "alpha-op", colorOp),
+                        XmlUtil::GetAttributeValue(xml, "blend-source"),
+                        XmlUtil::GetAttributeValue(xml, "blend-destination"));
+    }
+    else
+    {
+        o = new Texture(context->loader,
+                        filename,
+                        XmlUtil::GetAttributeValue(xml, "blend-source"),
+                        XmlUtil::GetAttributeValue(xml, "blend-destination"));
+    }
+    if (name)
+        context->textures[name] = o;
+    return o;
+}
+
+std::vector<Texture *> XmlObjectReader::ReadTextures(XmlElement *xml, XmlReadContext *context)
+{
+    std::vector<Texture *> objects;
+    for (int i = 0, sz = xml->childrenCount; i < sz; i++)
+        if (strcmp(xml->children[i]->name, "texture") == 0)
+            objects.push_back(ReadTexture(xml->children[i], context));
+    return objects;
+}
+
+ICollidable *XmlObjectReader::ReadCollider(XmlElement *xml, XmlReadContext *context)
+{
+    if (strcmp(xml->name, "collider") != 0) 
+        return 0;
+    const char *name = XmlUtil::GetAttributeValue(xml, "name");
+    if (name && strlen(name) > 0)
+    {
+        ICollidable *u = context->colliders[name];
+//      if (u) { u->Retain(); return u; }
+        if (u) return u;
+    }
+    const char *filename = XmlUtil::GetAttributeValue(xml, "file", name);
+    if (!filename)
+    {
+        printf("ERROR: Neither file nor name found in <collider /> element!\n");
+        return 0;
+    }
+    char fullFileName[1024];
+    sprintf(fullFileName, "%s.obj.collide", filename);
+    ICollidable *o = Collider::ReadCollider(globalTranslatePath(fullFileName));
+    if (!o)
+    {
+        printf("ERROR: Unable to create collider from file '%s'!\n", fullFileName);
+        return 0;
+    }
+    o->SetIdentifier(filename);
+//  printf("Loaded collider from file '%s'!\n", fullFileName);
+    if (name)
+        context->colliders[name] = o;
+    return o;
+}
+
+std::vector<ICollidable *> XmlObjectReader::ReadColliders(XmlElement *xml, XmlReadContext *context)
+{
+    std::vector<ICollidable *> objects;
+    for (int i = 0, sz = xml->childrenCount; i < sz; i++)
+        if (strcmp(xml->children[i]->name, "collider") == 0)
+            objects.push_back(ReadCollider(xml->children[i], context));
+    return objects;
+}
+
+inline float DegToRad(float x)
+{
+    const float DEG_TO_RAD = math::PIf / 180.f;
+    return x * DEG_TO_RAD;
+}
+
+Matrix XmlObjectReader::ReadTransform(XmlElement *xml)
+{
+    if (strcmp(xml->name, "transform")   != 0 && 
+        strcmp(xml->name, "uvtransform") != 0)
+        return Matrix(); // identity..
+    Matrix transform;
+    for (int i = 0, sz = xml->childrenCount; i < sz; i++)
+    {
+        XmlElement *elem = xml->children[i];
+        if      (strcmp(elem->name, "rotatex") == 0)
+        {
+            float theta = XmlUtil::GetFloat(elem, "angle", 0.f);
+            if (theta != 0.f)
+            {
+                Matrix m;
+                m.rotationx(DegToRad(theta));
+                transform = transform * m;
+            }
+        }
+        else if (strcmp(elem->name, "rotatey") == 0)
+        {
+            float theta = XmlUtil::GetFloat(elem, "angle", 0.f);
+            if (theta != 0.f)
+            {
+                Matrix m;
+                m.rotationy(DegToRad(theta));
+                transform = transform * m;
+            }
+        }
+        else if (strcmp(elem->name, "rotatez") == 0)
+        {
+            float theta = XmlUtil::GetFloat(elem, "angle", 0.f);
+            if (theta != 0.f)
+            {
+                Matrix m;
+                m.rotationz(DegToRad(theta));
+                transform = transform * m;
+            }
+        }
+        else if (strcmp(elem->name, "rotation") == 0)
+        {
+            Vector3 xyz;
+            xyz.x = DegToRad(XmlUtil::GetFloat(elem, "x", 0.f));
+            xyz.y = DegToRad(XmlUtil::GetFloat(elem, "y", 0.f));
+            xyz.z = DegToRad(XmlUtil::GetFloat(elem, "z", 0.f));
+            if (xyz.x != 0.f || xyz.y != 0.f || xyz.z != 0.f)
+            {
+                Matrix m;
+                m.eulerrotation(xyz);
+                transform = transform * m;
+            }
+        }
+        else if (strcmp(elem->name, "translate") == 0)
+        {
+            Vector3 xyz;
+            xyz.x = XmlUtil::GetFloat(elem, "x", 0.f);
+            xyz.y = XmlUtil::GetFloat(elem, "y", 0.f);
+            xyz.z = XmlUtil::GetFloat(elem, "z", 0.f);
+            if (xyz.x != 0.f || xyz.y != 0.f || xyz.z != 0.f)
+            {
+                Matrix m;
+                m.translate(xyz);
+                transform = transform * m;
+            }
+        }
+        else if (strcmp(elem->name, "scale") == 0)
+        {
+            Vector3 xyz;
+            xyz.x = XmlUtil::GetFloat(elem, "x", 0.f);
+            xyz.y = XmlUtil::GetFloat(elem, "y", 0.f);
+            xyz.z = XmlUtil::GetFloat(elem, "z", 0.f);
+            if (xyz.x != 1.f || xyz.y != 1.f || xyz.z != 1.f)
+            {
+                Matrix m;
+                m.scale(xyz);
+                transform = transform * m;
+            }
+        }
+    }
+    return transform; 
+}
+
+std::vector<Matrix> XmlObjectReader::ReadTransforms(XmlElement *xml)
+{
+    std::vector<Matrix> objects;
+    for (int i = 0, sz = xml->childrenCount; i < sz; i++)
+        if (strcmp(xml->children[i]->name, "transform") == 0)
+            objects.push_back(ReadTransform(xml->children[i]));
+    return objects;
+}
+
+std::vector<Matrix> XmlObjectReader::ReadUvTransforms(XmlElement *xml)
+{
+    std::vector<Matrix> objects;
+    for (int i = 0, sz = xml->childrenCount; i < sz; i++)
+        if (strcmp(xml->children[i]->name, "uvtransform") == 0)
+            objects.push_back(ReadTransform(xml->children[i]));
+    return objects;
+}
+
+Matrix XmlObjectReader::ReadChildTransform(XmlElement *xml)
+{
+    for (int i = 0, sz = xml->childrenCount; i < sz; i++)
+        if (strcmp(xml->children[i]->name, "transform") == 0)
+            return ReadTransform(xml->children[i]);
+    return Matrix();
+}
+
+Matrix XmlObjectReader::ReadChildUvTransform(XmlElement *xml)
+{
+    for (int i = 0, sz = xml->childrenCount; i < sz; i++)
+        if (strcmp(xml->children[i]->name, "uvtransform") == 0)
+            return ReadTransform(xml->children[i]);
+    return Matrix();
+}
+
+static bool ReadColor(XmlElement *xml, const char *name, Vector4 &color)
+{
+    Vector4 def(color);
+    return XmlObjectReader::ReadInlineVector(xml, name, 4, (float *)&color, (const float *)&def);
+}
+
+RenderStates XmlObjectReader::ReadStates(XmlElement *xml)
+{
+    RenderStates states;
+    states.DepthBias   = XmlUtil::GetFloat   (xml, "depth-bias",   0.0f);
+    states.Transparent = XmlUtil::GetBool    (xml, "transparent",  false);
+    states.DepthTest   = XmlUtil::GetBool    (xml, "depth-test",   true);
+    states.DepthWrite  = XmlUtil::GetBool    (xml, "depth-write",  true);
+    states.TestVisible = XmlUtil::GetBool    (xml, "test-visible", true);
+    states.CullFace    = XmlUtil::GetBool    (xml, "cull",         true);
+    states.Blurrable   = XmlUtil::GetBool    (xml, "blurrable",    false);
+    states.Fog         = XmlUtil::GetTriState(xml, "fog");
+    states.RenderOrder = XmlUtil::GetInt     (xml, "render-order", states.RenderOrder);
+    ReadColor(xml, "color", states.Color);
+    states.Color.w     = XmlUtil::GetFloat   (xml, "alpha",        states.Color.w);
+    return states;
+}
+
+Material XmlObjectReader::ReadMaterial(XmlElement *xml)
+{
+    Material material;
+    ReadColor(xml, "ambient",  material.ambient);
+    ReadColor(xml, "diffuse",  material.diffuse);
+    ReadColor(xml, "emissive", material.emissive);
+    ReadColor(xml, "specular", material.specular);
+    material.shininess = XmlUtil::GetFloat(xml, "shininess", 1.0f);
+    return material;
+}
+
+Light XmlObjectReader::ReadLight(XmlElement *xml)
+{
+    Light light;
+    light.id = XmlUtil::GetInt(xml, "id", 0);
+    ReadInlineVector(xml, "position", 3, (float *)&light.position);
+    ReadColor       (xml, "ambient",  light.ambient);
+    ReadColor       (xml, "diffuse",  light.diffuse);
+    ReadColor       (xml, "specular", light.specular);
+    light.shininess = XmlUtil::GetFloat(xml, "shininess", light.shininess);
+    return light;
+}
+
+IGameObject *XmlObjectReader::ReadMesh(XmlElement *xml, XmlReadContext *context)
+{
+    if (strcmp(xml->name, "mesh") != 0) 
+        return 0;
+    const char *file      = XmlUtil::GetExpectedAttributeValue(xml, "file");
+    const char *renderTag = XmlUtil::GetAttributeValue        (xml, "render-tag", "main");
+    std::vector<Texture  *> textures = ReadTextures(xml, context); // we only want one here!
+    return CreateMesh(renderTag,
+                      context->loader,
+                      file,
+                      textures.empty() ? 0 : textures[0],
+                      ReadChildTransform(xml),
+                      ReadChildUvTransform(xml),
+                      ReadStates(xml),
+                      ReadMaterial(xml));
+}
+
+bool XmlObjectReader::IsObjectType(XmlElement *xml)
+{
+    const char *objectTypes[] = { "mesh", "animation", "list", "object", 0 };
+    return xml && IndexOf(xml->name, objectTypes) != -1;
+}
+
+IGameObject *XmlObjectReader::ReadObjectList(XmlElement *xml, XmlReadContext *context)
+{
+    if (strcmp(xml->name, "list") != 0)
+        return 0;
+    std::vector<ICollidable *> colliders(ReadColliders(xml, context)); // we only want one - right now
+    ObjectList  *list = new ObjectList(ReadEvents(xml, context), colliders.empty() ? 0 : colliders[0]);
+    IGameObject *obj  = 0;
+    for (int i = 0, sz = xml->childrenCount; i < sz; i++)
+    {
+        if (IsObjectType(xml->children[i]))
+        {
+            obj = ReadObject(xml->children[i], context);
+            if (obj)
+            {
+                list->Add(obj);
+                obj->Release();
+            }
+        }
+    }
+    return list;
+}
+
+IGameObject *XmlObjectReader::ReadCoreObject(XmlElement *xml, XmlReadContext *context)
+{
+    if (strcmp(xml->name, "object") != 0) 
+        return 0;
+    std::vector<ICollidable *> colliders(ReadColliders(xml, context)); // we only want one - right now
+    std::vector<IGameObject *> objects(ReadObjects(xml, context));
+    Object *object = new Object(objects,
+                                ReadTransform(xml),
+                                ReadEvents(xml, context),
+                                colliders.empty() ? 0 : colliders[0]);
+    for (std::vector<IGameObject *>::iterator i = objects.begin(), e = objects.end(); i != e; ++i)
+        (*i)->Release();
+    return object;
+}
+
+typedef IGameObject *(*ObjectReader_fn_t)(XmlElement *xml, XmlReadContext *context);
+
+IGameObject *XmlObjectReader::ReadObject(XmlElement *xml, XmlReadContext *context)
+{
+    if (!IsObjectType(xml))
+        return 0;
+    const char *name = XmlUtil::GetAttributeValue(xml, "name");
+
+//  if (name && *name) printf("Reading <%s name='%s' />..\n", xml->name, name);
+//  else               printf("Reading <%s />..\n", xml->name);
+
+    if (name && strlen(name) > 0)
+    {
+        IGameObject *u = context->objects[name];
+        if (u) { u->Retain(); return u; }
+    }
+
+    const char *refers = XmlUtil::GetAttributeValue(xml, "refers");
+    IGameObject *o = 0;
+    if (!refers)
+    {
+        ObjectReader_fn_t  readers[] = { ReadMesh, ReadObjectList, ReadCoreObject, 0 },
+                          *pr        = readers;
+        while (*pr)
+        {
+            if ((o = (*pr)(xml, context)) != 0)
+                break;
+            pr++;
+        }
+        if (!o)
+        {
+            printf("Unable to read <%s/> '%s' type - internal error.\n", xml->name, name);
+            return 0;
+        }
+    }
+    else
+    {
+        IGameObject *u = context->objects[refers];
+        if (!u)
+        {
+            printf("Definition of <object> '%s' refers to undefined object '%s'\n", name, refers);
+            return 0;
+        }
+        o = u;
+        o->Retain();
+    }
+    const char *ignore[] = { "name", "file", 0 };
+    SetProperties(o->GetProperties(), xml, ignore);
+    if (name)
+        context->objects[name] = o;
+    return o;
+}
+
+std::vector<IGameObject *> XmlObjectReader::ReadObjects(XmlElement *xml, XmlReadContext *context)
+{
+    std::vector<IGameObject *> objects;
+    for (int i = 0, sz = xml->childrenCount; i < sz; i++)
+        if (IsObjectType(xml->children[i]))
+            objects.push_back(ReadObject(xml->children[i], context));
+    return objects;
+}
+
+bool XmlObjectReader::ReadInOrder(XmlElement *xml, XmlReadContext *context, RenderObjectLists &lists)
+{
+    for (int i = 0, sz = xml->childrenCount; i < sz; i++)
+    {
+        XmlElement *element = xml->children[i];
+        const char *name    = element->name;
+        if      (strcmp(name, "include") == 0)
+        {
+            const char *file = XmlUtil::GetExpectedAttributeValue(element, "file");
+            if (!file)
+                return false;
+            if (!ReadInOrderFile(file, context, lists))
+                return false;
+        }
+        else if (strcmp(name, "texture") == 0)
+            lists.textures.push_back(ReadTexture(element, context));
+        else if (strcmp(name, "collider") == 0)
+            lists.colliders.push_back(ReadCollider(element, context));
+        else if (IsObjectType(element))
+            lists.objects.push_back(ReadObject(element, context));
+    }
+    return true;
+}
+
+bool XmlObjectReader::ReadInOrderFile(const char *filename, XmlReadContext *context, RenderObjectLists &lists)
+{
+    std::string file(file::read_file_string(globalTranslatePath(filename)));
+    std::vector<IGameObject *> r;
+    if (file.empty())
+    {
+        printf("Unable to open xml object file '%s' (XmlObjectReader)\n", filename);
+        return false;
+    }
+    XmlElement *xml = parse(file.c_str());
+    bool success = ((xml != 0) && ReadInOrder(xml, context, lists));
+    context->xml.insert(xml);
+    return success;
+}
+
+std::vector<IGameObject *> XmlObjectReader::ReadText(const char *text, XmlReadContext *context)
+{
+    RenderObjectLists lists;
+    XmlElement *xml = parse(text);
+    ReadInOrder(xml, context, lists);
+    context->xml.insert(xml);
+    return lists.objects;
+}
+
+std::vector<IGameObject *> XmlObjectReader::ReadFile(const char *filename, XmlReadContext *context)
+{
+    RenderObjectLists lists;
+    ReadInOrderFile(filename, context, lists);
+    return lists.objects;
+}
+
+XmlReadContext *ReadXmlConfigFile(const char *filename)
+{
+    ContentLoader *loader = ContentLoader::GetInstance();
+    XmlReadContext *context = new XmlReadContext(loader);
+    XmlObjectReader::ReadFile(filename, context);
+    return context;
+}
+
+XmlReadContext *ReadXmlConfigText(const char *text, XmlReadContext *context)
+{
+    XmlObjectReader::ReadText(text, context);
+    return context;
+}
+
+XmlReadContext *ReadXmlConfigText(const char *text)
+{
+    ContentLoader *loader = ContentLoader::GetInstance();
+    XmlReadContext *context = new XmlReadContext(loader);
+    XmlObjectReader::ReadText(text, context);
+    return context;
+}

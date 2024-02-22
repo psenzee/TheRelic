@@ -1,0 +1,25 @@
+#ifndef _TCPCHANNEL_H
+#define _TCPCHANNEL_H
+
+#include "IChannel.h"
+
+class TcpChannel : public IChannel
+{
+public:
+
+    TcpChannel() : mAddress(0) {}
+
+    bool Open(const IAddress *address);
+    bool SendTo(const char *data, int length);
+    bool SendToReliable(const char *data, int length);
+    int  ReceiveFrom(char *data, int length);
+    void Close();
+
+    const IAddress *GetRemoteAddress() { return mAddress; }
+
+private:
+
+    const IAddress *mAddress;
+};
+
+#endif // _TCPCHANNEL_H

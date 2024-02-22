@@ -1,0 +1,13 @@
+<levels>
+
+<level name="Game" description="Game">
+
+  <map filename="level3-main.emp"    width="256" height="256" tileset="dl-icewall.xml" />
+  <map filename="level3-floor0.emp"  width="256" height="256" tileset="dl-icewall.xml" />
+  <map filename="level3-floor1.emp"  width="256" height="256" tileset="dl-icewall.xml" />
+  <map filename="level3-floor2.emp"  width="256" height="256" tileset="dl-icewall.xml" />    
+  <map filename="level3-floor3.emp"  width="256" height="256" tileset="dl-icewall.xml" render="false" events="false" />
+  
+</level>
+
+</levels>

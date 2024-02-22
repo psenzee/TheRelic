@@ -1,0 +1,774 @@
+#import "The_Relic2AppDelegate.h"
+#import "EAGLView.h"
+#import "AppController.h"
+#import "core/global.h"
+#import "XmlReadContext.h"
+#import "GLUtils.h"
+#import "OverheadCamera.h"
+#import "core/size.h"
+#import "LocalGameServices.h"
+#import "DeviceTexture.h"
+#import "Map.h"
+#import "GameState.h"
+#import "GameClock.h"
+#import "FrameRateTracker.h"
+#import "GameInput.h"
+#import "Material.h"
+#import "TextPopup.h"
+#import "time/Timer.h"
+#import "Profiler.h"
+#import "net/IConnection.h"
+
+#import <GameKit/GameKit.h>
+#import <CFNetwork/CFNetServices.h>
+
+#include <sys/types.h> 
+#include <sys/sysctl.h> 
+#include <netinet/in.h>
+#include <string>
+
+//
+// various states the game can get into
+//
+typedef enum {
+	kStateStartGame,
+	kStatePicker,
+	kStateMultiplayer,
+	kStateMultiplayerCointoss,
+	kStateMultiplayerReconnect
+} gameStates;
+
+//
+// for the sake of simplicity tank1 is the server and tank2 is the client
+//
+typedef enum {
+	kServer,
+	kClient
+} gameNetwork;
+
+const float kHeartbeatTimeMaxDelay = 2.0f;
+
+// GameKit Session ID for app
+#define kSessionID @"relicbtv1"
+#define kMaxPacketSize 1024
+
+// CONSTANTS
+//#define kScale	           			(1.0f / 128.0f)
+#define kAccelerometerFrequency		100.0 // Hz
+#define kRenderingFrequency			120.0 // Hz
+#define kFilteringFactor			0.1
+
+float __accel[3];
+
+NSString *gGamePeerId = 0;
+GKSession *gSession = 0;
+
+extern "C" void Autosave();
+
+Connection::OnReceiveCallback  gBluetoothOnReceiveCallback = 0;
+void                          *gBluetoothOnReceiveCallbackUser = 0;
+typedef void (*OnCancelCallback)(void *user);
+OnCancelCallback               gBluetoothOnCancelCallback = 0;
+void                          *gBluetoothOnCancelCallbackUser = 0;
+typedef void (*OnPickerConnectCallback)(void *user);
+OnPickerConnectCallback        gBluetoothOnPickerConnectCallback = 0;
+void                          *gBluetoothOnPickerConnectCallbackUser = 0;
+
+extern "C" void CaptureScreen()
+{
+  // we don't do this on the phone	
+}
+
+extern "C" const char *GetPlatformUniqueIdentifier()
+{
+	static char data[1024] = "";
+	strcpy(data, [[[UIDevice currentDevice] uniqueIdentifier] UTF8String]);
+	// NSLog(@"uniqueIdentifier: %@", [[UIDevice currentDevice] uniqueIdentifier]);
+	return data;
+}
+
+extern "C" const char *GetPlatformDeviceName()
+{
+	static char data[1024] = "";
+	strcpy(data, [[[UIDevice currentDevice] name] UTF8String]);
+	// NSLog(@"name: %@", [[UIDevice currentDevice] name]);
+	return data;
+}
+
+extern "C" const char *GetPlatformSystemName()
+{
+	static char data[1024] = "";
+	strcpy(data, [[[UIDevice currentDevice] systemName] UTF8String]);
+	// NSLog(@"systemName: %@", [[UIDevice currentDevice] systemName]);
+	return data;
+}
+
+extern "C" const char *GetPlatformSystemVersion()
+{
+	static char data[1024] = "";
+	strcpy(data, [[[UIDevice currentDevice] systemVersion] UTF8String]);
+	// NSLog(@"systemVersion: %@", [[UIDevice currentDevice] systemVersion]);
+	return data;
+}
+
+extern "C" const char *GetPlatformModel()
+{
+	static char data[1024] = "";
+	strcpy(data, [[[UIDevice currentDevice] model] UTF8String]);
+	// NSLog(@"model: %@", [[UIDevice currentDevice] model]);
+	return data;
+}
+
+extern "C" const char *GetPlatformMachine()
+{
+    static char machine[1024] = "";
+    size_t size = 0;  
+    sysctlbyname("hw.machine", NULL, &size, NULL, 0);  
+    sysctlbyname("hw.machine", machine, &size, NULL, 0);  
+    return machine;
+}
+
+extern "C" const char *GetPlatformLocalizedModel()
+{
+	static char data[1024];
+	strcpy(data, [[[UIDevice currentDevice] localizedModel] UTF8String]);
+	// NSLog(@"localizedModel: %@", [[UIDevice currentDevice] localizedModel]);
+	return data;
+}
+
+extern "C" bool GetPlatformIsFirstGen()
+{
+    const char *machine = GetPlatformMachine();
+    return strcmp(machine, "iPhone1,1") == 0 || strcmp(machine, "iPod1,1") == 0;
+}
+
+extern "C" bool GetPlatformIsSecondGen()
+{
+    const char *machine = GetPlatformMachine();
+    return strcmp(machine, "iPhone1,2") == 0 || strcmp(machine, "iPod1,2") == 0;
+}
+
+extern "C" void SetBluetoothOnReceiveCallback(Connection::OnReceiveCallback callback, void *user)
+{
+    gBluetoothOnReceiveCallback = callback;
+	gBluetoothOnReceiveCallbackUser = user;
+}
+
+extern "C" void SetBluetoothOnCancelCallback(OnCancelCallback callback, void *user)
+{
+    gBluetoothOnCancelCallback = callback;
+	gBluetoothOnCancelCallbackUser = user;
+}
+
+extern "C" void SetBluetoothOnPickerConnectCallback(OnPickerConnectCallback callback, void *user)
+{
+    gBluetoothOnPickerConnectCallback = callback;
+	gBluetoothOnPickerConnectCallbackUser = user;
+}
+
+id gApp;
+
+@implementation The_Relic2AppDelegate
+
+@synthesize window;
+@synthesize glView;
+
+@synthesize gameState, peerStatus, gameSession, gamePeerId, lastHeartbeatDate, connectionAlert;
+
+extern "C" void SetScreenTouchBegan(int index, int x, int y)
+{
+    if (state)
+        state->GetInput().ScreenTouchBegan(index, core::Point(x, y));
+}
+
+extern "C" void SetScreenTouchMoved(int index, int x, int y)
+{
+    if (state)
+        state->GetInput().ScreenTouchMoved(index, core::Point(x, y));
+}
+
+extern "C" void SetScreenTouchStationary(int index, int x, int y)
+{
+    if (state)
+        state->GetInput().ScreenTouchStationary(index, core::Point(x, y));
+}
+
+extern "C" void SetScreenTouchEnded(int index, int x, int y)
+{
+    if (state)
+        state->GetInput().ScreenTouchEnded(index, core::Point(x, y));
+}
+
+extern "C" void GoToUrl(const char *url)
+{
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithUTF8String:url]]];
+}
+
+// we've gotten a state change in the session
+- (void) session:(GKSession *)session peer:(NSString *)peerID didChangeState:(GKPeerConnectionState)state
+{ 
+	if(self.gameState == kStatePicker) {
+		return;				// only do stuff if we're in multiplayer, otherwise it is probably for Picker
+	}
+	
+	if(state == GKPeerStateDisconnected) {
+		// We've been disconnected from the other peer.
+		
+		// Update user alert or throw alert if it isn't already up
+		NSString *message = [NSString stringWithFormat:@"Could not reconnect with %@.", [session displayNameForPeer:peerID]];
+		if((self.gameState == kStateMultiplayerReconnect) && self.connectionAlert && self.connectionAlert.visible) {
+			self.connectionAlert.message = message;
+		}
+		else {
+			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Lost Connection" message:message delegate:self cancelButtonTitle:@"End Game" otherButtonTitles:nil];
+			self.connectionAlert = alert;
+			[alert show];
+			[alert release];
+		}
+		
+		// go back to start mode
+		self.gameState = kStateStartGame; 
+	} 
+} 
+
+- (void) applicationDidFinishLaunching:(UIApplication *)application
+{
+	gApp = self;
+	
+	peerStatus = kServer;
+	gamePacketNumber = 0;
+	gameSession = nil;
+	gamePeerId = nil;
+	lastHeartbeatDate = nil;
+	
+	NSString *uid = [[UIDevice currentDevice] uniqueIdentifier];
+
+	gameUniqueID = [uid hash];
+
+	self.gameState = kStateStartGame; // Setting to kStateStartGame does a reset of players, scores, etc. See -setGameState: below
+	
+// bluetooth disabled for now
+//	[NSTimer scheduledTimerWithTimeInterval:0.066 target:self selector:@selector(btUpdate) userInfo:nil repeats:YES];	
+	
+    //window = [[UIWindow alloc] initWithFrame:rect];
+    [application setStatusBarOrientation:UIInterfaceOrientationLandscapeRight];
+    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+	
+    accel[0] = accel[1] = accel[2] = 0.0f;
+    __accel[0] = __accel[1] = __accel[2] = 0.0f;
+#ifdef ACCELEROMETER
+    //Configure and start accelerometer
+    [[UIAccelerometer sharedAccelerometer] setUpdateInterval:(1.0 / kAccelerometerFrequency)];
+    [[UIAccelerometer sharedAccelerometer] setDelegate:self];	
+#endif
+	
+//	[self startPicker];
+	
+//    [self startApp]; // Crystal
+	
+	// Start the logo movie player 
+	[self startLogoMovieplayer];	
+	
+    // The AppID and version parameters must be populated with the data for your application
+	// from the developer dashboard
+	// The theme parameter must match that of one of the *.crystaltheme resources bundled with your application
+	[CrystalSession initWithAppID:@"1374239207" delegate:self version:1.0 theme:@"Indigo_007" secretKey:@"p5ms0ns0bjjtld79vl2hbs0onobt67"];
+	[CrystalSession lockToOrientation:UIDeviceOrientationLandscapeRight];	
+}
+
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
+{
+	SetReceivedLowMemoryWarning(true);
+}
+
+- (void) applicationWillResignActive:(UIApplication *)application
+{
+    [glView stopAnimation];
+}
+
+- (void) applicationDidBecomeActive:(UIApplication *)application
+{
+    [glView startAnimation];
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+	Autosave();
+    [glView stopAnimation];
+}
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller  
+          didFinishWithResult:(MFMailComposeResult)result 
+                        error:(NSError*)error;
+{
+	if (result == MFMailComposeResultSent) {
+		NSLog(@"It's away!");
+	}
+	[controller dismissModalViewControllerAnimated:YES];
+}
+
+- (void) startLogoMovieplayer
+{
+	NSLog(@"Starting logo movie player");
+	
+	// Start the logo movie player	
+	
+	// Check the current orientation and select the most appropriate video
+	// Default to the portrait version
+	NSString* movieName = nil;
+	
+	// Test forcing the orientation to portrait
+	//UIInterfaceOrientation orientation = UIInterfaceOrientationPortrait;
+	
+	// Test forcing the orientation to landscape
+	//UIInterfaceOrientation orientation = UIInterfaceOrientationLandscapeLeft; 
+	
+	// Test getting the orientation from the interface
+	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation]; 
+	
+	
+	// Check the orientation and select the appropriate movie to play.  The movie should be setup in the 
+	// right orientation to coincide with this.
+	// NOTE: All movies played should be in the m4v format currently.
+    movieName = @"Chillingo_Stinger_iPhone_Landscape_h264";	
+	/*
+	if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+	{
+		// iPad movie
+		if(UIInterfaceOrientationIsLandscape(orientation))
+			movieName =  @"Chillingo_Stinger_iPad_Landscape_h264";
+		else
+			movieName =  @"Chillingo_Stinger_iPad_Portrait_h264";
+	}
+	else 
+	{
+		// iPhone movie
+		if(UIInterfaceOrientationIsLandscape(orientation))
+			movieName = @"Chillingo_Stinger_iPhone_Landscape_h264";
+		else
+		{
+			// Note: On the hardware prior to iOS 4 the movie always gets rotated to be in landscape so we need to use a different movie
+			// On iOS 4.0 or the simulator the non-rotated version works fine.
+			NSArray* versionComponents = [[UIDevice currentDevice].systemVersion componentsSeparatedByString:@"."];
+			NSString* majorVersionNumberString = (NSString*)[versionComponents objectAtIndex:0];
+			
+			int majorVersionNumber = [majorVersionNumberString intValue];
+			
+			if(majorVersionNumber >= 4)
+			{
+				movieName = @"Chillingo_Stinger_iPhone_Portrait_h264";
+			}
+			else
+			{
+				movieName = @"Chillingo_Stinger_iPhone_Portrait_Rotated_h264";
+			}
+		}		
+	}
+	*/
+	
+	// Now we have a movie and orientation we can start the movie and wait for it to notify us when it has finished
+	//self._CrystalLogoMoviePlayer = [[[CrystalLogoMoviePlayer alloc] initWithMovieName:movieName orientation:orientation observer:self] autorelease];
+
+	CrystalLogoMoviePlayer *_CrystalLogoMoviePlayer = [[[CrystalLogoMoviePlayer alloc] initWithMovieName:movieName orientation:orientation observer:self] autorelease];
+	
+	[window addSubview:_CrystalLogoMoviePlayer];
+	[_CrystalLogoMoviePlayer start];
+	
+	// Test no observer
+	//self._CrystalLogoMoviePlayer = [[[CrystalLogoMoviePlayer alloc] initWithMovieName:@"Chillingo_Stinger_iPhone_Landscape_h264" observer:nil] autorelease];
+	/*
+	// If the logo movie player view controller is valid start playback
+	if(self._CrystalLogoMoviePlayer != nil)
+	{		
+		[window addSubview:self._CrystalLogoMoviePlayer];
+		[window makeKeyAndVisible];
+		
+		NSLog(@"Start logo movie player");
+		
+		[self._CrystalLogoMoviePlayer start];
+	}
+	else 
+	{
+		// Failed to create logo movie player so simply start the application	
+		[window makeKeyAndVisible];
+
+	//	[self startApp];
+	}
+	*/	
+}
+
+- (void)sendEmail
+{
+    MFMailComposeViewController* controller = [[MFMailComposeViewController alloc] init];
+    controller.mailComposeDelegate = self;
+    NSArray *toRecipients = [NSArray arrayWithObject:@"psenzee@yahoo.com"]; 	
+    [controller setToRecipients:toRecipients];    
+    [controller setSubject:@"My Subject"];
+    [controller setMessageBody:@"Hello there." isHTML:NO]; 
+    [controller presentModalViewController:controller animated:YES];
+//  [controller release];
+}
+
+- (void) dealloc
+{
+    [window release];
+    [glView release];
+	
+    [super dealloc];
+}
+
+- (void)accelerometer:(UIAccelerometer*)accelerometer didAccelerate:(UIAcceleration*)acceleration
+{
+    //Use a basic low-pass filter to only keep the gravity in the accelerometer values
+    accel[0] = acceleration.x * kFilteringFactor + accel[0] * (1.0 - kFilteringFactor);
+    accel[1] = acceleration.y * kFilteringFactor + accel[1] * (1.0 - kFilteringFactor);
+    accel[2] = acceleration.z * kFilteringFactor + accel[2] * (1.0 - kFilteringFactor);
+//  printf("accel %.2f, %.2f, %.2f\n", accel[0], accel[1], accel[2]);
+#ifdef ACCELEROMETER
+    __accel[0] = accel[0];
+    __accel[1] = accel[1];
+    __accel[2] = accel[2];
+#endif
+}
+
+-(void)startPicker {
+	GKPeerPickerController*		picker;
+	
+	self.gameState = kStatePicker;			// we're going to do Multiplayer!
+	
+	picker = [[GKPeerPickerController alloc] init]; // note: picker is released in various picker delegate methods when picker use is done.
+	picker.delegate = self;
+	[picker show]; // show the Peer Picker
+}
+
+- (void)peerPickerControllerDidCancel:(GKPeerPickerController *)picker { 
+	// Peer Picker automatically dismisses on user cancel. No need to programmatically dismiss.
+    
+	// autorelease the picker. 
+	picker.delegate = nil;
+    [picker autorelease]; 
+	
+	// invalidate and release game session if one is around.
+	if(self.gameSession != nil)	{
+		[self invalidateSession:self.gameSession];
+		self.gameSession = nil;
+	}
+	
+	// go back to start mode
+	self.gameState = kStateStartGame;
+	
+	if (gBluetoothOnCancelCallback)
+		gBluetoothOnCancelCallback(gBluetoothOnCancelCallbackUser);
+} 
+
+//
+// Provide a custom session that has a custom session ID. This is also an opportunity to provide a session with a custom display name.
+//
+- (GKSession *)peerPickerController:(GKPeerPickerController *)picker sessionForConnectionType:(GKPeerPickerConnectionType)type { 
+	GKSession *session = [[GKSession alloc] initWithSessionID:kSessionID displayName:nil sessionMode:GKSessionModePeer]; 
+	gSession = session;
+	return [session autorelease]; // peer picker retains a reference, so autorelease ours so we don't leak.
+}
+
+- (void)peerPickerController:(GKPeerPickerController *)picker didConnectPeer:(NSString *)peerID toSession:(GKSession *)session { 
+	// Remember the current peer.
+	self.gamePeerId = peerID;  // copy
+	gGamePeerId = peerID;
+	
+	// Make sure we have a reference to the game session and it is set up
+	self.gameSession = session; // retain
+	gSession = session;
+	self.gameSession.delegate = self; 
+	[self.gameSession setDataReceiveHandler:self withContext:NULL];
+	
+	// Done with the Peer Picker so dismiss it.
+	[picker dismiss];
+	picker.delegate = nil;
+	[picker autorelease];
+	
+	// Start Multiplayer game by entering a cointoss state to determine who is server/client.
+	self.gameState = kStateMultiplayerCointoss;
+	
+	if (gBluetoothOnPickerConnectCallback)
+		gBluetoothOnPickerConnectCallback(gBluetoothOnPickerConnectCallbackUser);	
+} 
+
+//
+// invalidate session
+//
+- (void)invalidateSession:(GKSession *)session {
+	if(session != nil) {
+		[session disconnectFromAllPeers]; 
+		session.available = NO; 
+		[session setDataReceiveHandler: nil withContext: NULL]; 
+		session.delegate = nil; 
+		gSession = 0;
+	}
+}
+
+/*
+ * Getting a data packet. This is the data receive handler method expected by the GKSession. 
+ * We set ourselves as the receive data handler in the -peerPickerController:didConnectPeer:toSession: method.
+ */
+- (void)receiveData:(NSData *)data fromPeer:(NSString *)peer inSession:(GKSession *)session context:(void *)context { 
+
+	static int lastPacketTime = -1;
+	unsigned char *incomingPacket = (unsigned char *)[data bytes];
+	int *pIntData = (int *)&incomingPacket[0];
+	
+	if (gBluetoothOnReceiveCallback)
+        gBluetoothOnReceiveCallback(0, incomingPacket, (int)[data length], gBluetoothOnReceiveCallbackUser);	
+	return;
+	//
+	// developer  check the network time and make sure packers are in order
+	//
+	int packetTime = pIntData[0];
+	int packetID = pIntData[1];
+	if(packetTime < lastPacketTime && packetID != NETWORK_COINTOSS) {
+		return;	
+	}
+	
+	lastPacketTime = packetTime;
+	switch( packetID ) {
+		case NETWORK_COINTOSS:
+		{
+			// coin toss to determine roles of the two players
+			int coinToss = pIntData[2];
+			// if other player's coin is higher than ours then that player is the server
+			if(coinToss > gameUniqueID) {
+				self.peerStatus = kClient;
+			}
+/*			
+			// notify user of tank color
+			self.gameLabel.text = (self.peerStatus == kServer) ? kBlueLabel : kRedLabel; // server is the blue tank, client is red
+			self.gameLabel.hidden = NO;
+			// after 1 second fire method to hide the label
+			[NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(hideGameLabel:) userInfo:nil repeats:NO];
+ */
+		}
+			break;
+		case NETWORK_MOVE_EVENT:
+		{
+			// received move event from other player, update other player's position/destination info
+			InfoPacket *ts = (InfoPacket *)&incomingPacket[8];
+			int peer = (self.peerStatus == kServer) ? kClient : kServer;
+			InfoPacket *ds = &infoStats[peer];
+			/*			
+			ds->tankDestination = ts->tankDestination;
+			ds->tankDirection = ts->tankDirection;
+			 */
+		}
+			break;
+		case NETWORK_FIRE_EVENT:
+		{
+			// received a missile fire event from other player, update other player's firing status
+			InfoPacket *ts = (InfoPacket *)&incomingPacket[8];
+			int peer = (self.peerStatus == kServer) ? kClient : kServer;
+			InfoPacket *ds = &infoStats[peer];
+			/*
+			ds->tankMissile = ts->tankMissile;
+			ds->tankMissilePosition = ts->tankMissilePosition;
+			ds->tankMissileDirection = ts->tankMissileDirection;
+			 */
+		}
+			break;
+		case NETWORK_HEARTBEAT:
+		{
+			// Received heartbeat data with other player's position, destination, and firing status.
+			// update the other player's info from the heartbeat
+			InfoPacket *ts = (InfoPacket *)&incomingPacket[8];		// tank data as seen on other client
+			int peer = (self.peerStatus == kServer) ? kClient : kServer;
+			InfoPacket *ds = &infoStats[peer];					// same tank, as we see it on this client
+			memcpy( ds, ts, sizeof(InfoPacket) );
+
+			// update heartbeat timestamp
+			self.lastHeartbeatDate = [NSDate date];
+			
+			// if we were trying to reconnect, set the state back to multiplayer as the peer is back
+			if(self.gameState == kStateMultiplayerReconnect) {
+				if(self.connectionAlert && self.connectionAlert.visible) {
+					[self.connectionAlert dismissWithClickedButtonIndex:-1 animated:YES];
+				}
+				self.gameState = kStateMultiplayer;
+			}
+		}
+			break;
+		default:
+			// error
+			break;
+	}
+}
+
+extern "C" void SendBluetoothData(const void *data, int length, bool reliable)
+{
+	static unsigned char networkPacket[kMaxPacketSize];
+	
+	//if (length < kMaxPacketSize)
+	{	
+		NSData *packet = [NSData dataWithBytes: data length: length];
+		if (reliable)
+		{ 
+			[gSession sendData:packet toPeers:[NSArray arrayWithObject:gGamePeerId] withDataMode:GKSendDataReliable error:nil];
+		}
+		else
+		{
+			[gSession sendData:packet toPeers:[NSArray arrayWithObject:gGamePeerId] withDataMode:GKSendDataUnreliable error:nil];
+		}
+	}
+}
+
+- (void)sendNetworkPacket:(GKSession *)session packetID:(int)packetID withData:(void *)data ofLength:(int)length reliable:(BOOL)howtosend {
+	// the packet we'll send is resued
+	static unsigned char networkPacket[kMaxPacketSize];
+	const unsigned int packetHeaderSize = 2 * sizeof(int); // we have two "ints" for our header
+	
+	if(length < (kMaxPacketSize - packetHeaderSize)) { // our networkPacket buffer size minus the size of the header info
+		int *pIntData = (int *)&networkPacket[0];
+		// header info
+		pIntData[0] = gamePacketNumber++;
+		pIntData[1] = packetID;
+		// copy data in after the header
+		memcpy( &networkPacket[packetHeaderSize], data, length ); 
+		
+		NSData *packet = [NSData dataWithBytes: networkPacket length: (length+8)];
+		if(howtosend == YES) { 
+			[session sendData:packet toPeers:[NSArray arrayWithObject:gamePeerId] withDataMode:GKSendDataReliable error:nil];
+		} else {
+			[session sendData:packet toPeers:[NSArray arrayWithObject:gamePeerId] withDataMode:GKSendDataUnreliable error:nil];
+		}
+	}
+}
+
+
+// Called when an alert button is tapped.
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+	// 0 index is "End Game" button
+	if(buttonIndex == 0) {
+		self.gameState = kStateStartGame; 
+	}
+}
+
+//
+// Runs at regular interval to update game based on current game state
+//
+- (void)btUpdate {
+	static int counter = 0;
+	switch (self.gameState) {
+		case kStatePicker:
+		case kStateStartGame:
+			break;
+		case kStateMultiplayerCointoss:
+			[self sendNetworkPacket:self.gameSession packetID:NETWORK_COINTOSS withData:&gameUniqueID ofLength:sizeof(int) reliable:YES];
+			self.gameState = kStateMultiplayer; // we only want to be in the cointoss state for one loop
+			break;
+		case kStateMultiplayer:
+			/*
+//			[self updateTanks];
+			counter++;
+			if(!(counter&7)) { // once every 8 updates check if we have a recent heartbeat from the other player, and send a heartbeat packet with current state
+				if(self.lastHeartbeatDate == nil) {
+					// we haven't received a hearbeat yet, so set one (in case we never receive a single heartbeat)
+					self.lastHeartbeatDate = [NSDate date];
+				}
+				else if(fabs([self.lastHeartbeatDate timeIntervalSinceNow]) >= kHeartbeatTimeMaxDelay) { // see if the last heartbeat is too old
+					// seems we've lost connection, notify user that we are trying to reconnect (until GKSession actually disconnects)
+					NSString *message = [NSString stringWithFormat:@"Trying to reconnect...\nMake sure you are within range of %@.", [self.gameSession displayNameForPeer:self.gamePeerId]];
+					UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Lost Connection" message:message delegate:self cancelButtonTitle:@"End Game" otherButtonTitles:nil];
+					self.connectionAlert = alert;
+					[alert show];
+					[alert release];
+					self.gameState = kStateMultiplayerReconnect;
+				}
+				
+				// send a new heartbeat to other player
+				InfoPacket *ts = &infoStats[self.peerStatus];
+				[self sendNetworkPacket:gameSession packetID:NETWORK_HEARTBEAT withData:ts ofLength:sizeof(InfoPacket) reliable:NO];
+			}
+			 */
+			break;
+		case kStateMultiplayerReconnect:
+			/*
+			// we have lost a heartbeat for too long, so pause game and notify user while we wait for next heartbeat or session disconnect.
+			counter++;
+			if(!(counter&7)) { // keep sending heartbeats to the other player in case it returns
+				InfoPacket *ts = &infoStats[self.peerStatus];
+				[self sendNetworkPacket:gameSession packetID:NETWORK_HEARTBEAT withData:ts ofLength:sizeof(InfoPacket) reliable:NO];
+			}
+			 */
+			break;
+		default:
+			break;
+	}
+}
+
+// Crystal stuff
+
+- (void) challengeStartedWithGameConfig:(NSString*)gameConfig
+{
+	// Start a challenge with the specified game config
+	// The game config will match the config shown in the Developer Dashboard
+}
+
+- (void) application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+{
+	[CrystalSession application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+}
+
+- (void) application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
+{
+	[CrystalSession application:application didFailToRegisterForRemoteNotificationsWithError:error];
+}
+
+- (void) application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary*)userInfo
+{
+	[CrystalSession application:application didReceiveRemoteNotification:userInfo];
+}
+
+- (BOOL) application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+	[CrystalSession application:application didFinishLaunchingWithOptions:launchOptions];
+//	[self startApp];
+	return YES;
+ }
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark -
+#pragma mark CrystalLogoMoviePlayerObserver
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+- (void) logoMovieDidFinish
+{
+	// This method will be called when the movie fishes either naturally or 
+	// by the user tapping the screen
+	NSLog(@"Log movie finished");
+	
+	// Notification from the movie player that the movie has finished	
+	// We can now release the logo movie player view controller
+	self._crystalLogoMoviePlayer = nil;
+	
+	// Start the main application
+	// If you have multiple movies to display in sequence create a  
+	// new logo movie player and increment a counter until all movies have played
+	// NOTE: The logo movie player may support movie queues at some point in the future
+    [glView startAnimation];
+}
+
+@end
+
+extern "C" void StartCrystal()
+{
+	// Open the Crystal UI
+	[CrystalSession activateCrystalUI];
+}
+
+extern "C" void StartBluetoothPicker()
+{
+	[gApp startPicker];
+}
+
+extern "C" void SendEmail(const char *subject, const char *message)
+{
+    [gApp sendEmail];	
+}
+

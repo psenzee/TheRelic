@@ -1,0 +1,27 @@
+#ifndef _LIGHT_H
+#define _LIGHT_H
+
+#include "core/core.h"
+#include "fast/Allocator.h"
+
+class Light
+{
+public:
+    
+    CLASS_NEW_DELETE()
+    
+    int     id;
+    Vector4 position;
+    Vector4 ambient,
+            diffuse,
+            specular;
+    float   shininess;
+
+    Light();
+    Light(int id, const Vector4 &position,
+                  const Vector4 &ambient,
+                  const Vector4 &diffuse,
+                  const Vector4 &specular, float shininess);
+};
+
+#endif // _LIGHT_H

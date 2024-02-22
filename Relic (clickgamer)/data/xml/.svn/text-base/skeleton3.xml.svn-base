@@ -1,0 +1,587 @@
+<objects>
+
+<!--  
+  <list name="Skeleton3.Die">  
+    <object name="Skel3Die00">
+      <mesh file="shadow~0" transparent="true"  depth-write="false">
+        <texture file="blue_glow" blend-source="SRC_ALPHA" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      </mesh>
+      <mesh file="skelwalk_0~1" transparent="true" depth-write="false">
+        <texture file="blue_glow_full" blend-source="SRC_ALPHA" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      </mesh>           
+    </object>
+  </list>
+-->
+
+<list name="Skeleton3.Die">
+  <event>$Reset</event>
+  <event>$NoLoop</event>
+  <object name="Skel3Die00">
+    <mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <mesh file="skeldie_0~0"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_0~1"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_0~2"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_0~3"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_0~4"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_0~5"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_0~6"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_0~7"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_0~8"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_0~9"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_0~10"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_0~11"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_0~12"><texture file="skeleton_02" /></mesh>   
+    <mesh file="skeldie_0~13"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_0~14"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_0~15"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_0~16"><texture file="skeleton_02" /></mesh>
+  </object>
+  <object name="Skel3Die01">
+    <mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <mesh file="skeldie_1~0"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_1~1"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_1~2"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_1~3"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_1~4"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_1~5"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_1~6"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_1~7"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_1~8"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_1~9"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_1~10"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_1~11"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_1~12"><texture file="skeleton_02" /></mesh>   
+    <mesh file="skeldie_1~13"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_1~14"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_1~15"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_1~16"><texture file="skeleton_02" /></mesh>
+  </object>
+  <object name="Skel3Die02">
+    <mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <mesh file="skeldie_2~0"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_2~1"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_2~2"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_2~3"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_2~4"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_2~5"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_2~6"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_2~7"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_2~8"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_2~9"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_2~10"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_2~11"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_2~12"><texture file="skeleton_02" /></mesh>   
+    <mesh file="skeldie_2~13"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_2~14"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_2~15"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_2~16"><texture file="skeleton_02" /></mesh>
+  </object>
+  <object name="Skel3Die03">
+    <mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <mesh file="skeldie_3~0"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_3~1"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_3~2"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_3~3"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_3~4"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_3~5"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_3~6"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_3~7"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_3~8"><texture file="skeleton_02" /></mesh>   
+    <mesh file="skeldie_3~9"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_3~10"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_3~11"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_3~12"><texture file="skeleton_02" /></mesh>    
+    <mesh file="skeldie_3~13"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_3~14"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_3~15"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_3~16"><texture file="skeleton_02" /></mesh>
+  </object>
+  <object name="Skel3Die04">
+    <mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <mesh file="skeldie_4~0"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_4~1"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_4~2"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_4~3"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_4~4"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_4~5"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_4~6"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_4~7"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_4~8"><texture file="skeleton_02" /></mesh>   
+    <mesh file="skeldie_4~9"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_4~10"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_4~11"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_4~12"><texture file="skeleton_02" /></mesh>   
+    <mesh file="skeldie_4~13"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_4~14"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_4~15"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_4~16"><texture file="skeleton_02" /></mesh>
+  </object>
+  <object name="Skel3Die05">
+    <mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <mesh file="skeldie_5~0"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_5~1"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_5~2"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_5~3"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_5~4"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_5~5"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_5~6"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_5~7"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_5~8"><texture file="skeleton_02" /></mesh>   
+    <mesh file="skeldie_5~9"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_5~10"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_5~11"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_5~12"><texture file="skeleton_02" /></mesh>    
+    <mesh file="skeldie_5~13"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_5~14"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_5~15"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_5~16"><texture file="skeleton_02" /></mesh>
+  </object>
+  <object name="Skel3Die06">
+    <mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <mesh file="skeldie_6~0"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_6~1"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_6~2"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_6~3"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_6~4"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_6~5"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_6~6"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_6~7"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_6~8"><texture file="skeleton_02" /></mesh>   
+    <mesh file="skeldie_6~9"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_6~10"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_6~11"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_6~12"><texture file="skeleton_02" /></mesh>   
+    <mesh file="skeldie_6~13"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_6~14"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_6~15"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_6~16"><texture file="skeleton_02" /></mesh>
+  </object>
+  <object name="Skel3Die07">
+    <mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <mesh file="skeldie_7~0"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_7~1"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_7~2"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_7~3"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_7~4"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_7~5"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_7~6"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_7~7"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_7~8"><texture file="skeleton_02" /></mesh>   
+    <mesh file="skeldie_7~9"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_7~10"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_7~11"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_7~12"><texture file="skeleton_02" /></mesh>    
+    <mesh file="skeldie_7~13"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_7~14"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_7~15"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_7~16"><texture file="skeleton_02" /></mesh>
+  </object>
+  <object name="Skel3Die08">
+    <mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <mesh file="skeldie_8~0"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_8~1"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_8~2"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_8~3"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_8~4"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_8~5"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_8~6"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_8~7"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_8~8"><texture file="skeleton_02" /></mesh>   
+    <mesh file="skeldie_8~9"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_8~10"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_8~11"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_8~12"><texture file="skeleton_02" /></mesh>   
+    <mesh file="skeldie_8~13"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_8~14"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_8~15"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_8~16"><texture file="skeleton_02" /></mesh>
+  </object>
+  <object name="Skel3Die09">
+    <mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <mesh file="skeldie_9~0"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_9~1"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_9~2"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_9~3"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_9~4"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_9~5"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_9~6"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_9~7"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_9~8"><texture file="skeleton_02" /></mesh>   
+    <mesh file="skeldie_9~9"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_9~10"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_9~11"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_9~12"><texture file="skeleton_02" /></mesh> 
+    <mesh file="skeldie_9~13"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_9~14"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_9~15"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_9~16"><texture file="skeleton_02" /></mesh>
+  </object>
+  <object name="Skel3Die10">
+    <mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <mesh file="skeldie_10~0"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_10~1"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_10~2"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_10~3"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_10~4"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_10~5"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_10~6"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_10~7"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_10~8"><texture file="skeleton_02" /></mesh>   
+    <mesh file="skeldie_10~9"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_10~10"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_10~11"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_10~12"><texture file="skeleton_02" /></mesh> 
+    <mesh file="skeldie_10~13"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_10~14"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_10~15"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_10~16"><texture file="skeleton_02" /></mesh>
+  </object>
+  <object name="Skel3Die11">
+    <mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <mesh file="skeldie_11~0"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_11~1"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_11~2"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_11~3"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_11~4"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_11~5"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_11~6"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_11~7"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_11~8"><texture file="skeleton_02" /></mesh>   
+    <mesh file="skeldie_11~9"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_11~10"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_11~11"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_11~12"><texture file="skeleton_02" /></mesh> 
+    <mesh file="skeldie_11~13"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_11~14"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_11~15"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_11~16"><texture file="skeleton_02" /></mesh>
+  </object>
+  <object name="Skel3Die12">
+    <mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <mesh file="skeldie_12~0"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_12~1"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_12~2"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_12~3"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_12~4"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_12~5"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_12~6"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_12~7"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_12~8"><texture file="skeleton_02" /></mesh>   
+    <mesh file="skeldie_12~9"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_12~10"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_12~11"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_12~12"><texture file="skeleton_02" /></mesh> 
+    <mesh file="skeldie_12~13"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_12~14"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_12~15"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_12~16"><texture file="skeleton_02" /></mesh>
+  </object>
+  <object name="Skel3Die13">
+    <mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <mesh file="skeldie_13~0"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_13~1"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_13~2"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_13~3"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_13~4"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_13~5"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_13~6"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_13~7"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_13~8"><texture file="skeleton_02" /></mesh>  
+    <mesh file="skeldie_13~9"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_13~10"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_13~11"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_13~12"><texture file="skeleton_02" /></mesh> 
+    <mesh file="skeldie_13~13"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_13~14"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_13~15"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_13~16"><texture file="skeleton_02" /></mesh>
+  </object>
+  <object name="Skel3Die14">
+    <mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <mesh file="skeldie_14~0"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_14~1"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_14~2"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_14~3"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_14~4"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_14~5"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_14~6"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_14~7"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_14~8"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_14~9"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_14~10"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_14~11"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_14~12"><texture file="skeleton_02" /></mesh> 
+    <mesh file="skeldie_14~13"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_14~14"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_14~15"><texture file="skeleton_02" /></mesh>  
+    <mesh file="skeldie_14~16"><texture file="skeleton_02" /></mesh>
+  </object>
+  <object name="Skel3Die15">
+    <mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <mesh file="skeldie_15~0"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_15~1"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_15~2"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_15~3"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_15~4"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_15~5"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_15~6"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_15~7"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_15~8"><texture file="skeleton_02" /></mesh>  
+    <mesh file="skeldie_15~9"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_15~10"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_15~11"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_15~12"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_15~13"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_15~14"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_15~15"><texture file="skeleton_02" /></mesh>
+    <mesh file="skeldie_15~16"><texture file="skeleton_02" /></mesh>
+  </object>
+  
+  <object name="Skel3DieDead">
+    <mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+    <mesh file="SkelDieDeadBody~0"><texture file="skeleton_02" /></mesh>
+  </object>
+  
+  <object name="Skel3DieDeadImposter">
+    <event>AddFrameToDebrisMap</event>
+  <!--<event>Destroy</event>-->
+<event>Script "MultiplayerDestroyCharacter"</event>
+    <mesh file="shadow_med~0" transparent="true" depth-write="false"><texture file="skel_dead" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+  </object>    
+</list>  
+  
+  <list name="Skeleton3.Walk_ReceiveHit">
+    <object name="Skel3WalkHit00"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_0~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_0~1"><texture file="skeleton_03_hurt" /></mesh><!--<mesh file="skelwalk_0~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Skel3WalkHit01"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_1~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_1~1"><texture file="skeleton_02" /></mesh><!--<mesh file="skelwalk_1~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Skel3WalkHit02"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_2~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_2~1"><texture file="skeleton_03_hurt" /></mesh><!--<mesh file="skelwalk_2~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Skel3WalkHit03"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_3~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_3~1"><texture file="skeleton_02" /></mesh><!--<mesh file="skelwalk_3~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Skel3WalkHit04"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_4~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_4~1"><texture file="skeleton_03_hurt" /></mesh><!--<mesh file="skelwalk_4~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Skel3WalkHit05"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_5~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_5~1"><texture file="skeleton_02" /></mesh><!--<mesh file="skelwalk_5~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Skel3WalkHit06"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_6~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_6~1"><texture file="skeleton_03_hurt" /></mesh><!--<mesh file="skelwalk_6~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Skel3WalkHit07"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_7~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_7~1"><texture file="skeleton_02" /></mesh><!--<mesh file="skelwalk_7~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Skel3WalkHit08"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_8~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_8~1"><texture file="skeleton_03_hurt" /></mesh><!--<mesh file="skelwalk_8~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Skel3WalkHit09"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_9~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_9~1"><texture file="skeleton_02" /></mesh><!--<mesh file="skelwalk_9~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Skel3WalkHit10"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_10~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_10~1"><texture file="skeleton_03_hurt" /></mesh><!--<mesh file="skelwalk_10~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Skel3WalkHit11"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_11~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_11~1"><texture file="skeleton_02" /></mesh><!--<mesh file="skelwalk_11~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Skel3WalkHit12"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_12~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_12~1"><texture file="skeleton_03_hurt" /></mesh><!--<mesh file="skelwalk_12~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Skel3WalkHit13"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_13~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_13~1"><texture file="skeleton_02" /></mesh><!--<mesh file="skelwalk_13~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Skel3WalkHit14"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_14~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_14~1"><texture file="skeleton_03_hurt" /></mesh><!--<mesh file="skelwalk_14~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Skel3WalkHit15"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_15~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_15~1"><texture file="skeleton_02" /></mesh><!--<mesh file="skelwalk_15~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Skel3WalkHit16"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_16~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_16~1"><texture file="skeleton_03_hurt" /></mesh><!--<mesh file="skelwalk_16~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Skel3WalkHit17"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_17~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_17~1"><texture file="skeleton_02" /></mesh><!--<mesh file="skelwalk_17~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Skel3WalkHit18"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_18~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_18~1"><texture file="skeleton_03_hurt" /></mesh><!--<mesh file="skelwalk_18~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Skel3WalkHit19"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_19~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_19~1"><texture file="skeleton_02" /></mesh><!--<mesh file="skelwalk_19~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Skel3WalkHit20"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_20~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_20~1"><texture file="skeleton_03_hurt" /></mesh><!--<mesh file="skelwalk_20~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Skel3WalkHit21"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_21~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_21~1"><texture file="skeleton_02" /></mesh><!--<mesh file="skelwalk_21~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Skel3WalkHit22"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_22~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_22~1"><texture file="skeleton_03_hurt" /></mesh><!--<mesh file="skelwalk_22~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Skel3WalkHit23"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_23~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_23~1"><texture file="skeleton_02" /></mesh><!--<mesh file="skelwalk_23~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Skel3WalkHit24"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelwalk_24~0" ><texture file="skelweapon_01small" /></mesh><mesh file="skelwalk_24~1"><texture file="skeleton_03_hurt" /></mesh><!--<mesh file="skelwalk_24~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+  </list>  
+  
+  <list name="Skeleton3.Idle">
+    <object name="Skel3Idle01"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000046~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000046~0"><texture file="skelweapon_01small" /></mesh></object>    
+    <object name="Skel3Idle02"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000047~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000047~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Idle03"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000048~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000048~0"><texture file="skelweapon_01small" /></mesh></object>        
+    <object name="Skel3Idle04"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000049~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000049~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Idle05"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000050~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000050~0"><texture file="skelweapon_01small" /></mesh></object>    
+    <object name="Skel3Idle06"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000051~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000051~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Idle07"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000052~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000052~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Idle08"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000053~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000053~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Idle09"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000054~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000054~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Idle10"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000055~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000055~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Idle11"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000056~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000056~0"><texture file="skelweapon_01small" /></mesh></object>    
+    <object name="Skel3Idle12"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000057~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000057~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Idle13"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000058~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000058~0"><texture file="skelweapon_01small" /></mesh></object>        
+    <object name="Skel3Idle14"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000059~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000059~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Idle15"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000060~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000060~0"><texture file="skelweapon_01small" /></mesh></object>    
+    <object name="Skel3Idle16"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000061~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000061~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Idle17"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000062~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000062~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Idle18"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000063~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000063~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Idle19"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000064~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000064~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Idle20"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000065~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000065~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object refers="Skel3Idle19" />
+    <object refers="Skel3Idle18" />
+    <object refers="Skel3Idle17" />
+    <object refers="Skel3Idle16" />
+    <object refers="Skel3Idle15" />
+    <object refers="Skel3Idle14" />
+    <object refers="Skel3Idle13" />
+    <object refers="Skel3Idle12" />
+    <object refers="Skel3Idle11" />
+    <object refers="Skel3Idle10" />
+    <object refers="Skel3Idle09" />
+    <object refers="Skel3Idle08" />
+    <object refers="Skel3Idle07" />
+    <object refers="Skel3Idle06" />
+    <object refers="Skel3Idle05" />
+    <object refers="Skel3Idle04" />
+    <object refers="Skel3Idle03" />
+    <object refers="Skel3Idle02" />
+  </list>
+  
+  <list name="Skeleton3.Walk">
+    <event>$FrameTime 17</event>  
+    <object name="Skel3Walk01"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000001~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000001~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk02"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000002~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000002~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk03"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000003~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000003~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk04"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000004~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000004~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk05"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000005~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000005~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk06"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000006~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000006~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk07"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000007~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000007~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk08"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000008~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000008~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk09"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000009~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000009~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk10"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000010~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000010~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk11"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000011~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000011~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk12"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000012~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000012~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk13"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000013~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000013~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk14"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000014~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000014~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk15"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000015~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000015~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk16"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000016~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000016~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk17"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000017~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000017~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk18"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000018~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000018~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk19"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000019~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000019~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk20"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000020~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000020~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk21"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000021~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000021~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk22"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000022~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000022~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk23"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000023~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000023~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk24"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000024~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000024~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk25"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000025~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000025~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk26"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000026~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000026~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk27"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000027~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000027~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk28"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000028~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000028~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk29"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000029~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000029~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk30"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000030~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000030~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk31"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000031~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000031~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk32"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000032~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000032~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk33"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000033~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000033~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk34"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000034~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000034~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk35"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000035~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000035~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk36"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000036~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000036~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk37"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000037~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000037~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk38"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000038~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000038~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk39"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000039~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000039~0"><texture file="skelweapon_01small" /></mesh></object>
+    <object name="Skel3Walk40"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_skel_walk_body_000040~0" ><texture file="skeleton_02" /></mesh><mesh file="anim_skel_walk_sword_000040~0"><texture file="skelweapon_01small" /></mesh></object>
+  </list>
+  
+  <list name="Skeleton3.Run">
+    <event>$FrameTime 17</event>   
+    <object refers="Skel3Walk01" /> 
+    <object refers="Skel3Walk02" />
+    <object refers="Skel3Walk03" />     
+    <object refers="Skel3Walk04" />
+    <object refers="Skel3Walk05" /> 
+    <object refers="Skel3Walk06" />
+    <object refers="Skel3Walk07" />
+    <object refers="Skel3Walk08" />
+    <object refers="Skel3Walk09" />
+    <object refers="Skel3Walk10" />
+    <object refers="Skel3Walk11" />    
+    <object refers="Skel3Walk12" />
+    <object refers="Skel3Walk13" />        
+    <object refers="Skel3Walk14" />
+    <object refers="Skel3Walk15" />    
+    <object refers="Skel3Walk16" />
+    <object refers="Skel3Walk17" />
+    <object refers="Skel3Walk18" />
+    <object refers="Skel3Walk19" />
+    <object refers="Skel3Walk20" />
+    <object refers="Skel3Walk21" />    
+    <object refers="Skel3Walk22" />
+    <object refers="Skel3Walk23" />
+    <object refers="Skel3Walk24" />
+    <object refers="Skel3Walk25" />    
+    <object refers="Skel3Walk26" />
+    <object refers="Skel3Walk27" />
+    <object refers="Skel3Walk28" />
+    <object refers="Skel3Walk29" />    
+    <object refers="Skel3Walk30" />
+    <object refers="Skel3Walk31" />    
+    <object refers="Skel3Walk32" />
+    <object refers="Skel3Walk33" />
+    <object refers="Skel3Walk34" />
+    <object refers="Skel3Walk35" />    
+    <object refers="Skel3Walk36" />
+    <object refers="Skel3Walk37" />
+    <object refers="Skel3Walk38" />
+    <object refers="Skel3Walk39" />
+    <object refers="Skel3Walk40" />    
+  </list>
+  
+  <list name="Skeleton3.Turn">
+    <event>$FrameTime 17</event>   
+    <object refers="Skel3Walk01" /> 
+    <object refers="Skel3Walk02" />
+    <object refers="Skel3Walk03" />     
+    <object refers="Skel3Walk04" />
+    <object refers="Skel3Walk05" /> 
+    <object refers="Skel3Walk06" />
+    <object refers="Skel3Walk07" />
+    <object refers="Skel3Walk08" />
+    <object refers="Skel3Walk09" />
+    <object refers="Skel3Walk10" />
+    <object refers="Skel3Walk11" />    
+    <object refers="Skel3Walk12" />
+    <object refers="Skel3Walk13" />        
+    <object refers="Skel3Walk14" />
+    <object refers="Skel3Walk15" />    
+    <object refers="Skel3Walk16" />
+    <object refers="Skel3Walk17" />
+    <object refers="Skel3Walk18" />
+    <object refers="Skel3Walk19" />
+    <object refers="Skel3Walk20" />
+    <object refers="Skel3Walk21" />    
+    <object refers="Skel3Walk22" />
+    <object refers="Skel3Walk23" />
+    <object refers="Skel3Walk24" />
+    <object refers="Skel3Walk25" />    
+    <object refers="Skel3Walk26" />
+    <object refers="Skel3Walk27" />
+    <object refers="Skel3Walk28" />
+    <object refers="Skel3Walk29" />    
+    <object refers="Skel3Walk30" />
+    <object refers="Skel3Walk31" />    
+    <object refers="Skel3Walk32" />
+    <object refers="Skel3Walk33" />
+    <object refers="Skel3Walk34" />
+    <object refers="Skel3Walk35" />    
+    <object refers="Skel3Walk36" />
+    <object refers="Skel3Walk37" />
+    <object refers="Skel3Walk38" />
+    <object refers="Skel3Walk39" />
+    <object refers="Skel3Walk40" />    
+  </list>  
+  
+  <list name="Skeleton3.Attack">
+    <event>$Reset</event>
+    <event>$NoLoop</event>
+    <event>$FrameTime 33</event>
+    <object name="Skel3Attack00">
+      <event>Script "DisableMovement"</event>
+      <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelfight_0~0" ><texture file="skeleton_02" /></mesh><mesh file="skelfight_0~2"><texture file="skelweapon_01small" /></mesh><!--<mesh file="skelfight_0~1" ><texture file="skeleton_02" /></mesh>--></object>
+    <object name="Skel3Attack01">
+      <event>Script "DisableMovement"</event>
+      <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelfight_1~0" ><texture file="skeleton_02" /></mesh><mesh file="skelfight_1~2"><texture file="skelweapon_01small" /></mesh><!--<mesh file="skelfight_1~1" ><texture file="skeleton_02" /></mesh>--></object>    
+    <object name="Skel3Attack02"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelfight_2~0" ><texture file="skeleton_02" /></mesh><mesh file="skelfight_2~2"><texture file="skelweapon_01small" /></mesh><!--<mesh file="skelfight_2~1" ><texture file="skeleton_02" /></mesh>--></object>
+    <object name="Skel3Attack03"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelfight_3~0" ><texture file="skeleton_02" /></mesh><mesh file="skelfight_3~2"><texture file="skelweapon_01small" /></mesh><!--<mesh file="skelfight_3~1" ><texture file="skeleton_02" /></mesh>--></object>        
+    <object name="Skel3Attack04"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelfight_4~0" ><texture file="skeleton_02" /></mesh><mesh file="skelfight_4~2"><texture file="skelweapon_01small" /></mesh><!--<mesh file="skelfight_4~1" ><texture file="skeleton_02" /></mesh>--></object>
+    <object name="Skel3Attack05"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelfight_5~0" ><texture file="skeleton_02" /></mesh><mesh file="skelfight_5~2"><texture file="skelweapon_01small" /></mesh><!--<mesh file="skelfight_5~1" ><texture file="skeleton_02" /></mesh>--></object>    
+    <object name="Skel3Attack06"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelfight_6~0" ><texture file="skeleton_02" /></mesh><mesh file="skelfight_6~2"><texture file="skelweapon_01small" /></mesh><!--<mesh file="skelfight_6~1" ><texture file="skeleton_02" /></mesh>--></object>
+    <object name="Skel3Attack07"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelfight_7~0" ><texture file="skeleton_02" /></mesh><mesh file="skelfight_7~2"><texture file="skelweapon_01small" /></mesh><!--<mesh file="skelfight_7~1" ><texture file="skeleton_02" /></mesh>--></object>
+    <object name="Skel3Attack08"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelfight_8~0" ><texture file="skeleton_02" /></mesh><mesh file="skelfight_8~2"><texture file="skelweapon_01small" /></mesh><!--<mesh file="skelfight_8~1" ><texture file="skeleton_02" /></mesh>--></object>
+    <object name="Skel3Attack09"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelfight_9~0" ><texture file="skeleton_02" /></mesh><mesh file="skelfight_9~2"><texture file="skelweapon_01small" /></mesh><!--<mesh file="skelfight_9~1" ><texture file="skeleton_02" /></mesh>--></object>
+    <object name="Skel3Attack10"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelfight_10~0" ><texture file="skeleton_02" /></mesh><mesh file="skelfight_10~2"><texture file="skelweapon_01small" /></mesh><!--<mesh file="skelfight_10~1" ><texture file="skeleton_02" /></mesh>--></object>
+    <object name="Skel3Attack11"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelfight_11~0" ><texture file="skeleton_02" /></mesh><mesh file="skelfight_11~2"><texture file="skelweapon_01small" /></mesh><!--<mesh file="skelfight_11~1" ><texture file="skeleton_02" /></mesh>--></object>    
+    <object name="Skel3Attack12"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelfight_12~0" ><texture file="skeleton_02" /></mesh><mesh file="skelfight_12~2"><texture file="skelweapon_01small" /></mesh><!--<mesh file="skelfight_12~1" ><texture file="skeleton_02" /></mesh>--></object>
+    <object name="Skel3Attack13"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelfight_13~0" ><texture file="skeleton_02" /></mesh><mesh file="skelfight_13~2"><texture file="skelweapon_01small" /></mesh><!--<mesh file="skelfight_13~1" ><texture file="skeleton_02" /></mesh>--></object>        
+    <object name="Skel3Attack14"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelfight_14~0" ><texture file="skeleton_02" /></mesh><mesh file="skelfight_14~2"><texture file="skelweapon_01small" /></mesh><!--<mesh file="skelfight_14~1" ><texture file="skeleton_02" /></mesh>--></object>
+    <object name="Skel3Attack15"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelfight_15~0" ><texture file="skeleton_02" /></mesh><mesh file="skelfight_15~2"><texture file="skelweapon_01small" /></mesh><!--<mesh file="skelfight_15~1" ><texture file="skeleton_02" /></mesh>--></object>
+    <object name="Skel3Attack16"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelfight_16~0" ><texture file="skeleton_02" /></mesh><mesh file="skelfight_16~2"><texture file="skelweapon_01small" /></mesh><!--<mesh file="skelfight_16~1" ><texture file="skeleton_05_ds" /></mesh>--></object>
+    <object name="Skel3Attack17"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelfight_17~0" ><texture file="skeleton_02" /></mesh><mesh file="skelfight_17~2"><texture file="skelweapon_01small" /></mesh><!--<mesh file="skelfight_17~2" ><texture file="skeleton_05_ds" /></mesh>--></object>
+    <object name="Skel3Attack18">    
+      <event>Script "ClearAction"</event>
+      <event>Script "EnableMovement"</event>
+      <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="skelfight_17~0" ><texture file="skeleton_02" /></mesh><mesh file="skelfight_17~2"><texture file="skelweapon_01small" /></mesh><!--<mesh file="skelfight_17~2" ><texture file="skeleton_05_ds" /></mesh>-->
+    </object>
+  </list>
+  
+</objects>

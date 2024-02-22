@@ -1,0 +1,189 @@
+<objects>
+  
+  <list name="Necromancer1.Die">  
+    <object name="Necro1Die00">
+      <mesh file="shadow~0" transparent="true"  depth-write="false">
+        <texture file="blue_glow" blend-source="SRC_ALPHA" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      </mesh>
+      <mesh file="nec_walk_00~0" transparent="true" depth-write="false">
+        <texture file="blue_glow_full" blend-source="SRC_ALPHA" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      </mesh>
+      <mesh file="nec_walk_00~1" transparent="true" depth-write="false">
+        <texture file="blue_glow_full" blend-source="SRC_ALPHA" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      </mesh>      
+    </object>
+  </list>
+  
+  <list name="Necromancer1.Walk_ReceiveHit"> 
+    <object name="Necromancer1WalkHit00"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_00~0"><texture file="Necro1_hurt" /></mesh><mesh file="nec_walk_00~1"><texture file="Necro1_hurt" /></mesh><!--<mesh file="skelwalk_0~2" ><texture file="Necro6" /></mesh>--></object>
+    <object name="Necromancer1WalkHit01"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_01~0"><texture file="Necro1_hurt" /></mesh><mesh file="nec_walk_01~1"><texture file="Necro1_hurt" /></mesh><!--<mesh file="skelwalk_1~2" ><texture file="Necro6" /></mesh>--></object>    
+    <object name="Necromancer1WalkHit02"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_02~0"><texture file="Necro1_hurt" /></mesh><mesh file="nec_walk_02~1"><texture file="Necro1_hurt" /></mesh><!--<mesh file="skelwalk_2~2" ><texture file="Necro6" /></mesh>--></object>
+    <object name="Necromancer1WalkHit03"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_03~0"><texture file="Necro1_hurt" /></mesh><mesh file="nec_walk_03~1"><texture file="Necro1_hurt" /></mesh><!--<mesh file="skelwalk_3~2" ><texture file="skelweapon_01small" /></mesh>--></object>        
+    <object name="Necromancer1WalkHit04"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_04~0"><texture file="Necro1_hurt" /></mesh><mesh file="nec_walk_04~1"><texture file="Necro1_hurt" /></mesh><!--<mesh file="skelwalk_4~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1WalkHit05"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_05~0"><texture file="Necro1_hurt" /></mesh><mesh file="nec_walk_05~1"><texture file="Necro1_hurt" /></mesh><!--<mesh file="skelwalk_5~2" ><texture file="skelweapon_01small" /></mesh>--></object>    
+    <object name="Necromancer1WalkHit06"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_06~0"><texture file="Necro1_hurt" /></mesh><mesh file="nec_walk_06~1"><texture file="Necro1_hurt" /></mesh><!--<mesh file="skelwalk_6~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1WalkHit07"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_07~0"><texture file="Necro1_hurt" /></mesh><mesh file="nec_walk_07~1"><texture file="Necro1_hurt" /></mesh><!--<mesh file="skelwalk_7~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1WalkHit08"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_08~0"><texture file="Necro1_hurt" /></mesh><mesh file="nec_walk_08~1"><texture file="Necro1_hurt" /></mesh><!--<mesh file="skelwalk_8~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1WalkHit09"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_09~0"><texture file="Necro1_hurt" /></mesh><mesh file="nec_walk_09~1"><texture file="Necro1_hurt" /></mesh><!--<mesh file="skelwalk_9~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1WalkHit10"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_10~0"><texture file="Necro1_hurt" /></mesh><mesh file="nec_walk_10~1"><texture file="Necro1_hurt" /></mesh><!--<mesh file="skelwalk_10~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1WalkHit11"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_11~0"><texture file="Necro1_hurt" /></mesh><mesh file="nec_walk_11~1"><texture file="Necro1_hurt" /></mesh><!--<mesh file="skelwalk_11~2" ><texture file="skelweapon_01small" /></mesh>--></object>    
+    <object name="Necromancer1WalkHit12"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_12~0"><texture file="Necro1_hurt" /></mesh><mesh file="nec_walk_12~1"><texture file="Necro1_hurt" /></mesh><!--<mesh file="skelwalk_12~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1WalkHit13"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_13~0"><texture file="Necro1_hurt" /></mesh><mesh file="nec_walk_13~1"><texture file="Necro1_hurt" /></mesh><!--<mesh file="skelwalk_13~2" ><texture file="skelweapon_01small" /></mesh>--></object>        
+    <object name="Necromancer1WalkHit14"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_14~0"><texture file="Necro1_hurt" /></mesh><mesh file="nec_walk_14~1"><texture file="Necro1_hurt" /></mesh><!--<mesh file="skelwalk_14~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1WalkHit15"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_15~0"><texture file="Necro1_hurt" /></mesh><mesh file="nec_walk_15~1"><texture file="Necro1_hurt" /></mesh><!--<mesh file="skelwalk_15~2" ><texture file="skelweapon_01small" /></mesh>--></object>    
+    <object name="Necromancer1WalkHit16"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_16~0"><texture file="Necro1_hurt" /></mesh><mesh file="nec_walk_16~1"><texture file="Necro1_hurt" /></mesh><!--<mesh file="skelwalk_16~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1WalkHit17"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_17~0"><texture file="Necro1_hurt" /></mesh><mesh file="nec_walk_17~1"><texture file="Necro1_hurt" /></mesh><!--<mesh file="skelwalk_17~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1WalkHit18"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_18~0"><texture file="Necro1_hurt" /></mesh><mesh file="nec_walk_18~1"><texture file="Necro1_hurt" /></mesh><!--<mesh file="skelwalk_18~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1WalkHit19"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_19~0"><texture file="Necro1_hurt" /></mesh><mesh file="nec_walk_19~1"><texture file="Necro1_hurt" /></mesh><!--<mesh file="skelwalk_19~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1WalkHit20"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_20~0"><texture file="Necro1_hurt" /></mesh><mesh file="nec_walk_20~1"><texture file="Necro1_hurt" /></mesh><!--<mesh file="skelwalk_20~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+  </list>  
+  
+  <list name="Necromancer1.Walk">
+    <object name="Necromancer1Walk00"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_00~0"><texture file="Necro6" /></mesh><mesh file="nec_walk_00~1"><texture file="Necro6" /></mesh><!--<mesh file="skelwalk_0~2" ><texture file="Necro6" /></mesh>--></object>
+    <object name="Necromancer1Walk01"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_01~0"><texture file="Necro6" /></mesh><mesh file="nec_walk_01~1"><texture file="Necro6" /></mesh><!--<mesh file="skelwalk_1~2" ><texture file="Necro6" /></mesh>--></object>    
+    <object name="Necromancer1Walk02"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_02~0"><texture file="Necro6" /></mesh><mesh file="nec_walk_02~1"><texture file="Necro6" /></mesh><!--<mesh file="skelwalk_2~2" ><texture file="Necro6" /></mesh>--></object>
+    <object name="Necromancer1Walk03"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_03~0"><texture file="Necro6" /></mesh><mesh file="nec_walk_03~1"><texture file="Necro6" /></mesh><!--<mesh file="skelwalk_3~2" ><texture file="skelweapon_01small" /></mesh>--></object>        
+    <object name="Necromancer1Walk04"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_04~0"><texture file="Necro6" /></mesh><mesh file="nec_walk_04~1"><texture file="Necro6" /></mesh><!--<mesh file="skelwalk_4~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Walk05"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_05~0"><texture file="Necro6" /></mesh><mesh file="nec_walk_05~1"><texture file="Necro6" /></mesh><!--<mesh file="skelwalk_5~2" ><texture file="skelweapon_01small" /></mesh>--></object>    
+    <object name="Necromancer1Walk06"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_06~0"><texture file="Necro6" /></mesh><mesh file="nec_walk_06~1"><texture file="Necro6" /></mesh><!--<mesh file="skelwalk_6~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Walk07"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_07~0"><texture file="Necro6" /></mesh><mesh file="nec_walk_07~1"><texture file="Necro6" /></mesh><!--<mesh file="skelwalk_7~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Walk08"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_08~0"><texture file="Necro6" /></mesh><mesh file="nec_walk_08~1"><texture file="Necro6" /></mesh><!--<mesh file="skelwalk_8~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Walk09"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_09~0"><texture file="Necro6" /></mesh><mesh file="nec_walk_09~1"><texture file="Necro6" /></mesh><!--<mesh file="skelwalk_9~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Walk10"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_10~0"><texture file="Necro6" /></mesh><mesh file="nec_walk_10~1"><texture file="Necro6" /></mesh><!--<mesh file="skelwalk_10~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Walk11"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_11~0"><texture file="Necro6" /></mesh><mesh file="nec_walk_11~1"><texture file="Necro6" /></mesh><!--<mesh file="skelwalk_11~2" ><texture file="skelweapon_01small" /></mesh>--></object>    
+    <object name="Necromancer1Walk12"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_12~0"><texture file="Necro6" /></mesh><mesh file="nec_walk_12~1"><texture file="Necro6" /></mesh><!--<mesh file="skelwalk_12~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Walk13"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_13~0"><texture file="Necro6" /></mesh><mesh file="nec_walk_13~1"><texture file="Necro6" /></mesh><!--<mesh file="skelwalk_13~2" ><texture file="skelweapon_01small" /></mesh>--></object>        
+    <object name="Necromancer1Walk14"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_14~0"><texture file="Necro6" /></mesh><mesh file="nec_walk_14~1"><texture file="Necro6" /></mesh><!--<mesh file="skelwalk_14~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Walk15"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_15~0"><texture file="Necro6" /></mesh><mesh file="nec_walk_15~1"><texture file="Necro6" /></mesh><!--<mesh file="skelwalk_15~2" ><texture file="skelweapon_01small" /></mesh>--></object>    
+    <object name="Necromancer1Walk16"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_16~0"><texture file="Necro6" /></mesh><mesh file="nec_walk_16~1"><texture file="Necro6" /></mesh><!--<mesh file="skelwalk_16~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Walk17"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_17~0"><texture file="Necro6" /></mesh><mesh file="nec_walk_17~1"><texture file="Necro6" /></mesh><!--<mesh file="skelwalk_17~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Walk18"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_18~0"><texture file="Necro6" /></mesh><mesh file="nec_walk_18~1"><texture file="Necro6" /></mesh><!--<mesh file="skelwalk_18~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Walk19"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_19~0"><texture file="Necro6" /></mesh><mesh file="nec_walk_19~1"><texture file="Necro6" /></mesh><!--<mesh file="skelwalk_19~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Walk20"><mesh file="shadow~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_walk_20~0"><texture file="Necro6" /></mesh><mesh file="nec_walk_20~1"><texture file="Necro6" /></mesh><!--<mesh file="skelwalk_20~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+  </list>
+<!--
+  <list name="Necromancer1.Idle">
+    <object name="Necromancer1Idle00"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_00~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_00~1"><texture file="Necro6" /></mesh></object>
+    <object name="Necromancer1Idle01"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_01~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_01~1"><texture file="Necro6" /></mesh></object>    
+  </list>  
+-->  
+
+  <list name="Necromancer1.Idle">
+    <object refers="Necromancer1Walk00" />
+    <object refers="Necromancer1Walk01" />
+    <object refers="Necromancer1Walk02" />
+    <object refers="Necromancer1Walk03" />
+    <object refers="Necromancer1Walk04" />
+    <object refers="Necromancer1Walk05" />
+    <object refers="Necromancer1Walk06" />
+    <object refers="Necromancer1Walk07" />
+    <object refers="Necromancer1Walk08" />
+    <object refers="Necromancer1Walk09" />
+    <object refers="Necromancer1Walk10" />
+    <object refers="Necromancer1Walk11" />
+    <object refers="Necromancer1Walk12" />
+    <object refers="Necromancer1Walk13" />
+    <object refers="Necromancer1Walk14" />
+    <object refers="Necromancer1Walk15" />
+    <object refers="Necromancer1Walk16" />
+    <object refers="Necromancer1Walk17" />
+    <object refers="Necromancer1Walk18" />
+    <object refers="Necromancer1Walk19" />
+    <object refers="Necromancer1Walk20" />
+  </list>  
+  
+  <list name="Necromancer1.Run">
+    <object refers="Necromancer1Walk00" />
+    <object refers="Necromancer1Walk01" />
+    <object refers="Necromancer1Walk02" />
+    <object refers="Necromancer1Walk03" />
+    <object refers="Necromancer1Walk04" />
+    <object refers="Necromancer1Walk05" />
+    <object refers="Necromancer1Walk06" />
+    <object refers="Necromancer1Walk07" />
+    <object refers="Necromancer1Walk08" />
+    <object refers="Necromancer1Walk09" />
+    <object refers="Necromancer1Walk10" />
+    <object refers="Necromancer1Walk11" />
+    <object refers="Necromancer1Walk12" />
+    <object refers="Necromancer1Walk13" />
+    <object refers="Necromancer1Walk14" />
+    <object refers="Necromancer1Walk15" />
+    <object refers="Necromancer1Walk16" />
+    <object refers="Necromancer1Walk17" />
+    <object refers="Necromancer1Walk18" />
+    <object refers="Necromancer1Walk19" />
+    <object refers="Necromancer1Walk20" />
+  </list>
+  
+  <list name="Necromancer1.Turn">
+    <object refers="Necromancer1Walk00" />
+    <object refers="Necromancer1Walk01" />
+    <object refers="Necromancer1Walk02" />
+    <object refers="Necromancer1Walk03" />
+    <object refers="Necromancer1Walk04" />
+    <object refers="Necromancer1Walk05" />
+    <object refers="Necromancer1Walk06" />
+    <object refers="Necromancer1Walk07" />
+    <object refers="Necromancer1Walk08" />
+    <object refers="Necromancer1Walk09" />
+    <object refers="Necromancer1Walk10" />
+    <object refers="Necromancer1Walk11" />
+    <object refers="Necromancer1Walk12" />
+    <object refers="Necromancer1Walk13" />
+    <object refers="Necromancer1Walk14" />
+    <object refers="Necromancer1Walk15" />
+    <object refers="Necromancer1Walk16" />
+    <object refers="Necromancer1Walk17" />
+    <object refers="Necromancer1Walk18" />
+    <object refers="Necromancer1Walk19" />
+    <object refers="Necromancer1Walk20" />
+  </list>  
+
+  <list name="Necromancer1.Attack">
+    <event>$Reset</event>
+    <event>$NoLoop</event>
+    <event>$FrameTime 33</event>
+    <object name="Necromancer1Attack00">
+      <event>Script "DisableMovement"</event>
+      <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_00~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_00~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_0~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Attack01">
+      <event>Script "DisableMovement"</event>
+      <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_01~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_01~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_1~2" ><texture file="skelweapon_01small" /></mesh>--></object>    
+    <object name="Necromancer1Attack02"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_02~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_02~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_2~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Attack03"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_03~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_03~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_3~2" ><texture file="skelweapon_01small" /></mesh>--></object>        
+    <object name="Necromancer1Attack04"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_04~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_04~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_4~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Attack05"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_05~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_05~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_5~2" ><texture file="skelweapon_01small" /></mesh>--></object>    
+    <object name="Necromancer1Attack06"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_06~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_06~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_6~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Attack07"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_07~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_07~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_7~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Attack08"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_08~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_08~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_8~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Attack09"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_09~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_09~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_9~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Attack10"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_10~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_10~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_10~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Attack11"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_11~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_11~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_11~2" ><texture file="skelweapon_01small" /></mesh>--></object>    
+    <object name="Necromancer1Attack12"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_12~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_12~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_12~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Attack13"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_13~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_13~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_13~2" ><texture file="skelweapon_01small" /></mesh>--></object>        
+    <object name="Necromancer1Attack14"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_14~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_14~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_14~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Attack15"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_15~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_15~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_5~2" ><texture file="skelweapon_01small" /></mesh>--></object>    
+    <object name="Necromancer1Attack16"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_16~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_16~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_6~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Attack17"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_17~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_17~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_7~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Attack18"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_18~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_18~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_8~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Attack19"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_19~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_19~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_9~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Attack20"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_20~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_20~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_10~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Attack21"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_21~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_21~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_11~2" ><texture file="skelweapon_01small" /></mesh>--></object>    
+    <object name="Necromancer1Attack22"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_22~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_22~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_12~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Attack23"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_23~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_23~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_13~2" ><texture file="skelweapon_01small" /></mesh>--></object>        
+    <object name="Necromancer1Attack24"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_24~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_24~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_14~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Attack25"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_25~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_25~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_5~2" ><texture file="skelweapon_01small" /></mesh>--></object>    
+    <object name="Necromancer1Attack26"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_26~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_26~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_6~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Attack27"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_27~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_27~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_7~2" ><texture file="skelweapon_01small" /></mesh>--></object>
+    <object name="Necromancer1Attack28"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_28~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_28~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_8~2" ><texture file="skelweapon_01small" /></mesh>--></object>        
+<!--
+    <object name="Necromancer1Attack29">
+      <event>Script "ClearAction"</event>
+      <event>Script "EnableMovement"</event>
+      <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="nec_cast_28~0" ><texture file="Necro6" /></mesh><mesh file="nec_cast_28~1"><texture file="Necro6" /></mesh><!--<mesh file="skelfight_8~2" ><texture file="skelweapon_01small" /></mesh>-- >
+    </object>        -->
+
+  </list>  
+  
+</objects>

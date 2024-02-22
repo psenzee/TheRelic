@@ -1,0 +1,52 @@
+#include "DriftApproach.h"
+
+#include "core/core.h"
+#include "game/Character.h"
+#include "Behaviors.h"
+
+void DriftApproach::Update(const GameTime &time)
+{
+    if (IsActive())
+    {
+        Character *self = GetCharacter(),
+                  *to   = GetApproachTarget();
+
+        self->SetCollidable(GetApproachCollide());
+
+        if (IsDestroyed(to))
+        {
+            RandomDrift(self, mRandomDrift);
+            return;
+        }
+
+        Vector3    pos(self->GetPosition()),
+                   topos(to->GetPosition()),
+                   dir(topos - pos);
+        float      distance = dir.length();
+
+        if (distance > mDriftRadius || distance < 1.f)
+        {
+            RandomDrift(self, mRandomDrift);
+        }
+        else if (distance > to->GetRadius())
+        {
+            dir /= distance;
+            dir *= (GetApproachSpeed() * (1.f - (distance / mDriftRadius)));
+            Move(self, dir, GetApproachCollide());
+        }
+        else
+        {
+            // ABSORB IT!
+            BlueGlow(to, to->GetPosition());
+            self->SetVisible(false);
+            self->Signal(SIGNAL_ABSORBED);
+            return;
+        }
+    }
+    Approach::Update(time);
+}
+
+void DriftApproach::RandomDrift(Character *self, float degree)
+{
+    Move(self, (Random3() * 2.f - Vector3(1.f, 1.f, 1.f)) * degree, GetApproachCollide());
+}

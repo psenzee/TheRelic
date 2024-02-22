@@ -1,0 +1,275 @@
+Here are my initial impressions.  I got upto around the 4th dungeon.
+
+x fix title sequence
+x fix map issue
+x shield button should disappear when no mana or magic is not enabled
+xm - The contrast is a tad too dark, could you bring some greater differentiation to the character and background
+xH - With only one form of hit the attack gets very repetitive, try and vary it somewhat with different animations or powers
+xe - the magic ability was overpowerful, i could continually press it when in a fight with no negative.  It should cooldown.
+xe - the white spectre that helps you should activate when you walk into it, not when you hit it.  You shouldn't be hitting a helpful character
+xm - every attack pauses the character. The character should be able to continually attack as moving forward, but move at a slower rate
+xe - the red door should be slightly redder etc, 
+xH - The game did get quite repetitive, you need to vary the enemies more, make some more vulnerable to magic etc.  They should attack and think in different ways.  Variation is key here
+ m - minor point the character could do with some vocals / phrases
+ H+- killer feature (I think overall it is a solid RPG, but it lacks the killer feature / really cool thing that I would tell my friends about.  What makes it different, what makes it original?  Tough, but needs to be thought about.)
+x multipliers - count combos
+x variable length health/mana bars
+x add mana potions
+
+Relic Todos
+
+x MP: OnFirstVisit mp-compatible
+x Credits need tap to dismiss
+MP: Items not properly serialized (destruction esp.?)
+MP: Clear keys at new level
+MP: Properly serialize/deserialize on next level
+MP: Properly synchronize characters
+MP: Fix level 4 LUA ERROR and disconnect after generator
+
+Multiplayer
+------------
+Why are some animations (exploding barrels, wobble) not working?
+Fix player name list (have names above chars?) + health?
+Weed out any char ids that are not synced
+Players must collide with each other
+Other players must have health bar
+Only have as many player characters visible as are connected
+Handle disconnects; etc. - disconnect server, client
+Are there allocation issues on the iPod/iPhone side for Bluetooth?
+Bluetooth is so slow on the iPod
+We need to handle level changes correctly, the first one in a new  
+level populates it and serializes it..
+Try different skins for barbarian
+
+----
+
+X MP: After respawn, can't move guy
+
+----
+
+Combos
+? Make necromancer cast spells, particle fx
+blood? on receiving Hit
+PFx as renderables
+Don't walk slowly, just stop
+Different players glow with different colors (feet circles)
+Experience, strength, leveling, hp cycle
+Shamans (that heal other skels)
+Glowing weapons - or particle fx
+*Camera Picking
+Make health meter glow when replenished
+
+Add text captions to characters
+
+Other players show a (thot) caption when they are paused or in
+inventory -or does everyone pause?
+
+Big pieces
+- multiplayer end to end
+  - story
+- animations
+- new dungeon art
+- dungeon gen
+- run sequence+
+- spellvm+
+- polish/bug fixing
+
+Copy Prot
+Net Chat
+Design own spells, weapons
+- spell vm with runes
+Share spells local network
+Chicken fox corn chickenhawk puzzle
+7 balls puzzle
+Have Dylan think up puzzles?
+Rss?
+Thoughts
+Immolate
+Invisible
+Thief
+Fire wall
+Skeleton slave
+Control hordes
+Secret doors
+Trap doors
+
+Fast matrix - generated
+Create character message
+Destroy charcter message
+Calculate priority separate function - including changed stuff
+
+Robust cleanup/destruction
+Projectiles
+Use hash_map instead of map where possible
+Bloom tool?
+
+Argh!
+Canabalt!
+Bezier streaking..
+Animation
+Stripping/Capture Dead
+Story
+Events/Markers (on enter, on screen)
+Dungeon Gen
+Ui
+Rpg+Items
+Bluetooth Bonjour +TCP
+Bugs
+Ascension engine like i8
+Support material changing for characters - add variety, and
+differentiate easier from harder characters
+
+Level - character level
+Luck - likelihood of being hit
+Strength - how hard you hit
+Toughness - armor
+Health - max hp
+Agility - how fast you hit
+Magic - how powerful your magic attacks are
+Mana - how many magic attacks you get
+Exp - experience pnts
+
+Skills-
+Critical - likelihood of a critical hit
+Tooltips for door opening
+Make flaming Axe
+Consider again adding treasure chests, vases
+Put filter between character movement and camera position
+CPture screens & upload them
+Lobby
+Kali copy protection
+Ask about joining - wait
+Passing positions
+Social
+  facebook + status (breakout)
+  Twitter (breakout)
+  email hi scores (3.0)
+Text on planes in world
+Wooden sign
+
+Use munkres to precompute interpolated frames?
+World Lights
+More enemy types
+FX!
+  - glow
+  - pulsating glow
+  - flickering torch
+  Animate camera
+  A free camera
+Skeletons explosively breaking
+Make flaming torch
+Make a nice vase, get it in game
+EventDispatcher/timer exposed in lua
+Use lua to fully parameterize fx
+Z Optionally use fast GL bitmap copy for text
+*Optimizations/Refactoring
+Lua iterator for DynamicMap
+Use hash_map instead of map
+Use fewer 'lua threads'
+DestroyCharacter
+  - verify stripping
+
+Encapsulate global variables - singletons?
+Expose the visibility rectangle to Lua
+Revisit stripping but I don't have current version of ipmesh need to
+revisit at home
+Return closest Movables as a sorted array
+Use lua to be able to create scene objects in addition to XML object
+reader
+Blender multibake script
+-  Exporter transformed & converted to ipmesh format
+- exporter writes .XML
+*Pipeline
+Pipe - ipmesh+wf+lua=pipe
+Pipe - Iteration over files issues
+(that iterating '*.obj' also returns *.objx)
+  iterator tool $path $ext $file q$modified-time
+Pipe - Can use UnxUtils instead?
+Pipe - wf changes
+Pipe - ipmesh fix up
+Pipe - Stripping pipeline
+Wf+ipmesh+Lua into pipe
+Flexible Pipeline
+Texture remapper
+- munkres on object sizes, to match objects
+- a*
+- need intelligent behavior from baddies
+- move lua update code to c++ so can use yield?
+  - or remove many lua threads?
+Integrate particle fx into XmlObjectReader
+Make torches with fx
+Fable 2 trails
+Bullet time
+Make spider spit venom
+z - don't think i need lights at this point..
+- have a cpp timer dispatcher (to lua callback) per character, global
+  - particle billboarding
+  - fx make them use mesh emitters
+    - fx store origin vertex (index), normal (index) in particle
+      - fx pointer to emmiter mesh
+  - fx should be refcounted?
+Howich would it cost for another related archer?
+- visibility - now using non-square render area
+- using scanline fill to determine renderable areas
+  - make sure we're not overrendering!
+  - GameState->mVisibleRegion now becomes a list of 'scanlines', not
+simple rect
+    - skip recomputing if no change
+- use placeholder objects (identified by name) for model annotation -
+ex.: where to put particle fx
+- lua into wf2
+Period of invulnerability
+Need merchants to transform gold into useful items/attributes
+Some elixirs that can be dropped can give : experience, hp, or stats
+increases - the player decides
+Magic is item based - your ability to use them is based on a stat
+Spawning
+Spawn points (as characters)
+Attributes (rpg) ?n
+Start easy
+Combos (without being hit), multipliers like fable, guitar hero
+Multilevel goals, maintain todo lists for player if necessary
+30s, 5m of fun or hours
+Flourishes
+Achievements
+God of War elements like hero of Sparta
+Like you're navigating a tricky task with increasing levels of
+difficulty and additional things to juggle
+Pickups/powers
+Switch - swaps you w/another player
+God Slide - use the accelerometer to slide all enemies (+ other
+players) around but not self
+Teleport/Teleporter
+Magic Boots - fast
+Magic Axe
+Better weapons
+IPod Library as background music
+Email sheets
+- email a friend with hi scores
+
+Baldur's Gate
+
+The art?
+Flashing when Hit
+Character much smaller than environment
+Small number of enemies compared to gauntlet or Relic
+Beautiful graphics - Much detail
+- blood
+- barrels
+- vases
+- flickering lamps (locally)
+- wall shadows
+- grain sacks
+- projectile weapons - spears, arrows, fireballs
+- timed smoke plumes (damaging)
+  - fire, arrows could work too
+- levers for doors (several doors in sequence)
+- cylindrical tunnels
+- dust around skeletons when they're hit and bone pieces fly off
+- skeletons are yellowish
+- skeletons look much better than in dungeon
+
+
+
+
+Sent from my iPhone

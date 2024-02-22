@@ -1,0 +1,49 @@
+#ifndef _APPROACH_H
+#define _APPROACH_H
+
+#include "core/core.h"
+#include "game/IBehavior.h"
+#include "game/Character.h"
+
+class Approach : public AbstractBehavior
+{
+public:
+
+    enum { TYPE = 1004 };
+
+    Approach() : AbstractBehavior(TYPE), mSpeed(1.f), mApproachTarget(0), mMinDistance(0.f), mTooFar(1000.f), mCollide(true) {}
+
+    void                    Start(Character *self)            { SetCharacter(self); }
+
+    // be sure and call this from the subclass
+    void                    Update(const GameTime &time)      { SetMeterDistance(GetDistance()); }
+
+    inline void             SetApproachSpeed(float speed)     { mSpeed = speed; }
+    inline void             SetApproachMinDistance(float v)   { mMinDistance = v; }
+    inline void             SetApproachTooFar(float v)        { mTooFar = v; }
+    inline void             SetApproachCollide(bool v)        { mCollide = v; }
+    inline void             SetApproachTarget(Character *c)   { mApproachTarget = c; }
+
+    inline float            GetApproachSpeed() const          { return mSpeed; }
+    inline float            GetApproachMinDistance() const    { return mMinDistance; }
+    inline float            GetApproachTooFar() const         { return mTooFar; }
+    inline bool             GetApproachCollide() const        { return mCollide; }
+    inline Character       *GetApproachTarget()               { return (mApproachTarget = Character::GetValidCharacter(mApproachTarget)); }
+    inline const Character *GetApproachTarget() const         { return (mApproachTarget = Character::GetValidCharacter(mApproachTarget)); }
+    float                   GetDistance() const;
+    bool                    IsActive() const;
+    
+protected:
+
+    void                    SetMeterDistance(float value);
+
+private:
+
+    float              mSpeed,
+                       mMinDistance,
+                       mTooFar;
+    mutable Character *mApproachTarget;
+    bool               mCollide;
+};
+
+#endif // _APPROACH_H

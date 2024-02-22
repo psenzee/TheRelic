@@ -1,0 +1,21 @@
+print "lua:store.lua"
+
+function Store(c)
+end
+
+function CreateStore_Character(c, type, hp, speed, x, y)
+  c:SetFixed(true)
+  c:SetStatic(true)
+  SetStoreHaloEffect(c)
+  SetAttributes(c, 10000.0, 0)
+  c:SetScale(1.1 * characterScale)
+  c:SetRadius(characterRadius)
+  c:data().selectEvent = "Select_Upgrade"
+  c:data().selector = InteractSelector
+end
+
+function CreateStore(type, hp, speed, x, y)
+  local c = NewCharacter(-1, "Store", type, x, y, 0.0)
+  CreateStore_Character(c, type, hp, speed, x, y)
+  return c
+end

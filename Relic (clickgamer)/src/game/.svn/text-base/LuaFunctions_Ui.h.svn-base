@@ -1,0 +1,8 @@
+#ifndef _LUAFUNCTIONS_UI_H
+#define _LUAFUNCTIONS_UI_H
+
+struct lua_State;
+
+void RegisterLuaUiFunctions(lua_State *lua);
+
+#endif // _LUAFUNCTIONS_UI_H

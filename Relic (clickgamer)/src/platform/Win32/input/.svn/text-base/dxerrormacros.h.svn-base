@@ -1,0 +1,8 @@
+#ifndef _DXERRORMACROS_H
+#define _DXERRORMACROS_H
+
+#include "d9exception.h"
+
+#define FAIL_ERR(_val) VERIFYD9((_val), "")
+
+#endif  // _DXERRORMACROS_H

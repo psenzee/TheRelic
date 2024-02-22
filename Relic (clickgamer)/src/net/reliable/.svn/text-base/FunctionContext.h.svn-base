@@ -1,0 +1,22 @@
+#ifndef _FUNCTION_CONTEXT_234235_H
+#define _FUNCTION_CONTEXT_234235_H
+
+template <typename FunctionT>
+struct FunctionContext
+{
+    typedef FunctionContext<FunctionT> self;
+
+    FunctionT  function;
+    void      *user;
+
+    inline FunctionContext<FunctionT>() : function(0), user(0) {}
+    inline FunctionContext<FunctionT>(FunctionT function, void *user) : function(function), user(user) {}
+    inline FunctionContext<FunctionT>(const FunctionContext<FunctionT> &other) : function(other.function), user(other.user) {}
+    inline FunctionContext<FunctionT> &operator=(const FunctionContext<FunctionT> &other) { function = other.function; user = other.user; return *this; }
+    inline bool operator==(const FunctionContext<FunctionT> &other) { return function == other.function && user == other.user; }
+};
+
+template <typename FunctionT>
+inline FunctionContext<FunctionT> Context(FunctionT function, void *user) { return FunctionContext<FunctionT>(function, user); }
+
+#endif // _FUNCTION_CONTEXT_234235_H

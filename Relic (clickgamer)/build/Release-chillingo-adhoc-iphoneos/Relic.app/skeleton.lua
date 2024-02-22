@@ -1,0 +1,127 @@
+print "lua:skeleton.lua"
+
+skeletonRadius = characterRadius
+skeletonHeight = -100.0
+
+function Serialize_Skeleton(c)
+  local x, y, z = c:GetPosition()
+  return
+  {
+    s_id          = c:GetId(),  
+    s_type        = c:GetType(),
+    s_seed        = c:GetSeed(),    
+    s_hp          = c:GetMaxHitPoints(),
+    s_speed       = c:GetApproachSpeed(),
+    s_orientation = c:GetOrientation(),  
+    s_x           = x,
+    s_y           = y
+  }  
+end
+
+function Deserialize_Skeleton(value)
+  if value.s_seed == nil then value.s_seed = MakeRandomSeed() end
+  local c = CreateSkeleton(value.s_type, value.s_hp, value.s_speed, value.s_x, value.s_y, value.s_seed)
+--c:SetId(value.s_id)  
+  c:SetPosition(value.s_x, value.s_y, 0)
+  c:ForceOrientation(value.s_orientation)
+  return c
+end
+
+function Skeleton(c)
+   SetTarget(c)
+   UpdateImmolationStatus(c)
+   LaunchProjectile(c, "Fire", 20.0, 10)
+end
+
+function SkeletonKilledEffects(c)
+  if c ~= nil then
+    local x, y, z = c:GetPosition() 
+    Audio_PlayAt("SkeletonKill", x, y, z, 3.0)
+    Audio_PlayAt("Hiss1", x, y, z, 1.0)
+    c:CompleteEffects()
+  end
+end
+
+function SkeletonKilled(c)
+  local killed = GetPlayer():data().skeletonsKilled
+  GetPlayer():data().skeletonsKilled = killed + 1
+  AddKill(GetPlayer())
+  SkeletonKilledEffects(c)
+end
+
+function MpKill(c, id)
+  if c ~= nil then
+    local killer = GetCharacterById(id)
+    c:SetHitPoints(0.0, killer)
+  end
+end
+
+function SkeletonHit(c)
+  if c ~= nil then
+    local xp, yp, zp = c:GetPosition()
+    Audio_PlayAt("SkeletonHit", xp, yp, zp, 0.25)
+    --[[
+    if c:data().hitcount ~= nil then
+      c:data().hitcount = 0
+    end
+    ]]--
+  end
+end
+
+function MpSkeletonKilled(c)
+  Call_MultiplayerNoLocal(c, "SkeletonKilledEffects")
+  Call_MultiplayerNoLocal(c, "MpKill", GetPlayer():GetId())
+  SkeletonKilled(c)
+end
+
+function MpSkeletonHit(c)
+  Call_Multiplayer(c, "SkeletonHit")
+end
+
+function SkeletonDeathComplete(c)
+  DestroyCharacter(c)
+end
+
+function CreateSkeleton_Character(c, type, hp, speed, x, y, seed)
+
+   c:SetTypeId(CONSTRAINED_COUNT_ENEMY_TYPE)
+   c:SetSeed(seed)
+   c:SetUpdateFrequency(17 * 3)
+
+   c:AddBehavior(NewAnimationBehavior())
+   if type == "Skeleton1" or type == "Skeleton3" or type == "Skeleton5" or type == "Skeleton7" then
+     c:AddBehavior(NewAggressiveApproach())
+     --[[
+     c:AddBehavior(NewAloofApproach())
+     local data = c:data()
+     data.projectiles = true
+     ]]--
+   else
+     c:AddBehavior(NewHitAndRunApproach())
+   end
+   c:AddBehavior(NewKillableBehavior())
+   c:AddBehavior(NewDieCollapseBehavior())
+   c:AddBehavior(NewGeneratedRolePlayer(math.random()))
+   c:AddBehavior(NewMeleeAttack())
+   
+   c:SetLevel(GetLevelNumber()) -- temporary
+   c:SetExperience(BASE_EXPERIENCE_MULTIPLIER * GetLevelNumber())
+
+   SetAttributes(c, RandomBetweenSeeded(seed, hp / 2, hp), GetRandomSpeedSeeded(seed, speed))
+   c:SetScale(1.0 * characterScale)
+
+   c:SetRadius(skeletonRadius)
+   c:SetApproachMinDistance(0)
+   c:SetApproachTooFar(600 * math.random() + 100)
+   c:AddSignalHandler(SIGNAL_DIED,           "MpSkeletonKilled")   
+   c:AddSignalHandler(SIGNAL_DIED,           "DropLoot")
+   c:AddSignalHandler(SIGNAL_RECEIVED_HIT,   "MpSkeletonHit")
+   c:AddSignalHandler(SIGNAL_DEATH_COMPLETE, "SkeletonDeathComplete")
+   return c
+end
+
+function CreateSkeleton(type, hp, speed, x, y, seed)
+   local c = NewCharacter(-1, "Skeleton", type, x, y, 0.0)
+   return CreateSkeleton_Character(c, type, hp, speed, x, y, seed)
+end
+

@@ -1,0 +1,46 @@
+#include "Selector.h"
+
+#include "core/core.h"
+#include "core/gametime.h"
+#include "render/Drawable.h"
+#include "render/RenderContext.h"
+
+Selector::Selector(Drawable *drawable, float rotate) 
+    : mDrawable(0), mAngle(0.f), mRotate(rotate)
+{ 
+    SetDrawable(drawable);
+}
+
+Selector::~Selector()
+{ 
+    SetDrawable(0);
+}
+
+void Selector::SetDrawable(Drawable *drawable)
+{
+    if (mDrawable != drawable)
+    {
+        if (drawable)
+            drawable->Retain();
+        if (mDrawable)
+            mDrawable->Release();
+        mDrawable = drawable;
+    }
+}
+
+void Selector::Update(const GameTime &time)
+{
+    mAngle += mRotate;
+}
+
+void Selector::Render(RenderContext &context)
+{
+    if (mDrawable)
+    {
+        Matrix rotation;
+        rotation.rotationz(mAngle);
+        RenderContext rc(context);
+        rc.transform = rotation * rc.transform;
+        mDrawable->Render(rc);
+    }
+}

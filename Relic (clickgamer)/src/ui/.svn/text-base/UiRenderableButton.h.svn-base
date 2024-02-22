@@ -1,0 +1,33 @@
+#ifndef _UIRENDERABLEBUTTON_H
+#define _UIRENDERABLEBUTTON_H
+
+#include "core/core.h"
+#include "fast/Allocator.h"
+#include "Ui.h"
+#include "UiBasicControl.h"
+
+class UiRenderableButton : public UiBasicControl
+{
+public:
+    
+    CLASS_NEW_DELETE()
+
+    inline UiRenderableButton(const char *name, const char *item, float alpha, float size, float scale, float angle) 
+        : UiBasicControl(name ? name : ""), mItem(item), mAlpha(alpha), mSize(size), mScale(scale), mAngle(angle)
+       { SetTransition(new UiTransition(this)); GetTransition()->SetMaxScale(5.f); }
+
+    int RenderRenderable(UiCore &core);
+    int Render(UiCore &core);
+
+    inline float GetRenderableScale() const { return GetState().IsFocused() ? mScale * 2.f : mScale; }
+
+private:
+
+    String        mItem;
+    float         mAlpha;
+    float         mSize;
+    float         mScale;
+    float         mAngle;
+};
+
+#endif // _UIRENDERABLEBUTTON_H

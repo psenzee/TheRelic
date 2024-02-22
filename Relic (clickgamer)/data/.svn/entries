@@ -1,0 +1,49 @@
+10
+
+dir
+204
+https://pl3.projectlocker.com/Axolotl/Relic/svn/Relic/trunk/data
+https://pl3.projectlocker.com/Axolotl/Relic/svn
+
+
+
+2011-01-09T18:34:52.021465Z
+203
+psenzee@yahoo.com
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+01566419-2df3-4adf-8b44-a9b7bdd0abca
+
+audio
+dir
+
+collide
+dir
+
+lua
+dir
+
+maps
+dir
+
+meshes
+dir
+
+textures
+dir
+
+xml
+dir
+

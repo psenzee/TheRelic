@@ -1,0 +1,234 @@
+print "lua:portal.lua"
+
+-- could set these up as a ring.. :)
+
+PORTALS_A = {} -- the max we support is 2 portals
+PORTALS_B = {} -- the max we support is 2 portals
+
+function MakeSaveablePortalList()
+  print ("MakeSaveablePortalList")
+  local list = { A = {}, B = {} }
+  local a = list['A']
+  local b = list['B']
+  for i = 1, #PORTALS_A do
+    local x, y, z = PORTALS_A[i]:GetPosition()
+    a[#a + 1] = { x, y }
+  end
+  for i = 1, #PORTALS_B do
+    local x, y, z = PORTALS_B[i]:GetPosition()
+    b[#b + 1] = { x, y }
+  end
+  return list
+end
+
+function UsePortalEffects()
+  DoFlash(1000)
+  local x, y, z = GetPlayer():GetPosition()    
+  Audio_PlayAt("Portal", x, y, z, 2.0)      
+  Audio_PlayAt("#vibrate", x, y, z, 2.0)   
+end
+
+function CreatePortalEffects()
+  DoFlash(1000)
+  local x, y, z = GetPlayer():GetPosition()
+  Audio_PlayAt("Electricity", x, y, z, 2.0)
+  Audio_PlayAt("#vibrate", x, y, z, 2.0)     
+end
+
+function UpdatePortalsFromList(list)
+  ClearPortals()
+  local a = list['A']
+  local b = list['B']
+  for i = 1, #a do
+    local value = a[i]
+    PlacePortalAAt(value[1], value[2])
+  end  
+  for i = 1, #b do
+    local value = b[i]
+    PlacePortalBAt(value[1], value[2])
+  end
+end
+
+PORTAL_A_DELAY = 0
+PORTAL_B_DELAY = 0
+
+PORTAL_ACTIVATION_RANGE = 32.0
+MAX_PORTAL_DELAY = 40 -- the number of frames to wait before teleporting again
+
+function ClearPortals()
+  for i = 1, #PORTALS_A do
+    DestroyCharacter(PORTALS_A[i])
+  end
+  for i = 1, #PORTALS_B do
+    DestroyCharacter(PORTALS_B[i])
+  end  
+  PORTALS_A = {}  
+  PORTALS_B = {}    
+end
+
+function DirectionOffset(player, magnitude)
+  local vx, vy, vz = player:GetVelocity()
+  vx, vy, vz = v3Normal(vx, vy, vz)
+  if v3LengthSq(vx, vy, vz) < 0.9 then
+    return 0, -magnitude, 0
+  end
+  if magnitude > 40 then
+    magnitude = 40
+  end
+  return vx * magnitude, vy * magnitude, 0
+end
+
+function PlacePortalAAt(x, y)
+  print("Placing portal A at (" .. x .. ", " .. y .. ")")
+  local portalCharacter = CreatePortalA("PortalA", 0, 0, x, y)
+  CreatePortalEffects()
+  if #PORTALS_A < 2 then
+    table.insert(PORTALS_A, portalCharacter)
+  else -- treat it as a queue
+    local remove = PORTALS_A[1]
+    DestroyCharacter(remove)
+    PORTALS_A[1] = PORTALS_A[2]
+    PORTALS_A[2] = portalCharacter  
+  end
+  print ("#PORTALS_A=" .. tostring(#PORTALS_A))
+end
+
+function PlacePortalA()
+  local player = GetPlayer()
+  local x, y, z = player:GetPosition()
+  PlacePortalAAt(x, y + 64)
+end
+
+function UpdatePortalsA()
+  if #PORTALS_A < 2 then
+    return 
+  end  
+  local player = GetPlayer()
+  if player == nil then
+    return
+  end
+  if PORTAL_A_DELAY > 0 then
+    PORTAL_A_DELAY = PORTAL_A_DELAY - 1
+    return
+  end
+  local x, y, z = player:GetPosition()
+  local xp1, yp1, zp1 = PORTALS_A[1]:GetPosition()
+  local xp2, yp2, zp2 = PORTALS_A[2]:GetPosition()
+  if v3Distance(x, y, z, xp1, yp1, zp1) < PORTAL_ACTIVATION_RANGE then  
+    player:SetPosition(xp2, yp2 + DirectionOffset(player, 64), zp2) 
+    PORTAL_A_DELAY = MAX_PORTAL_DELAY
+    UsePortalEffects()
+  elseif v3Distance(x, y, z, xp2, yp2, zp2) < PORTAL_ACTIVATION_RANGE then
+    player:SetPosition(xp1, yp1 + DirectionOffset(player, 64), zp1)
+    PORTAL_A_DELAY = MAX_PORTAL_DELAY
+    UsePortalEffects()
+  end
+end
+
+function UpdatePortals()
+  UpdatePortalsA()
+  UpdatePortalsB()
+end
+
+function PortalA(c)
+  local data = c:data()
+  if data.state == nil then
+    if #PORTALS_A >= 2 then
+      SetPortalAEffect(c)
+      data.state = 2
+    else
+      SetDisabledPortalAEffect(c)
+      data.state = 1
+    end
+  elseif data.state == 1 and #PORTALS_A >= 2 then
+    c:CompleteEffects()
+    SetPortalAEffect(c)  
+    data.state = 2
+  end
+end
+
+-- PortalB
+
+function PlacePortalBAt(x, y)
+  print("Placing portal B at (" .. x .. ", " .. y .. ")")
+  local portalCharacter = CreatePortalB("PortalB", 0, 0, x, y)
+  CreatePortalEffects()
+  if #PORTALS_B < 2 then
+    table.insert(PORTALS_B, portalCharacter)
+  else -- treat it as a queue
+    local remove = PORTALS_B[1]
+    DestroyCharacter(remove)
+    PORTALS_B[1] = PORTALS_B[2]
+    PORTALS_B[2] = portalCharacter  
+  end
+  print ("#PORTALS_B=" .. tostring(#PORTALS_B))
+end
+
+function PlacePortalB()
+  local player = GetPlayer()
+  local x, y, z = player:GetPosition()
+  PlacePortalBAt(x, y + 64)
+end
+
+function UpdatePortalsB() 
+  if #PORTALS_B < 2 then
+    return 
+  end  
+  local player = GetPlayer()
+  if player == nil then
+    return
+  end
+  if PORTAL_B_DELAY > 0 then
+    PORTAL_B_DELAY = PORTAL_B_DELAY - 1
+    return
+  end
+  local x, y, z = player:GetPosition()
+  local xp1, yp1, zp1 = PORTALS_B[1]:GetPosition()
+  local xp2, yp2, zp2 = PORTALS_B[2]:GetPosition()
+  if v3Distance(x, y, z, xp1, yp1, zp1) < PORTAL_ACTIVATION_RANGE then  
+    player:SetPosition(xp2, yp2 + DirectionOffset(player, 64), zp2) 
+    PORTAL_B_DELAY = MAX_PORTAL_DELAY
+    UsePortalEffects()
+  elseif v3Distance(x, y, z, xp2, yp2, zp2) < PORTAL_ACTIVATION_RANGE then
+    player:SetPosition(xp1, yp1 + DirectionOffset(player, 64), zp1)
+    PORTAL_B_DELAY = MAX_PORTAL_DELAY
+    UsePortalEffects()
+  end
+end
+
+function PortalB(c)
+  local data = c:data()
+  if data.state == nil then
+    if #PORTALS_B >= 2 then
+      SetPortalBEffect(c)
+      data.state = 2
+    else
+      SetDisabledPortalBEffect(c)
+      data.state = 1
+    end
+  elseif data.state == 1 and #PORTALS_B >= 2 then
+    c:CompleteEffects()
+    SetPortalBEffect(c)  
+    data.state = 2
+  end
+end
+
+function CreatePortal_Character(c, type, hp, speed, x, y)
+  c:SetFixed(true)
+  c:SetStatic(true)
+  SetAttributes(c, 10000.0, 0)
+  c:SetScale(1.1 * characterScale)
+  c:SetRadius(characterRadius)
+end
+
+function CreatePortalA(type, hp, speed, x, y)
+  local c = NewCharacter(-1, "PortalA", type, x, y, 0.0)
+  CreatePortal_Character(c, type, hp, speed, x, y)
+  return c
+end
+
+function CreatePortalB(type, hp, speed, x, y)
+  local c = NewCharacter(-1, "PortalB", type, x, y, 0.0)
+  CreatePortal_Character(c, type, hp, speed, x, y)
+  return c
+end

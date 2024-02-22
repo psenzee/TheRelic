@@ -1,0 +1,13 @@
+#ifndef _IEVENTLISTENER_H
+#define _IEVENTLISTENER_H
+
+class IEventListener
+{
+public:
+        
+    virtual ~IEventListener() {}
+        
+    virtual bool Notify(const char *event, const char *info) = 0;
+};
+
+#endif // _IEVENTLISTENER_H

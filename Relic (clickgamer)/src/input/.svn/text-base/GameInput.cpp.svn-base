@@ -1,0 +1,45 @@
+#include "GameInput.h"
+
+#include <stdio.h>
+
+#include "luautil/LuaInterpreter.h"
+#include "luautil/LuaCall.h"
+#include "luautil/LuaValue.h"
+
+void GameInput::GetInput()
+{
+    if (touched)
+    {
+        start.SetState(true);
+        touched = false;
+    }
+}
+
+void GameInput::ScreenTouch(int index, const core::Point &at, const char *function)
+{
+    touched = true; touch = at;
+    enum { ARG_COUNT = 3 };
+    static LuaValue arguments[ARG_COUNT];
+    arguments[0].SetNumber(index); arguments[1].SetNumber(at.x); arguments[2].SetNumber(at.y);
+    LuaCall(LuaInterpreter::GetInstance()->GetState(), function, arguments, ARG_COUNT);
+}
+
+void GameInput::ScreenTouchBegan(int index, const core::Point &at)
+{ 
+    ScreenTouch(index, at, "TouchBegan");
+}
+
+void GameInput::ScreenTouchMoved(int index, const core::Point &at)
+{ 
+    ScreenTouch(index, at, "TouchMoved");
+}
+
+void GameInput::ScreenTouchStationary(int index, const core::Point &at)
+{ 
+    ScreenTouch(index, at, "TouchStationary");
+}
+
+void GameInput::ScreenTouchEnded(int index, const core::Point &at)
+{ 
+    ScreenTouch(index, at, "TouchEnded");
+}

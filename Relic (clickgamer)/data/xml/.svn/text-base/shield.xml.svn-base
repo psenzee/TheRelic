@@ -1,0 +1,735 @@
+<objects>
+
+  <object name="ShieldIdle01">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="10" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle02">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="20" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle03">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="30" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle04">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="40" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle05">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="50" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle06">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="60" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle07">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="70" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle08">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="80" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle09">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="90" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle10">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="100" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle11">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="110" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle12">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="120" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle13">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="130" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle14">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="140" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle15">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="150" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle16">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="160" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle17">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="170" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle18">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="180" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle19">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="190" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle20">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="200" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle21">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="210" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle22">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="220" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle23">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="230" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle24">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="240" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle25">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="250" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle26">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="260" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle27">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="270" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle28">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="280" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle29">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="290" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle30">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="300" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle31">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="310" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle32">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="320" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle33">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="330" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle34">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="340" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle35">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="350" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldIdle36">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="BlueSelectorOpaqueSat2AlphaX" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="360" /></transform>
+    </mesh>
+  </object>
+  
+  <object name="ShieldReceive01">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="10" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive02">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="20" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive03">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="30" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive04">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="40" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive05">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="50" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive06">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="60" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive07">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="70" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive08">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="80" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive09">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="90" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive10">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="100" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive11">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="110" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive12">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="120" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive13">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="130" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive14">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="140" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive15">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="150" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive16">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="160" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive17">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="170" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive18">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1">
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="180" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive19">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="190" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive20">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="200" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive21">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="210" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive22">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="220" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive23">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="230" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive24">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="240" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive25">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="250" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive26">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="260" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive27">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="270" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive28">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="280" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive29">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="290" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive30">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="300" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive31">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="310" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive32">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="320" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive33">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="330" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive34">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="340" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive35">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="350" /></transform>
+    </mesh>
+  </object>
+  <object name="ShieldReceive36">
+    <mesh file="ballR10~0" transparent="true" alpha="0.1" >
+      <texture file="RedSelectorOpaqueSat2Alpha" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><rotatey angle="360" /></transform>
+    </mesh>
+  </object>  
+
+  <list name="Shield.Attack">
+    <event>$Reset</event>
+    <event>$NoLoop</event>
+    <event>$FrameTime 33</event>
+    <object refers="ShieldIdle01" />
+    <object refers="ShieldIdle02" />
+    <object refers="ShieldIdle03" />
+    <object refers="ShieldIdle04" />
+    <object refers="ShieldIdle05" />
+    <object refers="ShieldIdle06" />
+    <object refers="ShieldIdle07" />
+    <object refers="ShieldIdle08" />
+    <object refers="ShieldIdle09" />
+    <object refers="ShieldIdle10" />
+    <object refers="ShieldIdle11" />
+    <object refers="ShieldIdle12" />
+    <object refers="ShieldIdle13" />
+    <object refers="ShieldIdle14" />
+    <object refers="ShieldIdle15" />
+    <object refers="ShieldIdle16" />
+    <object refers="ShieldIdle17" />
+    <object refers="ShieldIdle18" />
+    <object refers="ShieldIdle19" />
+    <object refers="ShieldIdle20" />
+    <object refers="ShieldIdle21" />
+    <object refers="ShieldIdle22" />
+    <object refers="ShieldIdle23" />
+    <object refers="ShieldIdle24" />
+    <object refers="ShieldIdle25" />
+    <object refers="ShieldIdle26" />
+    <object refers="ShieldIdle27" />
+    <object refers="ShieldIdle28" />
+    <object refers="ShieldIdle29" />
+    <object refers="ShieldIdle30" />
+    <object refers="ShieldIdle31" />
+    <object refers="ShieldIdle32" />
+    <object refers="ShieldIdle33" />
+    <object refers="ShieldIdle34" />
+    <object refers="ShieldIdle35" />
+    <object refers="ShieldIdle36" />
+  </list>
+  
+  <list name="Shield.Die">
+    <event>$Reset</event>
+    <event>$NoLoop</event>   
+    <event>$FrameTime 130</event>
+    <object refers="ShieldIdle01" />
+    <object refers="ShieldIdle02" />
+    <object refers="ShieldIdle03" />
+    <object refers="ShieldIdle04" />
+    <object refers="ShieldIdle05" />
+    <object refers="ShieldIdle06" />
+    <object refers="ShieldIdle07" />
+    <object refers="ShieldIdle08" />
+    <object refers="ShieldIdle09" />
+    <object refers="ShieldIdle10" />
+  </list> 
+  
+  <list name="Shield.Idle">
+    <event>$FrameTime 33</event>  
+    <object refers="ShieldIdle01" />
+    <object refers="ShieldIdle02" />
+    <object refers="ShieldIdle03" />
+    <object refers="ShieldIdle04" />
+    <object refers="ShieldIdle05" />
+    <object refers="ShieldIdle06" />
+    <object refers="ShieldIdle07" />
+    <object refers="ShieldIdle08" />
+    <object refers="ShieldIdle09" />
+    <object refers="ShieldIdle10" />
+    <object refers="ShieldIdle11" />
+    <object refers="ShieldIdle12" />
+    <object refers="ShieldIdle13" />
+    <object refers="ShieldIdle14" />
+    <object refers="ShieldIdle15" />
+    <object refers="ShieldIdle16" />
+    <object refers="ShieldIdle17" />
+    <object refers="ShieldIdle18" />
+    <object refers="ShieldIdle19" />
+    <object refers="ShieldIdle20" />
+    <object refers="ShieldIdle21" />
+    <object refers="ShieldIdle22" />
+    <object refers="ShieldIdle23" />
+    <object refers="ShieldIdle24" />
+    <object refers="ShieldIdle25" />
+    <object refers="ShieldIdle26" />
+    <object refers="ShieldIdle27" />
+    <object refers="ShieldIdle28" />
+    <object refers="ShieldIdle29" />
+    <object refers="ShieldIdle30" />
+    <object refers="ShieldIdle31" />
+    <object refers="ShieldIdle32" />
+    <object refers="ShieldIdle33" />
+    <object refers="ShieldIdle34" />
+    <object refers="ShieldIdle35" />
+    <object refers="ShieldIdle36" />
+  </list> 
+  <!--
+  <list name="Shield.Idle">
+    <event>$FrameTime 33</event>  
+    <object refers="ShieldReceive01" />
+    <object refers="ShieldReceive02" />
+    <object refers="ShieldReceive03" />
+    <object refers="ShieldReceive04" />
+    <object refers="ShieldReceive05" />
+    <object refers="ShieldReceive06" />
+    <object refers="ShieldReceive07" />
+    <object refers="ShieldReceive08" />
+    <object refers="ShieldReceive09" />
+    <object refers="ShieldReceive10" />
+    <object refers="ShieldReceive11" />
+    <object refers="ShieldReceive12" />
+    <object refers="ShieldReceive13" />
+    <object refers="ShieldReceive14" />
+    <object refers="ShieldReceive15" />
+    <object refers="ShieldReceive16" />
+    <object refers="ShieldReceive17" />
+    <object refers="ShieldReceive18" />
+    <object refers="ShieldReceive19" />
+    <object refers="ShieldReceive20" />
+    <object refers="ShieldReceive21" />
+    <object refers="ShieldReceive22" />
+    <object refers="ShieldReceive23" />
+    <object refers="ShieldReceive24" />
+    <object refers="ShieldReceive25" />
+    <object refers="ShieldReceive26" />
+    <object refers="ShieldReceive27" />
+    <object refers="ShieldReceive28" />
+    <object refers="ShieldReceive29" />
+    <object refers="ShieldReceive30" />
+    <object refers="ShieldReceive31" />
+    <object refers="ShieldReceive32" />
+    <object refers="ShieldReceive33" />
+    <object refers="ShieldReceive34" />
+    <object refers="ShieldReceive35" />
+    <object refers="ShieldReceive36" />
+  </list>   
+  -->
+  <list name="Shield.Run">
+    <event>$FrameTime 33</event>  
+    <object refers="ShieldIdle01" />
+    <object refers="ShieldIdle02" />
+    <object refers="ShieldIdle03" />
+    <object refers="ShieldIdle04" />
+    <object refers="ShieldIdle05" />
+    <object refers="ShieldIdle06" />
+    <object refers="ShieldIdle07" />
+    <object refers="ShieldIdle08" />
+    <object refers="ShieldIdle09" />
+    <object refers="ShieldIdle10" />
+    <object refers="ShieldIdle11" />
+    <object refers="ShieldIdle12" />
+    <object refers="ShieldIdle13" />
+    <object refers="ShieldIdle14" />
+    <object refers="ShieldIdle15" />
+    <object refers="ShieldIdle16" />
+    <object refers="ShieldIdle17" />
+    <object refers="ShieldIdle18" />
+    <object refers="ShieldIdle19" />
+    <object refers="ShieldIdle20" />
+    <object refers="ShieldIdle21" />
+    <object refers="ShieldIdle22" />
+    <object refers="ShieldIdle23" />
+    <object refers="ShieldIdle24" />
+    <object refers="ShieldIdle25" />
+    <object refers="ShieldIdle26" />
+    <object refers="ShieldIdle27" />
+    <object refers="ShieldIdle28" />
+    <object refers="ShieldIdle29" />
+    <object refers="ShieldIdle30" />
+    <object refers="ShieldIdle31" />
+    <object refers="ShieldIdle32" />
+    <object refers="ShieldIdle33" />
+    <object refers="ShieldIdle34" />
+    <object refers="ShieldIdle35" />
+    <object refers="ShieldIdle36" />
+  </list>
+  
+  <list name="Shield.Walk">
+    <event>$FrameTime 33</event>  
+    <object refers="ShieldIdle01" />
+    <object refers="ShieldIdle02" />
+    <object refers="ShieldIdle03" />
+    <object refers="ShieldIdle04" />
+    <object refers="ShieldIdle05" />
+    <object refers="ShieldIdle06" />
+    <object refers="ShieldIdle07" />
+    <object refers="ShieldIdle08" />
+    <object refers="ShieldIdle09" />
+    <object refers="ShieldIdle10" />
+    <object refers="ShieldIdle11" />
+    <object refers="ShieldIdle12" />
+    <object refers="ShieldIdle13" />
+    <object refers="ShieldIdle14" />
+    <object refers="ShieldIdle15" />
+    <object refers="ShieldIdle16" />
+    <object refers="ShieldIdle17" />
+    <object refers="ShieldIdle18" />
+    <object refers="ShieldIdle19" />
+    <object refers="ShieldIdle20" />
+    <object refers="ShieldIdle21" />
+    <object refers="ShieldIdle22" />
+    <object refers="ShieldIdle23" />
+    <object refers="ShieldIdle24" />
+    <object refers="ShieldIdle25" />
+    <object refers="ShieldIdle26" />
+    <object refers="ShieldIdle27" />
+    <object refers="ShieldIdle28" />
+    <object refers="ShieldIdle29" />
+    <object refers="ShieldIdle30" />
+    <object refers="ShieldIdle31" />
+    <object refers="ShieldIdle32" />
+    <object refers="ShieldIdle33" />
+    <object refers="ShieldIdle34" />
+    <object refers="ShieldIdle35" />
+    <object refers="ShieldIdle36" />
+  </list>  
+  
+  <list name="Shield.Turn">
+    <event>$FrameTime 33</event>  
+    <object refers="ShieldIdle01" />
+    <object refers="ShieldIdle02" />
+    <object refers="ShieldIdle03" />
+    <object refers="ShieldIdle04" />
+    <object refers="ShieldIdle05" />
+    <object refers="ShieldIdle06" />
+    <object refers="ShieldIdle07" />
+    <object refers="ShieldIdle08" />
+    <object refers="ShieldIdle09" />
+    <object refers="ShieldIdle10" />
+    <object refers="ShieldIdle11" />
+    <object refers="ShieldIdle12" />
+    <object refers="ShieldIdle13" />
+    <object refers="ShieldIdle14" />
+    <object refers="ShieldIdle15" />
+    <object refers="ShieldIdle16" />
+    <object refers="ShieldIdle17" />
+    <object refers="ShieldIdle18" />
+    <object refers="ShieldIdle19" />
+    <object refers="ShieldIdle20" />
+    <object refers="ShieldIdle21" />
+    <object refers="ShieldIdle22" />
+    <object refers="ShieldIdle23" />
+    <object refers="ShieldIdle24" />
+    <object refers="ShieldIdle25" />
+    <object refers="ShieldIdle26" />
+    <object refers="ShieldIdle27" />
+    <object refers="ShieldIdle28" />
+    <object refers="ShieldIdle29" />
+    <object refers="ShieldIdle30" />
+    <object refers="ShieldIdle31" />
+    <object refers="ShieldIdle32" />
+    <object refers="ShieldIdle33" />
+    <object refers="ShieldIdle34" />
+    <object refers="ShieldIdle35" />
+    <object refers="ShieldIdle36" />
+  </list>      
+  
+  <list name="Shield.Walk_ReceiveHit">
+    <event>$FrameTime 33</event>  
+    <object refers="ShieldReceive01" />
+    <object refers="ShieldIdle02" />
+    <object refers="ShieldReceive03" />
+    <object refers="ShieldIdle04" />
+    <object refers="ShieldReceive05" />
+    <object refers="ShieldIdle06" />
+    <object refers="ShieldReceive07" />
+    <object refers="ShieldIdle08" />
+    <object refers="ShieldReceive09" />
+    <object refers="ShieldIdle10" />
+    <object refers="ShieldReceive11" />
+    <object refers="ShieldIdle12" />
+    <object refers="ShieldReceive13" />
+    <object refers="ShieldIdle14" />
+    <object refers="ShieldReceive15" />
+    <object refers="ShieldIdle16" />
+    <object refers="ShieldReceive17" />
+    <object refers="ShieldIdle18" />
+    <object refers="ShieldReceive19" />
+    <object refers="ShieldIdle20" />
+    <object refers="ShieldReceive21" />
+    <object refers="ShieldIdle22" />
+    <object refers="ShieldReceive23" />
+    <object refers="ShieldIdle24" />
+    <object refers="ShieldReceive25" />
+    <object refers="ShieldIdle26" />
+    <object refers="ShieldReceive27" />
+    <object refers="ShieldIdle28" />
+    <object refers="ShieldReceive29" />
+    <object refers="ShieldIdle30" />
+    <object refers="ShieldReceive31" />
+    <object refers="ShieldIdle32" />
+    <object refers="ShieldReceive33" />
+    <object refers="ShieldIdle34" />
+    <object refers="ShieldReceive35" />
+    <object refers="ShieldIdle36" />
+  </list>  
+
+</objects>

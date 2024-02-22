@@ -1,0 +1,16 @@
+#ifndef _LUADEFER_H
+#define _LUADEFER_H
+
+struct lua_State;
+
+int  LuaDeferByTimeMs(lua_State *lua);
+int  LuaDeferByFrames(lua_State *lua);
+int  LuaDeferByGameStateId(lua_State *lua);
+void LuaDeferUpdate(lua_State *lua);
+
+void LuaSetGameStateId(int value);
+int  LuaGetGameStateId();
+int  LuaSetGameStateId(lua_State *lua);
+int  LuaGetGameStateId(lua_State *lua);
+
+#endif // _LUADEFER_H

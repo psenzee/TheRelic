@@ -1,0 +1,41 @@
+#include "core/core.h"
+#include "UiRenderableButton.h"
+#include "UiCore.h"
+
+int UiRenderableButton::RenderRenderable(UiCore &core)
+{
+    if (IsVisible()/*ShouldRender() && fabsf(mAlpha * GetTransitionAlpha()) > 0.1f*/)
+    {
+        UiBounds bounds = UiCore::GetAbsoluteBounds(this);
+        float size = GetRenderableScale() + GetTransitionAdditiveScale();
+        core.DrawRenderable(mItem.c_str(),
+                            v3((bounds.maximum + bounds.minimum) * 0.5f), size, mAngle);
+        return 1;
+    }
+    return 0;
+}
+
+int UiRenderableButton::Render(UiCore &core)
+{
+    if (/*ShouldRender() && fabsf(mAlpha * GetTransitionAlpha()) > 0.1f*/IsVisible())
+    {
+        UiBounds bounds = UiCore::GetAbsoluteBounds(this);
+        const char *text = GetText();
+        float alpha = mAlpha * GetTransitionAlpha();
+        float size  = mSize + GetTransitionAdditiveScale();
+        Vector2 start(bounds.minimum.x, bounds.minimum.y),
+                end  (bounds.maximum.x, bounds.maximum.y);
+        if (text && *text)
+        {
+            Vector2 center((start + end) * 0.5f);
+            switch (GetJustification())
+            {
+            case JUSTIFY_CENTER: core.DrawStringGlow(text, center, GetJustification(), alpha, size);	break;
+            case JUSTIFY_LEFT:   core.DrawStringGlow(text, Vector2(start.x, center.y), GetJustification(), alpha, size); break;
+            case JUSTIFY_RIGHT:  core.DrawStringGlow(text, Vector2(center.x, center.y), GetJustification(), alpha, size); break;
+            }
+        }
+        return 1;
+    }
+    return 0;
+}

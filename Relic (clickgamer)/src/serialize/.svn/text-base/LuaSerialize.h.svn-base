@@ -1,0 +1,74 @@
+#ifndef _LUASERIALIZE_H
+#define _LUASERIALIZE_H
+
+#include "luautil/LuaValue.h"
+
+class  Dictionary;
+struct lua_State;
+
+namespace Serialize
+{
+/*
+
+-- Notes
+-- - need fast_string (esp. for LValue)
+-- - need guaranteed messages
+-- player ids are between 1-4 inclusive or zero for all
+
+-- TEST PROGRAM
+
+-- temporary supporting code for test
+TMP_REMOTE_SERIALIZED_STRING = ""
+
+function SendMessage(str)
+  TMP_REMOTE_SERIALIZED_STRING =  str
+end
+
+function NextMessage()
+  return TMP_REMOTE_SERIALIZED_STRING
+end
+
+-- actual real code
+function CallRPC(toUserId, methodName, ...)
+  SendMessage(PackRpc(toUserId, methodName, arg))
+end
+
+function HandleRPC(message)
+  local success, fromUserId, method, arguments = ReadRpc(message)
+  if success then
+    method(unpack(arguments))
+  end
+  return success
+end
+
+-- test code
+SetThisUserId(3)
+Dictionary_Add("ThisIsTheRemoteProcedure")
+Dictionary_Add("Paul")
+
+function ThisIsTheRemoteProcedure(name)
+  print ('why, hello there ' .. tostring(name) .. '!!!')
+end
+
+CallRPC(3, ThisIsTheRemoteProcedure, "Paul")
+HandleRPC(NextMessage())
+
+*/
+
+const Dictionary *GetDictionary();
+void              SetDictionary(Dictionary *dictionary);
+void              AddToDictionary(const char *text);
+int               GetThisUserId();
+void              SetThisUserId(int id);
+
+void              RegisterLuaSerializeFunctions(lua_State *state);
+
+void              PackLuaValue(char **to, lua_State *lua, const LuaValue &value, const Dictionary *dictionary);
+LuaValue          UnpackLuaValue(const char **from, lua_State *lua, const Dictionary *dictionary);
+
+void              PackLuaTable(char **to, lua_State *lua, const LuaTable &table, const Dictionary *dictionary);
+LuaTable          UnpackLuaTable(const char **from, lua_State *lua, const Dictionary *dictionary);
+
+}
+
+#endif  // _LUASERIALIZE_H

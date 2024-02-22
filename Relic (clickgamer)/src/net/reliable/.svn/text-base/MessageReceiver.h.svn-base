@@ -1,0 +1,34 @@
+#ifndef _MESSAGE_RECEIVER_239841_H
+#define _MESSAGE_RECEIVER_239841_H
+
+#include <deque>
+#include <map>
+
+#include "Message.h"
+
+class MessageCombiner;
+
+class MessageReceiver
+{
+public:
+
+    enum { RECEIVE_ERROR = -1, PROVIDED_SIZE_TOO_SMALL = -2 };
+
+    MessageReceiver(SendFunctionContext send, ReceiveFunctionContext receive);
+    ~MessageReceiver();
+
+    int  Receive(char *data, int length);
+
+private:
+
+    bool Acknowledge(const char *data);
+    int  ReceiveAvailable(char *data, int length);
+    void SendToCombiner(const char *data, int length);
+
+    SendFunctionContext                             mSend;
+    ReceiveFunctionContext                          mReceive;
+    std::map<int, MessageCombiner *>                mReceivers;
+    std::deque< std::pair<int, MessageCombiner *> > mAvailable;
+};
+
+#endif // _MESSAGE_RECEIVER_239841_H

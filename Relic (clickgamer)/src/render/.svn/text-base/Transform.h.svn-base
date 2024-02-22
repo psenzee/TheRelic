@@ -1,0 +1,22 @@
+#ifndef _TRANSFORM_H
+#define _TRANSFORM_H
+
+#include "core/core.h"
+#include "fast/Allocator.h"
+
+class Transform
+{
+public:
+    
+    CLASS_NEW_DELETE()
+        
+    Matrix matrix;
+
+    inline Transform(const Transform &t)    { matrix = t.matrix; }
+    inline Transform(const Matrix &m)       { matrix = m; }
+    inline Transform()                      { matrix.identity(); }
+
+    static Transform identity;
+};
+
+#endif // _TRANSFORM_H

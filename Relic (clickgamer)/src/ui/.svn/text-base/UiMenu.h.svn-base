@@ -1,0 +1,19 @@
+#ifndef _UIMENU_H
+#define _UIMENU_H
+
+#include "core/core.h"
+#include "fast/Allocator.h"
+#include "UiCollection.h"
+
+class UiMenu : public UiCollection
+{
+public:
+    
+    CLASS_NEW_DELETE()
+
+    UiMenu(const char *name) : UiCollection(name) {}
+
+private:
+};
+
+#endif // _UIMENU_H

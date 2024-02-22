@@ -1,0 +1,93 @@
+#include "MessageRenderer.h"
+#include "core/core.h"
+
+#include "text/Glyph.h"
+#include "text/Text.h"
+#include "render/RenderContext.h"
+#include "render/OverheadCamera.h"
+
+#include <algorithm>
+
+TextMessage::TextMessage(Text *text, const Vector3 &offset, const Vector2 &size, int delay, int persists) 
+    : text(text), persists(persists), delay(delay), size(size), offset(offset), inited(false)
+{
+}
+    
+void TextMessage::Draw(RenderContext &context)
+{
+    if (inited)
+    {
+        Vector3 lookAt(context.camera.GetLookAt());
+        lookAt.z  = 128.0f;
+      //lookAt.y += 16.0f;
+        if (delay <= 0)
+        {
+            Matrix s, m;
+            s.scale(v3(size, 1.0f));
+            m.translate(lookAt + offset * v3(size, 1.0f));
+            m = s * m;
+            text->Render(context, m, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+        }
+    }
+}
+
+float TextMessage::Depth() const
+{
+    return text->GetRenderAnchorPosition().z;
+}
+        
+bool TextMessage::Update(const GameTime &time)
+{
+    if (!inited)
+    {
+         text->Reset();
+         text->ForceUpdate(time);
+         inited = true;
+    }
+    delay--;
+    if (delay <= 0)
+    {
+        text->Update(time);
+        persists--;
+    }
+    if (persists == 0)
+        return false; // remove
+    return true;
+}
+
+MessageRenderer::MessageRenderer() : mFrames(0)
+{
+}
+    
+void MessageRenderer::Add(IMessage *message)
+{
+    mQueue.push_front(message);
+}
+
+void MessageRenderer::Update(const GameTime &time)
+{
+    if (mFrames % 10 == 0)
+    {
+        if (!mQueue.empty())
+        {
+            IMessage *message = mQueue.back();
+            mQueue.pop_back();
+            mMessages.push_back(message);
+        }
+    }
+    std::vector<IMessage *> list;
+    for (std::vector<IMessage *>::iterator i = mMessages.begin(), e = mMessages.end(); i != e; ++i)
+    {
+        if (!(*i)->Update(time))
+            delete *i;
+        else list.push_back(*i);
+    }
+    mMessages = list;
+    mFrames++;
+}    
+
+void MessageRenderer::Draw(RenderContext &context)
+{
+    for (std::vector<IMessage *>::iterator i = mMessages.begin(), e = mMessages.end(); i != e; ++i)
+        (*i)->Draw(context);
+}

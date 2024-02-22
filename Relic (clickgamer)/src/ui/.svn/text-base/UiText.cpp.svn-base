@@ -1,0 +1,17 @@
+#include "UiText.h"
+#include "UiCore.h"
+
+int UiText::Render(UiCore &core)
+{
+    if (ShouldRender())
+    {
+        UiBounds bounds = UiCore::GetAbsoluteBounds(this);
+        float alpha = mAlpha * GetTransitionAlpha();
+        float size  = mSize + GetTransitionAdditiveScale();
+        if (!mCenter) core.DrawStringGlow(GetText(), bounds.minimum, JUSTIFY_LEFT, alpha, size);
+      //else          core.DrawStringGlow(GetText(), (bounds.minimum + bounds.maximum) * 0.5f, JUSTIFY_CENTER, alpha, size);
+        else          core.DrawStringGlow(GetText(), bounds.minimum, JUSTIFY_CENTER, alpha, size);
+        return 1;
+    }
+    return 0;
+}

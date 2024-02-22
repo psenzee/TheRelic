@@ -1,0 +1,88 @@
+#include "AddressAcquirer.h"
+#include "BluetoothAcquirer.h"
+#include "BonjourAcquirer.h"
+#include "LobbyAcquirer.h"
+//#include "TcpServerAcquirer.h"
+
+AbstractAddressAcquirer::AbstractAddressAcquirer(IAddress::Domain domain, IAddress::Protocol protocol) 
+    : mDomain(domain), mProtocol(protocol)
+{
+}
+
+void AbstractAddressAcquirer::Register(IAddressListener &listener)
+{ 
+    mListeners.insert(&listener);
+}
+
+void AbstractAddressAcquirer::Unregister(IAddressListener &listener)
+{ 
+    mListeners.erase(&listener);
+}
+
+bool AbstractAddressAcquirer::Notify(IAddress *address)
+{
+    for (std::set<IAddressListener *>::iterator i = mListeners.begin(), e = mListeners.end(); i != e; ++i)
+    {
+        if ((*i)->GetProtocol() == IAddress::PROTOCOL_ANY || (*i)->GetProtocol() == address->GetProtocol())
+        {
+            if ((*i)->Receive(address))
+                return true;
+        }
+    }
+    return false;
+}
+
+AddressAcquirerManager::AddressAcquirerManager()
+{
+    Initialize();
+}
+
+AddressAcquirerManager::~AddressAcquirerManager()
+{ 
+    Shutdown();
+}
+
+void AddressAcquirerManager::Register(IAddressListener &listener)
+{
+    for (std::vector<IAddressAcquirer *>::iterator i = mAcquirers.begin(), e = mAcquirers.end(); i != e; ++i)
+        (*i)->Register(listener);
+}
+
+void AddressAcquirerManager::Unregister(IAddressListener &listener)
+{
+    for (std::vector<IAddressAcquirer *>::iterator i = mAcquirers.begin(), e = mAcquirers.end(); i != e; ++i)
+        (*i)->Unregister(listener);
+}
+
+void AddressAcquirerManager::Update()
+{
+    for (std::vector<IAddressAcquirer *>::iterator i = mAcquirers.begin(), e = mAcquirers.end(); i != e; ++i)
+        (*i)->Update();
+}
+    
+void AddressAcquirerManager::Initialize()
+{
+    // create and add all the acquirers
+    mAcquirers.push_back(new BluetoothAcquirer);
+    mAcquirers.push_back(new BonjourAcquirer);
+    mAcquirers.push_back(new LobbyAcquirer);
+//  mAcquirers.push_back(new TcpServerAcquirer);
+    UpdateDomain();
+}
+
+void AddressAcquirerManager::Shutdown()
+{
+    // destroy and remove all the acquirers
+    for (std::vector<IAddressAcquirer *>::iterator i = mAcquirers.begin(), e = mAcquirers.end(); i != e; ++i)
+        delete (*i);
+    mAcquirers.clear();
+    mDomain = IAddress::DOMAIN_NONE;
+}
+
+void AddressAcquirerManager::UpdateDomain()
+{
+    int domain = IAddress::DOMAIN_NONE;
+    for (std::vector<IAddressAcquirer *>::iterator i = mAcquirers.begin(), e = mAcquirers.end(); i != e; ++i)
+        domain |= (*i)->GetDomain();
+    mDomain = static_cast<IAddress::Domain>(domain);
+}

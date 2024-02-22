@@ -1,0 +1,20 @@
+#ifndef _INPUTDEVICE_H
+#define _INPUTDEVICE_H
+
+// TODO here create an abstraction layer that allows you to detach events from
+// input mappings..
+#include "dxconstants.h"
+
+class InputDevice
+{
+public:
+    InputDevice() {}
+    virtual ~InputDevice() {}
+
+    virtual bool initialize()   { return true; }
+    virtual bool poll()         { return true; }
+    virtual bool shutdown()     { return true; }
+    virtual bool active() const { return true; }
+};
+
+#endif  // _INPUTDEVICE_H

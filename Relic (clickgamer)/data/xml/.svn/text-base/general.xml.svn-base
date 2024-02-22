@@ -1,0 +1,35 @@
+<objects>
+
+  <object name="Marker">
+    <mesh file="ex_Marker">
+      <texture file="blue_glow_full" transparent="true" depth-write="false" />
+    </mesh>  
+  </object>
+
+  <include file="player.xml" />
+  <include file="guide.xml" />
+  <include file="skeleton0.xml" />
+  <include file="skeleton1.xml" />
+  <include file="skeleton2.xml" />
+  <include file="skeleton3.xml" />
+  <include file="skeleton4.xml" />
+  <include file="skeleton5.xml" />
+  <include file="skeleton6.xml" />
+  <include file="skeleton7.xml" />  
+  <include file="necromancer0.xml" />
+  <include file="necromancer1.xml" />
+  <include file="spider0.xml" />
+  <include file="spider1.xml" />
+  <include file="spider2.xml" />
+  <include file="spider3.xml" />
+  <include file="spider4.xml" />
+  <include file="arachnarex.xml" />
+  <include file="generatorghost.xml" />
+  <include file="quinotaur1.xml" />
+  <include file="quinotaur2.xml" />
+  <include file="barrel.xml" />
+  <include file="items.xml" />
+  <include file="doors.xml" />
+  <include file="shield.xml" />
+  
+</objects>

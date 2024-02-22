@@ -1,0 +1,89 @@
+#ifndef _XMLOBJECTREADER_H
+#define _XMLOBJECTREADER_H
+
+#include "core/core.h"
+
+#include "render/Material.h"
+#include "render/Light.h"
+
+class XmlElement;
+class XmlReadContext;
+
+class Event;
+class Texture;
+class RenderStates;
+class IGameObject;
+class Drawable;
+class ObjectList;
+class ICollidable;
+
+#include <vector>
+#include <set>
+
+class RenderObjectLists
+{
+public:
+    std::vector<Texture     *> textures;
+    std::vector<Drawable    *> drawables;
+    std::vector<ICollidable *> colliders;
+    std::vector<ObjectList  *> meshsets;
+    std::vector<IGameObject *> objects;
+};
+
+class XmlObjectReader
+{
+public:
+
+    static XmlElement                *GetFirstElement(std::set<XmlElement *> &xml, const char *name);
+
+    static bool                       ReadInlineVector(XmlElement *xml, const char *name, int count, float *value, const float *defaultValue = 0);
+
+    static Vector3                    ReadVector3(XmlElement *xml, const char *name0, const char *name1, const char *name2);
+    static Vector3                    ReadPoint3(XmlElement *xml);
+    static Vector3                    ReadSize3(XmlElement *xml);
+    
+    static Vector2                    ReadVector2(XmlElement *xml, const char *name0, const char *name1);
+    static Vector2                    ReadPoint2(XmlElement *xml);
+    static Vector2                    ReadSize2(XmlElement *xml);
+
+    static Event                     *ReadEvent(XmlElement *xml, XmlReadContext *context);
+    static std::vector<Event *>       ReadEvents(XmlElement *xml, XmlReadContext *context);
+
+    static Texture                   *ReadTexture(XmlElement *xml, XmlReadContext *context);
+    static std::vector<Texture *>     ReadTextures(XmlElement *xml, XmlReadContext *context);
+
+    static Matrix                     ReadTransform(XmlElement *xml);
+    static std::vector<Matrix>        ReadTransforms(XmlElement *xml);
+    static std::vector<Matrix>        ReadUvTransforms(XmlElement *xml);
+    static Matrix                     ReadChildTransform(XmlElement *xml);
+    static Matrix                     ReadChildUvTransform(XmlElement *xml);
+
+    static Material                   ReadMaterial(XmlElement *xml);
+    static std::vector<Material>      ReadMaterials(XmlElement *xml);
+
+    static Light                      ReadLight(XmlElement *xml);
+    static std::vector<Light>         ReadLights(XmlElement *xml);
+
+    static ICollidable               *ReadCollider(XmlElement *xml, XmlReadContext *context);
+    static std::vector<ICollidable *> ReadColliders(XmlElement *xml, XmlReadContext *context);
+    
+    static RenderStates               ReadStates(XmlElement *xml);
+
+    static bool                       IsObjectType(XmlElement *xml);
+
+    static IGameObject               *ReadMesh(XmlElement *xml, XmlReadContext *context);
+    static IGameObject               *ReadCoreObject(XmlElement *xml, XmlReadContext *context);
+    static IGameObject               *ReadObjectList(XmlElement *xml, XmlReadContext *context);
+
+    static IGameObject               *ReadObject(XmlElement *xml, XmlReadContext *context);
+    static std::vector<IGameObject *> ReadObjects(XmlElement *xml, XmlReadContext *context);
+
+    static void                       Read(XmlElement *xml, XmlReadContext *context, std::vector<IGameObject *> &drawables);
+    static std::vector<IGameObject *> ReadText(const char *text, XmlReadContext *context);
+    static std::vector<IGameObject *> ReadFile(const char *filename, XmlReadContext *context);
+        
+    static bool                       ReadInOrder(XmlElement *xml, XmlReadContext *context, RenderObjectLists &lists);
+    static bool                       ReadInOrderFile(const char *filename, XmlReadContext *context, RenderObjectLists &lists);
+};
+
+#endif // _XMLOBJECTREADER_H

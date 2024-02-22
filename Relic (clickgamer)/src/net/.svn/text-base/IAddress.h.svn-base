@@ -1,0 +1,32 @@
+#ifndef _IADDRESS_H
+#define _IADDRESS_H
+
+class IChannel;
+
+class IAddress
+{
+public:
+
+    enum Domain   { DOMAIN_NONE = 0, DOMAIN_INTERNET = 1, DOMAIN_LOCAL = 2, DOMAIN_ALL = DOMAIN_INTERNET | DOMAIN_LOCAL };
+    enum Protocol { PROTOCOL_NONE, PROTOCOL_ANY, PROTOCOL_UDP, PROTOCOL_TCP, PROTOCOL_TCP_UDP, PROTOCOL_BLUETOOTH };
+
+    virtual ~IAddress() {}
+
+    virtual Protocol  GetProtocol() const = 0;
+    virtual Domain    GetDomain()   const = 0;
+
+    virtual IChannel *Open(bool server) = 0;
+};
+
+class IAddressListener
+{
+public:
+    virtual ~IAddressListener() {}
+
+    virtual IAddress::Protocol GetProtocol() const = 0;
+
+    // here ownership is passed to the IAddressListener (and eventually to the IChannel) .. (this assumes a 1:1 mapping of channels to addresses)
+    virtual bool               Receive(IAddress *address) = 0;
+};
+
+#endif // _IADDRESS_H

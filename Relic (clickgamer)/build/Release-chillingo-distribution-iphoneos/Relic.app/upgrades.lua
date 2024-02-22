@@ -1,0 +1,365 @@
+print "Lua:upgrades.lua"
+
+--[[
+
+External API for this file:
+
+ShowLevelCompleteMenu()  - shows the menu for level complete
+
+CreateUpgradeMenus()     - create all upgrade related menus, including the level complete menu
+HideUpgradeMenus()       - hide all upgrade related menus, including the level complete menu
+HandleUpgradeEvent(name) - handle an upgrade event, returns true if recognized and handled, false if not
+
+UPGRADES - key/value table of upgrades: upgrade key and info
+
+]]--
+
+LEVEL_COMPLETE_MENU               = nil
+LEVEL_COMPLETE_MENU_CONTINUE      = nil
+LEVEL_COMPLETE_MENU_RESUME        = nil
+LEVEL_COMPLETE_MENU_TITLE         = nil
+LEVEL_COMPLETE_MENU_MORE          = nil
+IS_IN_STORE                       = false
+LEVEL_COMPLETE_MENU_PAGE          = 0
+LEVEL_COMPLETE_MAX_ITEMS_PER_PAGE = 4
+
+MAX_MANA                          = 600
+MAX_HEALTH                        = 6000
+
+local function _Purchase_IncreaseMaxHealth(p, d)
+  local hpmax = p:GetMaxHitPoints() * 1.1
+  if hpmax > MAX_HEALTH then
+    hpmax = MAX_HEALTH
+    ShowAchievement("MaxHealth")
+  end
+  p:SetMaxHitPoints(hpmax)
+  p:SetHitPoints(hpmax, p)
+end
+
+local function _Purchase_IncreaseMaxMana(p, d)
+  if d.manaMax == nil then d.manaMax = 1.0 end
+  d.manaMax = d.manaMax * 1.1  
+  if d.manaMax > MAX_MANA then
+    d.manaMax = MAX_MANA
+    ShowAchievement("MaxMana")
+  end  
+  d.mana = d.manaMax
+end
+
+local function _Purchase_IncreaseMeleeDamage(p, d)
+  local value = p:GetOverallAttackMultiplier()
+  p:SetOverallAttackMultiplier(value * 1.1)
+end
+
+local function _Purchase_IncreaseMagicBoltDamage(p, d)
+  if d.boltDamage == nil then d.boltDamage = 20.0 end
+  d.boltDamage = d.boltDamage * 1.1
+end
+
+UPGRADES = 
+{
+  IncreaseMaxHealth = -- this cost must go up as player progresses!
+  { name="+ Maximum Health",  cost=25,  required="None", order=1,
+    text="Increase maximum health by 10%.", 
+    purchase_fn=_Purchase_IncreaseMaxHealth, maxed_fn=(function (p, d) return p:GetMaxHitPoints() >= MAX_HEALTH; end) },
+    
+  IncreaseMaxMana = -- this cost must go up as player progresses!
+  { name="+ Maximum Mana",    cost=25,  required="Amaranth Ring", order=2,  
+    text="Increase maximum magic energy by 10%.",
+    purchase_fn=_Purchase_IncreaseMaxMana, maxed_fn=(function (p, d) return d.manaMax >= MAX_MANA; end) },
+    
+  IncreaseMeleeDamage = -- this cost must go up as player progresses!
+  { name="+ Axe Damage",    cost=25,  required="None", order=3,
+    text="Increase axe hit damage by 10%.",
+    purchase_fn=_Purchase_IncreaseMeleeDamage, maxed_fn=(function (p, d) return false; end) },
+
+  MagicBolt =
+  { name="Magic Bolt",               cost=25,  required="Amaranth Ring", order=4,
+    text="Fire a magic projectile that consumes mana.",
+    purchase_fn=(function (p, d) d.isBoltEnabled = true; ShowAchievement("MagicBolt"); end), maxed_fn=(function (p, d) return d.isBoltEnabled; end) },        
+    
+  IncreaseMagicBoltDamage = -- this cost must go up as player progresses!
+  { name="+ Magic Bolt Damage",    cost=25,  required="Magic Bolt", order=5,
+    text="Increase magic bolt damage by 10%.",
+    purchase_fn=_Purchase_IncreaseMagicBoltDamage, maxed_fn=(function (p, d) return false; end) },        
+           
+  DivineTouch =
+  { name="Divine Touch",             cost=50,  required="Amaranth Ring", order=6, 
+    text="Release a powerful wave of energy.\nConsumes mana and requires\nan attack multiplier of x2.", 
+    purchase_fn=(function (p, d) d.isDivineTouchEnabled = true; ShowAchievement("DivineTouch"); end), maxed_fn=(function (p, d) return d.isDivineTouchEnabled; end) },
+    
+  MagicShield =
+  { name="Magic Shield",             cost=75,  required="Amaranth Ring", order=7,
+    text="Create a magic shield that consumes mana.",
+    purchase_fn=(function (p, d) d.isShieldEnabled = true; ShowAchievement("Shield"); end), maxed_fn=(function (p, d) return d.isShieldEnabled; end) },
+    
+  Immolate =
+  { name="Immolate",                 cost=100,  required="Amaranth Ring", order=8,
+    text="Consume nearby enemies in pillars of fire.\nConsumes mana and requires\nan attack multiplier of x3.",
+    purchase_fn=(function (p, d) d.isImmolateEnabled = true; ShowAchievement("Immolate"); end), maxed_fn=(function (p, d) return d.isImmolateEnabled; end) },
+    
+  AtomicTouch =
+  { name="Atomic Touch",             cost=150, required="Amaranth Ring", order=9,
+    text="Release a devastating wave of energy.\nConsumes significant mana and requires\nan attack multiplier of x4.",
+    purchase_fn=(function (p, d) d.isAtomicTouchEnabled = true; ShowAchievement("AtomicTouch"); end), maxed_fn=(function (p, d) return d.isAtomicTouchEnabled; end) }
+}
+
+function HideUpgradeMenus()
+  _SetVisible(LEVEL_COMPLETE_MENU, false)
+  for key, upgrade in pairs(UPGRADES) do
+    _SetVisible(upgrade.menu, false)
+  end
+end
+
+function HandleUpgradeEvent(name)
+  if name == 'BackToLevelCompleteMenu' then
+    HideMenusRestoreHud()
+    ShowLevelCompleteMenu()
+    return true
+  elseif name == 'Upgrade_MORE' then
+    LevelCompleteMenu_GoToNextPage()
+    return true
+  end
+  for key, upgrade in pairs(UPGRADES) do
+    if name == ('Upgrade_' .. key) then 
+      HideMenusRestoreHud()
+      ShowUpgradeMenu(upgrade.menu, key)
+      return true
+    elseif name == ('Purchase_' .. key) then
+      HideMenusRestoreHud()
+      local player = GetPlayer()
+      if player == nil then return false end
+      local data = player:data()
+      if data == nil then return false end
+      local purchase = upgrade.purchase_fn
+      purchase(player, data)      
+      data.unspentKills = data.unspentKills - upgrade.cost
+      ShowLevelCompleteMenu()
+      return true
+    end
+  end
+  return false
+end
+
+local function _AddUpgradeButton(parent, name, text, width)
+  local button = Ui_CreateButton(name, "darkborder", text, 0, 0, width, 25, 1.0, 20)
+  UiControl_SetMargin(button, 2, 2)
+  UiControl_AddChild(parent, button)
+  RegisterUiListener(name, "MenuListener", { name = name })
+  return button
+end
+
+local function _GetKills()
+  local player = GetPlayer()
+  if player == nil then return 0 end
+  local data = player:data()
+  if data == nil then return 0 end  
+  return data.kills
+end
+
+local function _GetUnspentKills()
+  local player = GetPlayer()
+  if player == nil then return 0 end
+  local data = player:data()
+  if data == nil then return 0 end  
+  return data.unspentKills
+end
+
+local function _SetTextForUpgradeOption(instance, text, active)
+  local color = "\\#c0c0c0"
+  if active then color = "\\#80ff80" end
+  UiControl_SetText(instance, color .. text)
+end
+
+local function _AreRequirementsSatisfied(key)
+  local req = UPGRADES[key].required
+  if req == 'None' then
+    return true
+  else -- requirements that require us to look in player:data
+    local player = GetPlayer()
+    if player == nil then return false end
+    local data = player:data()
+    if data == nil then return false end
+    if req == 'Amaranth Ring' then
+      return data.isMagicEnabled == true
+    elseif req == 'Magic Bolt' then
+      return data.isBoltEnabled == true
+    elseif req == 'Magic Shield' then
+      return data.isShieldEnabled == true
+    elseif req == 'Immolate' then
+      return data.isImmolateEnabled == true
+    elseif req == 'Divine Touch' then
+      return data.isDivineTouchEnabled == true
+    elseif req == 'Atomic Touch' then
+      return data.isAtomicEnabled == true
+    end
+  end
+  return false
+end
+
+local function _SatisfiesUpgradeCriteria(key, unspentKillsCost, isMaxedOut)
+  if isMaxedOut or not _AreRequirementsSatisfied(key) then
+    return false
+  end
+  local unspentKills = _GetUnspentKills()
+  if unspentKillsCost > unspentKills then
+    return false
+  end
+  return true
+end
+
+local function _CreateOrderedUpgradeList(fn)
+  local list = {}
+  for key, upgrade in pairs(UPGRADES) do
+    upgrade.key = key
+    list[upgrade.order] = upgrade
+    if fn ~= nil then fn(upgrade) end
+  end
+  return list
+end
+
+local function _UpdateLevelCompleteMenu(isStore)
+  local player = GetPlayer()
+  if player == nil then return end
+  local data = player:data()
+  if data == nil then return end
+  local title = "Level Complete!"
+  if isStore then title = "Purchase Upgrades" end
+  UiControl_SetText(LEVEL_COMPLETE_MENU_TITLE, title)
+  UiControl_SetText(LEVEL_COMPLETE_MENU_UPGRADE_TEXT, "You have \\#80ff80" .. _GetUnspentKills() .. "\\#ffffff unspent kill(s).")  
+  UiControl_SetVisible(LEVEL_COMPLETE_MENU_CONTINUE, not isStore)
+  UiControl_SetVisible(LEVEL_COMPLETE_MENU_RESUME,       isStore)
+  local list = _CreateOrderedUpgradeList(function (u) UiControl_SetVisible(u.button, false); end)
+  local startList = LEVEL_COMPLETE_MENU_PAGE * LEVEL_COMPLETE_MAX_ITEMS_PER_PAGE + 1
+  local endList   = startList + LEVEL_COMPLETE_MAX_ITEMS_PER_PAGE - 1
+  if endList > #list then endList = #list end
+  for i = startList, endList do    
+    local upgrade = list[i]
+    UiControl_SetVisible(upgrade.button, true)
+    _SetTextForUpgradeOption(upgrade.button, upgrade.name, _SatisfiesUpgradeCriteria(upgrade.key, upgrade.cost, upgrade.maxed_fn(player, data)))    
+  end
+  UiControl_LayoutVertical(LEVEL_COMPLETE_MENU)
+end
+
+function LevelCompleteMenu_GoToNextPage()
+  LEVEL_COMPLETE_MENU_PAGE = LEVEL_COMPLETE_MENU_PAGE + 1
+  local list = _CreateOrderedUpgradeList(nil)
+  if LEVEL_COMPLETE_MENU_PAGE * LEVEL_COMPLETE_MAX_ITEMS_PER_PAGE > #list then
+    LEVEL_COMPLETE_MENU_PAGE = 0
+  end
+  _UpdateLevelCompleteMenu(IS_IN_STORE)
+end
+
+local function CreateLevelCompleteMenu()
+  local width = MENUS_WIDTH
+  local halfWidth = width * 0.5
+  local top = 10
+  local height = 20
+  local size = 23
+  local dividerHeight = 15  
+  LEVEL_COMPLETE_MENU = Ui_CreateMenu("LevelCompleteMenu", "border3", "..", 240 - halfWidth, top, 240 + halfWidth, top, 1.0, 22.5)
+  LEVEL_COMPLETE_MENU_TITLE = AddTextLine(LEVEL_COMPLETE_MENU, "Level Complete!", height * 2.0, size * 1.5)
+  LEVEL_COMPLETE_MENU_UPGRADE_TEXT = AddTextLine(LEVEL_COMPLETE_MENU, "..", height, size)
+  AddTextLine(LEVEL_COMPLETE_MENU, "", dividerHeight, size)
+  local list = _CreateOrderedUpgradeList(nil)
+  for i, upgrade in ipairs(list) do
+    upgrade.button = _AddUpgradeButton(LEVEL_COMPLETE_MENU, "Upgrade_" .. upgrade.key, upgrade.name, width)
+  end
+  LEVEL_COMPLETE_MENU_MORE = _AddUpgradeButton(LEVEL_COMPLETE_MENU, "Upgrade_MORE", "More >", width)
+  AddTextLine(LEVEL_COMPLETE_MENU, "", dividerHeight, size)  
+  LEVEL_COMPLETE_MENU_CONTINUE = AddMenuButton(LEVEL_COMPLETE_MENU, "LoadComplete_NextLevel", "Continue", width)  
+  LEVEL_COMPLETE_MENU_RESUME   = AddMenuButton(LEVEL_COMPLETE_MENU, "Resume", "Resume", width)
+  UiControl_LayoutVertical(LEVEL_COMPLETE_MENU)
+  UiControl_AddChild(CANVAS, LEVEL_COMPLETE_MENU)
+  UiControl_SetVisible(LEVEL_COMPLETE_MENU, false)
+end
+
+function UpgradeListener(info, data)
+  if data.name == 'Select_Upgrade' then
+    IS_IN_STORE = true
+    ShowLevelCompleteMenu()
+  end
+end
+
+function ShowLevelCompleteMenu()
+  HideMenus()
+  SetPaused(true)
+  PROCESS_BUTTONS = false
+  SetSuppressHud(true)
+  SetDarkness(0.5)
+  _UpdateLevelCompleteMenu(IS_IN_STORE)
+  if IS_IN_STORE then
+    ShowAchievement("PurchaseUpgrade")
+  end
+  ClearButtonPresses()
+  LockInputForTimeMs(2000)
+  _SetVisible(LEVEL_COMPLETE_MENU, true)
+  SubmitAchievementsQueue()
+end
+
+function ShowUpgradeMenu(instance, key)
+  local unspent = _GetUnspentKills()
+  local upgrade = UPGRADES[key]
+  UiControl_SetText(upgrade.unspentInstance, "\\#808080You have \\#80ff80" .. unspent .. "\\#808080 unspent kill(s).")
+  local costColor = "\\#80ff80"
+  local requireColor = "\\#80ff80"
+  local purchaseColor = "\\#ffffff"
+  local purchaseButton = upgrade.purchaseInstance
+  local cost = upgrade.cost
+  local satisfied = _AreRequirementsSatisfied(key)
+  local maxedOut = upgrade.maxed_fn(GetPlayer(), GetPlayer():data())
+  if cost >= unspent or not satisfied or maxedOut then
+    purchaseColor = "\\#808080"
+    UiControl_SetActive(purchaseButton, false)
+    if cost >= unspent then costColor = "\\#ff0000" end
+    if not satisfied then requireColor = "\\#ff0000" end        
+  else
+    UiControl_SetActive(purchaseButton, true)
+  end
+  local purchaseText = "Purchase"
+  if maxedOut then purchaseText = "Already Purchased" end
+  UiControl_SetText(upgrade.purchaseInstance, purchaseColor .. purchaseText)
+  UiControl_SetText(upgrade.costInstance, "\\#808080Cost: " .. costColor .. "" .. cost .. " kills")
+  UiControl_SetText(upgrade.requirementsInstance, "\\#808080Requirements: " .. requireColor .. upgrade.required)
+  HideMenus()
+  SetPaused(true)
+  PROCESS_BUTTONS = false
+  SetSuppressHud(true)
+  SetDarkness(0.5)
+  _SetVisible(instance, true)
+end
+
+function CreateUpgradeMenu(key)
+
+  local width = MENUS_WIDTH
+  local halfWidth = width * 0.5
+  local top = 10
+  local height = 20
+  local size = 23
+  local dividerHeight = 15
+  
+  local upgrade = UPGRADES[key]
+  local menu = Ui_CreateMenu("UpgradeMenu_" .. key, "border3", "..", 240 - halfWidth, top, 240 + halfWidth, top, 1.0, 22.5)
+  upgrade.menu = menu  
+  AddTextLine(menu, upgrade.name, height * 2.0, size * 1.5)
+  AddTextLine(menu, "", dividerHeight, size)
+  upgrade.unspentInstance = AddTextLine(menu, "..", height, size)
+  AddTextLine(menu, "", dividerHeight, size)
+  AddTextLine(menu, upgrade.text, height, size) 
+  AddTextLine(menu, "", dividerHeight * 4, size)
+  upgrade.costInstance = AddTextLine(menu, "\\#808080Cost: ..", height, size)
+  upgrade.requirementsInstance = AddTextLine(menu, "\\#808080Requirements: ..", height, size) 
+  AddTextLine(menu, "", dividerHeight, size)
+  upgrade.purchaseInstance = AddMenuButton(menu, "Purchase_" .. key, "Purchase", width)  
+  AddMenuButton(menu, "BackToLevelCompleteMenu", "Return", width)
+  UiControl_LayoutVertical(menu)
+  UiControl_AddChild(CANVAS, menu)
+  UiControl_SetVisible(menu, false)
+  return menu
+end
+
+function CreateUpgradeMenus()
+  CreateLevelCompleteMenu()
+  for key, upgrade in pairs(UPGRADES) do CreateUpgradeMenu(key) end
+  RegisterListener("Select_Upgrade", "UpgradeListener", { name = "Select_Upgrade" })
+end

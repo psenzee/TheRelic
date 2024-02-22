@@ -1,0 +1,38 @@
+#ifndef _DRIFTAPPROACH_H
+#define _DRIFTAPPROACH_H
+
+#include "core/core.h"
+#include "Approach.h"
+
+class DriftApproach : public Approach
+{
+public:
+
+    CLASS_NEW_DELETE()
+
+    DriftApproach(float driftSpeed = 2.f, float driftRadius = 500.f, float randomDrift = 0.f) 
+        : Approach(), mRandomDrift(randomDrift), mDriftRadius(driftRadius)
+    {
+        SetApproachSpeed(driftSpeed);
+    }
+
+    void Update(const GameTime &time);
+
+    void Serialize(IOutStream &s) const
+    {
+        // $TODO
+    }
+
+    static IBehavior *Deserialize(IInStream &s);
+
+private:
+
+    float      mRandomDrift;
+    float      mDriftRadius;
+
+    static float random();
+
+    void RandomDrift(Character *self, float degree);
+};
+
+#endif // _DRIFTAPPROACH_H

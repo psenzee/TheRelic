@@ -1,0 +1,277 @@
+print "Lua:ui.lua"
+
+SET_UNPAUSED = nil
+WAS_INTRO_SEQUENCE_DONE = false
+
+GAMESTATE_UNKNOWN             = 0
+GAMESTATE_PRELOAD             = 1
+GAMESTATE_SEQUENCE            = 2
+GAMESTATE_MENU                = 3
+GAMESTATE_LOADING_OUT_OF_MENU = 4
+GAMESTATE_STARTNEW            = 5
+GAMESTATE_LOAD                = 6
+GAMESTATE_STARTED             = 7
+GAMESTATE_JOIN                = 8
+GAMESTATE_INGAME              = 9
+GAMESTATE_LOADING             = 10
+GAMESTATE_LOADED              = 11
+GAMESTATE_UNLOADING           = 12
+GAMESTATE_UNLOADING_PLAYERS   = 13
+GAMESTATE_UNLOADED            = 14
+GAMESTATE_JOINING             = 15
+GAMESTATE_DESERIALIZED        = 16
+
+function IsInLoadingState()
+  local state = GetGameStateId()
+  return state ~= GAMESTATE_SEQUENCE and
+         state ~= GAMESTATE_MENU     and
+         state ~= GAMESTATE_INGAME
+end
+
+function IntroComplete()
+  ShowMainMenu()
+end
+
+function MainMenu_StartNewGameSinglePlayer()
+  print "***** MainMenu_StartNewGameSinglePlayer *****"
+  CloseMenus()  
+  SetGameStateId(GAMESTATE_LOADING_OUT_OF_MENU)  
+  PROCESS_BUTTONS = true
+  NewGame(1)  
+  SetSuppressHud(false)
+end
+
+function MainMenu_StartNewGameWiFi()
+  print "***** MainMenu_StartNewGameWiFi *****"
+  CloseMenus()
+  SetGameStateId(GAMESTATE_LOADING_OUT_OF_MENU)  
+  PROCESS_BUTTONS = true
+  NewGame(1)
+  SetSuppressHud(false)
+  StartWiFiServer()
+end
+
+function MainMenu_StartNewGameBluetooth()
+  print "***** MainMenu_StartNewGameBluetooth *****"
+  CloseMenus()
+  SetGameStateId(GAMESTATE_LOADING_OUT_OF_MENU)  
+  PROCESS_BUTTONS = true
+  NewGame(1)
+  SetSuppressHud(false)
+  StartBluetoothServer()
+end
+
+function MainMenu_LoadGameSinglePlayer()
+  print "***** MainMenu_LoadGameSinglePlayer *****"
+--CloseMenus()
+  HideMenus()
+--SetGameStateId(GAMESTATE_LOADING_OUT_OF_MENU)  
+  PROCESS_BUTTONS = true
+--LoadGame("saveprofile1.bin")
+--LoadGame(SAVE_FILENAME)
+  ShowLoadListMenu()
+  SetSuppressHud(false)
+end
+
+function MainMenu_LoadGameWiFi()
+  print "***** MainMenu_LoadGameWiFi *****"
+  CloseMenus()
+  SetGameStateId(GAMESTATE_LOADING_OUT_OF_MENU)  
+  PROCESS_BUTTONS = true
+  LoadGame("saveprofile1.bin")
+  SetSuppressHud(false)
+  StartWiFiServer()  
+end
+
+function MainMenu_LoadGameBluetooth()
+  print "***** MainMenu_LoadGameBluetooth *****"
+  CloseMenus()
+  SetGameStateId(GAMESTATE_LOADING_OUT_OF_MENU)  
+  PROCESS_BUTTONS = true
+  LoadGame("saveprofile1.bin")
+  SetSuppressHud(false)
+  StartBluetoothServer()  
+end
+
+function MainMenu_JoinWiFiGame()
+  print "***** MainMenu_JoinWiFiGame *****"
+  CloseMenus()
+  IS_STARTING_CLIENT = true
+  SetGameStateId(GAMESTATE_JOINING)
+  PROCESS_BUTTONS = true
+  NewGame(1)
+  SetSuppressHud(false)
+  DeferByGameStateId(GAMESTATE_INGAME, "StartWiFiClient")
+--StartWiFiClient()  
+end
+
+function MainMenu_JoinBluetoothGame()
+  print "***** MainMenu_JoinBluetoothGame *****"
+  CloseMenus()
+  IS_STARTING_CLIENT = true
+  SetGameStateId(GAMESTATE_JOINING)
+  PROCESS_BUTTONS = true
+  NewGame(1)
+  SetSuppressHud(false)
+  DeferByGameStateId(GAMESTATE_INGAME, "StartBluetoothClient")
+--StartBluetoothClient()   
+end
+
+function EnableProcessButtons()
+  PROCESS_BUTTONS = true
+end
+
+function DoFlash(time)
+  if FLASH_START == nil then
+    FLASH_START = GetTime()
+    FLASH_END = FLASH_START + time
+  end
+  LIGHTNESS_LEVEL = 1.0
+  SetOverlayColor(FADE_R, FADE_G, FADE_B, 1.0)
+end
+
+DARKNESS_LEVEL = 0.0
+LIGHTNESS_LEVEL = 0.0
+LIGHTNESS_LEVEL_OVERRIDE = 0.0
+BACKGROUND_LEVEL = 0.0
+
+function SetLightness(level)
+  LIGHTNESS_LEVEL = level
+end
+
+function SetLightnessOverride(level)
+  LIGHTNESS_LEVEL_OVERRIDE = level
+end
+
+function SetBackgroundLevel(level)
+  BACKGROUND_LEVEL = level
+end
+
+function SetDarkness(level)
+  DARKNESS_LEVEL = level
+end
+
+FADE_R = 1.0
+FADE_G = 1.0
+FADE_B = 1.0
+
+function SetFadeColor(r, g, b)
+  FADE_R = r
+  FADE_G = g
+  FADE_B = b
+end
+
+function UpdateOverlays()
+  LIGHTNESS_LEVEL = 0.0
+  if FLASH_START ~= nil then
+    local time = GetTime()
+    if time >= FLASH_END then
+      FLASH_START = nil
+      FLASH_END   = nil
+    else
+      local at = 1.0 - (time - FLASH_START) / (FLASH_END - FLASH_START)
+      if at > 0.1 and at < 1.01 then
+        LIGHTNESS_LEVEL = at        
+      end
+    end
+  end
+  SetOverlayColor(FADE_R, FADE_G, FADE_B, 0.0)
+
+  if LIGHTNESS_LEVEL + LIGHTNESS_LEVEL_OVERRIDE > 0.1 then
+    --DrawBackgroundPartial(LIGHTNESS_LEVEL, "white")
+    SetOverlayColor(FADE_R, FADE_G, FADE_B, LIGHTNESS_LEVEL + LIGHTNESS_LEVEL_OVERRIDE)
+  end
+  if DARKNESS_LEVEL > 0.1 then
+    DrawBackgroundPartial(DARKNESS_LEVEL, "Black")
+  end
+  if BACKGROUND_LEVEL > 0.1 then
+    DrawBackgroundPartial(BACKGROUND_LEVEL, "background_partial") 
+  end  
+end
+
+function UpdateCreditScroll()
+  if CREDITS_SCREEN ~= nil and UiControl_IsVisible(CREDITS_SCREEN) then
+    if CREDIT_SCROLL == nil then
+      ResetCreditScroll()
+    end
+    local x0, y0, x1, y1 = UiControl_GetBounds(CREDITS_SCREEN)
+    local dy = y1 - y0
+    UiControl_RequestBounds(CREDITS_SCREEN, x0, CREDIT_SCROLL, x1, CREDIT_SCROLL + dy)
+    CREDIT_SCROLL = CREDIT_SCROLL - 0.75
+    if CREDIT_SCROLL <= -800 then
+      DoFlash(2000)
+      ShowMainMenu()
+    end
+  end
+end
+
+function tmp_GetPlayerId()
+  local c = GetPlayer()
+  if c == nil then
+    return -1
+  end
+  return c:GetId()
+end
+
+function tmp_GetConnectionIds()
+  local count = Multiplayer_GetConnectionCount()
+  local text = "["
+  for index = 1,count do
+    if #text > 1 then
+      text = text .. "/"
+    end
+    local id = Multiplayer_GetIdByIndex(index - 1)
+    text = text .. tostring(id)
+  end
+  return text .. "]"
+end
+
+function UiUpdateAndRender(instance)
+
+  UpdateErrorOccurred("\\#ff00ff")
+  UpdateMemoryStats()
+
+  if not WAS_INTRO_SEQUENCE_DONE and IsIntroSequenceDone() then
+    SetGameStateId(GAMESTATE_MENU)
+    WAS_INTRO_SEQUENCE_DONE = true
+    DeferByTimeMs(100, "EnableProcessButtons")   
+    SetSuppressHud(false)
+    DrawIntroSequence() -- make sure we don't have an empty frame
+    UnloadSequenceTextures()
+  end  
+  
+  if not IS_STARTED or not IsIntroSequenceDone() then
+    DrawIntroSequence()
+    if not IS_STARTED then
+      DrawLoading()
+    else
+      SetPaused(true)
+      SetSuppressHud(true)
+    end
+    return
+  else
+    DISABLE_UI_INPUT = false
+  end
+
+  DrawSequence()
+  
+  UpdateHud()
+
+  if SET_UNPAUSED == nil then
+    SetPaused(false)
+    SetRenderPaused(false)
+    SET_UNPAUSED = true
+  end
+  
+  local player = GetPlayer()
+  
+  DrawHud(player)
+  DrawLevelUp(player)
+  UpdateOverlays()
+  UpdateCreditScroll()
+  
+  if IsMapOn() then
+    DrawCanvas(1.0)
+  end    
+  
+end

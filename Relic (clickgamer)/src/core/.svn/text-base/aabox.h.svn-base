@@ -1,0 +1,41 @@
+#ifndef _AABOX_H
+#define _AABOX_H
+
+#include "tuple3f.h"
+
+class AABox
+{
+public:
+        
+    Tuple3f minimum, maximum;
+        
+    inline AABox(const Tuple3f &a, const Tuple3f &b) : minimum(a.minimum(b)), maximum(a.maximum(b)) {}
+    inline AABox() : minimum(FLT_MAX, FLT_MAX, FLT_MAX), maximum(-FLT_MAX, -FLT_MAX, -FLT_MAX) {}    
+    
+    inline Tuple3f size()  const { return maximum - minimum; }    
+    inline bool    empty() const { return minimum.x >= maximum.x || minimum.y >= maximum.y || minimum.z >= maximum.z; }
+
+    inline bool    valid() const { return minimum.x <= maximum.x && minimum.y <= maximum.y && minimum.z <= maximum.z; } 
+    
+    inline void    insert(const AABox &box)
+    {
+        insert(box.minimum);
+        insert(box.maximum);
+    }
+    inline void    insert(const Tuple3f &point)
+    {
+        minimum = minimum.minimum(point);
+        maximum = maximum.maximum(point);
+    }
+    inline void    expand(const Tuple3f &values)
+    {
+        minimum -= values * 0.5f;
+        maximum += values * 0.5f;
+    }
+    inline AABox   overlap(const AABox &box) const
+    {
+        return AABox(box.minimum.maximum(minimum), box.maximum.minimum(maximum));
+    }
+};
+    
+#endif // _AABOX_H

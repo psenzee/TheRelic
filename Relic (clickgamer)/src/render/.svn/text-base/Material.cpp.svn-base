@@ -1,0 +1,21 @@
+/*
+ *  Material.cpp
+ *  GLGravity
+ *
+ *  Created by Paul Senzee on 1/1/09.
+ *  Copyright 2009 __MyCompanyName__. All rights reserved.
+ *
+ */
+
+#include "Material.h"
+
+Material::Material()
+: ambient(0.2f, 0.2f, 0.2f, 1.0f), diffuse(1.0f, 1.0f, 1.0f, 1.0f),
+  emissive(0.0f, 0.0f, 0.0f, 0.0f), specular(0.0f, 0.0f, 0.0f, 0.0f), shininess(10.0f)
+{
+}
+
+Material::Material(const Vector4 &ambient, const Vector4 &diffuse, const Vector4 &emissive, const Vector4 &specular, float shininess)
+  : ambient(ambient), diffuse(diffuse), emissive(emissive), specular(specular), shininess(shininess)
+{
+}

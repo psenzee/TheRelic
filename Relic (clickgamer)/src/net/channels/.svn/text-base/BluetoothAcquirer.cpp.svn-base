@@ -1,0 +1,12 @@
+#include "IAddress.h"
+#include "BluetoothAcquirer.h"
+
+BluetoothAcquirer::BluetoothAcquirer() 
+  : AbstractAddressAcquirer(IAddress::DOMAIN_LOCAL, IAddress::PROTOCOL_BLUETOOTH)
+{
+} 
+
+void BluetoothAcquirer::Update()
+{
+    // $TODO
+}

@@ -1,0 +1,13 @@
+<levels>
+
+<level name="Game" description="Game">
+
+  <map filename="level4-main-small.emp" width="256" height="256" tileset="dl-amaranth.xml" />
+  <map filename="level8-floor0.emp" width="256" height="256" tileset="dl-amaranth.xml" />
+  <map filename="level8-floor1.emp" width="256" height="256" tileset="dl-amaranth.xml" />
+  <map filename="level8-floor2.emp" width="256" height="256" tileset="dl-amaranth.xml" />    
+  <map filename="level8-floor3.emp" width="256" height="256" tileset="dl-amaranth.xml" render="false" events="false" />
+  
+</level>
+
+</levels>

@@ -1,0 +1,18 @@
+#include "RenderStates.h"
+
+void RenderStates::Apply(GraphicsDevice &device) const
+{
+    if (DepthBias != 0.0f)
+    {
+       //device.RenderState.DepthBias = DepthBias;
+    }
+    //glDepthMask(DepthEnable ? GL_TRUE: GL_FALSE);
+}
+
+void RenderStates::Unapply(GraphicsDevice &device) const
+{
+    if (DepthBias != 0.0f)
+    {
+        //device.RenderState.DepthBias = 0.0f;
+    }
+}

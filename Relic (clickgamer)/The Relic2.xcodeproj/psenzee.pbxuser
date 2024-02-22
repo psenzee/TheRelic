@@ -1,0 +1,1409 @@
+// !$*UTF8*$!
+{
+	1D6058900D05DD3D006BFB54 /* The Relic2 */ = {
+		activeExec = 0;
+		executables = (
+			437704AA1097C38E00B19835 /* The Relic2 */,
+		);
+	};
+	2514C27910084DCA00A42282 /* Shader.fsh */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {824, 291}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 232}";
+		};
+	};
+	2514C27A10084DCA00A42282 /* Shader.vsh */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {824, 317}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 369}";
+		};
+	};
+	29B97313FDCFA39411CA2CEA /* Project object */ = {
+		activeBuildConfigurationName = Release;
+		activeExecutable = 437704AA1097C38E00B19835 /* The Relic2 */;
+		activeSDKPreference = iphoneos4.2;
+		activeTarget = 1D6058900D05DD3D006BFB54 /* The Relic2 */;
+		addToTargets = (
+			1D6058900D05DD3D006BFB54 /* The Relic2 */,
+		);
+		breakpoints = (
+			4399DBC211273D4F00AF3BBA /* Connection.h:24 */,
+			4394304D1170D1B90083EAF4 /* GameUI.cpp:155 */,
+			4394305B1170D2080083EAF4 /* GameUI.cpp:56 */,
+			439430BA1170DBF00083EAF4 /* GlyphWriter_DrawString_mod.cpp:99 */,
+			435A7DF11198479A00799BCB /* LuaSerialize.cpp:146 */,
+			43797D34119903430013937D /* The_Relic2AppDelegate.mm:421 */,
+		);
+		codeSenseManager = 437704C51097C39A00B19835 /* Code sense */;
+		executables = (
+			437704AA1097C38E00B19835 /* The Relic2 */,
+		);
+		expressions = (
+			a,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = 1;
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					886,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					606,
+					60,
+					20,
+					48,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 316483259;
+			PBXWorkspaceStateSaveDate = 316483259;
+		};
+		perUserProjectItems = {
+			433C705912D430C500FFA760 /* PBXTextBookmark */ = 433C705912D430C500FFA760 /* PBXTextBookmark */;
+			433C705A12D430C500FFA760 /* PBXTextBookmark */ = 433C705A12D430C500FFA760 /* PBXTextBookmark */;
+			433C705B12D430C500FFA760 /* PBXTextBookmark */ = 433C705B12D430C500FFA760 /* PBXTextBookmark */;
+			433C705C12D430C500FFA760 /* PBXTextBookmark */ = 433C705C12D430C500FFA760 /* PBXTextBookmark */;
+			433C705D12D430C500FFA760 /* PBXTextBookmark */ = 433C705D12D430C500FFA760 /* PBXTextBookmark */;
+			433C705E12D430C500FFA760 /* PBXTextBookmark */ = 433C705E12D430C500FFA760 /* PBXTextBookmark */;
+			433C705F12D430C500FFA760 /* PBXTextBookmark */ = 433C705F12D430C500FFA760 /* PBXTextBookmark */;
+			433C706012D430C500FFA760 /* PBXTextBookmark */ = 433C706012D430C500FFA760 /* PBXTextBookmark */;
+			433C706112D430C500FFA760 /* PBXTextBookmark */ = 433C706112D430C500FFA760 /* PBXTextBookmark */;
+			433C706312D430C500FFA760 /* PBXTextBookmark */ = 433C706312D430C500FFA760 /* PBXTextBookmark */;
+			433C715312D4D0C900FFA760 /* PBXTextBookmark */ = 433C715312D4D0C900FFA760 /* PBXTextBookmark */;
+			436B5957127B3099001A86A2 /* PBXTextBookmark */ = 436B5957127B3099001A86A2 /* PBXTextBookmark */;
+			436B598B127B6F47001A86A2 /* PBXTextBookmark */ = 436B598B127B6F47001A86A2 /* PBXTextBookmark */;
+			436B59A3127B7040001A86A2 /* PBXBookmark */ = 436B59A3127B7040001A86A2 /* PBXBookmark */;
+			436B59B6127B7441001A86A2 /* PBXTextBookmark */ = 436B59B6127B7441001A86A2 /* PBXTextBookmark */;
+			436E9BA2114DFDD50079F655 /* PBXTextBookmark */ = 436E9BA2114DFDD50079F655 /* PBXTextBookmark */;
+			43719227119450C100CC2FDC /* PBXTextBookmark */ = 43719227119450C100CC2FDC /* PBXTextBookmark */;
+			4377CAE1116D900C001EE0F1 /* PBXTextBookmark */ = 4377CAE1116D900C001EE0F1 /* PBXTextBookmark */;
+			4378D86B12A075AE0055BDCF /* PBXBookmark */ = 4378D86B12A075AE0055BDCF /* PBXBookmark */;
+			4378D8A712A695520055BDCF /* PBXTextBookmark */ = 4378D8A712A695520055BDCF /* PBXTextBookmark */;
+			4378D8A812A695520055BDCF /* PBXTextBookmark */ = 4378D8A812A695520055BDCF /* PBXTextBookmark */;
+			4378D9B112D19C460055BDCF /* PBXTextBookmark */ = 4378D9B112D19C460055BDCF /* PBXTextBookmark */;
+			43797D4B119911F90013937D /* PBXTextBookmark */ = 43797D4B119911F90013937D /* PBXTextBookmark */;
+			437B2F4B12D4FF7F000C8C67 /* PlistBookmark */ = 437B2F4B12D4FF7F000C8C67 /* PlistBookmark */;
+			438CAA981195E7C100EBBAE4 /* PBXTextBookmark */ = 438CAA981195E7C100EBBAE4 /* PBXTextBookmark */;
+			438FB14D126BFD9100B62F94 /* PBXTextBookmark */ = 438FB14D126BFD9100B62F94 /* PBXTextBookmark */;
+			438FB55F126C037800B62F94 /* PBXTextBookmark */ = 438FB55F126C037800B62F94 /* PBXTextBookmark */;
+			438FB593126D392900B62F94 /* PBXTextBookmark */ = 438FB593126D392900B62F94 /* PBXTextBookmark */;
+			438FB5B4126D3CEA00B62F94 /* PBXTextBookmark */ = 438FB5B4126D3CEA00B62F94 /* PBXTextBookmark */;
+			438FB5D9126D3F3B00B62F94 /* PBXTextBookmark */ = 438FB5D9126D3F3B00B62F94 /* PBXTextBookmark */;
+			438FB5DA126D3F3B00B62F94 /* PBXTextBookmark */ = 438FB5DA126D3F3B00B62F94 /* PBXTextBookmark */;
+			438FB67B126D461000B62F94 /* PBXTextBookmark */ = 438FB67B126D461000B62F94 /* PBXTextBookmark */;
+			438FB7A61276382500B62F94 /* PBXBookmark */ = 438FB7A61276382500B62F94 /* PBXBookmark */;
+			438FB7A71276382500B62F94 /* PBXBookmark */ = 438FB7A71276382500B62F94 /* PBXBookmark */;
+			438FB7A81276382500B62F94 /* PBXTextBookmark */ = 438FB7A81276382500B62F94 /* PBXTextBookmark */;
+			438FB7A91276382500B62F94 /* PBXBookmark */ = 438FB7A91276382500B62F94 /* PBXBookmark */;
+			438FB7AA1276382500B62F94 /* PBXTextBookmark */ = 438FB7AA1276382500B62F94 /* PBXTextBookmark */;
+			4393CD6811C6ABC70017104E /* PBXTextBookmark */ = 4393CD6811C6ABC70017104E /* PBXTextBookmark */;
+			4394236E12D667E70035867E /* PBXTextBookmark */ = 4394236E12D667E70035867E /* PBXTextBookmark */;
+			4394238B12D6902F0035867E /* PBXTextBookmark */ = 4394238B12D6902F0035867E /* PBXTextBookmark */;
+			439423D912D6A9320035867E /* PlistBookmark */ = 439423D912D6A9320035867E /* PlistBookmark */;
+			439423DB12D6A9320035867E /* PBXTextBookmark */ = 439423DB12D6A9320035867E /* PBXTextBookmark */;
+			4394253712D7BE400035867E /* PBXTextBookmark */ = 4394253712D7BE400035867E /* PBXTextBookmark */;
+			439425C412DCA76C0035867E /* PBXTextBookmark */ = 439425C412DCA76C0035867E /* PBXTextBookmark */;
+			4394275F12DCD14A0035867E /* PBXBookmark */ = 4394275F12DCD14A0035867E /* PBXBookmark */;
+			439427D212DCDF5F0035867E /* PBXTextBookmark */ = 439427D212DCDF5F0035867E /* PBXTextBookmark */;
+			439427D512DCDF5F0035867E /* PBXTextBookmark */ = 439427D512DCDF5F0035867E /* PBXTextBookmark */;
+			43977BDA11B9479C005C6495 /* PBXTextBookmark */ = 43977BDA11B9479C005C6495 /* PBXTextBookmark */;
+			43B5556C11B376A00080FBD5 /* PBXTextBookmark */ = 43B5556C11B376A00080FBD5 /* PBXTextBookmark */;
+			43D3DAC51235FF9600D70070 /* PBXTextBookmark */ = 43D3DAC51235FF9600D70070 /* PBXTextBookmark */;
+			43E3160B12DD26E2005E6455 /* PBXBookmark */ = 43E3160B12DD26E2005E6455 /* PBXBookmark */;
+			43E3163312DD29C6005E6455 /* PBXTextBookmark */ = 43E3163312DD29C6005E6455 /* PBXTextBookmark */;
+			43E3165712DD3AC0005E6455 /* PBXTextBookmark */ = 43E3165712DD3AC0005E6455 /* PBXTextBookmark */;
+			43E3165812DD3AC0005E6455 /* PlistBookmark */ = 43E3165812DD3AC0005E6455 /* PlistBookmark */;
+		};
+		sourceControlManager = 437704C41097C39A00B19835 /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	32CA4F630368D1EE00C91783 /* The_Relic2_Prefix.pch */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {645, 483}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 318}";
+		};
+	};
+	43197AE51107EE3600C5036F /* generatorghost.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {981, 1512}}";
+			sepNavSelRange = "{804, 40}";
+			sepNavVisRange = "{1926, 1149}";
+			sepNavWindowFrame = "{{238, 138}, {1040, 669}}";
+		};
+	};
+	433C702912D40FD200FFA760 /* loadsavemenus.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {852, 2028}}";
+			sepNavSelRange = "{4575, 0}";
+			sepNavVisRange = "{3255, 1147}";
+			sepNavWindowFrame = "{{84, 252}, {750, 558}}";
+		};
+	};
+	433C705912D430C500FFA760 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 4378D8FF12C964080055BDCF /* upgrades.lua */;
+		name = "upgrades.lua: 275";
+		rLen = 0;
+		rLoc = 10140;
+		rType = 0;
+		vrLen = 103;
+		vrLoc = 26;
+	};
+	433C705A12D430C500FFA760 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB25B126C019E00B62F94 /* images.h */;
+		name = "images.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 83;
+		vrLoc = 0;
+	};
+	433C705B12D430C500FFA760 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB25E126C019E00B62F94 /* matrix4f.h */;
+		name = "matrix4f.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 111;
+		vrLoc = 0;
+	};
+	433C705C12D430C500FFA760 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB7821274EBF500B62F94 /* RelicDictionary.cpp */;
+		name = "RelicDictionary.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 118;
+		vrLoc = 0;
+	};
+	433C705D12D430C500FFA760 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 4378D80F1299D3930055BDCF /* shield.lua */;
+		name = "shield.lua: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 114;
+		vrLoc = 0;
+	};
+	433C705E12D430C500FFA760 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB173126BFFED00B62F94 /* ES2Renderer.h */;
+		name = "ES2Renderer.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 43;
+		vrLoc = 0;
+	};
+	433C705F12D430C500FFA760 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB174126BFFED00B62F94 /* ES2Renderer.m */;
+		name = "ES2Renderer.m: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 43;
+		vrLoc = 0;
+	};
+	433C706012D430C500FFA760 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB175126BFFED00B62F94 /* ESRenderer.h */;
+		name = "ESRenderer.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 42;
+		vrLoc = 0;
+	};
+	433C706112D430C500FFA760 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB16F126BFFED00B62F94 /* EAGLView.h */;
+		name = "EAGLView.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 40;
+		vrLoc = 0;
+	};
+	433C706312D430C500FFA760 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2514C27A10084DCA00A42282 /* Shader.vsh */;
+		name = "Shader.vsh: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 369;
+		vrLoc = 0;
+	};
+	433C715312D4D0C900FFA760 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2514C27910084DCA00A42282 /* Shader.fsh */;
+		name = "Shader.fsh: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 232;
+		vrLoc = 0;
+	};
+	4346A26611AA2D350036C893 /* indicators.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1776, 2618}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{1918, 656}";
+			sepNavWindowFrame = "{{390, 142}, {1040, 669}}";
+		};
+	};
+	43525A4411A09762009D0733 /* load.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1266, 2268}}";
+			sepNavSelRange = "{4961, 0}";
+			sepNavVisRange = "{3316, 1583}";
+			sepNavWindowFrame = "{{617, 145}, {1040, 669}}";
+		};
+	};
+	4359A94F10F2C9740053DE25 /* common.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {645, 2660}}";
+			sepNavSelRange = "{87, 0}";
+			sepNavVisRange = "{0, 609}";
+			sepNavWindowFrame = "{{537, 300}, {704, 578}}";
+		};
+	};
+	4359A95010F2C9740053DE25 /* createmap.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {645, 4298}}";
+			sepNavSelRange = "{9701, 0}";
+			sepNavVisRange = "{8629, 1323}";
+			sepNavWindowFrame = "{{590, 112}, {704, 701}}";
+		};
+	};
+	4359A95110F2C9740053DE25 /* door.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {613, 3304}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 1386}";
+			sepNavWindowFrame = "{{38, 151}, {704, 701}}";
+		};
+	};
+	4359A95310F2C9740053DE25 /* enemies.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1008, 2366}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{1531, 1525}";
+			sepNavWindowFrame = "{{545, 96}, {704, 578}}";
+		};
+	};
+	4359A95410F2C9740053DE25 /* fx.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {725, 1862}}";
+			sepNavSelRange = "{2568, 0}";
+			sepNavVisRange = "{1766, 1264}";
+			sepNavWindowFrame = "{{93, 172}, {784, 578}}";
+		};
+	};
+	4359A95510F2C9740053DE25 /* game.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {645, 5265}}";
+			sepNavSelRange = "{6485, 0}";
+			sepNavVisRange = "{10777, 882}";
+			sepNavWindowFrame = "{{222, 300}, {704, 578}}";
+		};
+	};
+	4359A95810F2C9740053DE25 /* inventory.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {768, 2576}}";
+			sepNavSelRange = "{3213, 0}";
+			sepNavVisRange = "{2934, 1680}";
+			sepNavWindowFrame = "{{84, 109}, {704, 701}}";
+		};
+	};
+	4359A95A10F2C9740053DE25 /* level.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1239, 3640}}";
+			sepNavSelRange = "{6690, 0}";
+			sepNavVisRange = "{4228, 1123}";
+			sepNavWindowFrame = "{{15, 232}, {1298, 641}}";
+		};
+	};
+	4359A95D10F2C9740053DE25 /* multiplayer.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1239, 5656}}";
+			sepNavSelRange = "{6358, 0}";
+			sepNavVisRange = "{2332, 996}";
+			sepNavWindowFrame = "{{51, 161}, {1298, 641}}";
+		};
+	};
+	4359A95E10F2C9740053DE25 /* necromancer.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1239, 1554}}";
+			sepNavSelRange = "{2824, 61}";
+			sepNavVisRange = "{1206, 1198}";
+			sepNavWindowFrame = "{{38, 211}, {1298, 641}}";
+		};
+	};
+	4359A95F10F2C9740053DE25 /* player.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {645, 2072}}";
+			sepNavSelRange = "{2469, 0}";
+			sepNavVisRange = "{1854, 1009}";
+			sepNavWindowFrame = "{{15, 172}, {704, 701}}";
+		};
+	};
+	4359A96110F2C9740053DE25 /* serialize.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {981, 3430}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{5778, 1017}";
+			sepNavWindowFrame = "{{61, 162}, {1040, 669}}";
+		};
+	};
+	4359A96310F2C9740053DE25 /* skeleton.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {725, 1022}}";
+			sepNavSelRange = "{1651, 80}";
+			sepNavVisRange = "{991, 1102}";
+			sepNavWindowFrame = "{{460, 143}, {784, 578}}";
+		};
+	};
+	4359A96410F2C9740053DE25 /* spider.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1239, 1862}}";
+			sepNavSelRange = "{3731, 53}";
+			sepNavVisRange = "{2538, 1264}";
+			sepNavWindowFrame = "{{15, 232}, {1298, 641}}";
+		};
+	};
+	4359A96710F2C9740053DE25 /* ui.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {645, 3510}}";
+			sepNavSelRange = "{6619, 0}";
+			sepNavVisRange = "{1961, 1209}";
+			sepNavVisRect = "{{0, 4947}, {475, 457}}";
+			sepNavWindowFrame = "{{326, 104}, {704, 701}}";
+		};
+	};
+	4359A96810F2C9740053DE25 /* uidraw.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {645, 700}}";
+			sepNavSelRange = "{55, 0}";
+			sepNavVisRange = "{0, 850}";
+			sepNavWindowFrame = "{{15, 172}, {704, 701}}";
+		};
+	};
+	435A7DF11198479A00799BCB /* LuaSerialize.cpp:146 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 438FB1C4126C005600B62F94 /* LuaSerialize.cpp */;
+		functionName = "LuaSendRpc(lua_State *lua)";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 146;
+		location = "The Relic2";
+		modificationTime = 316484989.854933;
+		originalNumberOfMultipleMatches = 1;
+		state = 1;
+	};
+	436A06B9117B586C0075D03E /* saveload.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1266, 1680}}";
+			sepNavSelRange = "{2651, 0}";
+			sepNavVisRange = "{2119, 1665}";
+			sepNavWindowFrame = "{{38, 211}, {1298, 641}}";
+		};
+	};
+	436B5957127B3099001A86A2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB3A0126C01EE00B62F94 /* AggressiveApproach.cpp */;
+		name = "AggressiveApproach.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 0;
+		vrLoc = 0;
+	};
+	436B598B127B6F47001A86A2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB4C2126C026900B62F94 /* Map.h */;
+		name = "Map.h: 25";
+		rLen = 0;
+		rLoc = 355;
+		rType = 0;
+		vrLen = 297;
+		vrLoc = 303;
+	};
+	436B59A3127B7040001A86A2 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 438FB176126BFFED00B62F94 /* Icon.png */;
+	};
+	436B59B6127B7441001A86A2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB177126BFFED00B62F94 /* main.m */;
+		name = "main.m: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 364;
+		vrLoc = 0;
+	};
+	436B5A05127F4883001A86A2 /* Entitlements.plist */ = {
+		uiCtxt = {
+			sepNavWindowFrame = "{{107, 211}, {1298, 578}}";
+		};
+	};
+	436E9BA2114DFDD50079F655 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 43E88D64114C1F5300C0EDD8 /* gamestate.lua */;
+		name = "gamestate.lua: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 967;
+		vrLoc = 0;
+	};
+	43719227119450C100CC2FDC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 4398CDE9111FE2D000D701C3 /* menus.lua */;
+		name = "menus.lua: 24";
+		rLen = 0;
+		rLoc = 439;
+		rType = 0;
+		vrLen = 1606;
+		vrLoc = 6747;
+	};
+	437704AA1097C38E00B19835 /* The Relic2 */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 1;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = "The Relic2";
+		savedGlobals = {
+		};
+		showTypeColumn = 0;
+		sourceDirectories = (
+		);
+		variableFormatDictionary = {
+		};
+	};
+	437704C41097C39A00B19835 /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+			repositoryNamesForRoots = {
+				"" = "";
+			};
+		};
+	};
+	437704C51097C39A00B19835 /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	4377CAE1116D900C001EE0F1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 43C79ACB11167E8500F61CD5 /* preload.lua */;
+		name = "preload.lua: 142";
+		rLen = 0;
+		rLoc = 3388;
+		rType = 0;
+		vrLen = 1477;
+		vrLoc = 2464;
+	};
+	4378D80F1299D3930055BDCF /* shield.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {824, 429}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 114}";
+		};
+	};
+	4378D86B12A075AE0055BDCF /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 4378D8111299D3C00055BDCF /* BlueSelectorOpaqueSat2AlphaX.png */;
+	};
+	4378D8A712A695520055BDCF /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 4359A94F10F2C9740053DE25 /* common.lua */;
+		name = "common.lua: 102";
+		rLen = 0;
+		rLoc = 2649;
+		rType = 0;
+		vrLen = 454;
+		vrLoc = 2265;
+	};
+	4378D8A812A695520055BDCF /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 4359A95310F2C9740053DE25 /* enemies.lua */;
+		name = "enemies.lua: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1009;
+		vrLoc = 4293;
+	};
+	4378D8FF12C964080055BDCF /* upgrades.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {873, 4017}}";
+			sepNavSelRange = "{10140, 0}";
+			sepNavVisRange = "{26, 103}";
+		};
+	};
+	4378D9B112D19C460055BDCF /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 43E88D66114C1F5300C0EDD8 /* input.lua */;
+		name = "input.lua: 163";
+		rLen = 1;
+		rLoc = 4464;
+		rType = 0;
+		vrLen = 600;
+		vrLoc = 3926;
+	};
+	43797D34119903430013937D /* The_Relic2AppDelegate.mm:421 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 438FB17A126BFFED00B62F94 /* The_Relic2AppDelegate.mm */;
+		functionName = "-peerPickerControllerDidCancel:";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 421;
+		location = "The Relic2";
+		modificationTime = 316484989.9069;
+		originalNumberOfMultipleMatches = 1;
+		state = 1;
+	};
+	43797D4B119911F90013937D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32CA4F630368D1EE00C91783 /* The_Relic2_Prefix.pch */;
+		name = "The_Relic2_Prefix.pch: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 318;
+		vrLoc = 0;
+	};
+	437B2F4B12D4FF7F000C8C67 /* PlistBookmark */ = {
+		isa = PlistBookmark;
+		fRef = 8D1107310486CEB800E47090 /* The_Relic2-Info.plist */;
+		fallbackIsa = PBXBookmark;
+		isK = 0;
+		kPath = (
+		);
+		name = "/Users/psenzee/ASR/trunk/The_Relic2-Info.plist";
+		rLen = 0;
+		rLoc = 9223372036854775808;
+	};
+	437B2F5012D4FF7F000C8C67 /* atomicity.h */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = atomicity.h;
+		path = "/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS3.1.sdk/usr/include/c++/4.2.1/ext/atomicity.h";
+		sourceTree = "<absolute>";
+	};
+	438CAA981195E7C100EBBAE4 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 4359A95010F2C9740053DE25 /* createmap.lua */;
+		name = "createmap.lua: 75";
+		rLen = 0;
+		rLoc = 2347;
+		rType = 0;
+		vrLen = 684;
+		vrLoc = 8714;
+	};
+	438FAB4B126BF76600B62F94 /* level10.xml */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1239, 450}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 555}";
+			sepNavWindowFrame = "{{38, 274}, {1298, 578}}";
+		};
+	};
+	438FB14D126BFD9100B62F94 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 4346A26611AA2D350036C893 /* indicators.lua */;
+		name = "indicators.lua: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 656;
+		vrLoc = 1918;
+	};
+	438FB16A126BFFED00B62F94 /* BonjourSupport.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1064, 3133}}";
+			sepNavSelRange = "{6789, 0}";
+			sepNavVisRange = "{0, 1315}";
+		};
+	};
+	438FB16F126BFFED00B62F94 /* EAGLView.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {733, 533}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{145, 1151}";
+			sepNavWindowFrame = "{{271, 225}, {750, 558}}";
+		};
+	};
+	438FB170126BFFED00B62F94 /* EAGLView.mm */ = {
+		uiCtxt = {
+			sepNavFolds = "{\n    c =     (\n                {\n            r = \"{6884, 613}\";\n            s = 0;\n        }\n    );\n    r = \"{0, 8736}\";\n    s = 0;\n}";
+			sepNavIntBoundsRect = "{{0, 0}, {1370, 3900}}";
+			sepNavSelRange = "{2635, 19}";
+			sepNavVisRange = "{2278, 626}";
+			sepNavWindowFrame = "{{177, 169}, {750, 558}}";
+		};
+	};
+	438FB172126BFFED00B62F94 /* ES1Renderer.mm */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {782, 3939}}";
+			sepNavSelRange = "{175, 0}";
+			sepNavVisRange = "{4, 762}";
+			sepNavWindowFrame = "{{130, 210}, {750, 558}}";
+		};
+	};
+	438FB173126BFFED00B62F94 /* ES2Renderer.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {824, 455}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 43}";
+			sepNavWindowFrame = "{{107, 231}, {750, 558}}";
+		};
+	};
+	438FB174126BFFED00B62F94 /* ES2Renderer.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {691, 4173}}";
+			sepNavSelRange = "{165, 0}";
+			sepNavVisRange = "{43, 638}";
+			sepNavWindowFrame = "{{512, 196}, {750, 558}}";
+		};
+	};
+	438FB175126BFFED00B62F94 /* ESRenderer.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {824, 247}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 42}";
+			sepNavWindowFrame = "{{130, 210}, {750, 558}}";
+		};
+	};
+	438FB176126BFFED00B62F94 /* Icon.png */ = {
+		uiCtxt = {
+			sepNavWindowFrame = "{{84, 232}, {1298, 578}}";
+		};
+	};
+	438FB177126BFFED00B62F94 /* main.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {691, 430}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 381}";
+			sepNavWindowFrame = "{{153, 189}, {750, 558}}";
+		};
+	};
+	438FB179126BFFED00B62F94 /* The_Relic2AppDelegate.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {691, 988}}";
+			sepNavSelRange = "{2294, 0}";
+			sepNavVisRange = "{1300, 986}";
+			sepNavWindowFrame = "{{411, 238}, {750, 558}}";
+		};
+	};
+	438FB17A126BFFED00B62F94 /* The_Relic2AppDelegate.mm */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1202, 10465}}";
+			sepNavSelRange = "{4883, 19}";
+			sepNavVisRange = "{0, 1002}";
+			sepNavWindowFrame = "{{571, 182}, {750, 558}}";
+		};
+	};
+	438FB1B9126C003500B62F94 /* GlyphDrawList.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {866, 1001}}";
+			sepNavSelRange = "{989, 0}";
+			sepNavVisRange = "{0, 1508}";
+			sepNavWindowFrame = "{{38, 294}, {750, 558}}";
+		};
+	};
+	438FB1BA126C003500B62F94 /* GlyphWriter_DrawString_mod.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1034, 3315}}";
+			sepNavSelRange = "{7568, 0}";
+			sepNavVisRange = "{6720, 1357}";
+			sepNavWindowFrame = "{{62, 273}, {750, 558}}";
+		};
+	};
+	438FB1F6126C006800B62F94 /* QuadRenderer.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {840, 5978}}";
+			sepNavSelRange = "{13946, 0}";
+			sepNavVisRange = "{12299, 1236}";
+			sepNavWindowFrame = "{{15, 295}, {704, 578}}";
+		};
+	};
+	438FB222126C00C900B62F94 /* AppStoreClientCall.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1239, 490}}";
+			sepNavSelRange = "{509, 320}";
+			sepNavVisRange = "{136, 693}";
+			sepNavWindowFrame = "{{85, 140}, {1298, 525}}";
+		};
+	};
+	438FB224126C00C900B62F94 /* global.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {708, 2016}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 650}";
+			sepNavWindowFrame = "{{84, 232}, {704, 578}}";
+		};
+	};
+	438FB23A126C018D00B62F94 /* Audio.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1200, 4578}}";
+			sepNavSelRange = "{7956, 0}";
+			sepNavVisRange = "{7647, 591}";
+			sepNavWindowFrame = "{{61, 253}, {1298, 578}}";
+		};
+	};
+	438FB248126C019E00B62F94 /* core.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {744, 854}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 789}";
+			sepNavWindowFrame = "{{453, 230}, {704, 578}}";
+		};
+	};
+	438FB258126C019E00B62F94 /* global.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {645, 450}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 392}";
+			sepNavWindowFrame = "{{130, 190}, {704, 578}}";
+		};
+	};
+	438FB259126C019E00B62F94 /* global.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {645, 588}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{195, 719}";
+			sepNavWindowFrame = "{{107, 211}, {704, 578}}";
+		};
+	};
+	438FB25B126C019E00B62F94 /* images.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {824, 676}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 83}";
+		};
+	};
+	438FB25E126C019E00B62F94 /* matrix4f.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {768, 5603}}";
+			sepNavSelRange = "{18464, 0}";
+			sepNavVisRange = "{17974, 2312}";
+			sepNavWindowFrame = "{{38, 294}, {750, 558}}";
+		};
+	};
+	438FB263126C019E00B62F94 /* paths.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1184, 1932}}";
+			sepNavSelRange = "{468, 0}";
+			sepNavVisRange = "{273, 265}";
+			sepNavWindowFrame = "{{661, 56}, {704, 578}}";
+		};
+	};
+	438FB264126C019E00B62F94 /* paths.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {645, 450}}";
+			sepNavSelRange = "{118, 0}";
+			sepNavVisRange = "{0, 534}";
+			sepNavWindowFrame = "{{153, 169}, {704, 578}}";
+		};
+	};
+	438FB26E126C019E00B62F94 /* simplexml.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {720, 6076}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 278}";
+		};
+	};
+	438FB271126C019E00B62F94 /* streams.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {846, 1540}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 413}";
+		};
+	};
+	438FB274126C019E00B62F94 /* strs.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1134, 1330}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{898, 1652}";
+			sepNavWindowFrame = "{{176, 148}, {704, 578}}";
+		};
+	};
+	438FB3A0126C01EE00B62F94 /* AggressiveApproach.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {726, 952}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 0}";
+		};
+	};
+	438FB3CA126C01EE00B62F94 /* GameState.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {810, 4511}}";
+			sepNavSelRange = "{4876, 0}";
+			sepNavVisRange = "{4145, 1218}";
+			sepNavWindowFrame = "{{281, 186}, {750, 558}}";
+		};
+	};
+	438FB3D3126C01EE00B62F94 /* LuaFunctions.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {824, 27599}}";
+			sepNavSelRange = "{64512, 0}";
+			sepNavVisRange = "{63783, 1558}";
+			sepNavWindowFrame = "{{222, 126}, {750, 558}}";
+		};
+	};
+	438FB42C126C021000B62F94 /* sparsehashtable.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {216, 14168}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 0}";
+		};
+	};
+	438FB4C2126C026900B62F94 /* Map.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {824, 1148}}";
+			sepNavSelRange = "{355, 0}";
+			sepNavVisRange = "{303, 297}";
+			sepNavWindowFrame = "{{15, 295}, {1298, 578}}";
+		};
+	};
+	438FB4EB126C027800B62F94 /* MathUtil.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {401, 1974}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 0}";
+		};
+	};
+	438FB55F126C037800B62F94 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 43E88D65114C1F5300C0EDD8 /* hud.lua */;
+		name = "hud.lua: 313";
+		rLen = 0;
+		rLoc = 8174;
+		rType = 0;
+		vrLen = 0;
+		vrLoc = 0;
+	};
+	438FB593126D392900B62F94 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB42C126C021000B62F94 /* sparsehashtable.h */;
+		name = "sparsehashtable.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 0;
+		vrLoc = 0;
+	};
+	438FB5B4126D3CEA00B62F94 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB4EB126C027800B62F94 /* MathUtil.cpp */;
+		name = "MathUtil.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 0;
+		vrLoc = 0;
+	};
+	438FB5D9126D3F3B00B62F94 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB264126C019E00B62F94 /* paths.h */;
+		name = "paths.h: 8";
+		rLen = 0;
+		rLoc = 118;
+		rType = 0;
+		vrLen = 534;
+		vrLoc = 0;
+	};
+	438FB5DA126D3F3B00B62F94 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB26E126C019E00B62F94 /* simplexml.cpp */;
+		name = "simplexml.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 278;
+		vrLoc = 0;
+	};
+	438FB67B126D461000B62F94 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB271126C019E00B62F94 /* streams.cpp */;
+		name = "streams.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 413;
+		vrLoc = 0;
+	};
+	438FB7821274EBF500B62F94 /* RelicDictionary.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1160, 243867}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 118}";
+		};
+	};
+	438FB7A61276382500B62F94 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 438FB6D3126D476B00B62F94 /* blue_glow_shadow.png */;
+	};
+	438FB7A71276382500B62F94 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 438FB66E126D45FD00B62F94 /* dust_glow_shadow_desat.png */;
+	};
+	438FB7A81276382500B62F94 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 43C871D8117ADD1800CBAE5E /* savepoint.lua */;
+		name = "savepoint.lua: 7";
+		rLen = 0;
+		rLoc = 266;
+		rType = 0;
+		vrLen = 0;
+		vrLoc = 0;
+	};
+	438FB7A91276382500B62F94 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 438FB7181270D59500B62F94 /* indigo_glow_full.png */;
+	};
+	438FB7AA1276382500B62F94 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB222126C00C900B62F94 /* AppStoreClientCall.h */;
+		name = "AppStoreClientCall.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 0;
+		vrLoc = 0;
+	};
+	4393CD6811C6ABC70017104E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 4359A95D10F2C9740053DE25 /* multiplayer.lua */;
+		name = "multiplayer.lua: 261";
+		rLen = 48;
+		rLoc = 6009;
+		rType = 0;
+		vrLen = 943;
+		vrLoc = 5716;
+	};
+	4394236E12D667E70035867E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 437B2F5012D4FF7F000C8C67 /* atomicity.h */;
+		name = "atomicity.h: 40";
+		rLen = 0;
+		rLoc = 1698;
+		rType = 0;
+		vrLen = 734;
+		vrLoc = 1328;
+	};
+	4394238B12D6902F0035867E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB3D3126C01EE00B62F94 /* LuaFunctions.cpp */;
+		name = "LuaFunctions.cpp: 2047";
+		rLen = 0;
+		rLoc = 64512;
+		rType = 0;
+		vrLen = 1558;
+		vrLoc = 63783;
+	};
+	439423D912D6A9320035867E /* PlistBookmark */ = {
+		isa = PlistBookmark;
+		fRef = 436B5A05127F4883001A86A2 /* Entitlements.plist */;
+		fallbackIsa = PBXBookmark;
+		isK = 0;
+		kPath = (
+		);
+		name = /Users/psenzee/ASR/trunk/Entitlements.plist;
+		rLen = 0;
+		rLoc = 9223372036854775808;
+	};
+	439423DB12D6A9320035867E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB172126BFFED00B62F94 /* ES1Renderer.mm */;
+		name = "ES1Renderer.mm: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 525;
+		vrLoc = 0;
+	};
+	4394253712D7BE400035867E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB170126BFFED00B62F94 /* EAGLView.mm */;
+		name = "EAGLView.mm: 12";
+		rLen = 0;
+		rLoc = 207;
+		rType = 0;
+		vrLen = 1233;
+		vrLoc = 49;
+	};
+	4394257312DC15330035867E /* CrystalLogoMoviePlayer.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {936, 1287}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 783}";
+			sepNavWindowFrame = "{{107, 231}, {750, 558}}";
+		};
+	};
+	4394257412DC15330035867E /* CrystalLogoMoviePlayer.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1377, 7397}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{44, 1126}";
+			sepNavWindowFrame = "{{130, 210}, {750, 558}}";
+		};
+	};
+	439425C412DCA76C0035867E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB16A126BFFED00B62F94 /* BonjourSupport.cpp */;
+		name = "BonjourSupport.cpp: 183";
+		rLen = 0;
+		rLoc = 6789;
+		rType = 0;
+		vrLen = 1315;
+		vrLoc = 0;
+	};
+	4394275F12DCD14A0035867E /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 438FB16F126BFFED00B62F94 /* EAGLView.h */;
+	};
+	439427D212DCDF5F0035867E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB17A126BFFED00B62F94 /* The_Relic2AppDelegate.mm */;
+		name = "The_Relic2AppDelegate.mm: 706";
+		rLen = 197;
+		rLoc = 23918;
+		rType = 0;
+		vrLen = 1120;
+		vrLoc = 23889;
+	};
+	439427D512DCDF5F0035867E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB170126BFFED00B62F94 /* EAGLView.mm */;
+		name = "EAGLView.mm: 108";
+		rLen = 385;
+		rLoc = 3225;
+		rType = 0;
+		vrLen = 1093;
+		vrLoc = 496;
+	};
+	4394304D1170D1B90083EAF4 /* GameUI.cpp:155 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 438FB18C126C001300B62F94 /* GameUI.cpp */;
+		functionName = "GameUI::DrawTextCentered(RenderContext &context, const char *s, const Vector2 &at, float alpha, float size)";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 155;
+		location = "The Relic2";
+		modificationTime = 316484989.023966;
+		originalNumberOfMultipleMatches = 0;
+		state = 2;
+	};
+	4394305B1170D2080083EAF4 /* GameUI.cpp:56 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 438FB18C126C001300B62F94 /* GameUI.cpp */;
+		functionName = "GameUI::DrawString(RenderContext &context, const char *s, const Vector2 &at, const Vector4 &color, float size, bool useInlineColor)";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 56;
+		location = "The Relic2";
+		modificationTime = 316484989.023986;
+		originalNumberOfMultipleMatches = 0;
+		state = 2;
+	};
+	439430BA1170DBF00083EAF4 /* GlyphWriter_DrawString_mod.cpp:99 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 438FB1BA126C003500B62F94 /* GlyphWriter_DrawString_mod.cpp */;
+		functionName = "GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector2 &start, const Vector2 &pos, const Vector4 &color, const Matrix &transform, const Matrix &view, void *buffer, bool useInlineColor)";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 99;
+		location = "The Relic2";
+		modificationTime = 316484989.024003;
+		originalNumberOfMultipleMatches = 0;
+		state = 2;
+	};
+	43977BDA11B9479C005C6495 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 4359A95110F2C9740053DE25 /* door.lua */;
+		name = "door.lua: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1386;
+		vrLoc = 0;
+	};
+	4398CDE8111FE2D000D701C3 /* guide.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1266, 64316}}";
+			sepNavSelRange = "{15249, 0}";
+			sepNavVisRange = "{0, 231}";
+			sepNavWindowFrame = "{{115, 359}, {704, 519}}";
+		};
+	};
+	4398CDE9111FE2D000D701C3 /* menus.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {824, 18265}}";
+			sepNavSelRange = "{13734, 0}";
+			sepNavVisRange = "{12986, 3534}";
+			sepNavWindowFrame = "{{498, 126}, {704, 701}}";
+		};
+	};
+	4399DB6611272AB300AF3BBA /* Connection.h */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.h;
+		name = Connection.h;
+		path = /Users/psenzee/Relic/Relic/trunk/Classes/Connection.h;
+		sourceTree = "<absolute>";
+	};
+	4399DBC211273D4F00AF3BBA /* Connection.h:24 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 4399DB6611272AB300AF3BBA /* Connection.h */;
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 24;
+		modificationTime = 316484989.023903;
+		originalNumberOfMultipleMatches = 0;
+		state = 2;
+	};
+	43B5556C11B376A00080FBD5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 4359A95510F2C9740053DE25 /* game.lua */;
+		name = "game.lua: 92";
+		rLen = 0;
+		rLoc = 3119;
+		rType = 0;
+		vrLen = 1600;
+		vrLoc = 0;
+	};
+	43C79ACA11167E8500F61CD5 /* overheadmap.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {972, 826}}";
+			sepNavSelRange = "{1071, 0}";
+			sepNavVisRange = "{427, 1137}";
+			sepNavWindowFrame = "{{15, 172}, {704, 701}}";
+		};
+	};
+	43C79ACB11167E8500F61CD5 /* preload.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {645, 2730}}";
+			sepNavSelRange = "{3388, 0}";
+			sepNavVisRange = "{2839, 1110}";
+			sepNavWindowFrame = "{{107, 300}, {704, 578}}";
+		};
+	};
+	43C871D8117ADD1800CBAE5E /* savepoint.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1239, 826}}";
+			sepNavSelRange = "{266, 0}";
+			sepNavVisRange = "{0, 1460}";
+			sepNavWindowFrame = "{{601, 353}, {1298, 525}}";
+		};
+	};
+	43D3DAC51235FF9600D70070 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 4359A96710F2C9740053DE25 /* ui.lua */;
+		name = "ui.lua: 17";
+		rLen = 0;
+		rLoc = 451;
+		rType = 0;
+		vrLen = 781;
+		vrLoc = 989;
+	};
+	43E3160B12DD26E2005E6455 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 8D1107310486CEB800E47090 /* The_Relic2-Info.plist */;
+	};
+	43E3163312DD29C6005E6455 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB17A126BFFED00B62F94 /* The_Relic2AppDelegate.mm */;
+		name = "The_Relic2AppDelegate.mm: 178";
+		rLen = 19;
+		rLoc = 4883;
+		rType = 0;
+		vrLen = 1659;
+		vrLoc = 11141;
+	};
+	43E3165712DD3AC0005E6455 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB17A126BFFED00B62F94 /* The_Relic2AppDelegate.mm */;
+		name = "The_Relic2AppDelegate.mm: 178";
+		rLen = 19;
+		rLoc = 4883;
+		rType = 0;
+		vrLen = 1002;
+		vrLoc = 0;
+	};
+	43E3165812DD3AC0005E6455 /* PlistBookmark */ = {
+		isa = PlistBookmark;
+		fRef = 8D1107310486CEB800E47090 /* The_Relic2-Info.plist */;
+		fallbackIsa = PBXBookmark;
+		isK = 0;
+		kPath = (
+			CFBundleIdentifier,
+		);
+		name = "/Users/psenzee/ASR/trunk/The_Relic2-Info.plist";
+		rLen = 0;
+		rLoc = 9223372036854775807;
+	};
+	43E88D63114C1F5300C0EDD8 /* dialogtext.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1254, 2492}}";
+			sepNavSelRange = "{5066, 0}";
+			sepNavVisRange = "{4900, 1541}";
+			sepNavWindowFrame = "{{38, 211}, {1298, 641}}";
+		};
+	};
+	43E88D64114C1F5300C0EDD8 /* gamestate.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1123, 884}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 1676}";
+			sepNavWindowFrame = "{{84, 232}, {1182, 578}}";
+		};
+	};
+	43E88D65114C1F5300C0EDD8 /* hud.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {126, 5880}}";
+			sepNavSelRange = "{8174, 0}";
+			sepNavVisRange = "{0, 0}";
+			sepNavWindowFrame = "{{38, 274}, {1182, 578}}";
+		};
+	};
+	43E88D66114C1F5300C0EDD8 /* input.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1074, 2240}}";
+			sepNavSelRange = "{4464, 1}";
+			sepNavVisRange = "{3926, 600}";
+			sepNavWindowFrame = "{{403, 300}, {1182, 578}}";
+		};
+	};
+	43E88D67114C1F5300C0EDD8 /* intro.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1123, 4830}}";
+			sepNavSelRange = "{4567, 0}";
+			sepNavVisRange = "{0, 659}";
+			sepNavWindowFrame = "{{176, 148}, {1182, 578}}";
+		};
+	};
+	43E88D68114C1F5300C0EDD8 /* portal.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {981, 3318}}";
+			sepNavSelRange = "{932, 0}";
+			sepNavVisRange = "{0, 948}";
+			sepNavWindowFrame = "{{15, 204}, {1040, 669}}";
+		};
+	};
+	43E88D69114C1F5300C0EDD8 /* quinotaur.lua */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {645, 2016}}";
+			sepNavSelRange = "{2926, 0}";
+			sepNavVisRange = "{2315, 847}";
+			sepNavWindowFrame = "{{130, 190}, {704, 578}}";
+		};
+	};
+	8D1107310486CEB800E47090 /* The_Relic2-Info.plist */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {824, 624}}";
+			sepNavSelRange = "{1250, 10}";
+			sepNavVisRange = "{751, 583}";
+			sepNavVisRect = "{{0, 0}, {863, 528}}";
+			sepNavWindowFrame = "{{190, 192}, {1182, 578}}";
+		};
+	};
+}

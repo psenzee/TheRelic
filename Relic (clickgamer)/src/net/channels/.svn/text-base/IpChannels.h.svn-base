@@ -1,0 +1,65 @@
+#ifndef _IPCHANNELS_H
+#define _IPCHANNELS_H
+
+#include "IChannel.h"
+
+class TcpChannel : public IChannel
+{
+public:
+
+    bool Open(const IAddress *address)
+    {
+        if (address->GetProtocol() != PROTOCOL_TCP)
+        {
+            // $TODO ERROR HERE
+            return false;
+        }
+        IpAddress *addr = static_cast<IpAddress *>(address);
+        // ..
+    }
+    bool SendToReliable(const char *data, int length)
+    {
+        // it's TCP, it's always reliable
+        return SendTo(data, length);
+    }
+};
+
+class Udp2Channel : public IChannel
+{
+public:
+
+    bool Open(const IAddress *address)
+    {
+        if (address->GetProtocol() != PROTOCOL_UDP)
+        {
+            // $TODO ERROR HERE
+            return false;
+        }
+        IpAddress *addr = static_cast<IpAddress *>(address);
+        // ..
+    }
+    bool SendToReliable(const char *data, int length)
+    {
+        // it's UDP, no guarantees regardless
+        // and no extra checking code right here
+        return SendTo(data, length);
+    }
+};
+
+class TcpUdpChannel : public IChannel
+{
+public:
+
+    bool Open(const IAddress *address)
+    {
+        if (address->GetProtocol() != PROTOCOL_TCP_UDP)
+        {
+            // $TODO ERROR HERE
+            return false;
+        }
+        IpAddress *addr = static_cast<IpAddress *>(address);
+        // ..
+    }
+};
+
+#endif // _IPCHANNELS_H

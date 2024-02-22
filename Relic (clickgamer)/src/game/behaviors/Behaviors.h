@@ -1,0 +1,115 @@
+#ifndef _BEHAVIORS_H
+#define _BEHAVIORS_H
+
+#include "game/IBehavior.h"
+#include "game/Character.h"
+#include "Signals.h"
+
+Character *GetTargetCharacter();
+void       DustHit(Character *c);
+void       DustHit(Character *c, const Vector3 &at);
+void       BlueGlow(Character *c);
+void       BlueGlow(Character *c, const Vector3 &at);
+Vector3    GetMovableDirection(Character *self, const Vector3 &direction);
+void       Move(Character *self, const Vector3 &direction, bool collide);
+
+float      RandomFloat();
+Vector3    Random3();
+
+#define GetKillableBehavior    GetBehavior<KillableBehavior,       KillableBehavior::TYPE>
+#define GetAnimationBehavior   GetBehavior<AnimationBehavior,     AnimationBehavior::TYPE>
+#define GetApproach            GetBehavior<Approach,                       Approach::TYPE>
+#define GetDieBehavior         GetBehavior<DieBehavior,                 DieBehavior::TYPE>
+#define GetAttack              GetBehavior<Attack,                           Attack::TYPE>
+#define GetRegularRolePlayer   GetBehavior<RolePlayer,                   RolePlayer::TYPE>
+#define GetGeneratedRolePlayer GetBehavior<GeneratedRolePlayer, GeneratedRolePlayer::TYPE>
+
+class IRolePlayer;
+
+IRolePlayer *GetRolePlayer(Character *c);
+
+// KillableBehavior
+bool     IsKillable(Character *c);
+bool     IsDestroyed(Character *c);
+float    GetHitPoints(Character *c);
+void     SetHitPoints(Character *c, Character *from, float value);
+float    GetMaxHitPoints(Character *c);
+void     SetMaxHitPoints(Character *c, float value);
+unsigned GetExperience(Character *c);
+void     SetExperience(Character *c, unsigned value);
+int      GetLevel(Character *c);
+void     SetLevel(Character *c, int value);
+void     ReceiveHit(Character *c, Character *from, float hp, float distance);
+void     ReceiveHitInMotion(Character *c, Character *from, float hp, float distance);
+float    GetKnockSpin(Character *c);
+void     SetKnockSpin(Character *c, float value);
+float    GetKnockBack(Character *c);
+void     SetKnockBack(Character *c, float value);
+bool     IsInvulnerable(Character *c);
+void     SetInvulnerable(Character *c, bool value);
+
+// AnimationBehavior
+bool  IsAnimation(Character *c);
+bool  IsInAttack(Character *c);
+void  SetForce(Character *c, const Vector3 &value);
+void  SetAction(Character *c, const char *value);
+void  SetAttackTypeCount(Character *c, int value);
+void  SetActionReset(Character *c, const char *value);
+void  SetCanMove(Character *c, bool value);
+void  SetWalkAndAttack(Character *c, bool value);
+bool  GetWalkAndAttack(Character *c);
+bool  CanMove(Character *c);
+void  Turn(Character *c, float angle, float force);
+
+// Approach
+bool  IsApproach(Character *c);
+bool  IsApproachActive(Character *c);
+void  SetApproachSpeed(Character *c, float speed);
+void  SetApproachMinDistance(Character *c, float v);
+void  SetApproachTooFar(Character *c, float v);
+void  SetApproachCollide(Character *c, bool v);
+void  SetApproachTarget(Character *c, Character *target);
+float GetApproachSpeed(Character *c);
+float GetApproachMinDistance(Character *c);
+float GetApproachTooFar(Character *c);
+bool  GetApproachCollide(Character *c);
+
+// Attack
+bool  IsAttack(Character *c);
+bool  IsAttackActive(Character *c);
+void  SetAttackSpeed(Character *c, float speed);
+void  SetAttackMultiplier(Character *c, float multiplier);
+float GetAttackMultiplier(Character *c);
+void  SetMaxAttackDistance(Character *c, float distance);
+void  SetAttackTarget(Character *c, Character *target);
+void  SetAutoAttack(Character *c, bool value);
+void  TriggerAttack(Character *c);
+
+// DieBehavior
+bool     IsDieBehavior(Character *c);
+void     SetDeathComplete(Character *c, bool complete);
+bool     IsDeathComplete(Character *c);
+
+// RolePlayer
+bool     IsRolePlayer(Character *c);
+void     SetStrength(Character *c, unsigned value);
+void     SetDexterity(Character *c, unsigned value);
+void     SetVitality(Character *c, unsigned value);
+void     SetEnergy(Character *c, unsigned value);
+void     SetLuck(Character *c, float value);
+unsigned GetStrength(Character *c);
+unsigned GetDexterity(Character *c);
+unsigned GetVitality(Character *c);
+unsigned GetEnergy(Character *c);
+float    GetLuck(Character *c);
+float    GetRolePlayerRandom(Character *c, float undesirable, float desirable);
+void     SetRolePlayerDefaultAttributes(Character *c);
+float    GetClassBonus(Character *c);
+float    GetRatingBonus(Character *c);
+float    GetAttackRating(Character *c);
+float    GetDefenseRating(Character *c);
+float    GetChanceToHit(Character *c, Character *defender);
+float    GetOverallAttackMultiplier(Character *c);
+void     SetOverallAttackMultiplier(Character *c, float value);
+
+#endif // _BEHAVIORS_H

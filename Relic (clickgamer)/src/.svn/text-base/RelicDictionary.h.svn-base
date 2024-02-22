@@ -1,0 +1,12 @@
+#ifndef _RELIC_DICTIONARY_H
+#define _RELIC_DICTIONARY_H
+
+class RelicDictionary
+{
+public:
+
+    static int         GetId(const char *text);
+    static const char *GetString(int id);
+};
+
+#endif // _RELIC_DICTIONARY_H

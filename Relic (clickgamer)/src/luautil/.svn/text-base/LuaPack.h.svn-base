@@ -1,0 +1,19 @@
+#ifndef _LUAPACK_H
+#define _LUAPACK_H
+
+// Pack:
+// &c - character (8 bit)
+// &i - int (32 bit)
+// &i16 - int (16 bit)
+// &f   - float (32 bit)
+// &f8.8 - fixed point 8/8
+// &z - null terminated string
+// &s - size prefixed string (32 bit)
+// &s16 - size prefixed string (16 bit)
+
+struct lua_State;
+
+int LuaPack(lua_State *state);
+int LuaUnpack(lua_State *state);
+
+#endif // _LUAPACK_H

@@ -1,0 +1,23 @@
+#ifndef _DIEDRIFTBEHAVIOR_H
+#define _DIEDRIFTBEHAVIOR_H
+
+#include "core/core.h"
+#include "DieBehavior.h"
+
+class DieDriftBehavior : public DieBehavior
+{
+public:
+
+    CLASS_NEW_DELETE()
+
+    DieDriftBehavior();
+
+    void Update(const GameTime &time);
+    void Signal(int signal);
+
+    void Serialize(IOutStream &s) const;
+
+    static IBehavior *Deserialize(IInStream &s);
+};
+
+#endif // _DIEDRIFTBEHAVIOR_H

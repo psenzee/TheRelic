@@ -1,0 +1,90 @@
+print "lua:playerprojectile.lua"
+
+projectileRadius = characterRadius * 1.0
+projectileHeight = -40.0
+
+function InitiatePlayerProjectile(player, c, type, hitpoints, seed)
+  if not IsAlive(c) or not IsAlive(player) then return end
+  local x, y, z = player:GetPosition()
+  local projectile = CreatePlayerProjectile("PlayerProjectile", 10, 10, x, y, type, seed)
+  local pdata = projectile:data()
+  pdata.target = c
+  pdata.aggressor = player
+  pdata.hit = hitpoints
+  pdata.knockback = 10.0
+end
+
+function LaunchPlayerProjectile(c, type, hitpoints)
+  local player = GetPlayer()
+  if not IsAlive(c) or not IsAlive(player) then return end
+  local data = player:data()
+  InitiatePlayerProjectile(player, c, type, hitpoints, MakeRandomSeed())
+end
+
+function PlayerProjectile(c)
+  local data = c:data()
+  c:SetApproachTarget(data.target)  
+  local x, y, z = c:GetPosition()
+  if data.last ~= nil then
+    if v3Distance(x, y, 0, data.last[1], data.last[2], 0) < 5.0 then -- if it hasn't moved, it's stuck
+      c:CompleteEffects()
+      DestroyCharacter(c)
+      DustHit(x, y)
+      return c
+    end  
+  end
+  data.last = { x, y }      
+  if CharacterDistance(c, data.target) < 64.0 then
+    PlayerProjectileFinished(c)
+  end
+  return c
+end
+
+function PlayerProjectileFinished(c)
+  if c ~= nil then
+    local player = GetPlayer()
+    local data = c:data()
+    if data.hit ~= nil then
+      EnqueueReceiveHitInMotion(data.target, data.aggressor, data.hit, data.knockback)
+    end
+    c:CompleteEffects()
+    DestroyCharacter(c)
+  end
+end
+
+function CreatePlayerProjectile_Character(c, type, hp, speed, x, y, projectileType, seed)
+
+   c:SetTypeId(1)
+   c:SetPersistent(true)
+   c:SetSeed(seed)   
+
+   c:AddBehavior(NewAnimationBehavior())
+   c:AddBehavior(NewAggressiveApproach())
+   c:AddBehavior(NewDieDriftBehavior())   
+   
+   c:AddSignalHandler(SIGNAL_ABSORBED, "MultiplayerDestroyCharacter")
+
+   SetAttributes(c, RandomBetweenSeeded(seed, hp / 2, hp), GetRandomSpeedSeeded(seed, speed))
+   c:SetScale(0.5 * characterScale)
+   
+   c:SetApproachSpeed(20.0)
+   c:SetCollidable(false)
+
+   c:SetRadius(projectileRadius)
+   c:SetApproachMinDistance(0)
+   c:SetApproachTooFar(1600)
+   c:AddSignalHandler(SIGNAL_DIED, "ProjectileFinished")
+
+   local projectile = nil
+   projectile = PlayerProjectileIndependent(x, y)
+
+   c:AddParticleEffect(projectile, -64)
+   c:SetFilterPosition(false)
+
+   return c
+end
+
+function CreatePlayerProjectile(type, hp, speed, x, y, projectileType, seed)
+   local c = NewCharacter(-1, type, type, x, y, 0.0)
+   return CreatePlayerProjectile_Character(c, type, hp, speed, x, y, projectileType, seed)
+end

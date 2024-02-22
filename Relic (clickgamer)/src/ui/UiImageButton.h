@@ -1,0 +1,31 @@
+#ifndef _UIIMAGEBUTTON_H
+#define _UIIMAGEBUTTON_H
+
+#include "core/core.h"
+#include "fast/Allocator.h"
+#include "UiBasicControl.h"
+
+class UiImageButton : public UiBasicControl
+{
+public:
+    
+    CLASS_NEW_DELETE()
+
+    inline UiImageButton(const char *name, const char *filename, float alpha, float size, const Vector2 &t0, const Vector2 &t1, float angle) 
+        : UiBasicControl(name ? name : ""), mFilename(filename), mAlpha(alpha), 
+          mSize(size), mT0(t0), mT1(t1), mAngle(angle)
+        { SetTransition(new UiTransition(this)); }
+
+    int Render(UiCore &core);
+
+private:
+
+    String  mFilename;
+    float   mAlpha;
+    float   mSize;
+    Vector2 mT0;
+    Vector2 mT1;
+    float   mAngle;
+};
+
+#endif // _UIIMAGEBUTTON_H

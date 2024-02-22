@@ -1,0 +1,24 @@
+#ifndef _ALOOFAPPROACH_H
+#define _ALOOFAPPROACH_H
+
+#include "core/core.h"
+#include "Approach.h"
+
+class AloofApproach : public Approach
+{
+    bool mInZone;
+
+public:
+
+    AloofApproach() : Approach(), mInZone(false) {}
+
+    CLASS_NEW_DELETE()
+
+    void Update(const GameTime &time);
+
+    void Serialize(IOutStream &s) const;
+
+    static IBehavior *Deserialize(IInStream &s);
+};
+
+#endif // _ALOOFAPPROACH_H

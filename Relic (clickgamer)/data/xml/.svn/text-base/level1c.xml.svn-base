@@ -1,0 +1,13 @@
+<levels>
+
+<level name="Game" description="Game">
+
+  <map filename="level-inbetween6.emp"    width="256" height="256" tileset="dl-stonewall.xml" />
+  <map filename="level0-floor0.emp"  width="256" height="256" tileset="dl-stonewall.xml" />
+  <map filename="level0-floor1.emp"  width="256" height="256" tileset="dl-stonewall.xml" />
+  <map filename="level0-floor2.emp"  width="256" height="256" tileset="dl-stonewall.xml" />    
+  <map filename="level0-floor3.emp"  width="256" height="256" tileset="dl-stonewall.xml" render="false" events="false" />      
+  
+</level>
+
+</levels>

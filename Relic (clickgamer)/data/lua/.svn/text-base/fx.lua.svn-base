@@ -1,0 +1,202 @@
+print "Lua:fx.lua"
+
+function SetPortalAEffect(character)
+  character:AddDiscEffect("FireSelectorOpaqueSat2", 0.2, 40.0, 0, 60.0, 0, 0)
+  character:AddCylinderEffect("CylinderEffect2Small",  0.2, 58.0, 0, 256,  0.01)
+  character:AddCylinderEffect("CircleEffect8",   -0.2, 60.0, 0, 256, -0.01)
+end
+
+function SetPortalBEffect(character)
+  character:AddDiscEffect("BlueSelectorOpaqueSat2", 0.2, 40.0, 0, 60.0, 0, 0)
+  character:AddCylinderEffect("CylinderEffect2BlackSmall",  0.2, 58.0, 0, 256,  0.01)
+  character:AddCylinderEffect("CircleEffect8",   -0.2, 60.0, 0, 256, -0.01)
+end
+
+function SetHealEffect(character)
+  character:AddCylinderEffect("CylinderEffect2Small",  0.2, 38.0, 0, 256,  0.05)
+  character:CompleteEffects()
+end
+
+function SetHitGeneratorEffect(character)
+  character:AddCylinderEffect("CylinderEffect2Small",  0.2, 38.0, 0, 512,  0.05)
+  character:CompleteEffects()
+end
+
+function SetWhiteHaloEffect(character)
+  character:AddCylinderEffect("white_glow_full",   -0.2, 40.0, 0, 512, -0.01)
+end
+
+function SetSavePointHaloEffect(character)
+  character:AddCylinderEffect("purple_glow_full2",   -0.2, 20.0, 0, 512, -0.01)
+  character:AddDiscEffect("BlueSelectorOpaqueSat2Alpha", 0.2, 60.0, 0, 80.0, 0, 64)  
+  character:AddDiscEffect("FireSelectorOpaqueSat2", 0.1, 40.0, 0, 60.0, 0, 64)      
+  character:AddDiscEffect("BlueSelectorOpaqueSat2", 0.05, 30.0, 0, 40.0, 0, 64)
+  character:AddDiscEffect("FireSelectorOpaqueSat2", -0.1, 20.0, 0, 30.0, 0, 64)        
+end
+
+function SetStoreHaloEffect(character)
+  character:AddCylinderEffect("purple_glow_full2",   -0.2, 20.0, 0, 512, -0.01)
+  character:AddDiscEffect("BlueSelectorOpaqueSat2Alpha", 0.2, 60.0, 0, 80.0, 0, 64)  
+  character:AddDiscEffect("FireSelectorOpaqueSat2", 0.1, 40.0, 0, 60.0, 0, 64)      
+--character:AddDiscEffect("BlueSelectorOpaqueSat2", 0.05, 30.0, 0, 40.0, 0, 64)
+--character:AddDiscEffect("FireSelectorOpaqueSat2", -0.1, 20.0, 0, 30.0, 0, 64)        
+end
+
+function SetYellowHaloEffect(character)
+  character:AddCylinderEffect("yellow_glow_full",   -0.2, 40.0, 0, 512, -0.01)
+end
+
+function SetIndigoHaloEffect(character)
+  character:AddCylinderEffect("indigo_glow_full",   -0.2, 40.0, 0, 512, -0.01)
+end
+
+function SetDisabledPortalAEffect(character)
+  character:AddDiscEffect("FireSelectorOpaqueSat2", 0.2, 40.0, 0, 60.0, 0, 0)
+end
+
+function SetDisabledPortalBEffect(character)
+  character:AddDiscEffect("BlueSelectorOpaqueSat2", 0.2, 40.0, 0, 60.0, 0, 0)
+end
+
+function SetAreaAttackEffect1(character)
+  local scale = 2
+  character:AddDiscEffect("CircleEffect8", 0.2,  8.0, 2.0 * scale, 80, 12.0 * scale, 0)
+  character:AddDiscEffect("CircleEffect8", -0.2, 10.0, 8.0 * scale, 40, 8.0 * scale, 0)
+end
+
+function SetAreaAttackEffect2(character)
+  local scale = 2
+  character:AddDiscEffect("CircleEffect8", 0.2,  8.0, 2.0 * scale, 80, 12.0 * scale, 0)
+  character:AddDiscEffect("FireSelectorOpaqueSat2", -0.2, 10.0, 8.0 * scale, 40, 8.0 * scale, 0)
+  SetFadeColor(1.0, 1.0, 1.0, 1.0)
+  DoFlash(250)  
+  Audio_PlayAt("#vibrate", 0, 0, 0, 6.0)  
+end
+
+function SetAreaAttackEffect3(character)
+  local scale = 2
+  character:AddDiscEffect("CircleEffect8", 0.2,  8.0, 2.0 * scale, 80, 12.0 * scale, 0)
+  character:AddDiscEffect("BlueSelectorOpaqueSat2", -0.2, 10.0, 8.0 * scale, 40, 8.0 * scale, 0)
+  SetFadeColor(1.0, 1.0, 1.0, 1.0)  
+  DoFlash(250)
+  Audio_PlayAt("#vibrate", 0, 0, 0, 6.0)  
+end
+
+function SetDestroyEffect1(character)
+  local scale = 2
+  character:AddDiscEffect("CylinderEffect2Small", 0.2,  8.0, 2.0 * scale, 80, 12.0 * scale, 0)
+  character:AddDiscEffect("CircleEffect8", -0.2, 10.0, 8.0 * scale, 40, 8.0 * scale, 0)
+end
+
+function _FireHit(x, y)
+  return CreateCloud("fire1", x, y, -100, 500.0, 3.0) 
+end
+
+function FireHit(x, y)
+  local r = _FireHit(x, y)
+  Rpc(_FireHit, x, y)  
+  return r  
+end
+
+function PerpetualFire(x, y)
+  return CreatePerpetualCloud("fire1", x, y, -100, 500.0, 3.0)
+end
+
+function PerpetualFireBig(x, y)
+  return CreatePerpetualCloud("fire1", x, y, -100, 1500.0, 3.0)
+end
+
+function PerpetualFireIndependent(x, y)
+  return CreatePerpetualCloudIndependent("fire2", x, y, -100, 500.0, 3.0)
+end
+
+function PoisonProjectileIndependent(x, y)
+  return CreatePerpetualCloudIndependent("green_glow3", x, y, -10, 500.0, 3.0)
+end
+
+function FireProjectileIndependent(x, y)
+  return CreatePerpetualCloudIndependent("fire2", x, y, -10, 500.0, 3.0)
+end
+
+function ElectricProjectileIndependent(x, y)
+  return CreatePerpetualCloudIndependent("blue_glow3", x, y, -10, 500.0, 3.0)
+end
+
+function PlayerProjectileIndependent(x, y)
+  return CreatePerpetualCloudIndependent("yellow_glow3", x, y, -10, 500.0, 3.0)
+end
+
+function PerpetualFireBigIndependent(x, y)
+  return CreatePerpetualCloudIndependent("fire1", x, y, -100, 1500.0, 3.0)
+end
+
+function PerpetualBlackCloudBigIndependent(x, y)
+  return CreatePerpetualCloudIndependent("arachnarex_glow3", x, y, -200, 2500.0, 3.0)
+end
+
+function DestroyPerpetualEffect(data)
+  if data.cloud ~= nil then
+    Effect_Destroy(data.cloud)
+    data.cloud = nil
+  end
+end
+
+function _DoorLockHit(x, y)
+  return CreateCloud("dust_glow_shadow_desat", x, y, -150, 500.0, 3.0)
+end
+
+function DoorLockHit(x, y)
+  local r = _DoorLockHit(x, y)
+  Rpc(_DoorLockHit, x, y)  
+  return r  
+end
+
+function _DustHit(x, y)
+  return CreateCloud("dust_glow_shadow_desat", x, y, -100, 500.0, 3.0)
+end
+
+function DustHit(x, y)
+  local r = _DustHit(x, y)
+  Rpc(_DustHit, x, y)
+  return r  
+end
+
+function _PoisonHit(x, y)
+  return CreateCloud("green_glow_shadow", x, y, -100, 500.0, 3.0)
+end
+
+function PoisonHit(x, y)
+  local r = _PoisonHit(x, y)
+  Rpc(_PoisonHit, x, y)
+  return r  
+end
+
+function _DustCircle(x, y)
+  return CreateCircleCloud("blue_glow_shadow", x, y, -145.0, 1000.0, 10.0) 
+end
+
+function DustCircle(x, y)
+  local r = _DustCircle(x, y)
+  Rpc(_DustCircle, x, y)  
+  return r  
+end
+
+function _BlueGlow(x, y)
+  return CreateCloud("blue_glow_shadow", x, y, -145.0, 500.0, 4.0)
+end
+
+function BlueGlow(x, y)
+  local r = _BlueGlow(x, y)
+  Rpc(_BlueGlow, x, y)
+  return r  
+end
+
+function _GreenGlow(x, y)
+  return CreateParticleSpray("green_glow_shadow", x, y, -145.0, 500.0, 4.0)
+end
+
+function GreenGlow(x, y)
+  local r = _GreenGlow(x, y)
+  Rpc(_GreenGlow, x, y)
+  return r
+end

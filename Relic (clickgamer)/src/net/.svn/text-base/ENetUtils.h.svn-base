@@ -1,0 +1,15 @@
+#ifndef _ENETUTILS_H
+#define _ENETUTILS_H
+
+namespace Connection
+{
+class ConnectionManager;
+}
+
+Connection::ConnectionManager *CreateENetClientConnectionManager(const char *address, int port);
+Connection::ConnectionManager *CreateENetServerConnectionManager(int port);
+Connection::ConnectionManager *CreateBluetoothClientConnectionManager();
+Connection::ConnectionManager *CreateBluetoothServerConnectionManager();
+void                           OnReceiveBluetoothConnectionLua(void *user);
+
+#endif // _ENETUTILS_H

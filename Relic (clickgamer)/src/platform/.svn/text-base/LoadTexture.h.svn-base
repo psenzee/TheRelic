@@ -1,0 +1,8 @@
+#ifndef _LOADTEXTURE_H
+#define _LOADTEXTURE_H
+
+#include "core/core.h"
+
+unsigned LoadTexture(const char *filename, core::Size *size = 0);
+
+#endif // _LOADTEXTURE_H

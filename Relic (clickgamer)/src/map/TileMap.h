@@ -1,0 +1,12 @@
+#ifndef _TILEMAP_H
+#define _TILEMAP_H
+
+#include "ITileMap.h"
+#include "TileMaps.h"
+
+#include "CoreTileMap.h"
+#include "ObjectTile.h"
+#include "ObjectTileSet.h"
+#include "SimpleTileMapModel.h"
+
+#endif // _TILEMAP_H

@@ -1,0 +1,72 @@
+<objects>
+         
+  <list name="Barrel.Idle">  
+    <object name="BarrelIdle0">
+      <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+      <mesh file="Barrel1~0"><texture file="Barrel" /></mesh>
+    </object>
+  </list>
+  
+  <list name="Barrel.Die">  
+    <event>$Reset</event>
+    <event>$NoLoop</event> 
+    <object name="BarrelDie01"><!--<mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>--><mesh file="BarrelAnimate_000001~0" cull="false" test-visible="false"><texture file="Barrel" /></mesh></object>
+    <object name="BarrelDie02"><!--<mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>--><mesh file="BarrelAnimate_000002~0" cull="false" test-visible="false"><texture file="Barrel" /></mesh></object>
+    <object name="BarrelDie03"><!--<mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>--><mesh file="BarrelAnimate_000003~0" cull="false" test-visible="false"><texture file="BrokenBarrel2" /></mesh></object>
+    <object name="BarrelDie04"><!--<mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>--><mesh file="BarrelAnimate_000004~0" cull="false" test-visible="false"><texture file="BrokenBarrel2" /></mesh></object>
+    <object name="BarrelDie05"><!--<mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>--><mesh file="BarrelAnimate_000005~0" cull="false" test-visible="false"><texture file="BrokenBarrel2" /></mesh></object>
+    <object name="BarrelDie06"><!--<mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>--><mesh file="BarrelAnimate_000006~0" cull="false" test-visible="false"><texture file="BrokenBarrel2" /></mesh></object>
+    <object name="BarrelDie07"><!--<mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>--><mesh file="BarrelAnimate_000007~0" cull="false" test-visible="false"><texture file="BrokenBarrel2" /></mesh></object>
+    <object name="BarrelDie08"><!--<mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>--><mesh file="BarrelAnimate_000008~0" cull="false" test-visible="false"><texture file="BrokenBarrel2" /></mesh></object>
+    <object name="BarrelDie09"><!--<mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>--><mesh file="BarrelAnimate_000009~0" cull="false" test-visible="false"><texture file="BrokenBarrel2" /></mesh></object>
+    <object name="BarrelDie10"><!--<mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>--><mesh file="BarrelAnimate_000010~0" cull="false" test-visible="false"><texture file="BrokenBarrel2" /></mesh></object>    
+    <object name="BarrelDie11"><!--<mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>--><mesh file="BarrelAnimate_000011~0" cull="false" test-visible="false"><texture file="BrokenBarrel2" /></mesh></object>
+    <object name="BarrelDie12"><!--<mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>--><mesh file="BarrelAnimate_000012~0" cull="false" test-visible="false"><texture file="BrokenBarrel2" /></mesh></object>
+    <object name="BarrelDie13"><!--<mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>--><mesh file="BarrelAnimate_000013~0" cull="false" test-visible="false"><texture file="BrokenBarrel2" /></mesh></object>
+    <object name="BarrelDie14"><!--<mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>--><mesh file="BarrelAnimate_000014~0" cull="false" test-visible="false"><texture file="BrokenBarrel2" /></mesh></object>
+    <object name="BarrelDie15"><!--<mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>--><mesh file="BarrelAnimate_000015~0" cull="false" test-visible="false"><texture file="BrokenBarrel2" /></mesh></object>
+    <object name="BarrelDie16">
+      <event>AddFrameToDebrisMap</event>
+      <!--<event>Destroy</event>-->
+    <event>Script "MultiplayerDestroyCharacter"</event>
+      <!--<mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>-->
+      <mesh file="BarrelAnimate_000016~0" cull="false" transparent="true" render-tag="main" test-visible="false"><texture file="BrokenBarrel2" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh></object>
+  </list>  
+  
+  <list name="Barrel.Walk_ReceiveHit">  
+    <event>$Reset</event>
+    <event>$NoLoop</event>  
+    <event>$FrameTime 66</event>
+    <object name="BarrelHit01"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="BarrelWobbleAnimate_000001~0"><texture file="Barrel" /></mesh></object>
+    <object name="BarrelHit02"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="BarrelWobbleAnimate_000002~0"><texture file="Barrel" /></mesh></object>
+    <object name="BarrelHit03"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="BarrelWobbleAnimate_000003~0"><texture file="Barrel" /></mesh></object>
+    <object name="BarrelHit04"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="BarrelWobbleAnimate_000004~0"><texture file="Barrel" /></mesh></object>
+    <object name="BarrelHit05"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="BarrelWobbleAnimate_000005~0"><texture file="Barrel" /></mesh></object>
+    <object name="BarrelHit06"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="BarrelWobbleAnimate_000006~0"><texture file="Barrel" /></mesh></object>
+    <object name="BarrelHit07"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="BarrelWobbleAnimate_000007~0"><texture file="Barrel" /></mesh></object>
+    <object name="BarrelHit08"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="BarrelWobbleAnimate_000008~0"><texture file="Barrel" /></mesh></object>
+    <object name="BarrelHit09"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="BarrelWobbleAnimate_000009~0"><texture file="Barrel" /></mesh></object>
+    <object name="BarrelHit10"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="BarrelWobbleAnimate_000010~0"><texture file="Barrel" /></mesh></object>        
+    <object name="BarrelHit11"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="BarrelWobbleAnimate_000011~0"><texture file="Barrel" /></mesh></object>
+    <object name="BarrelHit12"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="BarrelWobbleAnimate_000012~0"><texture file="Barrel" /></mesh></object>
+    <object name="BarrelHit13"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="BarrelWobbleAnimate_000013~0"><texture file="Barrel" /></mesh></object>
+    <object name="BarrelHit14"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="BarrelWobbleAnimate_000014~0"><texture file="Barrel" /></mesh></object>
+    <object name="BarrelHit15"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="BarrelWobbleAnimate_000015~0"><texture file="Barrel" /></mesh></object>
+    <object name="BarrelHit16"><mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="BarrelWobbleAnimate_000016~0"><texture file="Barrel" /></mesh></object>
+  </list>  
+  
+  <list name="Barrel.Walk">  
+    <object name="BarrelWalk0">
+      <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+      <mesh file="Barrel1~0"><texture file="Barrel" /></mesh>
+    </object>
+  </list>  
+  
+  <list name="Barrel.Attack">  
+    <object name="BarrelAttack0">
+      <mesh file="shadow~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh>
+      <mesh file="Barrel1~0"><texture file="Barrel" /></mesh>
+    </object>
+  </list>
+  
+</objects>

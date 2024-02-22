@@ -1,0 +1,45 @@
+#include "UiDialogText.h"
+#include "UiCore.h"
+#include "core/strs.h"
+
+int UiDialogText::Render(UiCore &core)
+{   
+    if (ShouldRender())
+    {
+        UiBounds bounds = UiCore::GetAbsoluteBounds(this);
+        char text[64 * 1024];
+        const char *ptext = text;
+        bool istab = false;
+        enum { FRAMES_TAB = 10, FRAMES_NORMAL = 2 };
+        if ((mFrames % mFramesToWait) == 0)
+        {
+            int strsz = strlen(GetText());
+            if (mStringOffset >= strsz)
+                mStringOffset = strsz;
+            else
+            {
+                ptext = first_of((char *)(GetText() + mStringOffset), " \t\n\r");
+                mStringOffset = ptext ? (ptext - GetText()) : strsz;
+            }
+            istab = (ptext && *ptext == '\t');
+            mFramesToWait = istab ? FRAMES_TAB : FRAMES_NORMAL;
+            strncpy(text, GetText(), mStringOffset);
+            text[mStringOffset] = '\0';
+            mStringOffset++;
+        }
+        else
+        {
+            strncpy(text, GetText(), mStringOffset);
+            text[mStringOffset - 1] = '\0';
+    //      if (mFramesToWait > FRAMES_NORMAL)
+    //          strcpy(text + mStringOffset - 1, " ..");
+        }
+        float alpha = mAlpha * GetTransitionAlpha();
+        float size  = mSize + GetTransitionAdditiveScale();
+        if (!mCenter) core.DrawStringGlow(text, bounds.minimum, JUSTIFY_LEFT, alpha, size);
+        else          core.DrawStringGlow(text, bounds.minimum, JUSTIFY_CENTER, alpha, size);
+        mFrames++;
+        return 1;
+    }
+    return 0;
+}

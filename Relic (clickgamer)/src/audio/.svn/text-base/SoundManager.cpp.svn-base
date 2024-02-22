@@ -1,0 +1,192 @@
+#include "SoundManager.h"
+#include "OpenALSupport.h"
+#include "Audio.h"
+
+#include "core/random.h"
+#include "math/Filters.h"
+
+#ifdef __APPLE__
+#include "platform/Apple/SoundEngine.h"
+#endif
+
+SoundManager *SoundManager::sInstance = 0;
+
+// http://www.devmaster.net/articles/openal-tutorials/lesson1.php
+// http://www.edenwaith.com/products/pige/tutorials/openal.php
+// http://connect.creativelabs.com/openal/default.aspx
+/*
+extern "C" const char *globalTranslatePath(const char *path)
+{
+    return path;
+}
+*/
+ScatterNoise::ScatterNoise(Audio &audio, float distance) 
+    : mAudio(audio), mDistance(distance), mRepositionFrame(0), mRandom(++sSeedValue), mPosition(0.05f)
+{
+}
+
+void ScatterNoise::Update()
+{
+    if (mRepositionFrame <= 0)
+    {
+        mTargetPosition = Vector3((mRandom.realf() - 0.5f) * 2.0f * mDistance + mListener.x,
+                                    (mRandom.realf() - 0.5f) * 2.0f * mDistance + mListener.y,
+                                    mListener.z);
+        mRepositionFrame = mRandom.integer() % 100;
+    }
+    mAudio.SetSourcePosition(mSourceName.c_str(), mPosition.Get());
+    mPosition.Input(mTargetPosition);
+    mRepositionFrame--;
+}
+
+int ScatterNoise::sSeedValue;
+
+SoundManager::SoundManager() : mAudio(), mAmbientNoise1(mAudio, 100.f), mAmbientNoise2(mAudio, 100.f), mAmbientVolume(1.f), mThemePlaying(false)
+{
+#ifdef __APPLE__
+//	SoundEngine_Initialize(0.f);
+#endif
+}
+
+void SoundManager::Load()
+{
+    mAudio.Load("drips11k8m.wav",                        "Drips");
+    mAudio.Load("creature_footstep_large_var_01_01.wav", "LargeFootstep");
+    mAudio.Load("body_fall_dirt_01.wav",                 "Fall1");
+    mAudio.Load("body_hit_big_03.wav",                   "Hit1");
+    mAudio.Load("airwhoosh03.wav",                       "Whoosh1");
+    mAudio.Load("bone_break11.wav",                      "BoneBreak");
+
+    mAudio.SetSource("Drips", "Ambient1");
+    mAudio.SetSource("Drips", "Ambient2");
+}
+
+void SoundManager::Load(const char *filename, const char *soundname)
+{
+    mAudio.Load(filename, soundname);
+}
+
+void SoundManager::SetAmbientVolume(float value)
+{
+    mAmbientVolume = value;
+}
+
+void SoundManager::Play(const char *sound, const char *source, float gain, bool loop)
+{
+    if (strcmp(sound, "#vibrate") == 0)
+    {
+        mAudio.Vibrate();
+        return;
+    }
+    mAudio.SetSource(sound, source);
+    mAudio.Play(source, gain, loop);
+}
+
+void SoundManager::PlayAt(const char *sound, const Vector3 &position, float gain)
+{
+    if (strcmp(sound, "#vibrate") == 0)
+    {
+        mAudio.Vibrate();
+        return;
+    }	
+    const char *available = GetAvailableSourceName();
+    mAudio.SetSource(sound, available);
+    mAudio.SetSourcePosition(available, position);
+    mAudio.Play(available, gain, false);
+}
+
+void SoundManager::PlayTheme(const char *filename, float gain) // this will possibly have a radically different implementation for iPhone & PC
+{
+#ifndef __APPLE__
+    const char *source = "theme";
+    // the pc implementation
+    if (!mAudio.IsLoaded(filename))
+    {
+        mAudio.Load(filename, filename); // use the filename as the sound name
+    }
+    mAudio.SetSource(filename, source); // use the sound name as the source name
+    mAudio.Play(source, gain, true);
+#else // iPhone
+    if (mThemePlaying)
+    {
+        SoundEngine_StopBackgroundMusic(false);
+        SoundEngine_UnloadBackgroundMusicTrack();
+    }
+    SoundEngine_LoadBackgroundMusicTrack(filename, true, false);
+    SoundEngine_SetBackgroundMusicVolume(gain);	
+    SoundEngine_StartBackgroundMusic();
+    mThemePlaying = true;
+#endif
+}
+
+void SoundManager::SetListenerPosition(const Vector3 &v)
+{
+    mAudio.SetListenerPosition(v);
+    mAmbientNoise1.SetListenerPosition(v);
+    mAmbientNoise2.SetListenerPosition(v);
+}
+
+void SoundManager::StartAmbient()
+{
+    mAudio.SetSourceSecondsOffset("Ambient1", 3.f);
+    mAudio.Play("Ambient1", mAmbientVolume, true);
+    mAudio.Play("Ambient2", mAmbientVolume, true);
+    mAmbientNoise1.SetSourceName("Ambient1");
+    mAmbientNoise2.SetSourceName("Ambient2");
+}
+
+void SoundManager::StopAmbient()
+{
+    mAudio.Stop("Ambient1");
+    mAudio.Stop("Ambient2");
+}
+
+void SoundManager::Update()
+{
+    mAmbientNoise1.Update();
+    mAmbientNoise2.Update();
+}
+
+const char *SoundManager::GetAvailableSourceName() const
+{
+    static char name[8];
+    static unsigned times[8]; // doing these as function static is a hack
+    static int count = 0;
+    if (count == 0)
+        memset(times, 0xff, sizeof(times));
+    for (int i = 0; i < 8; i++)
+    {
+        sprintf(name, "#%d", i);
+        if (mAudio.IsSourceDone(name))
+        {
+            times[i] = count++;
+            return name;
+        }
+    }
+    memset(name, 0, sizeof(name));
+    int earliest = ~0u, earlyIndex = 0;
+    for (int i = 0; i < 8; i++)
+    {
+        if (times[i] < earliest)
+        {
+            earliest = times[i];
+            earlyIndex = i;
+        }
+    }
+    sprintf(name, "#%d", earlyIndex);
+    times[earlyIndex] = count++;
+    return name;
+}
+
+inline float MapToRange(float t, float lo, float hi)
+{
+    float d = hi - lo;
+    return t * d + lo;
+}
+
+Vector3 GetRandomVector3(core::Random &r, const Vector3 &lo, const Vector3 &hi)
+{
+    return Vector3(MapToRange(r.realf(), lo.x, hi.x),
+                   MapToRange(r.realf(), lo.y, hi.y),
+                   MapToRange(r.realf(), lo.z, hi.z));
+}

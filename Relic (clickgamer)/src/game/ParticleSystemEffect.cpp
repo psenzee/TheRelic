@@ -1,0 +1,61 @@
+#include "ParticleSystemEffect.h"
+
+#include "core/core.h"
+#include "core/gametime.h"
+#include "render/ParticleEffects.h"
+#include "render/RenderContext.h"
+
+extern bool IsLowEndDevice();
+
+ParticleSystemEffect::ParticleSystemEffect(ParticleSystem *particles, float atZ)
+    : mParticleSystem(particles), mCompleteFrames(-1), mTime(0), mAtZ(atZ)
+{ 
+}
+
+ParticleSystemEffect::~ParticleSystemEffect()
+{
+    if (mParticleSystem)
+        delete mParticleSystem;
+    mParticleSystem = 0;
+}
+
+void ParticleSystemEffect::Update(const GameTime &time)
+{
+    if (mCompleteFrames != 0)
+    {
+        if (mCompleteFrames > 0)
+            mCompleteFrames--;
+        mTime = time;
+    }
+}
+
+void ParticleSystemEffect::SetPosition(const Vector3 &p)
+{
+    if (mParticleSystem)
+        mParticleSystem->SetPosition(Vector3(p.x, p.y, mAtZ));
+}
+
+void ParticleSystemEffect::Complete()
+{
+    if (mCompleteFrames == -1)
+    {
+        mCompleteFrames = COMPLETE_FRAMES;
+        ParticleEffects::GetInstance()->DeferredDestroy(mParticleSystem);
+        mParticleSystem = 0;
+    }
+}
+
+bool ParticleSystemEffect::IsComplete() const
+{
+    return mCompleteFrames == 0;
+}
+
+void ParticleSystemEffect::Render(RenderContext &context)
+{
+    if (mParticleSystem && mCompleteFrames != 0)
+    {
+        if (!IsLowEndDevice())
+            ParticleEffects::GetInstance()->DeferRender(mParticleSystem);
+          //mParticleSystem->Render(context, mTime);
+    }
+}

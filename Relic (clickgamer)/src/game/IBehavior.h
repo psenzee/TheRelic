@@ -1,0 +1,75 @@
+#ifndef _IBEHAVIOR_H
+#define _IBEHAVIOR_H
+
+#include "core/core.h"
+#include "fast/Allocator.h"
+
+class Character;
+class GameTime;
+class RenderContext;
+class IOutStream;
+class IInStream;
+
+class IBehavior
+{
+public:
+
+    virtual ~IBehavior() {}
+
+    virtual Character       *GetCharacter()                                                         = 0;
+    virtual const Character *GetCharacter() const                                                   = 0;
+
+    virtual int              GetBehaviorTypeId()                                                    = 0; // this can be arbitrary
+    virtual bool             IsOfType(int type)                                                     = 0; // this can be arbitrary
+    virtual void             Start(Character *self)                                                 = 0;
+    virtual void             Suspend()                                                              = 0;
+    virtual bool             IsSuspended() const                                                    = 0;
+    virtual void             Resume()                                                               = 0;
+    virtual void             Stop()                                                                 = 0;
+    virtual void             Reset()                                                                = 0;
+    
+    virtual void             Signal(int signal)                                                     = 0;
+    virtual void             Serialize(IOutStream &s) const                                         = 0;
+    
+    virtual void             Update(const GameTime &time)                                           = 0;
+    virtual void             Draw(RenderContext &rc, const Vector3 &position, const GameTime &time) = 0;
+};
+
+class AbstractBehavior : public IBehavior
+{
+public:
+    
+    AbstractBehavior(int behaviorTypeId) : mBehaviorTypeId(behaviorTypeId), mSuspended(false), mCharacter(0) {}
+    ~AbstractBehavior() { Stop(); }
+           
+    // from IBehavior
+    Character       *GetCharacter();
+    const Character *GetCharacter() const;
+    
+    int              GetBehaviorTypeId()                                                    { return mBehaviorTypeId; }
+    bool             IsOfType(int type)                                                     { return mBehaviorTypeId == type; } // this can be overriden for inheritance support
+
+    void             Suspend()                                                              { mSuspended = true; }
+    bool             IsSuspended() const                                                    { return mSuspended; }
+    void             Resume()                                                               { mSuspended = false; }
+    void             Stop()                                                                 { SetCharacter(0); }
+    void             Reset()                                                                {}
+    
+    void             Signal(int signal)                                                     {}
+    
+    void             Update(const GameTime &time)                                           {}
+    void             Draw(RenderContext &rc, const Vector3 &position, const GameTime &time) {}
+    
+protected:
+    
+    // not from IBehavior
+    void             SetCharacter(Character *character)                                     { mCharacter = character; }
+    
+private:
+
+    int                mBehaviorTypeId;
+    bool               mSuspended;
+    mutable Character *mCharacter;
+};
+
+#endif  // _IBEHAVIOR_H

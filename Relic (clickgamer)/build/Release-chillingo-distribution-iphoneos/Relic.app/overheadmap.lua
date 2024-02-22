@@ -1,0 +1,71 @@
+print "Lua:overheadmap.lua"
+
+MAP_ENABLED = true
+
+MAP_FRAME = -1 -- -1 means it's not shown, -2 means it is, and anything positive in between is a transition TO the MAP and negative is a transition FROM the MAP
+
+-- these are public functions
+function IsMapOn()
+  return MAP_FRAME ~= -1
+end
+
+function UpdateMap()
+  if MAP_ENABLED and ButtonPressed(4) then
+    ToggleMap()
+  end
+  PerFrame_UpdateMap()
+end
+
+---------------- PRIVATE ----------------
+
+function ToggleMap(startFunction)
+  if MAP_FRAME == -1 then
+    IN_GAME_MENU_START_FUNCTION = startFunction
+    MAP_FRAME = GetGameStateFrames()
+    SetSuppressHud(true)    
+  elseif MAP_FRAME == -2 then
+    MAP_FRAME = -GetGameStateFrames()
+    HideInGameMenu()
+  end
+end
+
+IN_GAME_MENU_START_FUNCTION = nil
+
+function PerFrame_UpdateMap()
+
+  local frame = GetGameStateFrames()
+  if MAP_FRAME == -1 or MAP_FRAME == -2 then
+    return
+  
+  -- transition TO map
+  elseif frame == MAP_FRAME + 1 then
+    SetPaused(true)
+    SetCharacterPaused(true)
+  elseif frame > MAP_FRAME + 1 and frame < MAP_FRAME + 10 then
+    SetBaseDepthScale(BASE_DEPTH_SCALE + (frame - MAP_FRAME) * 1.0)
+    SetSpeedDepthScalar(1.0, speedDepth)
+  elseif frame == MAP_FRAME + 10 then
+    if IN_GAME_MENU_START_FUNCTION == nil then
+      --ShowInGameItemsPage()
+      ShowInGameMapPage()
+    else
+      IN_GAME_MENU_START_FUNCTION()
+      IN_GAME_MENU_START_FUNCTION = nil
+    end      
+    MAP_FRAME = -2
+  
+  -- transition FROM map
+  elseif frame > -MAP_FRAME + 1 and frame < -MAP_FRAME + 10 then
+    SetBaseDepthScale(BASE_DEPTH_SCALE + (10.0 - (frame - -MAP_FRAME) * 1.0))
+    SetSpeedDepthScalar(1.0, speedDepth)
+  elseif frame == -MAP_FRAME + 10 then
+    SetBaseDepthScale(BASE_DEPTH_SCALE)
+    SetSpeedDepthScalar(1.0, speedDepth)
+    SetCharacterPaused(false)
+    SetPaused(false)    
+  elseif frame == -MAP_FRAME + 11 then
+    MAP_FRAME = -1
+    SetSuppressHud(false)
+  end
+  
+end

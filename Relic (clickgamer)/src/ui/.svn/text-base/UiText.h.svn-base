@@ -1,0 +1,27 @@
+#ifndef _UITEXT_H
+#define _UITEXT_H
+
+#include "core/core.h"
+#include "UiBasicControl.h"
+#include "UiTransition.h"
+#include "fast/Allocator.h"
+
+class UiText : public UiBasicControl
+{
+public:
+    
+    CLASS_NEW_DELETE()
+    
+    inline UiText(const char *name, float alpha, float size, bool center) : UiBasicControl(name ? name : ""), mAlpha(alpha), mSize(size), mCenter(center)
+      { SetTransition(new UiTransition(this)); }
+
+    int Render(UiCore &core);
+
+private:
+
+    float  mAlpha;
+    float  mSize;
+    bool   mCenter;
+};
+
+#endif // _UITEXT_H

@@ -1,0 +1,246 @@
+// !$*UTF8*$!
+{
+	1D3623240D0F684500981E51 /* ChillingoCrystalTestAppDelegate.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {691, 430}}";
+			sepNavSelRange = "{712, 0}";
+			sepNavVisRange = "{0, 948}";
+			sepNavWindowFrame = "{{107, 231}, {750, 558}}";
+		};
+	};
+	1D3623250D0F684500981E51 /* ChillingoCrystalTestAppDelegate.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {936, 3783}}";
+			sepNavSelRange = "{371, 0}";
+			sepNavVisRange = "{3, 610}";
+			sepNavWindowFrame = "{{330, 175}, {750, 558}}";
+		};
+	};
+	1D6058900D05DD3D006BFB54 /* ChillingoCrystalTest */ = {
+		activeExec = 0;
+		executables = (
+			439425F112DCACA30035867E /* ChillingoCrystalTest */,
+		);
+	};
+	2514C27910084DCA00A42282 /* Shader.fsh */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {691, 430}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 230}";
+			sepNavWindowFrame = "{{245, 105}, {750, 558}}";
+		};
+	};
+	2514C27A10084DCA00A42282 /* Shader.vsh */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {691, 430}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 364}";
+			sepNavWindowFrame = "{{268, 84}, {750, 558}}";
+		};
+	};
+	28EC4C5611D54ECE0027AA9F /* ChillingoCrystalTestViewController.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {691, 455}}";
+			sepNavSelRange = "{594, 0}";
+			sepNavVisRange = "{3, 731}";
+			sepNavWindowFrame = "{{107, 231}, {750, 558}}";
+		};
+	};
+	28EC4C5711D54ECE0027AA9F /* ChillingoCrystalTestViewController.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {716, 5317}}";
+			sepNavSelRange = "{492, 0}";
+			sepNavVisRange = "{460, 827}";
+			sepNavWindowFrame = "{{395, 258}, {750, 558}}";
+		};
+	};
+	28FD14FC0DC6FC130079059D /* EAGLView.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {716, 494}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{173, 829}";
+			sepNavWindowFrame = "{{50, 320}, {750, 558}}";
+		};
+	};
+	28FD14FD0DC6FC130079059D /* EAGLView.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {716, 2379}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 467}";
+			sepNavWindowFrame = "{{299, 247}, {750, 558}}";
+		};
+	};
+	29B97313FDCFA39411CA2CEA /* Project object */ = {
+		activeBuildConfigurationName = Release;
+		activeExecutable = 439425F112DCACA30035867E /* ChillingoCrystalTest */;
+		activeSDKPreference = iphoneos4.2;
+		activeTarget = 1D6058900D05DD3D006BFB54 /* ChillingoCrystalTest */;
+		addToTargets = (
+			1D6058900D05DD3D006BFB54 /* ChillingoCrystalTest */,
+		);
+		codeSenseManager = 4394260012DCACC30035867E /* Code sense */;
+		executables = (
+			439425F112DCACA30035867E /* ChillingoCrystalTest */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					883,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 316494697;
+			PBXWorkspaceStateSaveDate = 316494697;
+		};
+		perUserProjectItems = {
+			439DB87512DDEDE000B06546 /* PlistBookmark */ = 439DB87512DDEDE000B06546 /* PlistBookmark */;
+			439DB87612DDEDE000B06546 /* PlistBookmark */ = 439DB87612DDEDE000B06546 /* PlistBookmark */;
+		};
+		sourceControlManager = 439425FF12DCACC30035867E /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	29B97316FDCFA39411CA2CEA /* main.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {519, 245}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 373}";
+			sepNavWindowFrame = "{{15, 315}, {750, 558}}";
+		};
+	};
+	32CA4F630368D1EE00C91783 /* ChillingoCrystalTest_Prefix.pch */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {796, 430}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 338}";
+			sepNavWindowFrame = "{{291, 63}, {750, 558}}";
+		};
+	};
+	439425F112DCACA30035867E /* ChillingoCrystalTest */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = ChillingoCrystalTest;
+		savedGlobals = {
+		};
+		showTypeColumn = 0;
+		sourceDirectories = (
+		);
+	};
+	439425FF12DCACC30035867E /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+			repositoryNamesForRoots = {
+				"" = "";
+			};
+		};
+	};
+	4394260012DCACC30035867E /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	4394260E12DCAE840035867E /* CrystalLeaderboards.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1069, 1898}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 620}";
+		};
+	};
+	4394260F12DCAE840035867E /* CrystalPlayer.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1174, 1482}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 334}";
+		};
+	};
+	4394261012DCAE840035867E /* CrystalSession.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1006, 5408}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 661}";
+		};
+	};
+	439426A712DCB7AF0035867E /* CrystalLogoMoviePlayer.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {936, 1248}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 665}";
+		};
+	};
+	439426A812DCB7AF0035867E /* CrystalLogoMoviePlayer.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {824, 7423}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{281, 952}";
+		};
+	};
+	439DB87512DDEDE000B06546 /* PlistBookmark */ = {
+		isa = PlistBookmark;
+		fRef = 8D1107310486CEB800E47090 /* ChillingoCrystalTest-Info.plist */;
+		fallbackIsa = PBXBookmark;
+		isK = 0;
+		kPath = (
+			CFBundleIdentifier,
+		);
+		name = "/Users/psenzee/Senzee_iOS/ChillingoCrystalTest/ChillingoCrystalTest-Info.plist";
+		rLen = 0;
+		rLoc = 9223372036854775807;
+	};
+	439DB87612DDEDE000B06546 /* PlistBookmark */ = {
+		isa = PlistBookmark;
+		fRef = 8D1107310486CEB800E47090 /* ChillingoCrystalTest-Info.plist */;
+		fallbackIsa = PBXBookmark;
+		isK = 0;
+		kPath = (
+			CFBundleDevelopmentRegion,
+		);
+		name = "/Users/psenzee/Senzee_iOS/ChillingoCrystalTest/ChillingoCrystalTest-Info.plist";
+		rLen = 0;
+		rLoc = 9223372036854775807;
+	};
+	8D1107310486CEB800E47090 /* ChillingoCrystalTest-Info.plist */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {726, 572}}";
+			sepNavSelRange = "{1154, 0}";
+			sepNavVisRange = "{828, 386}";
+			sepNavWindowFrame = "{{50, 320}, {750, 558}}";
+		};
+	};
+}

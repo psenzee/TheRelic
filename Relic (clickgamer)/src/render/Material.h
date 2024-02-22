@@ -1,0 +1,24 @@
+#ifndef _MATERIAL_H
+#define _MATERIAL_H
+
+#include "core/core.h"
+#include "fast/Allocator.h"
+
+class Material
+{
+public:
+    
+    CLASS_NEW_DELETE()
+    
+    Vector4 ambient,
+            diffuse,
+            emissive,
+            specular;
+    
+    float   shininess;
+
+    Material();    
+    Material(const Vector4 &ambient, const Vector4 &diffuse, const Vector4 &emissive, const Vector4 &specular, float shininess);
+};
+
+#endif // _MATERIAL_H

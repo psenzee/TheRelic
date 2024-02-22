@@ -1,0 +1,75 @@
+#ifndef _KILLABLEBEHAVIOR_H
+#define _KILLABLEBEHAVIOR_H
+
+#include "core/core.h"
+#include "game/Character.h"
+#include "game/IBehavior.h"
+#include "KnockBackState.h"
+
+class KillableBehavior : public AbstractBehavior
+{
+public:
+
+    CLASS_NEW_DELETE()
+
+    enum { TYPE = 1001 };
+
+    KillableBehavior() : AbstractBehavior(TYPE), mHitPoints(1.f), mMaxHitPoints(1.f), mKiller(0), mHitFrames(0), mLevel(1), mExperience(10), mKnockSpin(1.f), mKnockBackMultiplier(1.f), mAttackedBy(0), mInvulnerable(false) {}
+    ~KillableBehavior() { Stop(); }
+
+    bool          IsDestroyed() const               { return mHitPoints <= 0.f; }
+    float         GetHitPoints() const              { return mHitPoints; }
+    void          SetHitPoints(float value, Character *from);
+    float         GetMaxHitPoints() const           { return mMaxHitPoints; }
+    void          SetMaxHitPoints(float value);
+    unsigned      GetExperience() const             { return mExperience; }
+    void          SetExperience(unsigned value)     { mExperience = value; }
+    int           GetLevel() const                  { return mLevel; }
+    void          SetLevel(int value)               { mLevel = value; }
+    void          SetKnockSpin(float value)         { mKnockSpin = value; }
+    float         GetKnockSpin() const              { return mKnockSpin; }
+    void          SetKnockBack(float value)         { mKnockBackMultiplier = value; }
+    float         GetKnockBack() const              { return mKnockBackMultiplier; }
+    void          SetInvulnerable(bool value)       { mInvulnerable = value; }
+    bool          IsInvulnerable() const            { return mInvulnerable; }
+
+    void          ReceiveHit(float value, float distance, Character *from);
+    void          ReceiveHitInMotion(float value, float distance, Character *from);
+
+    Character    *GetKiller()                       { return mKiller; }
+    
+    void          Start(Character *self);
+    void          Stop();
+    void          Reset();
+    void          Update(const GameTime &time);
+
+    void          Serialize(IOutStream &s) const
+    {
+        // $TODO
+    }
+
+    static IBehavior *Deserialize(IInStream &s);
+    
+private:
+
+    enum { RECEIVEHIT_FRAMES = 16 };
+
+    void            KnockBack(float distance, Character *from);
+
+    void            Killed(Character *killer);
+
+    bool            mInvulnerable;
+    int             mHitFrames;
+
+    int             mLevel;
+    unsigned        mExperience;
+    float           mHitPoints;
+    float           mMaxHitPoints;
+    float           mKnockSpin;
+    float           mKnockBackMultiplier;
+    KnockBackState  mKnockBack;
+    Character      *mKiller;
+    Character      *mAttackedBy;
+};
+
+#endif // _KILLABLEBEHAVIOR_H

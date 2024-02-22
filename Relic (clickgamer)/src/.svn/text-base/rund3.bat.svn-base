@@ -1,0 +1,1 @@
+C:\root\d4\d0814_2\Release\d3.exe server-game.lua

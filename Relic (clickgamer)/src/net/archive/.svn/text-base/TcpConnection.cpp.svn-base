@@ -1,0 +1,129 @@
+#include "TcpConnection.h"
+#include "Sockets.h"
+#include "Address.h"
+
+#include <stdio.h> // printf
+#include <string.h> // memset
+
+#include "time/Timer.h"
+
+TcpConnection::TcpConnection(int localPort) : 
+    mSocket(0), mLocalPort(localPort)
+{
+    mLocal.Zero();
+}
+
+TcpConnection::~TcpConnection()
+{
+    Close();
+}
+
+bool TcpConnection::Open(const Address &address)
+{
+    mSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (mSocket < 0)
+    {
+        printf("Cannot create socket, error %d\n", (int)mSocket);
+        return false;
+    }
+
+    unsigned long enabled = 1;
+    IoctlSocket(mSocket, FIONBIO, &enabled);
+
+    // bind port locally
+    sockaddr_in addr;
+    addr.sin_family = AF_INET;
+    addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    addr.sin_port = htons(mLocalPort);
+    mLocal.SetAddress(addr);
+    int rc = bind(mSocket, (struct sockaddr *)&addr, sizeof(addr));
+    if (rc < 0)
+    {
+        printf("Cannot bind port, error %d (%s)\n", rc, GetSocketErrorDescription());
+        return false;
+    }
+
+    SOCKADDR saddr_connect;
+    sockaddr_in *sin_ptr = (sockaddr_in *)address.GetAddress();
+
+    memset(&saddr_connect, 0, sizeof(saddr_connect));
+    saddr_connect.sa_family = AF_INET;
+
+    sin_ptr = (sockaddr_in *)&saddr_connect;
+
+    unsigned short port_u = address.GetPort();
+
+    sin_ptr->sin_port = htons(port_u);
+
+    if (connect(mSocket, address.GetAddress(), sizeof(sockaddr_in)) != 0)
+    {
+        printf("Cannot connect (%s)!\n", GetSocketErrorDescription());
+        return false;
+    }
+/*
+	FD_SET(mSocket, &m_fdsr);
+	FD_SET(mSocket, &m_fdsw);
+	FD_SET(mSocket, &m_fdse);
+*/
+    return true;
+}
+
+void TcpConnection::Close()
+{
+    CloseSocket(mSocket);
+}
+
+enum { TOTAL_TIME = 5 };
+
+static void ReportSentBandwidth(int bytes)
+{
+    static unsigned total = 0, lastTime = GetCurrentTimeMs();
+    total += bytes;
+    if (GetCurrentTimeMs() > lastTime + TOTAL_TIME * 1000)
+    {
+        lastTime = GetCurrentTimeMs();
+        printf("Data rate (bytes sent) last %d seconds = %.2fkbps\n", TOTAL_TIME, total * 8 / static_cast<float>(TOTAL_TIME * 1024));
+        total = 0;
+    }
+}
+
+static void ReportReceivedBandwidth(int bytes)
+{
+    static unsigned total = 0, lastTime = GetCurrentTimeMs();
+    total += bytes;
+    if (GetCurrentTimeMs() > lastTime + TOTAL_TIME * 1000)
+    {
+        lastTime = GetCurrentTimeMs();
+        printf("Data rate (bytes received) last %d seconds = %.2fkbps\n", TOTAL_TIME, total * 8 / static_cast<float>(TOTAL_TIME * 1024));
+        total = 0;
+    }
+}
+
+bool TcpConnection::Send(const char *data, int length)
+{
+    int rc = send(mSocket, data, length, 0);
+    if (rc < 0)
+    {
+        printf("Cannot send data (%s)!\n", GetSocketErrorDescription());
+        return false;
+    }
+    ReportSentBandwidth(length);
+    return true;
+}
+
+int TcpConnection::Receive(char *data, int length)
+{
+    // init buffer 
+    memset(data, 0, length); // this is excessive
+
+    // receive message 
+    int n = recv(mSocket, data, length, 0);
+    if (n == -1)
+    {
+        printf("Cannot receive data (%s)!\n", GetSocketErrorDescription());
+        // some sort of error reporting..
+        return 0;
+    }
+    ReportReceivedBandwidth(n);
+    return n;
+}

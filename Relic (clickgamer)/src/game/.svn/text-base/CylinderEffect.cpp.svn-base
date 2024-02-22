@@ -1,0 +1,60 @@
+#include "CylinderEffect.h"
+
+#include "core/core.h"
+#include "core/gametime.h"
+#include "render/Drawable.h"
+#include "render/DrawableUtils.h"
+#include "render/RenderContext.h"
+
+CylinderEffect::CylinderEffect(const char *filename, float rotate, float radius, float radiusDelta, float height, float heightUvDelta) 
+    : mDrawable(0), mAngle(0.f), mFilename(filename), mRotate(rotate),
+     mRadius(radius), mHeight(height), mRadiusDelta(radiusDelta), mHeightUvDelta(heightUvDelta), mHeightUv(0.f), mCompleteFrames(-1)
+{ 
+}
+
+CylinderEffect::~CylinderEffect()
+{
+    if (mDrawable)
+        mDrawable->Release();
+    mDrawable = 0;
+}
+
+void CylinderEffect::Update(const GameTime &time)
+{
+    if (mCompleteFrames != 0)
+    {
+        mAngle += mRotate;
+        mRadius += mRadiusDelta;
+        mHeightUv += mHeightUvDelta;
+        if (mDrawable)
+            mDrawable->Release();
+        mDrawable = CreateCylinder("main", mFilename.c_str(), 16, mRadius, mHeight, mHeightUv);
+        if (mDrawable->GetStates() && mCompleteFrames != -1)
+            mDrawable->GetStates()->Color.w = mCompleteFrames / float(COMPLETE_FRAMES);
+        if (mCompleteFrames > 0)
+            mCompleteFrames--;
+    }
+}
+
+void CylinderEffect::Complete()
+{
+    if (mCompleteFrames == -1)
+        mCompleteFrames = COMPLETE_FRAMES;
+}
+
+bool CylinderEffect::IsComplete() const
+{
+    return (mRadius >= 1024.f || mCompleteFrames == 0);
+}
+
+void CylinderEffect::Render(RenderContext &context)
+{
+    if (mDrawable && mCompleteFrames != 0)
+    {
+        Matrix rotation;
+        rotation.rotationz(mAngle);
+        RenderContext rc(context);
+        rc.transform = rotation * rc.transform;
+        mDrawable->Render(rc);
+    }
+}

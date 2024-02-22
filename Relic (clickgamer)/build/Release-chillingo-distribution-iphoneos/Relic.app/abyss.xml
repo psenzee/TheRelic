@@ -1,0 +1,193 @@
+<objects>
+  
+  <!-- ///////////////////////////////////////////////////////// -->
+  <!-- ABYSS STUFF -->
+  <!-- OutCorner Meshes -->
+  
+  <object name="AbyssOutCornerSW">
+    <mesh file="ex_2OutCornerTopSW~0" test-visible="false" render-tag="level">
+      <texture name="FloorTile" />
+      <transform><translate x="0" y="0" z="128" /></transform>
+    </mesh>
+    <mesh file="ex_NewOutCorner~0" test-visible="false" render-tag="level">
+      <texture file="NewOutCornerIce" />
+      <transform><translate x="0" y="0" z="128" /><rotatez angle="0" /></transform>
+    </mesh>
+  </object>  
+  
+  <object name="AbyssOutCornerSE">
+    <mesh file="ex_2OutCornerTopSW~0" test-visible="false" render-tag="level">
+      <texture name="FloorTile" />
+      <transform><translate x="0" y="0" z="128" /><rotatez angle="90" /></transform>      
+    </mesh>
+    <mesh file="ex_NewOutCorner~0" test-visible="false" render-tag="level">
+      <texture file="NewOutCornerIceFlip" />
+      <transform><translate x="0" y="0" z="128" /><rotatez angle="90" /></transform>
+    </mesh>
+  </object>      
+
+  <object name="AbyssOutCornerNE">  
+    <mesh file="ex_2OutCornerTopSW~0" test-visible="false" render-tag="level">
+      <texture name="FloorTile" />
+      <transform><translate x="0" y="0" z="128" /><rotatez angle="180" /></transform>      
+    </mesh>
+    <mesh file="ex_NewOutCorner~0" test-visible="false" render-tag="level">
+      <texture file="NewOutCornerIceFlip" />
+      <transform><translate x="0" y="0" z="128" /><rotatez angle="180" /></transform>
+    </mesh>
+  </object>
+  
+  <object name="AbyssOutCornerNW">
+    <mesh file="ex_2OutCornerTopSW~0" test-visible="false" render-tag="level">
+      <texture name="FloorTile" />
+      <transform><translate x="0" y="0" z="128" /><rotatez angle="270" /></transform>
+    </mesh>
+    <mesh file="ex_NewOutCorner~0" test-visible="false" render-tag="level">
+      <texture file="NewOutCornerIceFlip" />
+      <transform><translate x="0" y="0" z="128" /><rotatez angle="270" /></transform>
+    </mesh>
+  </object>
+
+  <!-- OutCornerColumn Meshes -->
+  <object name="AbyssOutCornerColumnNW">
+    <mesh file="ex_2OutCornerTopNW~0" test-visible="false" render-tag="level">
+      <texture name="FloorTile" />
+      <transform><translate x="0" y="0" z="128" /></transform>
+    </mesh>
+    <mesh file="ex_2ColumnCorner0~0" test-visible="false" render-tag="level">
+      <texture file="Abyss60" />
+      <transform><scale x="1" y="1" z="2" /><translate x="0" y="0" z="256" /></transform>
+    </mesh>
+  </object>
+
+  
+  <object name="AbyssOutCornerColumnSW">
+    <mesh file="ex_2OutCornerTopSW~0" test-visible="false" render-tag="level">
+      <texture name="FloorTile" />
+      <transform><translate x="0" y="0" z="128" /></transform>      
+    </mesh>    
+    <mesh file="ex_2ColumnCorner3~0" test-visible="false" render-tag="level">
+      <texture file="Abyss61" />
+      <transform><scale x="1" y="1" z="2" /><translate x="0" y="0" z="256" /></transform>      
+    </mesh>
+  </object>  
+  
+  <object name="AbyssOutCornerColumnNE">
+    <mesh file="ex_2OutCornerTopNE~0" test-visible="false" render-tag="level">
+      <texture name="FloorTile" />
+      <transform><translate x="0" y="0" z="128" /></transform>      
+    </mesh>
+    <mesh file="ex_2OutCornerTopNEShadow~0" fog="false" test-visible="false" render-tag="level-floor-overlay" render-order="3">
+      <texture file="Shadow_OutCornerTopNE" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      <transform><translate x="0" y="0" z="128" /></transform>
+    </mesh>    
+    <mesh file="ex_2ColumnCorner1~0" test-visible="false" render-tag="level">
+      <texture file="Abyss62" />
+      <transform><scale x="1" y="1" z="2" /><translate x="0" y="0" z="256" /></transform>      
+    </mesh>
+  </object>    
+  
+  <object name="AbyssOutCornerColumnSE">
+    <mesh file="ex_2OutCornerTopSE~0" test-visible="false" render-tag="level">
+      <texture name="FloorTile" />
+      <transform><translate x="0" y="0" z="128" /></transform>      
+    </mesh>        
+    <mesh file="ex_2ColumnCorner2~0" test-visible="false" render-tag="level">
+      <texture file="Abyss63" />
+      <transform><scale x="1" y="1" z="2" /><translate x="0" y="0" z="256" /></transform>      
+    </mesh>
+  </object>  
+
+  <!-- InCorner Meshes -->  
+
+  <object name="AbyssInCornerNW"> 
+    <mesh file="ex_2CornerTopNW~0" test-visible="false" render-tag="level">
+      <texture name="FloorTile" />
+      <transform><translate x="0" y="0" z="128" /></transform>      
+    </mesh>        
+    <mesh file="ex_2InCorner3~0" test-visible="false" render-tag="level">
+      <texture file="Abyss21" />
+      <transform><scale x="1" y="1" z="2" /><translate x="0" y="0" z="256" /></transform>      
+    </mesh>
+  </object>
+
+  <object name="AbyssInCornerNE">   
+    <mesh file="ex_2CornerTopNE~0" test-visible="false" render-tag="level">
+      <texture name="FloorTile" />
+      <transform><translate x="0" y="0" z="128" /></transform>      
+    </mesh>  
+    <mesh file="ex_2InCorner0~0" test-visible="false" render-tag="level">
+      <texture file="Abyss20" />
+      <transform><scale x="1" y="1" z="2" /><translate x="0" y="0" z="256" /></transform>      
+    </mesh>
+  </object>
+  
+  <object name="AbyssInCornerSE">
+    <mesh file="ex_2CornerTopSE~0" test-visible="false" render-tag="level">
+      <texture name="FloorTile" />
+      <transform><translate x="0" y="0" z="128" /></transform>      
+    </mesh>
+    <mesh file="ex_2InCorner1~0" test-visible="false" render-tag="level">
+      <texture file="Abyss12" />
+      <transform><scale x="1" y="1" z="2" /><translate x="0" y="0" z="256" /></transform>      
+    </mesh>
+  </object>      
+
+  <object name="AbyssInCornerSW">  
+    <mesh file="ex_2CornerTopSW~0" test-visible="false" render-tag="level">
+      <texture name="FloorTile" />
+      <transform><translate x="0" y="0" z="128" /></transform>      
+    </mesh>  
+    <mesh file="ex_2InCorner2~0" test-visible="false" render-tag="level">
+      <texture file="Abyss14" />
+      <transform><scale x="1" y="1" z="2" /><translate x="0" y="0" z="256" /></transform>      
+    </mesh>
+  </object>
+
+  <!-- Walls -->
+
+  <object name="AbyssWallE">  
+    <mesh file="ex_2WallTopE~0" test-visible="false" render-tag="level">
+      <texture name="FloorTile" />
+      <transform><translate x="0" y="0" z="128" /></transform>      
+    </mesh>  
+    <mesh file="ex_2Wall1Light~0" test-visible="false" render-tag="level">
+      <texture file="Abyss22" />
+      <transform><scale x="1" y="1" z="2" /><translate x="0" y="0" z="256" /></transform>      
+    </mesh>
+  </object>  
+
+  <object name="AbyssWallN">
+    <mesh file="ex_2WallTopN~0" test-visible="false" render-tag="level">
+      <texture name="FloorTile" />
+      <transform><translate x="0" y="0" z="128" /></transform>      
+    </mesh>        
+    <mesh file="ex_2Wall0~0" test-visible="false" render-tag="level">
+      <texture file="Abyss19" />
+      <transform><scale x="1" y="1" z="2" /><translate x="0" y="0" z="256" /></transform>      
+    </mesh>
+  </object>
+   
+  <object name="AbyssWallS">
+    <mesh file="ex_2WallTopS~0" test-visible="false" render-tag="level">
+      <texture name="FloorTile" />
+      <transform><translate x="0" y="0" z="128" /></transform>      
+    </mesh>      
+    <mesh file="ex_2Wall2~0" test-visible="false" render-tag="level">
+      <texture file="Abyss17" />
+      <transform><scale x="1" y="1" z="2" /><translate x="0" y="0" z="256" /></transform>      
+    </mesh>
+  </object>  
+  
+  <object name="AbyssWallW">
+    <mesh file="ex_2WallTopW~0" test-visible="false" render-tag="level">
+      <texture name="FloorTile" />
+      <transform><translate x="0" y="0" z="128" /></transform>      
+    </mesh>    
+    <mesh file="ex_2Wall3Light~0" test-visible="false" render-tag="level">
+      <texture file="Abyss18" />
+      <transform><scale x="1" y="1" z="2" /><translate x="0" y="0" z="256" /></transform>      
+    </mesh>    
+  </object>
+
+</objects>

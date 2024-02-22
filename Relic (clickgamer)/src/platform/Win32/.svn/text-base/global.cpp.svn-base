@@ -1,0 +1,114 @@
+#include "core/global.h"
+#include "core/file.h"
+#include "core/strs.h"
+
+#include <stdio.h>
+
+Profiler  *profiler = 0;
+GameState *state    = 0;
+
+//#define GLOBAL_PATH_ROOT "_data"
+//#define GLOBAL_PATH_ROOT "_configs"
+#define GLOBAL_PATH_ROOT "../data"
+
+//float _g_inputSensitivity = 100.0f;
+float _g_inputSensitivity = 1.0f;
+float _g_tiltFactor       = 1.0f;
+
+const char *_g_readOnlyPath  = GLOBAL_PATH_ROOT;
+const char *_g_readWritePath = GLOBAL_PATH_ROOT "/save";
+
+extern "C" 
+{
+
+static const char *makePath(const char *path, const char *filename)
+{
+    static char complete[1024];
+    *complete = 0;
+    const char *directories[] = { "audio", "collide", "lua", "maps", "meshes", "textures", "xml", 0 };
+    const char *extensions[]  = { ".wav", ".collide", ".lua", ".emp", ".bin", ".png", ".xml", 0 };
+    for (int i = 0; directories[i]; i++)
+    {
+        if (ends(filename, extensions[i]))
+        {
+            sprintf(complete, "%s/%s/%s", path, directories[i], filename);
+            return complete;
+        }
+    }
+    for (int i = 0; directories[i]; i++)
+    {
+        sprintf(complete, "%s/%s/%s", path, directories[i], filename);
+        if (file::path_exists(complete))
+            return complete;
+        else
+        {
+            sprintf(complete, "%s/%s/%s%s", path, directories[i], filename, extensions[i]);
+            if (file::path_exists(complete))
+                return complete;
+        }
+        *complete = 0;
+    }
+    return complete;
+}
+
+static const char *makePathWriteable(const char *path, const char *filename)
+{
+    static char complete[1024];
+    sprintf(complete, "%s/save/%s", path, filename);
+    return complete;
+}
+
+const char *globalTranslatePath(const char *filename)
+{
+    return makePath(_g_readOnlyPath, filename);
+}
+
+const char *getGlobalReadOnlyPath()
+{
+    return _g_readOnlyPath;
+}
+
+const char *globalTranslateReadWritePath(const char *filename)
+{
+    return makePathWriteable(_g_readWritePath, filename);
+}
+
+const char *getGlobalReadWritePath()
+{
+    return _g_readOnlyPath;
+}
+
+const char *globalReadTextFile(const char *filename)
+{
+    const char *translatedPath = globalTranslatePath(filename);
+    file::buffer_t b = file::read_file(translatedPath);
+    if (!b.data)
+    {
+        printf("Unable to load text file '%s'\n", translatedPath);
+        return 0;
+    }
+    printf("Loading text file '%s' and leaking!!\n", translatedPath);
+    return (const char *)b.data;
+}
+
+bool FreeMemory(int threshold)
+{
+    // nothing, for iphone only
+    return true;
+}
+
+unsigned GetFreeMemory()
+{
+    return 1024 * 1024 * 1024; // just fake it up
+}
+
+bool ReceivedLowMemoryWarning()
+{
+    return false; // just fake it up
+}
+
+void SetReceivedLowMemoryWarning(bool v)
+{
+}
+
+}

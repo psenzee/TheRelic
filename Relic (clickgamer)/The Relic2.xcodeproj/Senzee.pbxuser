@@ -1,0 +1,118 @@
+// !$*UTF8*$!
+{
+	1D6058900D05DD3D006BFB54 /* The Relic2 */ = {
+		activeExec = 0;
+		executables = (
+			621A64A3142A6DEE0096929D /* The Relic2 */,
+		);
+	};
+	29B97313FDCFA39411CA2CEA /* Project object */ = {
+		activeBuildConfigurationName = Release;
+		activeExecutable = 621A64A3142A6DEE0096929D /* The Relic2 */;
+		activeTarget = 1D6058900D05DD3D006BFB54 /* The Relic2 */;
+		codeSenseManager = 621A64CF142A6DF70096929D /* Code sense */;
+		executables = (
+			621A64A3142A6DEE0096929D /* The Relic2 */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					341,
+					20,
+					48.16259765625,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 338324974;
+			PBXWorkspaceStateSaveDate = 338324974;
+		};
+		perUserProjectItems = {
+			621A6518142A7C5C0096929D /* XCBuildMessageTextBookmark */ = 621A6518142A7C5C0096929D /* XCBuildMessageTextBookmark */;
+			621A6519142A7C5C0096929D /* PBXTextBookmark */ = 621A6519142A7C5C0096929D /* PBXTextBookmark */;
+		};
+		sourceControlManager = 621A64CE142A6DF70096929D /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	438FB223126C00C900B62F94 /* AppStoreClientCall.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {901, 2587}}";
+			sepNavSelRange = "{1442, 0}";
+			sepNavVisRange = "{779, 656}";
+		};
+	};
+	621A64A3142A6DEE0096929D /* The Relic2 */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = "The Relic2";
+		showTypeColumn = 0;
+		sourceDirectories = (
+		);
+	};
+	621A64CE142A6DF70096929D /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+			repositoryNamesForRoots = {
+				"" = "";
+			};
+		};
+	};
+	621A64CF142A6DF70096929D /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	621A6518142A7C5C0096929D /* XCBuildMessageTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "Potential leak of an object allocated on line 47 and stored into 'uiA'";
+		fRef = 438FB223126C00C900B62F94 /* AppStoreClientCall.m */;
+		fallbackIsa = XCBuildMessageTextBookmark;
+		rLen = 1;
+		rLoc = 53;
+		rType = 1;
+	};
+	621A6519142A7C5C0096929D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 438FB223126C00C900B62F94 /* AppStoreClientCall.m */;
+		name = "AppStoreClientCall.m: 54";
+		rLen = 0;
+		rLoc = 1442;
+		rType = 0;
+		vrLen = 656;
+		vrLoc = 779;
+	};
+}

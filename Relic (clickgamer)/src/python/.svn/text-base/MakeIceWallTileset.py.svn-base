@@ -1,0 +1,382 @@
+
+THEME = 13
+
+def theme(filename):
+    return filename + "_" + str(THEME)
+
+#TOP_TEXTURE      = "FloorLava5"
+#TOP_TEXTURE      = "Tile23_"
+TOP_TEXTURE      = "Top2"
+#TOP_TEXTURE      = "white"
+FLOOR1_TEXTURE   = "StoneGrassFloor3"
+FLOOR1_TEXTURE_ALT = "StoneGrassFloor4"
+#FLOOR1_TEXTURE   = "Cobblestone2"
+FLOOR2_TEXTURE   = "Floor_Ice"
+FLOOR2_TEXTURE_ALT   = "Floor_IceAlt"
+#COLUMN_TEXTURE   = "ColumnTile29"
+COLUMN_TEXTURE   = theme("Baked_Column0")
+#ARCH_TEXTURE   = "IceArchLight"
+#ARCH_TEXTURE   = "AlienArch"
+ARCH_TEXTURE   = "OriginalArch"
+ZSCALE           = 1.5
+
+WALL_IS_NORMAL = 0
+WALL_IS_ARCH   = 1
+WALL_IS_CRATES = 2
+
+PATH = 'C:/root/d4/d0814_2/_configs/prototypes-icewall.xml'
+
+def writeHeader(file):
+    file.write('<objects>\n\n')
+    file.write('  <texture name="TopTile"   file="' + TOP_TEXTURE + '" /> <!-- "TopTile3" -->\n')
+    file.write('  <texture name="FloorTile" file="FloorStone3_14" /> <!-- "Floor_Ice", "FloorLava2", "Floor_Dirt" -->\n\n')
+
+def writeFooter(file):
+    file.write('</objects>\n')
+
+def writeTransform(file, orientation, zOffset, zScale):
+    if orientation == 0 and zOffset == 0 and zScale == 1:
+        return
+    file.write('      <transform>')
+    if orientation != 0: file.write('<rotatez angle="' + str(orientation * 90) + '" />')
+    if zScale      != 1: file.write('<scale x="1" y="1" z="' + str(zScale) + '" />')
+    if zOffset     != 0: file.write('<translate x="0" y="0" z="' + str(zOffset) + '" />')
+    file.write('</transform>\n')
+
+def writeEmpty(file):
+    file.write('  <object name="Empty">\n')
+    file.write('    <mesh file="ex_Floor1~0" depth-write="false" test-visible="false" render-tag="level-floor">\n')
+    file.write('      <texture file="Black" />\n')
+    file.write('      <transform><scale x="0" y="0" z="0" /></transform>\n')
+    file.write('    </mesh>\n')  
+    file.write('  </object>\n\n')
+
+def writeEmptyFloor(file):
+    file.write('  <object name="Floor"><object refers="Empty" /></object>\n\n')
+
+#    file.write('  <object name="FloorType1"><object refers="Empty" /></object>\n\n')
+#    file.write('  <object name="FloorType2"><object refers="Empty" /></object>\n\n')
+    
+def writeSimpleMeshWithUvTransform(file, orientation, meshName, textureName, uvTransform):
+    file.write('    <mesh file="' + meshName + '" test-visible="false" render-tag="level">\n')
+    file.write('      <texture file="' + textureName + '" />\n')
+    writeTransform(file, orientation, 0, ZSCALE)
+    file.write(uvTransform)
+    file.write('    </mesh>\n')
+
+def writeSimpleMesh(file, orientation, meshName, textureName):
+    writeSimpleMeshWithUvTransform(file, orientation, meshName, textureName, '')
+#    file.write('    <mesh file="' + meshName + '" test-visible="false" render-tag="level">\n')
+#    file.write('      <texture file="' + textureName + '" />\n')
+#    writeTransform(file, orientation, 0, ZSCALE)
+#    file.write('    </mesh>\n')
+
+def writeSimpleMeshObject(file, name, orientation, meshName, textureName):
+    file.write('  <!-- ' + name + ' -->\n')
+    file.write('  <object name="' + name + '">\n')
+    writeSimpleMesh(file, orientation, meshName, textureName)
+    file.write('  </object>\n\n')
+
+def writeUpStairsObject(file, orientation, textureName):
+    name = "UpStairs"
+    file.write('  <!-- ' + name + ' -->\n')
+    file.write('  <object name="' + name + '">\n')    
+    writeSimpleMesh(file, orientation, "ex_NewUpStairs~0", textureName)
+    writeSimpleMesh(file, (orientation + 3) % 4, "ex_2UpStairsTop~0", TOP_TEXTURE)
+    writeShadowMesh(file, 0, "Shadow_WallEUpStairs")
+    file.write('  </object>\n\n')    
+
+def writeFloorType(file, name, textureName):
+    file.write('  <object name="' + name + '">\n')
+    file.write('    <mesh file="ex_Floor1~0" depth-write="false" test-visible="false" render-tag="level-floor" render-order="1">\n')
+    file.write('      <texture name="' + textureName + '" />\n')
+    file.write('    </mesh>\n')  
+    file.write('  </object>\n\n')
+    file.write('  <object name="' + name + '_DownStairs">\n')
+    file.write('    <mesh file="ex_2DownStairsFloor~0" depth-write="false" test-visible="false" render-tag="level-floor" render-order="1">\n')
+    file.write('      <texture name="' + textureName + '" />\n')
+    file.write('    </mesh>\n')
+    file.write('  </object>\n\n')
+
+def writeFloorTypeOverlay(file, name, orientation, textureName):
+    file.write('  <object name="' + name + '">\n')
+    file.write('    <mesh file="ex_Floor1~0" depth-write="false" test-visible="false" render-tag="level-floor-overlay" render-order="2">\n')
+    file.write('      <texture name="' + textureName + '" blend-destination="ONE_MINUS_SRC_ALPHA" />\n')
+    writeTransform(file, orientation, 0, 1)
+    file.write('    </mesh>\n')  
+    file.write('  </object>\n\n')
+
+def writeFloorEdgeSingleSide(file, orientation, textureName):
+    file.write('    <mesh file="ex_Edge~0" depth-write="false" test-visible="false" render-tag="level-floor" render-order="2">\n')
+    file.write('      <texture name="' + textureName + '" blend-destination="ONE_MINUS_SRC_ALPHA" />\n')
+    if orientation != 0: file.write('      <transform><rotatez angle="' + str(orientation * 90) + '" /></transform>\n')
+    file.write('    </mesh>\n')
+    file.write('    <mesh file="ex_Edge~0" depth-write="false" fog="false" test-visible="false" render-tag="level-floor-overlay" render-order="3">\n')
+    file.write('      <texture file="Shadow_Crease" blend-destination="ONE_MINUS_SRC_ALPHA" />\n')
+    if orientation != 0: file.write('      <transform><rotatez angle="' + str(orientation * 90) + '" /></transform>\n')
+    file.write('    </mesh>\n')
+
+def writeFloorEdgeInnerCorner(file, orientation, textureName):
+#   file.write('    <mesh file="ex_EdgeInner~0" depth-write="false" test-visible="false" render-tag="level-floor" render-order="2">\n')
+    file.write('    <mesh file="ex_EdgeInner~0" test-visible="false" render-tag="level-floor" render-order="2">\n')
+    file.write('      <texture name="' + textureName + '" blend-destination="ONE_MINUS_SRC_ALPHA" />\n')
+    if orientation != 0: file.write('      <transform><rotatez angle="' + str(orientation * 90) + '" /></transform>\n')
+    file.write('    </mesh>\n')
+#   file.write('    <mesh file="ex_EdgeInner~0" depth-write="false" fog="false" test-visible="false" render-tag="level-floor-overlay" render-order="3">\n')
+#   file.write('      <texture file="Shadow_Crease" blend-destination="ONE_MINUS_SRC_ALPHA" />\n')
+#   if orientation != 0: file.write('      <transform><rotatez angle="' + str(orientation * 90) + '" /></transform>\n')
+#   file.write('    </mesh>\n')
+    
+def writeFloorEdgeOuterCorner(file, orientation, textureName):
+#   file.write('    <mesh file="ex_EdgeOuter~0" depth-write="false" test-visible="false" render-tag="level-floor" render-order="2">\n')
+    file.write('    <mesh file="ex_EdgeOuter~0" test-visible="false" render-tag="level-floor" render-order="2">\n')
+    file.write('      <texture name="' + textureName + '" blend-destination="ONE_MINUS_SRC_ALPHA" />\n')
+    if orientation != 0: file.write('      <transform><rotatez angle="' + str(orientation * 90) + '" /></transform>\n')
+    file.write('    </mesh>\n')
+#   file.write('    <mesh file="ex_EdgeOuter~0" depth-write="false" fog="false" test-visible="false" render-tag="level-floor-overlay" render-order="3">\n')
+#   file.write('      <texture file="Shadow_Crease" blend-destination="ONE_MINUS_SRC_ALPHA" />\n')
+#   if orientation != 0: file.write('      <transform><rotatez angle="' + str(orientation * 90) + '" /></transform>\n')
+#   file.write('    </mesh>\n')    
+    
+def writeFloorEdge(file, name, orientation, textureName1, textureName2):
+    file.write('  <object name="' + name + '">\n')
+    file.write('    <mesh file="ex_EdgeZWrite~0" test-visible="false" render-tag="level-floor" render-order="1">\n')
+    file.write('      <texture name="Black" blend-destination="ONE_MINUS_SRC_ALPHA" />\n')
+    if orientation != 0: file.write('      <transform><rotatez angle="' + str(orientation * 90) + '" /></transform>\n')
+    file.write('    </mesh>\n')
+    writeFloorEdgeSingleSide(file, orientation,           textureName1)
+    writeFloorEdgeSingleSide(file, (orientation + 2) % 4, textureName2)
+    file.write('  </object>\n\n')
+
+def writeFloorEdgeCorner(file, name, orientation, textureName1, textureName2):
+    file.write('  <object name="' + name + '">\n')   
+#    file.write('    <mesh file="ex_EdgeZWrite~0" test-visible="false" render-tag="level-floor" render-order="1">\n')
+#    file.write('      <texture name="Black" blend-destination="ONE_MINUS_SRC_ALPHA" />\n')
+#    if orientation != 0: file.write('      <transform><rotatez angle="' + str(orientation * 90) + '" /></transform>\n')
+#    file.write('    </mesh>\n')    
+    writeFloorEdgeOuterCorner(file, (orientation + 1) % 4,           textureName1)
+    writeFloorEdgeInnerCorner(file, (orientation + 1) % 4, textureName2)
+    file.write('  </object>\n\n')    
+
+def writeOverlayMesh(file, orientation, meshName, textureName, renderOrder, zOffset, zScale, uvTransform):
+    file.write('    <mesh file="' + meshName + '" depth-write="false" fog="false" test-visible="false" render-tag="level-floor-overlay" render-order="' + str(renderOrder) + '">\n')
+    file.write('      <texture file="' + textureName + '" blend-destination="ONE_MINUS_SRC_ALPHA" />\n')
+    writeTransform(file, orientation, zOffset, zScale)
+    file.write(uvTransform)   
+    file.write('    </mesh>\n')
+
+def writeWallTypeMeshDelegate(file, orientation, index, meshName, textureName):
+    x = (index % 4) * 0.25
+    y = (index / 4) * 0.25
+    uvTransform = '      <uvtransform><scale x="0.25" y="0.25" z="1" /><translate x="' + str(x) + '" y="' + str(y) + '" z="0" /></uvtransform>\n'
+    writeSimpleMeshWithUvTransform(file, orientation, meshName, textureName, uvTransform)    
+
+def writeWallTypeMesh(file, orientation, meshName, textureName):
+    if not textureName.startswith("Baked_"):
+      writeSimpleMesh(file, orientation, meshName, textureName)
+      return
+    lastUnderScore = textureName.rfind("_")
+    typename = textureName[0:lastUnderScore]
+    themeNo  = textureName[lastUnderScore + 1:]
+    last = typename[len(typename) - 1]
+    if last == 'A' or last == 'B' or last == 'D' or last == 'L':
+      typename = typename[:len(typename) - 1]
+      if last == 'L': last = 'A'
+      if last == 'D': last = 'B'
+    else:
+      last = ''    
+    print typename + "; " + last + "; " + themeNo
+    filename = "WallTypesA_" + str(themeNo)
+    if last == 'B':
+      filename = "WallTypesB_" + str(themeNo)        
+    index = -1    
+    if   typename == 'Baked_Column':          index = 0
+    elif typename == 'Baked_ColumnAtCorner':  index = 1
+    elif typename == 'Baked_Corner':          index = 2
+    elif typename == 'Baked_DownStairs':      index = 3
+    elif typename == 'Baked_OutCorner':       index = 4
+    elif typename == 'Baked_OutCornerColumn': index = 5
+    elif typename == 'Baked_UpStairs':        index = 6
+    elif typename == 'Baked_WallArch':        index = 7
+    elif typename == 'Baked_WallCrates':      index = 8
+    elif typename == 'Baked_Wall':            index = 9    
+    if index == -1:
+      writeSimpleMesh(file, orientation, meshName, textureName)
+#    elif index == 0 or index == 1 or index == 5:
+#      writeShadowMeshDelegate(file, (orientation + 1) % 4, index, meshName, filename)
+    else:
+      writeWallTypeMeshDelegate(file, orientation, index, meshName, filename)
+
+def writeShadowMesh(file, orientation, textureName):
+#   writeOverlayMesh(file, orientation, "ex_Floor1~0", textureName, 3, 0, 1, "")
+    index = -1
+    if   textureName == 'Shadow_OutCornerSWColumn': index = 0
+    elif textureName == 'Shadow_OutCornerSW':       index = 1
+    elif textureName == 'Shadow_TopInCorner':       index = 2
+    elif textureName == 'Shadow_Column':            index = 3
+    elif textureName == 'Shadow_WallELight':        index = 4
+    elif textureName == 'Shadow_TopOutCorner':      index = 5
+    elif textureName == 'Shadow_WallWCrates':       index = 6
+    elif textureName == 'Shadow_Crease':            index = 7
+    elif textureName == 'Shadow_WallEUpStairs':     index = 8
+    elif textureName == 'Shadow_CornerNE':          index = 9
+    elif textureName == 'Shadow_TopWall':           index = 10
+    elif textureName == 'Shadow_Tent':              index = 11
+    elif textureName == 'Shadow_WallEArchLight':    index = 12
+    elif textureName == 'Shadow_Market':            index = 13
+    elif textureName == 'Shadow_Machine1':          index = 14
+    elif textureName == 'Shadow_Machine2':          index = 15
+    if index == -1:
+      writeOverlayMesh(file, orientation, "ex_Floor1~0", textureName, 3, 0, 1, "")
+    elif index == 0 or index == 1 or index == 5:
+      writeShadowMeshDelegate(file, (orientation + 1) % 4, index, "Shadows")
+    else:
+      writeShadowMeshDelegate(file, orientation, index, "Shadows")
+
+def writeShadowMeshDelegate(file, orientation, index, textureName):
+    x = (index % 4) * 0.25
+    y = (index / 4) * 0.25
+    uvTransform = '      <uvtransform><scale x="0.24" y="0.24" z="1" /><translate x="' + str(x + 0.005) + '" y="' + str(y + 0.005) + '" z="0" /></uvtransform>\n'
+    writeOverlayMesh(file, orientation, "ex_Floor1~0", textureName, 3, 0, 1, uvTransform)  
+
+def writeWall(file, name, orientation, meshName, textureName, wallType):
+    file.write('  <!-- ' + name + ' -->\n')    
+    file.write('  <object name="' + name + '">\n')
+    writeSimpleMesh(file, orientation, "ex_3WallTop~0", TOP_TEXTURE)
+    writeOverlayMesh(file, orientation, "ex_3WallTop~0", "Shadow_TopWall", 4, -1, ZSCALE, "")
+    writeWallTypeMesh(file, orientation, meshName, textureName)
+    if   wallType == WALL_IS_ARCH:
+      writeSimpleMesh(file, orientation, "ex_3Arch~0", ARCH_TEXTURE)
+    elif wallType == WALL_IS_CRATES:
+      writeSimpleMesh(file, 0, "ex_CrateSimple~0", "Crate3")      
+    # write other meshes here
+    if wallType == WALL_IS_CRATES:
+      writeShadowMesh(file, 0, "Shadow_WallWCrates")
+    elif wallType == WALL_IS_ARCH:
+      writeShadowMesh(file, orientation, "Shadow_WallEArchLight")
+    else:
+      writeShadowMesh(file, orientation, "Shadow_WallELight")
+    file.write('  </object>\n\n')
+
+def writeOutCorner(file, orientation, directionName, cornerTexture, columnTexture):
+    name = "OutCorner"
+    if columnTexture: name = name + "Column"
+    file.write('  <object name="' + name + directionName + '">\n')
+    writeSimpleMesh(file, orientation, "ex_3OutCornerTop~0", TOP_TEXTURE)
+    writeOverlayMesh(file, orientation, "ex_3OutCornerTop~0", "Shadow_TopOutCorner", 4, -1, ZSCALE, "")
+    writeWallTypeMesh(file, orientation, "ex_3OutCorner~0", cornerTexture)
+    if columnTexture: writeWallTypeMesh(file, orientation, "ex_3Column~0", columnTexture)
+    shadowTexture = "Shadow_OutCornerSW"
+    if columnTexture: shadowTexture = "Shadow_OutCornerSWColumn"
+    writeShadowMesh(file, orientation, shadowTexture)
+    file.write('  </object>\n\n')
+
+def writeInCorner(file, orientation, directionName, textureName):    
+    file.write('  <object name="InCorner' + directionName + '">\n')
+    writeSimpleMesh(file, orientation, "ex_3CornerTop~0", TOP_TEXTURE)
+    writeOverlayMesh(file, orientation, "ex_3CornerTop~0", "Shadow_TopInCorner", 4, -1, ZSCALE, "")
+    writeWallTypeMesh(file, orientation, "ex_3Corner~0", textureName)
+    writeShadowMesh(file, orientation, "Shadow_CornerNE")
+    file.write('  </object>\n\n')
+
+def writeColumn(file, name, textureName):    
+    file.write('  <!-- ' + name + ' -->\n')
+    file.write('  <object name="' + name + '">\n')
+    writeShadowMesh(file, 0, "Shadow_Column")    
+    writeWallTypeMesh(file, 0, "ex_3Column~0", textureName)
+    file.write('  </object>\n\n')
+
+# start writing
+file = open(PATH, 'w')
+writeHeader(file)
+
+writeEmpty(file)
+writeEmptyFloor(file)
+writeSimpleMeshObject(file, "Top",        0, "ex_Top0~0",       TOP_TEXTURE)
+writeUpStairsObject  (file, 0, theme("Baked_UpStairsL"))
+writeSimpleMeshObject(file, "DownStairs", 0, "ex_2DownStairs~0",  theme("Baked_DownStairs"))
+
+writeFloorType(file, "FloorType1", FLOOR1_TEXTURE)
+writeFloorType(file, "FloorType1Alt", FLOOR1_TEXTURE_ALT)
+writeFloorType(file, "FloorType2", FLOOR2_TEXTURE)
+writeFloorType(file, "FloorType2Alt", FLOOR2_TEXTURE_ALT)
+
+writeFloorEdge(file, "FloorType2EndW",  1, FLOOR1_TEXTURE, FLOOR2_TEXTURE)
+writeFloorEdge(file, "FloorType2EndE",  3, FLOOR1_TEXTURE, FLOOR2_TEXTURE)
+writeFloorEdge(file, "FloorType2EndN",  0, FLOOR1_TEXTURE, FLOOR2_TEXTURE)
+writeFloorEdge(file, "FloorType2EndS",  2, FLOOR1_TEXTURE, FLOOR2_TEXTURE)
+
+writeFloorEdgeCorner(file, "FloorType2EndNW", 1, FLOOR1_TEXTURE, FLOOR2_TEXTURE)
+writeFloorEdgeCorner(file, "FloorType2EndSE", 3, FLOOR1_TEXTURE, FLOOR2_TEXTURE)
+writeFloorEdgeCorner(file, "FloorType2EndNE", 0, FLOOR1_TEXTURE, FLOOR2_TEXTURE)
+writeFloorEdgeCorner(file, "FloorType2EndSW", 2, FLOOR1_TEXTURE, FLOOR2_TEXTURE)
+                     
+#writeFloorTypeOverlay(file, "FloorType2EndNE", 0, "FloorMerge_IceNE")
+#writeFloorTypeOverlay(file, "FloorType2EndNW", 1, "FloorMerge_IceNE")
+#writeFloorTypeOverlay(file, "FloorType2EndSW", 2, "FloorMerge_IceNE")
+#writeFloorTypeOverlay(file, "FloorType2EndSE", 3, "FloorMerge_IceNE")
+
+file.write('  <!-- OutCornerColumn Meshes -->\n')
+#writeOutCorner(file, 0, "SW", theme("Baked_OutCornerColumn0"), theme("Baked_Column0"))
+#writeOutCorner(file, 3, "NW", theme("Baked_OutCornerColumn1"), theme("Baked_Column1"))
+#writeOutCorner(file, 2, "NE", theme("Baked_OutCornerColumn2"), theme("Baked_Column2"))
+#writeOutCorner(file, 1, "SE", theme("Baked_OutCornerColumn3"), theme("Baked_Column3"))
+
+writeOutCorner(file, 0, "SW", theme("Baked_OutCornerColumnB"), theme("Baked_ColumnAtCornerB"))
+writeOutCorner(file, 3, "NW", theme("Baked_OutCornerColumnA"), theme("Baked_ColumnAtCornerA"))
+writeOutCorner(file, 2, "NE", theme("Baked_OutCornerColumnB"), theme("Baked_ColumnAtCornerB"))
+writeOutCorner(file, 1, "SE", theme("Baked_OutCornerColumnA"), theme("Baked_ColumnAtCornerA"))
+
+#writeOutCorner(file, 0, "SW", theme("Baked_OutCornerColumnB"), theme("Baked_ColumnB"))
+#writeOutCorner(file, 3, "NW", theme("Baked_OutCornerColumnA"), theme("Baked_ColumnB"))
+#writeOutCorner(file, 2, "NE", theme("Baked_OutCornerColumnB"), theme("Baked_ColumnB"))
+#writeOutCorner(file, 1, "SE", theme("Baked_OutCornerColumnA"), theme("Baked_ColumnB"))
+
+file.write('  <!-- OutCorner Meshes -->\n')
+#writeOutCorner(file, 0, "SW", theme("Baked_OutCorner0"), False)
+#writeOutCorner(file, 3, "NW", theme("Baked_OutCorner1"), False)
+#writeOutCorner(file, 2, "NE", theme("Baked_OutCorner2"), False)
+#writeOutCorner(file, 1, "SE", theme("Baked_OutCorner3"), False)
+
+writeOutCorner(file, 0, "SW", theme("Baked_OutCornerB"), False)
+writeOutCorner(file, 3, "NW", theme("Baked_OutCornerA"), False)
+writeOutCorner(file, 2, "NE", theme("Baked_OutCornerB"), False)
+writeOutCorner(file, 1, "SE", theme("Baked_OutCornerA"), False)
+
+file.write('  <!-- InCorner Meshes -->\n')
+#writeInCorner (file, 0, "NE", theme("Baked_Corner0"))
+#writeInCorner (file, 1, "NW", theme("Baked_Corner3"))
+#writeInCorner (file, 2, "SW", theme("Baked_Corner2"))
+#writeInCorner (file, 3, "SE", theme("Baked_Corner1"))
+
+writeInCorner (file, 0, "NE", theme("Baked_CornerA"))
+writeInCorner (file, 1, "NW", theme("Baked_CornerB"))
+writeInCorner (file, 2, "SW", theme("Baked_CornerA"))
+writeInCorner (file, 3, "SE", theme("Baked_CornerB"))
+
+file.write('  <!-- Column Meshes -->\n')
+#writeColumn(file, "Column0", theme("Baked_ColumnB"))
+writeColumn(file, "Column0", "Baked_ColumnB_14")
+#writeColumn(file, "Column1", theme("Baked_Column1"))
+writeColumn(file, "Column1", "LavaColumn0")
+
+file.write('  <!-- Wall Meshes -->\n')
+mainWallType = "ex_3Wall~0"
+
+#writeWall(file, "WallELight",  0, mainWallType, theme("Baked_Wall0"),       WALL_IS_NORMAL)
+#writeWall(file, "WallEArch",   0, mainWallType, theme("Baked_WallArch0"),   WALL_IS_ARCH)
+#writeWall(file, "WallN",       1, mainWallType, theme("Baked_Wall1"),       WALL_IS_NORMAL)
+#writeWall(file, "WallWLight",  2, mainWallType, theme("Baked_Wall2"),       WALL_IS_NORMAL)
+#writeWall(file, "WallWCrates", 2, mainWallType, theme("Baked_WallCrates2"), WALL_IS_CRATES)
+#writeWall(file, "WallS",       3, mainWallType, theme("Baked_Wall3"),       WALL_IS_NORMAL)
+
+writeWall(file, "WallELight",  0, mainWallType, theme("Baked_WallL"),       WALL_IS_NORMAL)
+writeWall(file, "WallEArch",   0, mainWallType, theme("Baked_WallArchL"),   WALL_IS_ARCH)
+writeWall(file, "WallN",       1, mainWallType, theme("Baked_WallD"),       WALL_IS_NORMAL)
+writeWall(file, "WallWLight",  2, mainWallType, theme("Baked_WallL"),       WALL_IS_NORMAL)
+writeWall(file, "WallWCrates", 2, mainWallType, theme("Baked_WallCratesL"), WALL_IS_CRATES)
+writeWall(file, "WallS",       3, mainWallType, theme("Baked_WallD"),       WALL_IS_NORMAL)
+
+writeFooter(file)
+file.close()
+

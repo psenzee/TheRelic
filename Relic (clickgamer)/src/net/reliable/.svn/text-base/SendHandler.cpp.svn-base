@@ -1,0 +1,71 @@
+#include "core/core_assert.h"
+#include <string.h>
+
+#include "Message.h"
+#include "SendHandler.h"
+
+int SendHandler::OUTSTANDING = 0;
+
+SendHandler::SendHandler(SendFunctionContext send) 
+    : mSend(send), mMsSent(0), mMsResend(32), mMsTimeout(1024), mAckReceived(false), mAbandon(false)
+{
+    OUTSTANDING++;
+}
+
+SendHandler::~SendHandler()
+{
+    OUTSTANDING--;
+    mMessage.Destroy();
+}
+
+void SendHandler::Acknowledge()
+{
+    if (!mAbandon && !mAckReceived)
+    {
+        mAckReceived = true;
+        mMessage.Destroy();
+    }
+}
+
+void SendHandler::Abandon()
+{
+    if (!mAbandon && !mAckReceived)
+    {
+        mAbandon = true;
+        mMessage.Destroy();
+    }
+}
+
+bool SendHandler::IsDone() const
+{
+    return mAckReceived || mAbandon;
+}
+
+void SendHandler::Update()
+{
+    if (!mAckReceived && !mAbandon)
+    {
+        if (mMsResend >= mMsTimeout)
+        {
+            Abandon();
+            return;
+        }
+        int time = GetNetTimeMs();
+        if ((time - mMsSent) >= mMsResend)
+            InternalSend();
+    }
+}
+
+void SendHandler::InternalSend()
+{
+    mMsResend <<= 1;
+    mMsSent = GetNetTimeMs();
+    mSend.function(mSend.user, mMessage.data, mMessage.length);
+}
+
+void SendHandler::Send(const char *data, int length)
+{
+    mMsResend >>= 1;
+    mMessage.Copy(data, length);
+    InternalSend();
+}

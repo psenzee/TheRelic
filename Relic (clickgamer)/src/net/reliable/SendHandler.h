@@ -1,0 +1,42 @@
+#ifndef _SEND_HANDLER_4235_H
+#define _SEND_HANDLER_4235_H
+
+#include "Message.h"
+#include "FunctionContext.h"
+
+// this class resends a message at decaying intervals until it is acknowledged or times out
+class SendHandler
+{
+public:
+
+    static int OUTSTANDING;
+
+    SendHandler(SendFunctionContext send);
+    ~SendHandler();
+
+    void Send(const char *data, int length); 
+
+    void Update();
+
+    void Acknowledge();
+    void Abandon();
+
+    bool IsDone() const;
+
+private:
+
+    Message                     mMessage;
+
+    SendFunctionContext         mSend;
+
+    int                         mMsTimeout,
+                                mMsSent,
+                                mMsResend;
+
+    bool                        mAckReceived,
+                                mAbandon;
+
+    void InternalSend();
+};
+
+#endif // _SEND_HANDLER_4235_H

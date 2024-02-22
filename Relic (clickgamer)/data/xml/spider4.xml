@@ -1,0 +1,229 @@
+<objects>
+    
+  <list name="Spider4.Die">    
+    <object name="Spider4Die00">
+      <mesh file="shadow_big~0" transparent="true"  depth-write="false">
+        <texture file="blue_glow" blend-source="SRC_ALPHA" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      </mesh>
+      <mesh file="anim_spider_000046~0" transparent="true" depth-write="false">
+        <texture file="blue_glow_full" blend-source="SRC_ALPHA" blend-destination="ONE_MINUS_SRC_ALPHA" />
+      </mesh>
+    </object>
+  </list>  
+  
+  <list name="Spider4.Walk_ReceiveHit">
+    <event>$Reset</event>
+    <event>$NoLoop</event>  
+    <object name="Spider4WalkHit00"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000001~0" ><texture file="Spider0_hurt" /></mesh></object>
+    <object name="Spider4WalkHit01"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000003~0" ><texture file="Spider0_hurt" /></mesh></object>
+    <object name="Spider4WalkHit02"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000005~0" ><texture file="Spider0_hurt" /></mesh></object>
+    <object name="Spider4WalkHit03"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000007~0" ><texture file="Spider0_hurt" /></mesh></object>
+    <object name="Spider4WalkHit04"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000009~0" ><texture file="Spider0_hurt" /></mesh></object>
+    <object name="Spider4WalkHit05"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000011~0" ><texture file="Spider0_hurt" /></mesh></object>
+    <object name="Spider4WalkHit06"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000013~0" ><texture file="Spider0_hurt" /></mesh></object>
+    <object name="Spider4WalkHit07"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000015~0" ><texture file="Spider0_hurt" /></mesh></object>
+    <object name="Spider4WalkHit08"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000017~0" ><texture file="Spider0_hurt" /></mesh></object>
+    <object name="Spider4WalkHit09"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000019~0" ><texture file="Spider0_hurt" /></mesh></object>
+    <object name="Spider4WalkHit10"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000021~0" ><texture file="Spider0_hurt" /></mesh></object>
+  </list>   
+  
+  <list name="Spider4.Idle">
+    <object name="Spider4Idle01"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000046~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Idle02"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000047~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Idle03"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000048~0" ><texture file="Spider5" /></mesh></object>        
+    <object name="Spider4Idle04"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000049~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Idle05"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000050~0" ><texture file="Spider5" /></mesh></object>    
+    <object name="Spider4Idle06"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000051~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Idle07"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000052~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Idle08"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000053~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Idle09"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000054~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Idle10"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000055~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Idle11"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000056~0" ><texture file="Spider5" /></mesh></object>    
+    <object name="Spider4Idle12"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000057~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Idle13"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000058~0" ><texture file="Spider5" /></mesh></object>        
+    <object name="Spider4Idle14"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000059~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Idle15"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000060~0" ><texture file="Spider5" /></mesh></object>    
+    <object name="Spider4Idle16"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000061~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Idle17"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000062~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Idle18"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000063~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Idle19"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000064~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Idle20"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000065~0" ><texture file="Spider5" /></mesh></object>
+    <object refers="Spider4Idle19" />
+    <object refers="Spider4Idle18" />
+    <object refers="Spider4Idle17" />
+    <object refers="Spider4Idle16" />
+    <object refers="Spider4Idle15" />
+    <object refers="Spider4Idle14" />
+    <object refers="Spider4Idle13" />
+    <object refers="Spider4Idle12" />
+    <object refers="Spider4Idle11" />
+    <object refers="Spider4Idle10" />
+    <object refers="Spider4Idle09" />
+    <object refers="Spider4Idle08" />
+    <object refers="Spider4Idle07" />
+    <object refers="Spider4Idle06" />
+    <object refers="Spider4Idle05" />
+    <object refers="Spider4Idle04" />
+    <object refers="Spider4Idle03" />
+    <object refers="Spider4Idle02" />
+  </list>
+  
+  <list name="Spider4.Walk">
+    <event>$FrameTime 17</event>  
+    <object name="Spider4Walk01"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000001~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk02"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000002~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk03"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000003~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk04"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000004~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk05"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000005~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk06"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000006~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk07"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000007~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk08"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000008~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk09"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000009~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk10"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000010~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk11"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000011~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk12"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000012~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk13"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000013~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk14"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000014~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk15"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000015~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk16"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000016~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk17"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000017~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk18"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000018~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk19"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000019~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk20"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000020~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk21"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000021~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk22"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000022~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk23"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000023~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk24"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000024~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk25"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000025~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk26"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000026~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk27"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000027~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk28"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000028~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk29"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000029~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk30"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000030~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk31"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000031~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk32"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000032~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk33"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000033~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk34"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000034~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk35"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000035~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk36"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000036~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk37"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000037~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk38"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000038~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk39"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000039~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Walk40"><mesh file="shadow_big~0" transparent="true"  depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="anim_spider_000040~0" ><texture file="Spider5" /></mesh></object>
+
+  </list>
+  
+  <list name="Spider4.Run">
+    <event>$FrameTime 17</event>    
+    <object refers="Spider4Walk01" />
+    <object refers="Spider4Walk02" />
+    <object refers="Spider4Walk03" />
+    <object refers="Spider4Walk04" />
+    <object refers="Spider4Walk05" />
+    <object refers="Spider4Walk06" />
+    <object refers="Spider4Walk07" />
+    <object refers="Spider4Walk08" />
+    <object refers="Spider4Walk09" />
+    <object refers="Spider4Walk10" />
+    <object refers="Spider4Walk11" />
+    <object refers="Spider4Walk12" />
+    <object refers="Spider4Walk13" />
+    <object refers="Spider4Walk14" />
+    <object refers="Spider4Walk15" />
+    <object refers="Spider4Walk16" />
+    <object refers="Spider4Walk17" />
+    <object refers="Spider4Walk18" />
+    <object refers="Spider4Walk19" />
+    <object refers="Spider4Walk20" />
+    <object refers="Spider4Walk21" />
+    <object refers="Spider4Walk22" />
+    <object refers="Spider4Walk23" />
+    <object refers="Spider4Walk24" />
+    <object refers="Spider4Walk25" />
+    <object refers="Spider4Walk26" />
+    <object refers="Spider4Walk27" />
+    <object refers="Spider4Walk28" />
+    <object refers="Spider4Walk29" />
+    <object refers="Spider4Walk30" />
+    <object refers="Spider4Walk31" />
+    <object refers="Spider4Walk32" />
+    <object refers="Spider4Walk33" />
+    <object refers="Spider4Walk34" />
+    <object refers="Spider4Walk35" />
+    <object refers="Spider4Walk36" />
+    <object refers="Spider4Walk37" />
+    <object refers="Spider4Walk38" />
+    <object refers="Spider4Walk39" />
+    <object refers="Spider4Walk40" />
+  </list>
+  
+  <list name="Spider4.Turn">
+    <event>$FrameTime 17</event>    
+    <object refers="Spider4Walk01" />
+    <object refers="Spider4Walk02" />
+    <object refers="Spider4Walk03" />
+    <object refers="Spider4Walk04" />
+    <object refers="Spider4Walk05" />
+    <object refers="Spider4Walk06" />
+    <object refers="Spider4Walk07" />
+    <object refers="Spider4Walk08" />
+    <object refers="Spider4Walk09" />
+    <object refers="Spider4Walk10" />
+    <object refers="Spider4Walk11" />
+    <object refers="Spider4Walk12" />
+    <object refers="Spider4Walk13" />
+    <object refers="Spider4Walk14" />
+    <object refers="Spider4Walk15" />
+    <object refers="Spider4Walk16" />
+    <object refers="Spider4Walk17" />
+    <object refers="Spider4Walk18" />
+    <object refers="Spider4Walk19" />
+    <object refers="Spider4Walk20" />
+    <object refers="Spider4Walk21" />
+    <object refers="Spider4Walk22" />
+    <object refers="Spider4Walk23" />
+    <object refers="Spider4Walk24" />
+    <object refers="Spider4Walk25" />
+    <object refers="Spider4Walk26" />
+    <object refers="Spider4Walk27" />
+    <object refers="Spider4Walk28" />
+    <object refers="Spider4Walk29" />
+    <object refers="Spider4Walk30" />
+    <object refers="Spider4Walk31" />
+    <object refers="Spider4Walk32" />
+    <object refers="Spider4Walk33" />
+    <object refers="Spider4Walk34" />
+    <object refers="Spider4Walk35" />
+    <object refers="Spider4Walk36" />
+    <object refers="Spider4Walk37" />
+    <object refers="Spider4Walk38" />
+    <object refers="Spider4Walk39" />
+    <object refers="Spider4Walk40" />
+  </list>  
+  
+  <list name="Spider4.Attack">
+    <event>$Reset</event>  
+    <object name="Spider4Attack00"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="spider_attack_00~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Attack01"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="spider_attack_01~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Attack02"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="spider_attack_02~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Attack03"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="spider_attack_03~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Attack04"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="spider_attack_04~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Attack05"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="spider_attack_05~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Attack06"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="spider_attack_06~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Attack07"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="spider_attack_07~0" ><texture file="Spider5" /></mesh></object>
+    <object name="Spider4Attack08"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="spider_attack_08~0" ><texture file="Spider5" /></mesh></object>          
+    <object name="Spider4Attack09"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="spider_attack_09~0" ><texture file="Spider5" /></mesh></object>          
+    <object name="Spider4Attack10"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="spider_attack_10~0" ><texture file="Spider5" /></mesh></object>          
+    <object name="Spider4Attack11"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="spider_attack_11~0" ><texture file="Spider5" /></mesh></object>          
+    <object name="Spider4Attack12"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="spider_attack_12~0" ><texture file="Spider5" /></mesh></object>          
+    <object name="Spider4Attack13"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="spider_attack_13~0" ><texture file="Spider5" /></mesh></object>          
+    <object name="Spider4Attack14"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="spider_attack_14~0" ><texture file="Spider5" /></mesh></object>          
+    <object name="Spider4Attack15"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="spider_attack_15~0" ><texture file="Spider5" /></mesh></object>          
+    <object name="Spider4Attack16"><mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="spider_attack_16~0" ><texture file="Spider5" /></mesh></object>            
+    <object name="Spider4Attack17TriggerIdle">
+      <event>GoTo "Idle"</event>
+      <mesh file="shadow_big~0" transparent="true" depth-write="false"><texture file="shadow" blend-destination="ONE_MINUS_SRC_ALPHA" /></mesh><mesh file="spider_attack_16~0" ><texture file="Spider5" /></mesh>
+    </object>
+  </list>          
+  
+</objects>
