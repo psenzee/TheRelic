@@ -171,8 +171,8 @@ extern "C" FILE *GetDebugFile()
 {
     if (!DEBUG_FILE)
     {
-        char filename[64];
-        sprintf(filename, "%s.txt", GetPlatformDeviceName());
+        char filename[256];
+        snprintf(filename, sizeof(filename) - 1, "%s.txt", GetPlatformDeviceName());
         DEBUG_FILE = fopen(filename, "w");
     }
     return DEBUG_FILE;

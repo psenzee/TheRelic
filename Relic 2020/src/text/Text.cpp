@@ -64,7 +64,7 @@ void Text::MakePartyText(const char *s, char *buffer, int seed)
         int index = static_cast<int>(r.integer() % count);
         if (index == prev)
             index = (index + 1) % (int)count; // make sure we don't have the same color twice adjacent
-        pb += sprintf(pb, "%s%c", colors[index], *s);
+        pb += snprintf(pb, 16, "%s%c", colors[index], *s);
         prev = index;
     }
 }

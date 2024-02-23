@@ -150,7 +150,7 @@ void ContentLoader::RemoveBundle(const char *name)
 DeviceMesh *ContentLoader::LoadMesh(const char *name)
 {
     char fname[1024];
-    sprintf(fname, "%s.ips", name);
+    snprintf(fname, sizeof(fname) - 1, "%s.ips", name);
     LogLoadStart(fname, "MESH");
     FileFromBundle file = GetFileFromBundle(fname);
     if (file.data)

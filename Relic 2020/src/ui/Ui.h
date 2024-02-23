@@ -126,6 +126,8 @@ public:
         case UiEvent::CLICK_ENTERED:
             mState = FOCUSED;
             break;
+        default:
+            break; // TODO anything else
         }
     }
 

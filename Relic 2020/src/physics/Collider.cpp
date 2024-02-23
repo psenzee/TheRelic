@@ -221,6 +221,7 @@ static Collider::Classification TypeToClassification(Node::Type type)
     case Node::OUT:       return Collider::CLASS_OUT;
     case Node::IN:        return Collider::CLASS_IN;
     case Node::PARTITION: return Collider::CLASS_ON;
+    default:              break;
     }
     return Collider::CLASS_ERROR;
 }
