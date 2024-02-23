@@ -264,7 +264,7 @@ local TEXT_PARTS =
 },
 {
   { sequenceend = 20000, darkness = 0.5, background = false, images = false, lockinput = true, pause = true },  -- 12: x
-  { y = 120, time = 1000, text = "You must destroy the\n\\#808080Forge of Souls\\#ffffff\nat this level." },
+  { y = 120, time = 1000, text = "You must destroy the\n\\#808080Forge of Souls\\#ffffff\nin the vault." },
   { y = 140, time = 7000, text = "It is not far. Here is a key\nto enter that room." },
   { y = 82,  time = 25000, text = "" },
   { y = 82,  time = 30000, text = "" },
