@@ -87,7 +87,7 @@ extern "C" void GoToUrl(const char *url)
 const char *iPhoneReadTextFile(const char *filename)
 {
     NSString *path = [[NSBundle mainBundle] resourcePath];
-    printf("\nReading file at path: %s\n", [path UTF8String]);
+    printf("\n[iPhoneReadTextFile] Reading file '%s' at path: %s\n", filename, [path UTF8String]);
     NSString *fileText = [NSString stringWithContentsOfFile:[path stringByAppendingFormat:@"/%s", filename] encoding:NSUTF8StringEncoding error:nil];
     const char *text = [fileText UTF8String];
   //[path release];
@@ -134,7 +134,7 @@ const char *iPhoneTranslateReadWritePath(const char *filename)
 extern "C" bool WriteUserTextFile(const char *filename, const char *data)
 {
 	const char *path = iPhoneTranslateReadWritePath(filename);
-    printf("\nWriting file at path: %s\n", path);
+    printf("\n[WriteUserTextFile] Writing file '%s' at path: %s\n", filename, path);
 	FILE *file = fopen(path, "wb");
 	if (file == NULL)
 		return false;
@@ -146,7 +146,7 @@ extern "C" bool WriteUserTextFile(const char *filename, const char *data)
 extern "C" const char *ReadUserTextFile(const char *filename)
 {
 	const char *path = iPhoneTranslateReadWritePath(filename);
-    printf("\nReading file at path: %s\n", path);
+    printf("\n[ReadUserTextFile] Reading file '%s' at path: %s\n", filename, path);
     NSString *fileText = [NSString stringWithContentsOfFile:[NSString stringWithUTF8String:path] encoding:NSUTF8StringEncoding error:nil];
     const char *text = [fileText UTF8String];
     return text;
@@ -193,7 +193,8 @@ bool buttons[32] =
 
 extern "C" const char *globalReadTextFile(const char *path)
 {
-    return iPhoneReadTextFile(path);	
+    printf("\n[globalReadTextFile] Reading path '%s'\n", path);
+    return iPhoneReadTextFile(path);
 }
 
 extern "C" const char *globalTranslatePath(const char *path)

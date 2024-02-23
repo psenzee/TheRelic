@@ -19,9 +19,10 @@ extern bool IsLowEndDevice();
 GameUI::GameUI(const char **filenames) : messager(0), writer(0), scale(-1.0f, -1.0f)
 {
     memset(mWriters, 0, sizeof(mWriters));
-    for (int i = 0; i < GLYPH_PAGES; i++)
-        if (filenames[i])
-            mWriters[i] = new GlyphWriter(filenames[i]);
+    for (int i = 0; i < GLYPH_PAGES && filenames[i]; i++) {
+        printf("Glyph filename (%d) %s\n", i, filenames[i]);
+        mWriters[i] = new GlyphWriter(filenames[i]);
+    }
     messager = new MessageRenderer;
     SetGlyphPage(0);
 }

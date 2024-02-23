@@ -258,10 +258,10 @@ void GameState::Initialize(const GameDimensions &dimensions)
 {
     const char *pagesSmall[] = { "OptimusPrincepsSemiBold_S64B1I0_512.xml",
                               /*   "OptimusPrincepsSemiBold_S64B1I0_512.xml", 
-                                 "OptimusPrincepsSemiBold_S64B1I0_512.xml", */ 0 };
+                                 "OptimusPrincepsSemiBold_S64B1I0_512.xml", */ 0, 0, 0 };
     const char *pagesLarge[] = { "OptimusPrincepsSemiBold_S64B1I0_1024.xml",
                               /*   "OptimusPrincepsSemiBold_S64B1I0_1024.xml", 
-                                 "OptimusPrincepsSemiBold_S64B1I0_1024.xml", */ 0 };                                 
+                                 "OptimusPrincepsSemiBold_S64B1I0_1024.xml", */ 0, 0, 0 };
     const char **pages = pagesSmall;
 	
     if (IsHiResDevice()) {
