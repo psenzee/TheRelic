@@ -70,7 +70,7 @@ void Attack::Update(const GameTime &time)
         if (mAttackFrames > 0)
         {
             mAttackFrames--;
-            if (!mAutoAttack && /*GetAttackCurrentFrame() > 6/*CONTACT_FRAME* / &&*/ mTriggerAttack)
+            if (!mAutoAttack && /*GetAttackCurrentFrame() > 6  /-*CONTACT_FRAME*-/ &&*/ mTriggerAttack)
             {
                 processTriggerAttack = true;
             }

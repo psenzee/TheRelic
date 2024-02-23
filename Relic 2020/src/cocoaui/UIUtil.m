@@ -10,6 +10,8 @@ static BOOL    IS_LANDSCAPE = NO;
 static CGFloat FONT_SCALE_IPHONE = 1.3;
 static CGFloat FONT_SCALE_IPAD   = 1.0;
 
+extern bool IsHiResDevice();
+
 static CGSize OrientedSize(CGSize sz, BOOL landscape)
 {
     CGFloat min = MIN(sz.width, sz.height);
@@ -111,6 +113,7 @@ void PrintScreenSizes(void)
 {
     printf("\n--------------------------------\n");
     printf(                                 "IsLandscape              : %s\n", IsLandscape() ? "yes" : "no");
+    printf(                                 "IsHiResDevice            : %s\n", IsHiResDevice() ? "yes" : "no");
     printf(                                 "iPhoneIdiom              : %s\n", iPhoneIdiom() ? "yes" : "no");
     printf(                                 "iPadIdiom                : %s\n", iPadIdiom() ? "yes" : "no");
     PrintCGSize(GetScreenSize(),            "GetScreenSize            ", true);

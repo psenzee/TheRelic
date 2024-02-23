@@ -77,7 +77,7 @@ struct Node32
                 str = "_";
                 break;
             default:
-                sprintf(pointer, "%d", type);
+                snprintf(pointer, sizeof(pointer) - 1, "%d", type);
                 str = pointer;
                 break;
         }
@@ -297,7 +297,7 @@ static Collider::Classification ClassifySphere(const Tuple3f &point, float radiu
 static Collider::Classification ClassifyRadius(const Tuple3f &point, float radius, const Node *n, Tuple3f &minNegVector, Tuple3f &at)
 {
     Node::Type type = GetFullType(n);
-    /*
+    / *
     if (type == Node::IN)
     {
         float distance = prevPlane.distance(point);

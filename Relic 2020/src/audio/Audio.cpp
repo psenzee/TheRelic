@@ -224,7 +224,7 @@ bool Audio::SetSourcePosition(const char *sourcename, const Vector3 &pos)
         printf("[Audio::SetSourcePosition] Audio source '%s' not found!\n", sourcename);
         return false;
     }
-    ALenum error = AL_NO_ERROR;        
+    //ALenum error = AL_NO_ERROR;
     ALuint source = (*i).second;
     alSourcefv(source, AL_POSITION, (ALfloat *)&pos);
     return true;
@@ -328,7 +328,7 @@ bool Audio::IsSourceDone(const char *sourcename) const
     if (i == mSources.end())
         return true;
 
-    ALenum error = AL_NO_ERROR;
+    //ALenum error = AL_NO_ERROR;
     ALuint source = (*i).second;
     ALint  state = AL_PLAYING;
     alGetSourcei(source, AL_SOURCE_STATE, &state);
@@ -345,7 +345,7 @@ void Audio::ReleaseSource(const char *sourcename)
     map_t::iterator i = mSources.find(sn);
     if (i != mSources.end())
     {
-        ALenum error = AL_NO_ERROR;
+        //ALenum error = AL_NO_ERROR;
         ALuint source = (*i).second;
         alSourcei(source, AL_BUFFER, 0),
         alDeleteSources(1, &source);

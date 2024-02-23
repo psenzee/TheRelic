@@ -10,14 +10,14 @@ DeviceMesh::DeviceMesh(const char *filename, bool compact) : mMesh(0)
 {
     char newname[1024];
     mMesh = new OpenGLESMesh;
-    sprintf(newname, "%s.ips", filename);
+    snprintf(newname, sizeof(newname) - 1, "%s.ips", filename);
     if (!mMesh->Read(newname, compact))
     {
         delete mMesh;
         mMesh = 0;
 
         mMesh = new OpenGLESMesh;
-        sprintf(newname, "%s.ipi", filename);
+        snprintf(newname, sizeof(newname) - 1, "%s.ipi", filename);
         if (!mMesh->Read(newname, compact))
         {
             printf("Unable to read file '%s'!\n", filename);

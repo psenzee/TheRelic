@@ -269,19 +269,23 @@ end
 HEALTH_PICKUP_COUNT = 0
 GOLD_PICKUP_COUNT   = 0
 GOLD_PICKUP_MOD     = 1
+GOLD_PICKUP_MOD     = 1
 
 function AddToInventoryMax(player, item, count, maximum)
-  if count <= 0 or GetPlayer() ~= player then
+  if count == nil or count <= 0 or GetPlayer() ~= player then
     return false
   end
-  local prevTotal = GetInventoryItemCount(player, item)  
+  local prevTotal = GetInventoryItemCount(player, item)
+  if prevTotal == nil then
+    prevTotal = 0
+  end
   local total = prevTotal + count
   if prevTotal == 0 then
     local event = "FirstAcquired_" .. item
     FireEvent(event, event)
   end
   if maximum ~= nil and total >= maximum then
-    total = clampMax
+    total = maximum
   end
   SetInventoryItemCount(player, item, total)
   local phrase = ItemPhrase(item, count)

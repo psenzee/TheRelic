@@ -4,25 +4,25 @@
 #include <zlib/zlib.h>
 #include <string.h>
 
-static void ReportAverageCompression(int uncompressed, int compressed)
+static void ReportAverageCompression(size_t uncompressed, size_t compressed)
 {
-    static int in = 0, out = 0, count = 0;
+    static size_t in = 0, out = 0, count = 0;
     in  += uncompressed;
     out += compressed;
     count++;
     if (count % 100 == 0 && count != 0)
     {
-        printf("Compression: in=%db, out=%db\n", in / count, out / count);
+        printf("Compression: in=%lub, out=%lub\n", in / count, out / count);
         in = out = count = 0;
     }
 }
 
-bool Codec::DoCompress(int size)
+bool Codec::DoCompress(size_t size)
 {
     return size > 150; // figure out what the best value is for this
 }
 
-int Codec::EncodeUncompressed(const char *uncompressed, int size, char *compressed)
+ssize_t Codec::EncodeUncompressed(const char *uncompressed, size_t size, char *compressed)
 {
     PackChar(&compressed, (char)UNCOMPRESSED);
     PackUInt16(&compressed, size);
@@ -30,7 +30,7 @@ int Codec::EncodeUncompressed(const char *uncompressed, int size, char *compress
     return size + sizeof(unsigned short) + sizeof(char);
 }
 
-int Codec::EncodeCompressed(const char *uncompressed, int size, char *compressed)
+ssize_t Codec::EncodeCompressed(const char *uncompressed, size_t size, char *compressed)
 {
     char *buffer = compressed + sizeof(unsigned short) + sizeof(char);
     //Z_NO_COMPRESSION - data is not compressed.
@@ -55,54 +55,54 @@ int Codec::EncodeCompressed(const char *uncompressed, int size, char *compressed
     PackChar(&compressed, (char)COMPRESSED);
     PackUInt16(&compressed, compressedSize);
     ReportAverageCompression(size, compressedSize);
-    return compressedSize + sizeof(unsigned short) + sizeof(char);
+    return ssize_t(compressedSize + sizeof(unsigned short) + sizeof(char));
 }
 
-int Codec::Encode(const char *uncompressed, int size, char *compressed)
+ssize_t Codec::Encode(const char *uncompressed, size_t size, char *compressed)
 {
     if (size > 32 * 1024)
-        printf("Encoding large message of %d bytes ..\n", size);
+        printf("Encoding large message of %lu bytes ..\n", size);
     if (!DoCompress(size))
         return EncodeUncompressed(uncompressed, size, compressed);
-    int compressedSize = EncodeCompressed(uncompressed, size, compressed);
+    ssize_t compressedSize = EncodeCompressed(uncompressed, size, compressed);
     if (compressedSize == -1)
         return EncodeUncompressed(uncompressed, size, compressed);
     if (size > 32 * 1024)
-        printf("  .. compressed to %d bytes\n", compressedSize);
+        printf("  .. compressed to %ld bytes\n", compressedSize);
     return compressedSize;
 }
 
-int Codec::DecodeUncompressed(const char *compressed, char *uncompressed)
+ssize_t Codec::DecodeUncompressed(const char *compressed, char *uncompressed)
 {
     char c = *compressed;
     if (static_cast<unsigned char>(c) != UNCOMPRESSED)
         return -1;
     UnpackChar(&compressed);
-    int size = UnpackUInt16(&compressed);
+    ssize_t size = UnpackUInt16(&compressed);
     memcpy(uncompressed, compressed, size);
     return size;
 }
 
-int Codec::DecodeCompressed(const char *compressed, char *uncompressed)
+ssize_t Codec::DecodeCompressed(const char *compressed, char *uncompressed)
 {
     char c = *compressed;
     if (static_cast<unsigned char>(c) != COMPRESSED)
         return -1;
     UnpackChar(&compressed);
     int size = UnpackUInt16(&compressed);
-    unsigned long uncompressedSize = MAX_DECODE_SIZE;
+    uLongf uncompressedSize = MAX_DECODE_SIZE;
     //int ZEXPORT uncompress(Bytef *dest, uLongf *destLen, const Bytef *source, uLongf sourceLen);
     int error = uncompress(reinterpret_cast<unsigned char *>(uncompressed), &uncompressedSize,
-                           reinterpret_cast<const unsigned char *>(compressed), size);
+                           reinterpret_cast<const unsigned char *>(compressed), uLong(size));
     if (error != Z_OK)
     {
         printf("uncompress error!\n");
         return -1;
     }
-    return uncompressedSize;
+    return ssize_t(uncompressedSize);
 }
 
-int Codec::Decode(const char *compressed, char *uncompressed)
+ssize_t Codec::Decode(const char *compressed, char *uncompressed)
 {
     switch (static_cast<unsigned char>(*compressed))
     {

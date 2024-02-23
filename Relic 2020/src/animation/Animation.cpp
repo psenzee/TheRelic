@@ -59,13 +59,13 @@ static void Draw(IGameObject *object, RenderContext &context, const Matrix &m, f
         object->GetRenderable().Render(rc);
     }
 }
-
+/*
 static void DrawFrame(IGameObject *object, int frame, RenderContext &context, const Matrix &m, float alpha)
 {
     if (object)
         Draw(object->GetObjectList().GetObjects()[frame], context, m, alpha);
 }
-
+*/
 void Animation::Render(RenderContext &context, const Matrix &transform)
 {
     Draw(GetFrame(), context, transform, mAlpha);
@@ -113,7 +113,6 @@ bool GetTagStringArgument(const char *data, const char *name, char *buffer)
     if (!starts(data, name))
         return false;
     data += static_cast<int>(strlen(name));
-    int value = 0;
     if (read_quoted(&data, '"', buffer))
         return true;
     printf("Animation: expected quoted (\") string after '%s' tag!\n", name);

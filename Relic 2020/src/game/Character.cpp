@@ -72,7 +72,7 @@ CharacterPositionPacket GetCharacterPositionPacket(Character *ch)
     unsigned char angle  = GetNBitUIntFromFloatAngle(ch->GetOrientationAngle(), 8);
 
     unsigned char flags1 = 0;
-    unsigned char flags2 = 0;
+    //unsigned char flags2 = 0;
     
     Vector3 position(ch->GetPosition());
     short x = (int)position.x;
@@ -95,7 +95,7 @@ void SetCharacterPositionPacket(Character *ch, const CharacterPositionPacket &pa
 {
     unsigned char animid =  packet.data[2];
     unsigned char frame  = (packet.data[3] >> 2) & 0x3f;
-    unsigned char flags1 =  packet.data[3] & 0x03;
+//  unsigned char flags1 =  packet.data[3] & 0x03;
     unsigned char angle  = packet.data[4];
     
     short id = 0, x = 0, y = 0;
@@ -260,7 +260,7 @@ void Character::SetAnimation(const char *name)
     if (!mAnimation)
     {
         char tag[1024];
-        sprintf(tag, "%s.%s", mType.c_str(), name);
+        snprintf(tag, sizeof(tag) - 1, "%s.%s", mType.c_str(), name);
         mAnimation = new Animation;
         mAnimation->Load(mRenderables, tag);
         mAnimations[nameStr] = mAnimation;
@@ -389,6 +389,9 @@ bool Character::StaticCollides(const Vector3 &p, float radius, Vector3 &resolve)
     case ICollidable::CLASS_IN:  resolve = Vector3(); return true;  // we don't know how to get out..
     case ICollidable::CLASS_OUT: resolve = Vector3(); return false; // we don't NEED to get out..
     case ICollidable::CLASS_ON:  return true;                       // the resolve vector will show us the way out..
+    default:
+        // error?
+        break;
     }
     return false;
 }
@@ -408,6 +411,9 @@ int Character::CollidesAt(const Vector3 &p, float radius)
                 // $TODO
             collision = 511;
         }
+        break;
+    default:
+         // error?
         break;
     }
 
@@ -502,7 +508,7 @@ bool Character::FaceClosestAttackable(float radius, float maxAngle)
 {
     DynamicMapIterator iterator = GetDynamicMap()->GetAllClosest(this, radius);
     
-    Vector3  thisAt(GetPosition());
+//  Vector3  thisAt(GetPosition());
     float    minAngle   = math::TWOPIf;
     float    minDist    = radius;
     Movable *found      = 0;
@@ -630,7 +636,7 @@ IBehavior *Character::GetBehavior(int behaviorTypeId)
 // IBehavior support
 int Character::GetBehaviorIndex(int behaviorTypeId, int startIndex)
 {
-    for (int i = startIndex, sz = mBehaviors.size(); i < sz; i++)
+    for (int i = startIndex, sz = int(mBehaviors.size()); i < sz; i++)
         if (mBehaviors[i] && mBehaviors[i]->IsOfType(behaviorTypeId))
             return i;
     return -1;

@@ -30,9 +30,9 @@ Vector3 v = GetGlobalGame()->GetLevel()->GetFieldVector(self->GetPosition());
                    topos(to->GetPosition()),
                    dir(topos - pos);
         float      distance = dir.length(),
-                   speed    = GetApproachSpeed(),
-                   mind     = GetApproachMinDistance(),
-                   toofar   = GetApproachTooFar();
+                   mind     = GetApproachMinDistance();
+//        float      speed    = GetApproachSpeed(),
+//                   toofar   = GetApproachTooFar();
 
         dir /= distance;
         if (true)//(distance < toofar)

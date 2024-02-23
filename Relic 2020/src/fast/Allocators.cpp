@@ -112,10 +112,10 @@ void PoolAllocator::PrintStatistics() const
 {
     printf("\n"
             "Allocator stats:        \n"
-            "  outstanding objects %d\n"
-            "  total allocated     %d\n"
-            "  total freed         %d\n"
-            "  free list count     %d\n", count, allocated, freed, free);
+            "  outstanding objects %lu\n"
+            "  total allocated     %lu\n"
+            "  total freed         %lu\n"
+            "  free list count     %lu\n", count, allocated, freed, free);
 }
 
 size_t PoolAllocator::GetPageCount() const
@@ -125,7 +125,7 @@ size_t PoolAllocator::GetPageCount() const
 
 void PoolAllocator::DumpStatistics(FILE *file) const
 {
-    fprintf(file, "MEM: size %3u outstanding %5u total %5u freed %5u free %5u | pages %5u\n", allocator->item_size, count, allocated, freed, free, allocator->GetPageCount());
+    fprintf(file, "MEM: size %3lu outstanding %5lu total %5lu freed %5lu free %5lu | pages %5lu\n", allocator->item_size, count, allocated, freed, free, allocator->GetPageCount());
 }
 
 ReferenceAllocator::ReferenceAllocator(size_t, size_t item_size) 
@@ -151,9 +151,9 @@ void ReferenceAllocator::PrintStatistics() const
 {
     printf("\n"
             "Allocator stats:        \n"
-            "  outstanding objects %d\n"
-            "  total allocated     %d\n"
-            "  total freed         %d\n", count, allocated, freed);
+            "  outstanding objects %lu\n"
+            "  total allocated     %lu\n"
+            "  total freed         %lu\n", count, allocated, freed);
 }
 
 SmallObjectAllocator::SmallObjectAllocator()
@@ -204,12 +204,12 @@ void *SmallObjectAllocator::Reallocate(void *p, size_t size)
     try {
         memcpy(nmem, p, sz);
     } catch (...) {
-        printf("SOA ERROR! exception in memcpy in Reallocate! osize=%u, nsize=%u", osize, size);
+        printf("SOA ERROR! exception in memcpy in Reallocate! osize=%lu, nsize=%lu", osize, size);
     }
     try {
         Destroy(p);
     } catch (...) {
-        printf("SOA ERROR! exception in Destroy in Reallocate! osize=%u, nsize=%u", osize, size);
+        printf("SOA ERROR! exception in Destroy in Reallocate! osize=%lu, nsize=%lu", osize, size);
     }
     return nmem;
 }

@@ -63,8 +63,8 @@ void MyResolveCallback(CFNetServiceRef theService, CFStreamError *error, void *i
 	    printf("RESOLVE\n");
 	    // i think this means we're done
 	    CFArrayRef addresses = CFNetServiceGetAddressing(gServiceBeingResolved);
-	    int count = CFArrayGetCount(addresses);
-	    for (int i = 0; i < count; i++)
+	    long count = CFArrayGetCount(addresses);
+	    for (long i = 0; i < count; i++)
         {
             sockaddr ipaddress;
             sockaddr_in *ipin = (sockaddr_in *)&ipaddress;
@@ -75,8 +75,8 @@ void MyResolveCallback(CFNetServiceRef theService, CFStreamError *error, void *i
 		    unsigned int   ip   = *(uint32_t *)&(ipin->sin_addr);
             gBonjourPort = *(uint32_t *)&(ipin->sin_port);
 	        ip = ntohl(ip); gBonjourPort = ntohs(gBonjourPort);
-		    printf("%d.%d.%d.%d:%d\n", (ip >> 24) & 0xff, (ip >> 16) & 0xff, (ip >> 8) & 0xff, ip & 0xff, gBonjourPort); 
-			sprintf(gBonjourAddress, "%d.%d.%d.%d", (ip >> 24) & 0xff, (ip >> 16) & 0xff, (ip >> 8) & 0xff, ip & 0xff);
+		    printf("%u.%u.%u.%u:%u\n", (ip >> 24) & 0xff, (ip >> 16) & 0xff, (ip >> 8) & 0xff, ip & 0xff, gBonjourPort);
+			snprintf(gBonjourAddress, 16, "%u.%u.%u.%u", (ip >> 24) & 0xff, (ip >> 16) & 0xff, (ip >> 8) & 0xff, ip & 0xff);
 		    done = true;
 	    }
     }
@@ -92,7 +92,7 @@ void MyResolveCallback(CFNetServiceRef theService, CFStreamError *error, void *i
 
 void MyBrowseCallBack(CFNetServiceBrowserRef browser, CFOptionFlags flags, CFTypeRef domainOrService, CFStreamError *error, void *info)
 {
-	printf("This is the BROWSE callback, don't know what it's supposed to do.. %d %p : ", *error, info);
+	printf("This is the BROWSE callback, don't know what it's supposed to do.. %d %p : ", error->error, info);
 	CFShow(domainOrService);
     MyResolveService((CFNetServiceRef)domainOrService);
 	printf("\n");
@@ -139,9 +139,9 @@ static Boolean MyStartBrowsingForServices(CFStringRef domain, CFStringRef type)
 		CFRelease(gServiceBrowserRef);
 		gServiceBrowserRef = NULL;
 		
-		fprintf(stderr, "CFNetServiceBrowserSearchForServices returned (domain = %d (%d), error = %ld)\n", error.domain, kCFStreamErrorDomainNetServices, error.error);
+		fprintf(stderr, "CFNetServiceBrowserSearchForServices returned (domain = %ld (%d), error = %d)\n", (long)error.domain, (int)kCFStreamErrorDomainNetServices, error.error);
 	}
-	
+
 	return result;
 }
 
@@ -165,7 +165,7 @@ static void MyResolveService(CFStringRef name, CFStringRef type, CFStringRef dom
 		CFRelease(gServiceBeingResolved);
 		gServiceBeingResolved = NULL;
 		
-		fprintf(stderr, "CFNetServiceResolve returned (domain = %d, error = %ld)\n", error.domain, error.error);
+		fprintf(stderr, "CFNetServiceResolve returned (domain = %d, error = %ld)\n", (int)error.domain, (long)error.error);
 	}
 }
 
@@ -189,7 +189,7 @@ static void MyResolveService(CFNetServiceRef resolve)
 		CFRelease(gServiceBeingResolved);
 		gServiceBeingResolved = NULL;
 		
-		fprintf(stderr, "CFNetServiceResolve returned (domain = %d, error = %ld)\n", error.domain, error.error);
+		fprintf(stderr, "CFNetServiceResolve returned (domain = %d, error = %ld)\n", (int)error.domain, (long)error.error);
 	}
 }
 

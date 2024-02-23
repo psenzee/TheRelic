@@ -286,6 +286,7 @@ bool ConnectionManager::ChangeId(int oldid, int newid)
     if (!connection->Send(message, sizeof(message), true, true))
         return false;
     ChangeIdInternal(oldid, newid);
+    return true;
 }
 
 bool ConnectionManager::ChangeIdInternal(int oldid, int newid)
@@ -296,6 +297,7 @@ bool ConnectionManager::ChangeIdInternal(int oldid, int newid)
     IConnection *c = GetConnectionAt(index);
     if (!c) return false;
     c->SetId(newid);
+    return true;
 }
 
 bool ConnectionManager::CloseById(int connectionid)

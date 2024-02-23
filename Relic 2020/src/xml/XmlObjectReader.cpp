@@ -209,7 +209,7 @@ ICollidable *XmlObjectReader::ReadCollider(XmlElement *xml, XmlReadContext *cont
         return 0;
     }
     char fullFileName[1024];
-    sprintf(fullFileName, "%s.obj.collide", filename);
+    snprintf(fullFileName, sizeof(fullFileName) - 1, "%s.obj.collide", filename);
     ICollidable *o = Collider::ReadCollider(globalTranslatePath(fullFileName));
     if (!o)
     {

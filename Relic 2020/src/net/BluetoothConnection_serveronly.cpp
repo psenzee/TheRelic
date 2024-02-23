@@ -222,6 +222,15 @@ void BluetoothServerConnector::Process()
         LuaCall(lua, "MultiplayerConnectCancelled", 0, 0);			
         mState = UNCONNECTED;
         break;
+    case CONNECTED:
+        // TODO!
+        break;
+    case UNCONNECTED:
+        // TODO!
+        break;
+    case WAITING_FOR_PICKER:
+        // TODO!
+        break;
     }
 
     // OnReceive
@@ -269,6 +278,15 @@ void BluetoothClientConnector::Process()
             connection->DisconnectInternal();			
         LuaCall(lua, "MultiplayerConnectCancelled", 0, 0);			
         mState = UNCONNECTED;
+        break;
+    case CONNECTED:
+        // TODO!
+        break;
+    case UNCONNECTED:
+        // TODO!
+        break;
+    case WAITING_FOR_PICKER:
+        // TODO!
         break;
     }
 

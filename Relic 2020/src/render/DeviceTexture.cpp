@@ -8,7 +8,7 @@
 DeviceTexture::DeviceTexture(const char *filename) : texid(0), size(0, 0)
 {
     char newname[1024];
-    sprintf(newname, "%s.png", filename);
+    snprintf(newname, sizeof(newname) - 1, "%s.png", filename);
     texid = LoadTexture(newname, &size);
 }
 

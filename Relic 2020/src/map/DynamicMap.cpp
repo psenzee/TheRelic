@@ -327,15 +327,15 @@ core::Rectangle DynamicMap::CalculateSearchArea(const Movable *movable, float ra
     {
         const Vector2 at(point.x - p.x * mUnit.x, point.y - p.y * mUnit.y);
 
-        if (at.y >= mUnit.y - radius) { /*rect.y++;* / rect.height++; }
+        if (at.y >= mUnit.y - radius) { / *rect.y++;* / rect.height++; }
         if (at.y <=           radius) { rect.y--; rect.height++; }
-        if (at.x >= mUnit.x - radius) { /*rect.x++;* / rect.width++;  }
+        if (at.x >= mUnit.x - radius) { / *rect.x++;* / rect.width++;  }
         if (at.x <=           radius) { rect.x--; rect.width++;  }
 
-        /*
-        if (at.y >= mUnit.y - d) { /*rect.y++;* / rect.height++; }
+        / *
+        if (at.y >= mUnit.y - d) { / *rect.y++;* / rect.height++; }
         if (at.y <=           d) { rect.y--; rect.height++; }
-        if (at.x >= mUnit.x - d) { /*rect.x++;* / rect.width++;  }
+        if (at.x >= mUnit.x - d) { / *rect.x++;* / rect.width++;  }
         if (at.x <=           d) { rect.x--; rect.width++;  }
         * /
     }

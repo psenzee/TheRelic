@@ -44,7 +44,6 @@ function ResolveCollision(c, p)
   c:SetPosition(xa, ya, za)
 end
 
-
 function Update_InputDirection(c)
   local xi, yi, zi = GetInputDirection()
   local f = 1.0 / FPS_FACTOR

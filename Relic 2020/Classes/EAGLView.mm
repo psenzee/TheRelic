@@ -96,38 +96,38 @@ const char *iPhoneReadTextFile(const char *filename)
 
 const char *iPhoneTranslatePath(const char *filename)
 {
-    static char translatedPath[1024];
+    static char translatedPath[1024] = { 0 };
     NSString *path = [[NSBundle mainBundle] resourcePath];
     NSString *file = [path stringByAppendingFormat:@"/%s", filename];
-    strcpy(translatedPath, [file UTF8String]);
+    strncpy(translatedPath, [file UTF8String], sizeof(translatedPath) - 1);
     return translatedPath;
 }
 
 extern "C" const char *getGlobalReadOnlyPath()
 {
-    static char data[1024];	
+    static char data[1024] = { 0 };
     NSString *path = [[NSBundle mainBundle] resourcePath];
-    strcpy(data, [path UTF8String]);	
+    strncpy(data, [path UTF8String], sizeof(data) - 1);
 //  [path release];
     return data;
 }
 
 extern "C" const char *getGlobalReadWritePath()
 {
-    static char data[1024];	
+    static char data[1024] = { 0 };
     NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    strcpy(data, [path UTF8String]);	
+    strncpy(data, [path UTF8String], sizeof(data) - 1);
 //  [path release];
     return data;
 }
 
 const char *iPhoneTranslateReadWritePath(const char *filename)
 {
-    static char translatedPath[1024];
+    static char translatedPath[1024] = { 0 };
     NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString *file = [path stringByAppendingFormat:@"/%s", filename];
-    strcpy(translatedPath, [file UTF8String]);
-	// [file release];	
+    strncpy(translatedPath, [file UTF8String], sizeof(translatedPath) - 1);
+	// [file release];
     return translatedPath;
 }
 
@@ -160,13 +160,14 @@ extern "C" void SetScreenTouchStationary(int index, int x, int y);
 void UpdateTouch(UITouch *touch, UIView *view)
 {
     CGPoint pt = [touch locationInView:view];
+    int ti = int(intptr_t(touch) & 0x7ffffff);
 	switch ([touch phase])
 	{
-		case UITouchPhaseBegan:      SetScreenTouchBegan((intptr_t)touch, pt.x, pt.y); break;
-		case UITouchPhaseMoved:      SetScreenTouchMoved((intptr_t)touch, pt.x, pt.y); break;
-		case UITouchPhaseStationary: SetScreenTouchStationary((intptr_t)touch, pt.x, pt.y); break;
+		case UITouchPhaseBegan:      SetScreenTouchBegan(ti, pt.x, pt.y); break;
+		case UITouchPhaseMoved:      SetScreenTouchMoved(ti, pt.x, pt.y); break;
+		case UITouchPhaseStationary: SetScreenTouchStationary(ti, pt.x, pt.y); break;
 		case UITouchPhaseCancelled:
-		case UITouchPhaseEnded:      SetScreenTouchEnded((intptr_t)touch, pt.x, pt.y); break;			
+		case UITouchPhaseEnded:      SetScreenTouchEnded(ti, pt.x, pt.y); break;
 		default: break;
 	}
 }
@@ -314,7 +315,7 @@ extern "C" bool GetPlatformIsiPad()
 BOOL hasRetinaDisplay(void)
 {
 	if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
-		return [[UIScreen mainScreen] scale] == 2.0 ? YES : NO;
+		return [[UIScreen mainScreen] scale] != 1.0 ? YES : NO;
 	return NO;
 }
 

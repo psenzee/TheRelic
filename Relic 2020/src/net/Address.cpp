@@ -39,7 +39,7 @@ const char *Address::GetAsString() const
 {
     static char address[1024];
     // print received message 
-    sprintf(address, "%s:%u",
+    snprintf(address, sizeof(address) - 1, "%s:%u",
             inet_ntoa(mAddress->sin_addr),
             ntohs(mAddress->sin_port));
     return address;

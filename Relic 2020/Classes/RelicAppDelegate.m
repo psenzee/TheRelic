@@ -10,26 +10,23 @@
 #import "RelicViewController.h"
 #import "UIUtil.h"
 
-bool   g_bInBackground               = false,
-       g_activateCrystalAtProfile    = false,
-       g_crystalIsActive             = false;
-
-void  *g_crystalActivateContext      = 0;
-void (*g_crystalActivated)(void *)   = 0;
-
-void  *g_crystalDeactivateContext    = 0;
-void (*g_crystalDeactivated)(void *) = 0;
+bool   g_bInBackground               = false;
 
 void  *g_alertDismissedContext       = 0;
 void (*g_alertDismissed)(void *)     = 0;
 
 id     g_App                         = nil;
 
-bool   g_doActivateCrystal           = false;
-
 int    g_iOSMajorVersion             = -1;
 int    g_iOSMinorVersion1            = -1;
 int    g_iOSMinorVersion2            = -1;
+
+extern void GetVersion();
+extern int  GetiOSMajorVersion();
+extern int  GetiOSMinorVersion1();
+extern int  GetiOSMinorVersion2();
+extern bool IsVersionGTE(int major, int minor1, int minor2);
+extern bool ShouldShowLogoSplash();
 
 extern bool        WriteUserTextFile(const char *filename, const char *data);
 extern bool        GetPlatformIsiPad(void);

@@ -88,7 +88,7 @@ void AnimationBehavior::Reset()
     mTurn = false;
     mTurnAngle = 0.f;
     mTurnForce = 0.f;
-    mDirection = 0.f, 1.f, 0.f; 
+    mDirection = Vector3(0.f, 1.f, 0.f);
     mAccumulatedForce = 0.f;
     mAccumulatedForceChange = FilterValue(0.f, 0.25f);
     mDisableMoveCount = 0;
@@ -239,7 +239,7 @@ const char *AnimationBehavior::GetAnimationName() const
     if (strcmp(mActionName.c_str(), "Die") == 0)
         return "Die";
     static char string[256];
-    sprintf(string, "%s%s%s", mMovementName.c_str(), mTurnName.c_str(), mActionName.c_str());
+    snprintf(string, sizeof(string) - 1, "%s%s%s", mMovementName.c_str(), mTurnName.c_str(), mActionName.c_str());
   //return GetRealAnimationName(string);
     const char *name = GetRealAnimationName(string, mWalkAndAttack);
     if (mAttackTypeCount > 1)
@@ -250,7 +250,7 @@ const char *AnimationBehavior::GetAnimationName() const
         {
             const char *finalName = name;
             int attack = mAttackCount % mAttackTypeCount;
-            sprintf(string, "Attack%d", attack + 1);
+            snprintf(string, sizeof(string) - 1, "Attack%d", attack + 1);
             if (attack != 0)
                 finalName = string;
             if (!mIsAttackSet)

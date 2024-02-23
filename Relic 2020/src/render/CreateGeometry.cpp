@@ -45,8 +45,8 @@ bool CreateCylinder(float radius, float height, float heightUv, int segments, Ve
 {
     if (radius <= 0.f || height <= 0.f)
         return false; // nothing to do..
-    float segmentAngle = math::TWOPIf / segments,
-          halfHeight   = height * 0.5f;
+    float segmentAngle = math::TWOPIf / segments;
+//  float halfHeight   = height * 0.5f;
     Vertex *pv = vertices;
     while (heightUv >  1.f) heightUv -= 1.f;
     while (heightUv < -1.f) heightUv += 1.f;
