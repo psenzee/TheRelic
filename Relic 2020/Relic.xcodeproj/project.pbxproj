@@ -1178,6 +1178,7 @@
 		DA7AB2B423B826C300DDC4AF /* black_button_potion.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7AB2B323B826C300DDC4AF /* black_button_potion.png */; };
 		DA7AB2B623B82A1100DDC4AF /* tick_new.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7AB2B523B82A1100DDC4AF /* tick_new.png */; };
 		DA7AB2B823B9376100DDC4AF /* black_button_ring.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7AB2B723B9376100DDC4AF /* black_button_ring.png */; };
+		DAAE3EB42B89432200832818 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAAE3EB32B89432200832818 /* LaunchScreen.storyboard */; };
 		DAEFF7F123BC17540062B630 /* tick_new_2.png in Resources */ = {isa = PBXBuildFile; fileRef = DAEFF7F023BC17540062B630 /* tick_new_2.png */; };
 		DAEFF7F323BD04670062B630 /* globals.lua in Resources */ = {isa = PBXBuildFile; fileRef = DAEFF7F223BD04670062B630 /* globals.lua */; };
 		DAEFF7F623BD2F390062B630 /* GameDimensions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAEFF7F423BD2F390062B630 /* GameDimensions.cpp */; };
@@ -2628,6 +2629,7 @@
 		DA7AB2B323B826C300DDC4AF /* black_button_potion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = black_button_potion.png; path = data/textures/black_button_potion.png; sourceTree = "<group>"; };
 		DA7AB2B523B82A1100DDC4AF /* tick_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tick_new.png; path = data/textures/tick_new.png; sourceTree = "<group>"; };
 		DA7AB2B723B9376100DDC4AF /* black_button_ring.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = black_button_ring.png; path = data/textures/black_button_ring.png; sourceTree = "<group>"; };
+		DAAE3EB32B89432200832818 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DAEFF7F023BC17540062B630 /* tick_new_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tick_new_2.png; path = data/textures/tick_new_2.png; sourceTree = "<group>"; };
 		DAEFF7F223BD04670062B630 /* globals.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = globals.lua; path = data/lua/globals.lua; sourceTree = "<group>"; };
 		DAEFF7F423BD2F390062B630 /* GameDimensions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameDimensions.cpp; path = src/GameDimensions.cpp; sourceTree = "<group>"; };
@@ -2746,6 +2748,7 @@
 				28EC4C5811D54ECE0027AA9F /* RelicViewController.xib */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* Relic-Info.plist */,
+				DAAE3EB32B89432200832818 /* LaunchScreen.storyboard */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -5098,6 +5101,7 @@
 				439DC04112DF7BD900B06546 /* FloorStone3_1smAlt.png.pvrhi in Resources */,
 				439DC04212DF7BD900B06546 /* FloorStone3_1smAlt.png.pvrlo in Resources */,
 				439DC04312DF7BD900B06546 /* FloorStone3_14.png.pvrhi in Resources */,
+				DAAE3EB42B89432200832818 /* LaunchScreen.storyboard in Resources */,
 				439DC04412DF7BD900B06546 /* FloorStone3_14.png.pvrlo in Resources */,
 				439DC04512DF7BD900B06546 /* FutureFloor.png.pvrhi in Resources */,
 				439DC04612DF7BD900B06546 /* FutureFloor.png.pvrlo in Resources */,

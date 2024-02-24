@@ -12,14 +12,14 @@ void LuaBehavior::Start(Character *self)
 {
     SetCharacter(self);
     char function[128];
-    sprintf(function, "%s_Start", mFunction.c_str());
+    snprintf(function, sizeof(function) - 1, "%s_Start", mFunction.c_str());
     Execute(String(function));
 }
 
 void LuaBehavior::Stop()
 {
     char function[128];
-    sprintf(function, "%s_Stop", mFunction.c_str());
+    snprintf(function, sizeof(function) - 1, "%s_Stop", mFunction.c_str());
     Execute(String(function));
     AbstractBehavior::Stop();
 }

@@ -19,8 +19,8 @@ Text::Text(GlyphWriter *writer, const char *s, const Vector2 &pos, const Vector2
     size_t        sz        = strlen(s);
     char         *current   = new char [sz + 1],
                  *pcur      = current;
-    
-    memset(current, 0, sz + 1);    
+
+    memset(current, 0, sz + 1);
     while (*s)
     {
         if (!GlyphWriter::ParseColor(&s, color))

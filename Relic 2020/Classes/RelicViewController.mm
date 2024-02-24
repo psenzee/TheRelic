@@ -120,6 +120,7 @@ extern "C" void UnloadAll();
 - (void)awakeFromNib
 {
     printf("AWAKE FROM NIB %p\n", self);
+    [super awakeFromNib];
     [self initialize];
 }
 
@@ -127,9 +128,9 @@ extern "C" void UnloadAll();
 {
     PrintScreenSizes();
     CGSize sz = GetScreenSize();
-    CGRect frame;
-    frame.origin = CGPointMake(0.0, 0.0);
-    frame.size = sz;
+    CGRect frame = [[UIScreen mainScreen] applicationFrame];
+    //frame.origin = CGPointMake(0.0, 0.0);
+    //frame.size = sz;
     if (!IsLandscape()) {
         //frame.size = CGSizeSwap(frame.size);
     }
