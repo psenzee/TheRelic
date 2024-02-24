@@ -47,6 +47,8 @@
 	<true/>
 	<key>UIStatusBarHidden</key>
 	<true/>
+	<key>Delegate Class Name</key>
+	<string>RelicAppDelegate</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 </dict>

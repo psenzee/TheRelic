@@ -145,8 +145,11 @@ extern void SetupGame(void);
 	
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
 	
+    //Create a window that is the same size as the screen
+ //   UIWindow *window = UIWindow(frame: UIScreen.main.bounds)
+    
     [self startApp];
-	
+
     return YES;
 }
 
