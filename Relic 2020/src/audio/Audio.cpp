@@ -162,10 +162,10 @@ bool Audio::Load(const char *filename, const char *soundname)
     // we don't run wavs directly on an iPhone
     char caffile[1024];
     if (ends(filename, ".wav", true))
-        sprintf(caffile, "%s.caf", filename);
+        snprintf(caffile, sizeof(caffile) - 1, "%s.caf", filename);
     else
-        strcpy(caffile, filename);
-    toloadfile = caffile;	
+        snprintf(caffile, sizeof(caffile) - 1, "%s", filename);
+    toloadfile = caffile;
 #endif	
             
     data = GetOpenALAudioData(globalTranslatePath(toloadfile), &size, &format, &freq);

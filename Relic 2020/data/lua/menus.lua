@@ -1221,7 +1221,7 @@ function CreateInGameMenu()
 --AddHorizMenuButton(IN_GAME_MENU, "To_Attributes", "Attributes", 130)  
 --AddHorizMenuButton(IN_GAME_MENU, "To_Stats", "Stats", 80)
 --AddHorizMenuButton(IN_GAME_MENU, "To_Quests", "Quests", 100)
---AddHorizMenuButton(IN_GAME_MENU, "To_NextIGPage", ">",   20)  
+  AddHorizMenuButton(IN_GAME_MENU, "To_NextIGPage", ">",   20)  
   UiControl_LayoutHorizontal(IN_GAME_MENU)
   
   UiControl_AddChild(CANVAS, IN_GAME_MENU)
