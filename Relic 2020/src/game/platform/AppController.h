@@ -45,8 +45,6 @@ APPLE HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 */
-
-#import "GLGravityView.h"
 //CLASS INTERFACES:
 
 @interface AppController : NSObject <UIAccelerometerDelegate, GLGravityViewDelegate>

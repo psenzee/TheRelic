@@ -144,7 +144,7 @@ extern void SetupGame(void);
 	g_App = self;
 	
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
-	
+	[[UIApplication stat]]
     [self startApp];
 	
     return YES;

@@ -5848,7 +5848,7 @@
 					"src/lua-5.1.4/src",
 					"src/enet-1.2.1/include/",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.1;
 				ONLY_ACTIVE_ARCH = YES;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
@@ -5893,7 +5893,7 @@
 					"src/lua-5.1.4/src",
 					"src/enet-1.2.1/include/",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B6F205C3-6C50-4E43-9579-4C260E7B90D1";
 				SDKROOT = iphoneos;

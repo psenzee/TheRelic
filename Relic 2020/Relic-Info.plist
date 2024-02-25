@@ -45,6 +45,8 @@
 	<string>UIInterfaceOrientationLandscapeLeft</string>
 	<key>UIPrerenderedIcon</key>
 	<true/>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>UIStatusBarHidden</key>
 	<true/>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
