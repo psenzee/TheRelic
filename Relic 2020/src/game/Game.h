@@ -1,6 +1,9 @@
 #ifndef _GAME_H
 #define _GAME_H
 
+/* THIS APPEARS TO BE TOTALLY DEPRECATED IN FAVOR OF GameState!!  MAYBE IT'S FROM I8 */
+
+
 #include "core/core.h"
 #include "core/global.h"
 
@@ -12,7 +15,6 @@ class GameInput;
 class OverheadCamera;
 class Level;
 class LevelManager;
-class Player;
 class Character;
 class UiCore;
 class ITile;

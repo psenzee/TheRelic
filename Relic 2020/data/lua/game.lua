@@ -123,7 +123,7 @@ function GameStateInitialize(instance)
   A_LIGHT = CreateLight()
   SetLight(1, A_LIGHT)
   -- local x, y, z = GetLookAt()
-  -- SetLightPosition(A_LIGHT, x, y, z, 0)
+  -- SetLightPosition(A_LIGHT, x, y, z, 1)
 
 end
 
@@ -233,11 +233,11 @@ function UpdateGameState(instance)
   if GetPlayer() ~= nil then
     local x, y, z = GetPlayer():GetPosition()
     SetLightingEnabled(true)
--- (-1 + (GetGameStateFrames() % 2) * 2) * 128
-    SetLightPosition(A_LIGHT, x, y, 0, 0)
-    SetLightDiffuse(A_LIGHT, 1.0, 1.0, 1.0, 1000.0)
+    SetLightPosition(A_LIGHT, x, y, z - 64, 1)
+    -- SetLightDiffuse(A_LIGHT, 1.0, 1.0, 1.0, 1000.0)
     SetLightAmbient(A_LIGHT, 1.0, 1.0, 1.0, 1.0)
-    SetDefaultLightingType(1)
+    SetDefaultLightingType(4)
+    -- SetLight0OnPlayer()
   end
   
   IS_STARTED = false
@@ -245,7 +245,6 @@ function UpdateGameState(instance)
     return
   end
   IS_STARTED = true
-  print("\nIS_STARTED=true\n")
 
   UpdateMap()
   UiInventoryUpdate(player)
@@ -376,6 +375,8 @@ function DisplayPlaceName()
 end
 
 function UpdateGame(instance)
+
+  SetLightingEnabled(false)
 
  -- local b5x, b5y = Ui_DrawToScreenPosition((478 + 436) * 0.5, (305 + 265) * 0.5)
   local b5y, b5x = (478 + 436) * 0.5, 320 - (305 + 265) * 0.5

@@ -2624,6 +2624,9 @@
 		DA3BDDDE23E47F9A0078F549 /* keyButton128B.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = keyButton128B.png; path = data/textures/keyButton128B.png; sourceTree = "<group>"; };
 		DA3BDDDF23E47F9A0078F549 /* keyButton128W.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = keyButton128W.png; path = data/textures/keyButton128W.png; sourceTree = "<group>"; };
 		DA3BDDE023E47F9A0078F549 /* keyButton128Y.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = keyButton128Y.png; path = data/textures/keyButton128Y.png; sourceTree = "<group>"; };
+		DA65A76D2B8F68D40041B6F5 /* Lights.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Lights.cpp; path = src/render/Lights.cpp; sourceTree = "<group>"; };
+		DA65A76E2B8F68D40041B6F5 /* Lights.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Lights.h; path = src/render/Lights.h; sourceTree = "<group>"; };
+		DA65A76F2B8F9FED0041B6F5 /* PauseState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PauseState.h; path = src/level/PauseState.h; sourceTree = "<group>"; };
 		DA7AB2B123B8208000DDC4AF /* black_button_sword.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = black_button_sword.png; path = data/textures/black_button_sword.png; sourceTree = "<group>"; };
 		DA7AB2B323B826C300DDC4AF /* black_button_potion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = black_button_potion.png; path = data/textures/black_button_potion.png; sourceTree = "<group>"; };
 		DA7AB2B523B82A1100DDC4AF /* tick_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tick_new.png; path = data/textures/tick_new.png; sourceTree = "<group>"; };
@@ -2804,8 +2807,6 @@
 		439DB8A612DE3DEA00B06546 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				DAEFF7F423BD2F390062B630 /* GameDimensions.cpp */,
-				DAEFF7F523BD2F390062B630 /* GameDimensions.h */,
 				DAF0EB1123B29D330003BACB /* cocoaui */,
 				439DB97F12DE41F000B06546 /* animation */,
 				439DB97E12DE41EB00B06546 /* audio */,
@@ -3911,6 +3912,9 @@
 		439DB96412DE411B00B06546 /* game */ = {
 			isa = PBXGroup;
 			children = (
+				DA65A76F2B8F9FED0041B6F5 /* PauseState.h */,
+				DAEFF7F423BD2F390062B630 /* GameDimensions.cpp */,
+				DAEFF7F523BD2F390062B630 /* GameDimensions.h */,
 				439DBB9A12DE4DD600B06546 /* Character.cpp */,
 				439DBB9B12DE4DD600B06546 /* Character.h */,
 				439DBB9C12DE4DD600B06546 /* CircleEffect.cpp */,
@@ -4009,6 +4013,8 @@
 				439DBB1112DE4B8900B06546 /* ImmediateDrawable.h */,
 				439DBB1212DE4B8900B06546 /* Light.cpp */,
 				439DBB1312DE4B8900B06546 /* Light.h */,
+				DA65A76D2B8F68D40041B6F5 /* Lights.cpp */,
+				DA65A76E2B8F68D40041B6F5 /* Lights.h */,
 				439DBB1412DE4B8900B06546 /* LocalGameServices.h */,
 				439DBB1512DE4B8900B06546 /* Material.cpp */,
 				439DBB1612DE4B8900B06546 /* Material.h */,

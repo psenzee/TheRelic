@@ -115,14 +115,14 @@ void SetDefaultLighting()
         glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
         glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
         glLightfv(GL_LIGHT0, GL_SPECULAR, lightDiffuse);
-        glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+       // glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
         glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.001f);
         glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.0f);
         glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.00f);
-        const GLfloat lightDiffuse1[]  = { 1.8f, 1.8f, 1.8f, 1.0f };    
-        const GLfloat lightPosition1[] = { 0.0f, 0.0f, 100.0f, 1.0f };
-        glLightfv(GL_LIGHT1, GL_DIFFUSE, lightDiffuse1);
-        glLightfv(GL_LIGHT1, GL_POSITION, lightPosition1);
+     //   const GLfloat lightDiffuse1[]  = { 1.8f, 1.8f, 1.8f, 1.0f };
+     //   const GLfloat lightPosition1[] = { 0.0f, 0.0f, 100.0f, 1.0f };
+     //   glLightfv(GL_LIGHT1, GL_DIFFUSE, lightDiffuse1);
+     //   glLightfv(GL_LIGHT1, GL_POSITION, lightPosition1);
     }
     else if (_g_lightingType == 2)
     {

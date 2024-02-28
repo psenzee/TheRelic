@@ -242,6 +242,14 @@ static int PostLeaderboard(lua_State *lua)
     return 0;
 }
 
+static int Lua_SetLight0OnPlayer(lua_State *lua)
+{
+    Vector3 v = GetGlobalGame()->GetPlayer()->GetPosition();
+    Vector4 v4(v.x, v.y, v.z - 64, 1.0);
+    glLightfv(GL_LIGHT0, GL_POSITION, v4.data());
+    return 0;
+}
+
 static int SetAnimationFrameInterval(lua_State *lua)
 {
     luaL_checktype(lua, -1, LUA_TNUMBER);	
@@ -1240,7 +1248,6 @@ static int Draw9Slice(lua_State *lua)
     return 0;
 }
 
-
 static int SetQuad(lua_State *lua)
 {
     luaL_checktype(lua, -13, LUA_TSTRING); // quad name
@@ -1794,6 +1801,9 @@ static int GetOverlayColor(lua_State *lua)
     return 3;
 }
 
+
+//Lights _gLuaLights;
+
 Light *_gLuaLights[8] = { 0, 0, 0, 0,
                           0, 0, 0, 0, };
 bool _gLuaLightsEnabled = false;
@@ -1806,9 +1816,9 @@ void SetLuaLights(GraphicsDevice &device)
     {
         for (int i = 0; i < ALLOWED_LIGHT_COUNT; i++)
         {
-            if (_gLuaLights[i] != 0)
-                device.SetLight(*_gLuaLights[i], true);
-            else device.EnableLight(i, false);
+//            if (_gLuaLights[i] != 0)
+//                device.SetLight(*_gLuaLights[i], true);
+//            else device.EnableLight(i, false);
         }
     }
 }
@@ -2439,6 +2449,7 @@ void RegisterLuaFunctions(lua_State *lua)
     lua_register(lua, "GetUiBounds",                   Lua_GetUiBounds);
     lua_register(lua, "GetLookAt",                     Lua_GetLookAt);
     lua_register(lua, "GetReferenceBounds",            Lua_GetReferenceBounds);
+    lua_register(lua, "SetLight0OnPlayer",             Lua_SetLight0OnPlayer);
 
     lua_register(lua, "SetOverlayColor",               SetOverlayColor);
     lua_register(lua, "GetOverlayColor",               GetOverlayColor);

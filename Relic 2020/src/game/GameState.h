@@ -8,6 +8,8 @@
 #include "GameDimensions.h"
 
 #include "render/GameEffects.h"
+#include "render/Lights.h"
+
 #include "events/EventTimer.h"
 #include "events/EventDispatcher.h"
 #include "events/IEventListener.h"
@@ -18,13 +20,14 @@
 
 #include "render/LocalGameServices.h" // $HACK$
 
+#include "PauseState.h"
+
 class GameInput;
 class OverheadCamera;
 class LocalGameServices;
 class DeviceTexture;
 class Level;
 class LevelManager;
-class Player;
 class Character;
 class GameUI;
 class UiCore;
@@ -37,6 +40,7 @@ class RenderContext;
 class DynamicMap;
 class UiInstance;
 class Game;
+class Movable;
 
 struct lua_State;
 
@@ -88,6 +92,9 @@ public:
 	void                    ResetFpsAverage();
 	
 	void                    UnloadAll();
+
+    Character              *GetPlayer();
+    PauseState              GetPauseState() const;
 	
 private:
     
@@ -102,6 +109,8 @@ private:
     EventDispatcher    mUiEventDispatcher;
 
     Multiplayer        mMultiplayer;
+    
+    Lights             mLights;
 
     LuaThread         *mGameThread;
     UiInstance        *mUiInstance;    
@@ -127,9 +136,16 @@ private:
     
     static GameState  *mInstance;
     
+    DeviceTexture     *mOverlay;
+    
     void               Initialize(const GameDimensions &dimensions);
     void               RenderEffects(const GameTime &time);
 	void               UpdateFpsAverage(unsigned framesToAdd, unsigned elapsed);
+    void               DrawOverlay();
+    void               DrawParticles(const GameTime &time);
+    void               LookAt(Movable *m);
+    void               LookAt(const Vector3 &v);
+    void               DrawLevel(const GameTime &time);
 };
 
 void            SetGlobalRenderContext(const RenderContext &rc);

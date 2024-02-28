@@ -32,14 +32,15 @@ public:
     void              SetProjection(const Matrix &m);
     Matrix            GetProjection() const;
     void              SetMaterial(const Material &m);
-    void              SetLight(const Light &light, bool enable = true);
+    
+    void              SetLight(size_t slot, const Light &light, bool enable = true);
+    void              EnableLight(size_t slot, bool enable = true);
+    bool              IsLightingEnabled() const;
+    
     void              SetFog(const Vector4 &color, float density = 0.3f);
     void              SetUvTransform(const Matrix &m);
 
     void              SetBaseUvTransform(const Matrix &m);
-
-    void              EnableLight(int id, bool enable = true);
-    void              EnableLight(const Light &light, bool enable = true) { EnableLight(light.id, enable); }
 
     void              StartFrame() {}
     void              EndFrame() { mFrame++; }

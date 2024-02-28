@@ -136,11 +136,16 @@ void GraphicsDevice::EnableColorMaterial(bool v)
    if (v) glEnable(GL_COLOR_MATERIAL); else glDisable(GL_COLOR_MATERIAL);
 }
 
-void GraphicsDevice::SetLight(const Light &light, bool enable)
+bool GraphicsDevice::IsLightingEnabled() const
+{
+    return GLStates::lighting.Get();
+}
+
+void GraphicsDevice::SetLight(size_t slot, const Light &light, bool enable)
 {
     glLoadIdentity();
 
-    int id = GL_LIGHT0 + light.id;
+    int id = GL_LIGHT0 + slot;
 
     glLightfv(id, GL_AMBIENT,  (const float *)&light.ambient);
     glLightfv(id, GL_DIFFUSE,  (const float *)&light.diffuse);
@@ -150,10 +155,10 @@ void GraphicsDevice::SetLight(const Light &light, bool enable)
     glLightfv(id, GL_POSITION, position);
 
     if (enable)
-        EnableLight(light.id, true);
+        EnableLight(slot, true);
 }
 
-void GraphicsDevice::EnableLight(int id, bool enable)
+void GraphicsDevice::EnableLight(size_t slot, bool enable)
 {
-    GLStates::light[id].enable.Set(enable);
+    GLStates::light[slot].enable.Set(enable);
 }

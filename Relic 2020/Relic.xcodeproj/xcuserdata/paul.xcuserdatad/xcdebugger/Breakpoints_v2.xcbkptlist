@@ -7,22 +7,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "12E81C2A-42C7-47F1-8970-B697FF61D146"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "src/game/Game.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "260"
-            endingLineNumber = "260"
-            landmarkName = "Game::Update(time)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "BC02AAAC-E846-44C5-8123-1AD3FFD1FEE3"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -109,10 +93,298 @@
             filePath = "src/game/GameState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "321"
-            endingLineNumber = "321"
+            startingLineNumber = "324"
+            endingLineNumber = "324"
             landmarkName = "GameState::LoadRenderables()"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BB8D02CD-D525-47D0-999D-D4536341C33C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/game/Game.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "276"
+            endingLineNumber = "276"
+            landmarkName = "Game::Notify(e, info)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "BB8D02CD-D525-47D0-999D-D4536341C33C - 2117b15a531c127b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Game::Notify(char const*, char const*)"
+                  moduleName = "Relic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/Relic%202020/src/game/Game.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "276"
+                  endingLineNumber = "276"
+                  offsetFromSymbolStart = "20">
+               </Location>
+               <Location
+                  uuid = "BB8D02CD-D525-47D0-999D-D4536341C33C - 2117b15a531c127b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Game::Notify(char const*, char const*)"
+                  moduleName = "Relic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/Relic%202020/src/game/Game.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "276"
+                  endingLineNumber = "276"
+                  offsetFromSymbolStart = "24">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FD0D3AAF-73A1-40CD-99B0-FFB87A8F5434"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/game/Game.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "234"
+            endingLineNumber = "234"
+            landmarkName = "Game::Visit(range)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "FD0D3AAF-73A1-40CD-99B0-FFB87A8F5434 - 37b3dd1d2eee47b9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Game::Visit(core::Rectangle const&amp;)"
+                  moduleName = "Relic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/Relic%202020/src/game/Game.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "234"
+                  endingLineNumber = "234"
+                  offsetFromSymbolStart = "20">
+               </Location>
+               <Location
+                  uuid = "FD0D3AAF-73A1-40CD-99B0-FFB87A8F5434 - 37b3dd1d2eee47b9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Game::Visit(core::Rectangle const&amp;)"
+                  moduleName = "Relic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/Relic%202020/src/game/Game.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "234"
+                  endingLineNumber = "234"
+                  offsetFromSymbolStart = "28">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "72DBC842-7626-4229-8F24-4A929D26C780"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/game/Game.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "220"
+            endingLineNumber = "220"
+            landmarkName = "Game::SetPlayer(p)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "72DBC842-7626-4229-8F24-4A929D26C780 - 6ece384046aca4d1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Game::SetPlayer(Character*)"
+                  moduleName = "Relic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/Relic%202020/src/game/Game.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "220"
+                  endingLineNumber = "220"
+                  offsetFromSymbolStart = "20">
+               </Location>
+               <Location
+                  uuid = "72DBC842-7626-4229-8F24-4A929D26C780 - 6ece384046aca4d1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Game::SetPlayer(Character*)"
+                  moduleName = "Relic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/Relic%202020/src/game/Game.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "220"
+                  endingLineNumber = "220"
+                  offsetFromSymbolStart = "28">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D10DFAAF-81B0-44D3-BB9F-48131825A3AD"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/game/Game.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "196"
+            endingLineNumber = "196"
+            landmarkName = "Game::EndGame()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "D10DFAAF-81B0-44D3-BB9F-48131825A3AD - a1d6005b3f16ce5c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Game::EndGame()"
+                  moduleName = "Relic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/Relic%202020/src/game/Game.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "196"
+                  endingLineNumber = "196"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  uuid = "D10DFAAF-81B0-44D3-BB9F-48131825A3AD - a1d6005b3f16ce5c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Game::EndGame()"
+                  moduleName = "Relic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/Relic%202020/src/game/Game.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "196"
+                  endingLineNumber = "196"
+                  offsetFromSymbolStart = "24">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E6442FD9-6582-4DA6-973D-E70BD6984017"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/game/Game.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "189"
+            endingLineNumber = "189"
+            landmarkName = "Game::Autosave()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "E6442FD9-6582-4DA6-973D-E70BD6984017 - 84c73d12b20008f3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Game::Autosave()"
+                  moduleName = "Relic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/Relic%202020/src/game/Game.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "189"
+                  endingLineNumber = "189"
+                  offsetFromSymbolStart = "0">
+               </Location>
+               <Location
+                  uuid = "E6442FD9-6582-4DA6-973D-E70BD6984017 - 84c73d12b20008f3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Game::Autosave()"
+                  moduleName = "Relic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/Relic%202020/src/game/Game.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "189"
+                  endingLineNumber = "189"
+                  offsetFromSymbolStart = "20">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D56E4A46-EAA2-4344-9C1B-49467B797F18"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/game/Game.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
+            landmarkName = "Game::Game(uiCore, luaThread, multiplayer)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "D56E4A46-EAA2-4344-9C1B-49467B797F18 - 8afd93c64ee3a422"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Game::Game(UiCore*, LuaThread*, Multiplayer*)"
+                  moduleName = "Relic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/Relic%202020/src/game/Game.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "80"
+                  endingLineNumber = "80"
+                  offsetFromSymbolStart = "56">
+               </Location>
+               <Location
+                  uuid = "D56E4A46-EAA2-4344-9C1B-49467B797F18 - 8afd93c64ee3a7e0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Game::Game(UiCore*, LuaThread*, Multiplayer*)"
+                  moduleName = "Relic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/Relic%202020/src/game/Game.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "78"
+                  endingLineNumber = "78"
+                  offsetFromSymbolStart = "120">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

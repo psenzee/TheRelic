@@ -46,6 +46,8 @@
 #include "serialize/LuaSerialize.h"
 #include "render/ParticleFxDrawable.h"
 
+#include "level/PauseState.h"
+
 extern "C"
 {
 #include <lua.h>
@@ -184,7 +186,7 @@ GameState::GameState(const GameDimensions &dimensions) :
     mRenderables(0), mGameThread(0), mUiCore(0), mFrames(0), mFpsFrames(0), mFpsTimeMs(1), 
     mFpsRunningAverage(30.0),
     mOverlayColor(Vector4(1.f, 1.f, 1.f, 0.f)),
-    mDimensions(dimensions)
+    mDimensions(dimensions), mOverlay(0)
 {
     if (!Serialize::GetDictionary()) {
         Dictionary *dictionary = new Dictionary;
@@ -286,6 +288,7 @@ void GameState::Initialize(const GameDimensions &dimensions)
     mInput->SetTransform(mDimensions.GetTouchTransform());
     
     mBackground  = new DeviceTexture("Black");
+    mOverlay = new DeviceTexture("white");
     mCamera = new OverheadCamera(*device, 45.0f);
     mCamera->SetDepthScale(0.8f);
 
@@ -392,8 +395,6 @@ void GameState::RenderEffects(const GameTime &time)
 
 void SetLuaLights(GraphicsDevice &device);
 
-DeviceTexture *overlay = 0;
-
 void GameState::UnloadAll()
 {
 	Game *game = GetGame();
@@ -405,49 +406,15 @@ void GameState::UnloadAll()
 	ContentLoader::GetInstance()->UnloadAllTextures();
 }
 
-void GameState::Draw(const GameTime &time)
+void GameState::DrawOverlay()
 {
     GraphicsDevice *device = GraphicsDevice::GetInstance();
-
-    device->StartFrame();
-    total.EndFrame();
-    total.StartFrame();
-
-    SetLuaLights(*device);	
-	
-    static Material material;
-    device->EnableColorMaterial(false);
-    device->SetMaterial(material);
-
-    ParticleFxDrawable::SetGameTime(time);
-    RenderContext renderContext(*device, *mCamera);
-    SetGlobalRenderContext(renderContext);
-
-//  SetLuaLights(*device);
-
-    mGame->Draw(time);
-    device->SetColor(Vector4(1.f, 1.f, 1.f, 1.f));
-
-    if (!mGame->IsRenderPaused())
-    {
-        ParticleEffects::GetInstance()->Render(renderContext, time);
-        mQuads->RenderQuads();
-    }
-
-    profiler->StartTime("fx");
-    PushLightingType();
-    SetDefaultLightingType(2);
-    RenderEffects(time);
-    profiler->EndTime("fx");
-    PopLightingType();
-    mUiInstance->UpdateAndRender(time, renderContext);
-    uidraw.EndFrame();
-    device->SetColor(Vector4(1.f, 1.f, 1.f, 1.f));
-
     if (mOverlayColor.w >= 0.05f)
     {
         // terrible hack, but it works..
         OverheadCamera c(*device, 45.f);
+        // I wish I had commented what I am trying to accomplish here at the time I wrote it
+        // but I believe this is setting up the projection and view matrices for the colored overlay
         Matrix m;
         m.data[0]  =   1.61f;
         m.data[5]  =   2.41f;
@@ -471,18 +438,131 @@ void GameState::Draw(const GameTime &time)
         RenderContext rc(*device, c);
         SetGlobalRenderContext(rc);
 
-        if (!overlay) {
-            overlay = new DeviceTexture("white");
-        }
-
         Vector3 size(1000.f, 1000.f);
         float distance = -150.f;
         device->EnableDepthTest(false);
-        QuadRenderer::RenderScreenAlignedQuad(overlay, mOverlayColor,
+        QuadRenderer::RenderScreenAlignedQuad(mOverlay, mOverlayColor,
                                               Vector3(size.x, size.y, distance), Vector3(-size.x, -size.y, distance),
                                               Vector2(0.f, 1.f), Vector2(1.f, 0.f));
         device->EnableDepthTest(true);
     }
+}
+
+void GameState::DrawParticles(const GameTime &time)
+{
+    ParticleFxDrawable::SetGameTime(time);
+    profiler->StartTime("fx");
+    PushLightingType();
+    SetDefaultLightingType(2);
+    RenderEffects(time);
+    PopLightingType();
+    profiler->EndTime("fx");
+}
+
+Character *GameState::GetPlayer()
+{
+    return mGame ? mGame->GetPlayer() : 0;
+}
+
+PauseState GameState::GetPauseState() const
+{
+    if (!mGame) {
+        return PauseState(true, true, true);
+    }
+    return PauseState(mGame->IsRenderPaused(), mGame->IsPaused(), mGame->IsCharacterPaused());
+}
+
+void GameState::LookAt(const Vector3 &p)
+{
+    GetGlobalCamera()->SetLookAt(p);
+    GraphicsDevice *device = GraphicsDevice::GetInstance();
+    device->SetProjection(GetGlobalCamera()->GetProjection());
+}
+
+void GameState::LookAt(Movable *movable)
+{
+    LookAt(movable ? movable->GetPosition() : Vector3(0.f, 0.f, 0.f));
+}
+
+void GameState::DrawLevel(const GameTime &time)
+{
+    static Material material;
+    
+    GraphicsDevice *device = GraphicsDevice::GetInstance();
+    RenderContext renderContext(*device, *GetGlobalCamera());
+    SetGlobalRenderContext(renderContext);
+    
+    SetLuaLights(*device);
+
+    LookAt(GetPlayer());
+
+    device->SetMaterial(material);
+
+    PauseState paused(GetPauseState());
+
+    if (mGame && !paused.render)
+    {
+        leveldrawlogic.StartFrame();
+        mGame->GetLevels()->Draw(renderContext, time, paused);
+        leveldrawlogic.EndFrame();
+
+        leveldrawsubmit.StartFrame();
+        RenderSet::GetInstance()->Render("level", renderContext);
+        device->EnableFog(false);
+        RenderSet::GetInstance()->Render("level-floor", renderContext);
+        RenderSet::GetInstance()->Render("level-floor-overlay", renderContext);
+        RenderSet::GetInstance()->Render("fx", renderContext);
+        RenderSet::GetInstance()->Render("main",  renderContext);
+        leveldrawsubmit.EndFrame();
+
+        RenderSet::GetInstance()->Render("selector", renderContext);
+        QuadRenderer::RenderDeferred();
+        
+        profiler->StartTime("messages_hud");
+        uidraw.StartFrame();
+        mUiCore->GetGameUi().Draw(renderContext);
+        uidraw.EndFrame();
+        profiler->EndTime("messages_hud");
+    }
+}
+
+void GameState::Draw(const GameTime &time)
+{
+    GraphicsDevice *device = GraphicsDevice::GetInstance();
+
+    device->StartFrame();
+    total.EndFrame();
+    total.StartFrame();
+
+    SetLuaLights(*device);	
+	
+    static Material material;
+    device->EnableColorMaterial(false);
+    device->SetMaterial(material);
+
+    //ParticleFxDrawable::SetGameTime(time);
+    RenderContext renderContext(*device, *mCamera);
+    SetGlobalRenderContext(renderContext);
+
+//  SetLuaLights(*device);
+
+    //mGame->Draw(time);
+    DrawLevel(time);
+    device->SetColor(Vector4(1.f, 1.f, 1.f, 1.f));
+
+    if (!mGame->IsRenderPaused())
+    {
+        ParticleEffects::GetInstance()->Render(renderContext, time);
+        mQuads->RenderQuads();
+    }
+
+    DrawParticles(time);
+
+    mUiInstance->UpdateAndRender(time, renderContext);
+    uidraw.EndFrame();
+    device->SetColor(Vector4(1.f, 1.f, 1.f, 1.f));
+
+    DrawOverlay();
 
     device->EndFrame();
 }

@@ -3,9 +3,12 @@
 
 #include "core/core.h"
 #include "core/random.h"
+#include "PauseState.h"
 
 #include "LevelOptions.h"
 #include "PlaceNameGenerator.h"
+
+#include <vector>
 
 class XmlElement;
 class Map;
@@ -24,18 +27,6 @@ class CharacterSync;
 class CompactVectorFieldMap;
 class BitMap2d;
 class DebrisMap;
-
-#include <vector>
-
-struct PauseState
-{
-    bool render,
-         update,
-         characters;
-
-    inline explicit PauseState(bool render = false, bool update = false, bool characters = false) 
-        : render(render), update(update), characters(characters) {}
-};
 
 class Level
 {
