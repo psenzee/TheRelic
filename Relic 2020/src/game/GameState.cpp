@@ -272,6 +272,7 @@ void GameState::Initialize(const GameDimensions &dimensions)
 	  
     mGameUi = new GameUI(pages);
     mUiCore = new UiCore(dimensions, *mGameUi, *mQuads, mUiEventDispatcher);
+   // UiCore *ui = new UiCore(dimensions, *mGameUi, *mQuads, mUiEventDispatcher);
 
     Vector2 v = dimensions.GetViewportSize();
     core::Size sz = core::Size(int(v.x), int(v.y));
@@ -300,12 +301,19 @@ void GameState::Initialize(const GameDimensions &dimensions)
 
     LuaInterpreter *interpreter = LuaInterpreter::GetInstance();
 
+    /*
     const char *luaFile = _g_MainLuaFile;//"Game.lua";
     interpreter->SetGlobalData("GameState", this);
     if (!interpreter->RunFile(globalTranslatePath(luaFile)))
         core_abort(("Execution of '%s' failed!\n", luaFile));
+    */
     mGameThread = interpreter->CreateThread(this);
     mGame = new Game(mUiCore, mGameThread, &mMultiplayer);
+    // first run lua after game?
+    const char *luaFile = _g_MainLuaFile;//"Game.lua";
+    interpreter->SetGlobalData("GameState", this);
+    if (!interpreter->RunFile(globalTranslatePath(luaFile)))
+        core_abort(("Execution of '%s' failed!\n", luaFile));
 }
 
 void GameState::LoadRenderables()

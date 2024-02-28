@@ -253,7 +253,6 @@ static String Parse(const char *item, int *index)
         *(q + 1) = '\0';
         q++;
     }
-    int count = 0;
     *index = -1;
     if (*p == ':')
         *index = atoi(p + 1);

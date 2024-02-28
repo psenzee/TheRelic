@@ -135,6 +135,9 @@ extern void SetupGame(void);
     [self.window setRootViewController:self.viewController];
     [self.window addSubview:self.viewController.view];
     [self.window makeKeyAndVisible];
+    
+    CGRect r = self.window.frame;
+    printf("(%f, %f, %f, %f)", r.origin.x, r.origin.y, r.size.width, r.size.height);
 	
     SetupGame();
 }
@@ -144,7 +147,6 @@ extern void SetupGame(void);
 	g_App = self;
 	
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
-	[[UIApplication stat]]
     [self startApp];
 	
     return YES;

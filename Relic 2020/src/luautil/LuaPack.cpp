@@ -148,7 +148,7 @@ static int Pack(lua_State *state, char *out)
             *out++ = '&';
             break;
         }
-        int size = 32, strsz = 0;
+        int size = 32;
         char ch = *format++;
         switch (ch)
         {

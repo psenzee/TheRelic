@@ -1,5 +1,8 @@
 print "Lua:menus.lua"
 
+WIDTH  = _G.UI_RIGHT
+HEIGHT = _G.UI_BOTTOM
+
 MAIN_MENU = nil                                                                                                                          
 MULTIPLAYER_MENU = nil
 START_NEW_MENU = nil
@@ -70,8 +73,8 @@ function ResetCreditScroll()
   CREDIT_SCROLL = 180
 end
 
-MENUS_WIDTH = 800
-MENUS_TOP   = 130
+MENUS_WIDTH = 1500
+MENUS_TOP   = 200
 
 function _SetVisibleForce(menu, visible)
 if UiControl_IsVisible(menu) ~= visible then
@@ -86,8 +89,9 @@ function _SetVisible(menu, visible)
 end
 
 function StartUi()
+  local x, y, w, h = GetUiBounds()
   if CANVAS == nil then
-    CANVAS = Ui_CreateMenu("Canvas", "", "", 0, 0, 480, 320, 1.0, 22.5)
+    CANVAS = Ui_CreateMenu("Canvas", "", "", x, y, w, h, 1.0, 22.5)
     Ui_SetRootControl(CANVAS)
   end  
 end
@@ -466,10 +470,10 @@ end
 CONTINUE_TO_MULTIPLAYER_FUNCTION = nil
 
 function CreateMenuType(type, atY)
-  local center = 240
+  local x, y, w, h = GetUiBounds()
+  local center = w * 0.5 + x
   local width = MENUS_WIDTH
-  local halfWidth = width * 0.5  
---  if GetPlatformIsiPad() then center = 320; end
+  local halfWidth = width * 0.5
   return Ui_CreateMenu(type, "border3", "..", center - halfWidth, atY, center + halfWidth, atY, 1.0, 22.5)
 end
 
@@ -761,22 +765,9 @@ function CreateMenus()
 end
 
 function AddRelicTitleTo(menu)
-  local x =  145
-  local y = -135  
-  local iPhoneWidth = 512
-  local iPadWidth = 360
-  local width = iPhoneWidth
+  local x, y, w, h = GetUiBounds()
   local logo = ChooseImage("RelicLogoInGame", "RelicLogoInGame_x2")
-  local title = nil
-  --[[
-  if GetPlatformIsiPad() then
-    width = iPadWidth
-    x = x - (iPadWidth - iPhoneWidth) * 0.5
-    title = Ui_CreateImageButton("", logo, "", 0 + x, 0 + y, width + x, width * 0.5 + y, 1.0, 25, 0, 1, 1, 0.5, 0)  
-  else
-  ]]--
-    title = Ui_CreateImageButton("", logo, "", 0 + x, 0 + y, 512 + x, 256 + y, 1.0, 25, 0, 1, 1, 0.5, 0)
-  --end
+  local title = Ui_CreateImageButton("", logo, "", (w - x) * 0.44 + x, y - MENUS_TOP, (w - x) * 1.44 + x, h - MENUS_TOP, 1.0, 25, 0, 1, 1, 0.5, 0)
   UiControl_AddChild(menu, title)
   UiControl_SetActive(title, false)
 end
@@ -1182,8 +1173,8 @@ function CreateConnectFailed()
 end
 
 function AddHorizMenuButton(parent, name, text, width)
-  local button = Ui_CreateButton(name, "border88_dark", text, 0, 300, width, 325, 1.0, 18.75)
-  UiControl_AddChild(parent, button)  
+  local button = Ui_CreateButton(name, "border88_dark", text, 0, HEIGHT - 20, width, HEIGHT + 5, 1.0, 18.75)
+  UiControl_AddChild(parent, button)
   RegisterUiListener(name, "MenuListener", { name = name })
 end
 
@@ -1214,7 +1205,8 @@ function HideInGameMenu()
 end
 
 function CreateInGameMenu()
-  IN_GAME_MENU = Ui_CreateMenu("InGameMenu", "border3", "..", 0, 290, 480, 320, 1.0, 22.5)
+  local x, y, w, h = GetUiBounds()
+  IN_GAME_MENU = Ui_CreateMenu("InGameMenu", "border3", "..", x, y, w, y + 30, 1.0, 22.5)
 
 --AddHorizMenuButton(IN_GAME_MENU, "To_Map",   "Map",   70)  
 --AddHorizMenuButton(IN_GAME_MENU, "To_Items", "Items", 80)  
@@ -1229,7 +1221,7 @@ function CreateInGameMenu()
 end
 
 function CreateInGameMenuPage2()
-  IN_GAME_MENU2 = Ui_CreateMenu("InGameMenu2", "border3", "..", 0, 290, 480, 320, 1.0, 22.5)
+  IN_GAME_MENU2 = Ui_CreateMenu("InGameMenu2", "border3", "..", 0, HEIGHT - 30, WIDTH, HEIGHT, 1.0, 22.5)
   
   AddHorizMenuButton(IN_GAME_MENU2, "To_PrevIGPage", "<",   20)
 --AddHorizMenuButton(IN_GAME_MENU2, "To_Settings", "Settings", 110)
@@ -1243,8 +1235,12 @@ function CreateInGameMenuPage2()
 end
 
 function AddPauseMenuButtonR2L(page, index, event, name)
-  local BUTTON_WIDTH = 120
-  local button = Ui_CreateButton(event, "darkborder", name, 430 - BUTTON_WIDTH * index, 15, 550 - BUTTON_WIDTH * index, 15 + 40, 1.0, 30.0)
+  local x, y, w, h = GetUiBounds()
+  local BUTTON_WIDTH = 90
+  y = y + 15
+  w = w - BUTTON_WIDTH * 2
+  local offset = BUTTON_WIDTH * index
+  local button = Ui_CreateButton(event, "darkborder", name, w - offset, y, (w + BUTTON_WIDTH / 2 + 10) - offset, y + 40, 1.0, 30.0)
   UiControl_AddChild(page, button)
 end
 
@@ -1253,8 +1249,8 @@ function AddResumeButton(page)
 end
 
 function CreateInGameMapPage()
-  local x, y, w, h = GetBackgroundOffsetSize()
-  MAP_PAGE = Ui_CreateMenu("MapPage", "border3", "..", x/2, 0, w, h, 1.0, 22.5)
+  local x, y, w, h = GetUiBounds()
+  MAP_PAGE = Ui_CreateMenu("MapPage", "border3", "..", x, y, w, h, 1.0, 22.5)
   local title = Ui_CreateText("Map", "Pause", 20, TITLE_START, 80, TITLE_START + 50, 1.0, 30.0, false)
   AddPauseMenuButtonR2L(MAP_PAGE, 0, "Resume", "resume")
   AddPauseMenuButtonR2L(MAP_PAGE, 1, "SaveGame", "save")
@@ -1449,7 +1445,7 @@ STATS_SPIDERS = nil
 STATS_QUINOS  = nil
 
 function CreateInGameAttributesPage()
-  ATTRIBUTES_PAGE = Ui_CreateMenu("AttrPage", "border3", "..", 0, 0, 480, 320, 1.0, 22.5)
+  ATTRIBUTES_PAGE = Ui_CreateMenu("AttrPage", "border3", "..", 0, 0, WIDTH, HEIGHT, 1.0, 22.5)
   local title = Ui_CreateText("Attributes", "Attributes", 20, TITLE_START, 80, TITLE_START + 50, 1.0, 30.0, false) 
   AddResumeButton(ATTRIBUTES_PAGE)
   UiControl_AddChild(ATTRIBUTES_PAGE, title)
@@ -1459,7 +1455,7 @@ function CreateInGameAttributesPage()
 end
 
 function CreateInGameStatsPage()
-  STATS_PAGE = Ui_CreateMenu("StatsPage", "border3", "..", 0, 0, 480, 320, 1.0, 22.5)
+  STATS_PAGE = Ui_CreateMenu("StatsPage", "border3", "..", 0, 0, WIDTH, HEIGHT, 1.0, 22.5)
   local title = Ui_CreateText("Stats", "Stats", 20, TITLE_START, 80, TITLE_START + 50, 1.0, 30.0, false) 
   AddResumeButton(STATS_PAGE)    
   UiControl_AddChild(STATS_PAGE, title)
@@ -1468,7 +1464,7 @@ function CreateInGameStatsPage()
 end
 
 function CreateInGameQuestsPage()
-  QUESTS_PAGE = Ui_CreateMenu("QuestsPage", "border3", "..", 0, 0, 480, 320, 1.0, 22.5)
+  QUESTS_PAGE = Ui_CreateMenu("QuestsPage", "border3", "..", 0, 0, WIDTH, HEIGHT, 1.0, 22.5)
   local title = Ui_CreateText("Quests", "Quests", 20, TITLE_START, 80, TITLE_START + 50, 1.0, 30.0, false) 
   AddResumeButton(QUESTS_PAGE)    
   UiControl_AddChild(QUESTS_PAGE, title)
@@ -1477,7 +1473,7 @@ function CreateInGameQuestsPage()
 end
 
 function CreateInGameSettingsPage()
-  SETTINGS_PAGE = Ui_CreateMenu("SettingsPage", "border3", "..", 0, 0, 480, 320, 1.0, 22.5)
+  SETTINGS_PAGE = Ui_CreateMenu("SettingsPage", "border3", "..", 0, 0, WIDTH, HEIGHT, 1.0, 22.5)
   local title = Ui_CreateText("Settings", "Settings", 20, TITLE_START, 80, TITLE_START + 50, 1.0, 30.0, false) 
   AddResumeButton(SETTINGS_PAGE)    
   UiControl_AddChild(SETTINGS_PAGE, title)
@@ -1486,7 +1482,7 @@ function CreateInGameSettingsPage()
 end
 
 function CreateInGameMultiplayerPage()
-  MULTIPLAYER_PAGE = Ui_CreateMenu("MultiplayerPage", "border3", "..", 0, 0, 480, 320, 1.0, 22.5)
+  MULTIPLAYER_PAGE = Ui_CreateMenu("MultiplayerPage", "border3", "..", 0, 0, WIDTH, HEIGHT, 1.0, 22.5)
   local title = Ui_CreateText("Multiplayer", "Multiplayer", 20, TITLE_START, 80, TITLE_START + 50, 1.0, 30.0, false) 
   AddResumeButton(MULTIPLAYER_PAGE)
   UiControl_AddChild(MULTIPLAYER_PAGE, Ui_CreateButton("StartBluetoothPicker", "border88_dark", "Bluetooth (2 players)", 40, 120, 260, 140, 1.0, 18.75))
@@ -1499,7 +1495,7 @@ function CreateInGameMultiplayerPage()
 end
 
 function CreateInGameCreditsPage()
-  CREDITS_PAGE = Ui_CreateMenu("CreditsPage", "border3", "..", 0, 0, 480, 320, 1.0, 22.5)
+  CREDITS_PAGE = Ui_CreateMenu("CreditsPage", "border3", "..", 0, 0, WIDTH, HEIGHT, 1.0, 22.5)
   local title = Ui_CreateText("Credits", "Credits", 20, TITLE_START, 80, TITLE_START + 50, 1.0, 30.0, false) 
   AddResumeButton(CREDITS_PAGE)
   UiControl_AddChild(CREDITS_PAGE, title)
@@ -1525,7 +1521,7 @@ function AddZoomLevel(str, number, count)
 end
 
 function CreateInGameDebugPage()
-  DEBUG_PAGE = Ui_CreateMenu("DebugPage", "border3", "..", 0, 0, 480, 320, 1.0, 22.5)
+  DEBUG_PAGE = Ui_CreateMenu("DebugPage", "border3", "..", 0, 0, WIDTH, HEIGHT, 1.0, 22.5)
   local title = Ui_CreateText("Debug", "Debug", 20, TITLE_START, 80, TITLE_START + 50, 1.0, 30.0, false) 
   AddResumeButton(DEBUG_PAGE)
   UiControl_AddChild(DEBUG_PAGE, title)

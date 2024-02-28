@@ -83,5 +83,6 @@ SetHudGlobals({ 0, 0, 10, 10 })
 
 function UpdateHudGlobals()
   local minx, miny, maxx, maxy = GetUiBounds()
+  -- print ("UiBounds " .. minx .. " " .. miny .. " " .. maxx .. " " .. maxy .. "\n")
   SetHudGlobals({ minx, miny, maxx, maxy })
 end

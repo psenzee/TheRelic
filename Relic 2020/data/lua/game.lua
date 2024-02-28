@@ -119,9 +119,11 @@ function GameStateInitialize(instance)
   
   RegisterUiListener("SaveGameEvent",  "SaveGameListener", {})  
 
---SetLightingEnabled(true)
---A_LIGHT = CreateLight()
---SetLight(1, A_LIGHT)
+  SetLightingEnabled(true)
+  A_LIGHT = CreateLight()
+  SetLight(1, A_LIGHT)
+  -- local x, y, z = GetLookAt()
+  -- SetLightPosition(A_LIGHT, x, y, z, 0)
 
 end
 
@@ -151,7 +153,7 @@ function StartGame(instance)
   StartMultiplayer(server)
   StartHud()
   StartEnemies()
-  
+
  --TurnEnemies(5)
 
   --PROCESS_BUTTONS = true
@@ -219,7 +221,7 @@ function UpdateGameState(instance)
   UpdateHudGlobals()
  
   FPS_FACTOR = GetFpsAverage() / 30.0
---  print(string.format("FPS av: %.02f FACTOR %.02f", GetFpsAverage(), FPS_FACTOR))
+  print(string.format("FPS av: %.02f FACTOR %.02f", GetFpsAverage(), FPS_FACTOR))
 --[[
   if (GetTime() - LAST_PRINTED_TEXTURES) > 10000 then
     LAST_PRINTED_TEXTURES = GetTime()
@@ -227,22 +229,24 @@ function UpdateGameState(instance)
   end
 ]]--
   ProcessInput()
-  --[[
+  
   if GetPlayer() ~= nil then
     local x, y, z = GetPlayer():GetPosition()
-    SetLightPosition(A_LIGHT, x, y, (-1 + (GetGameStateFrames() % 2) * 2) * 128, 0)
+    SetLightingEnabled(true)
+-- (-1 + (GetGameStateFrames() % 2) * 2) * 128
+    SetLightPosition(A_LIGHT, x, y, 0, 0)
     SetLightDiffuse(A_LIGHT, 1.0, 1.0, 1.0, 1000.0)
-    SetLightAmbient(A_LIGHT, 1.0, 1.0, 1.0, 1.0)	
+    SetLightAmbient(A_LIGHT, 1.0, 1.0, 1.0, 1.0)
+    SetDefaultLightingType(1)
   end
-  ]]--
   
   IS_STARTED = false
   if not IS_STARTED and not PreloadAndStart() then
     return
   end
   IS_STARTED = true
-  --print("\nIS_STARTED=true\n")
-  
+  print("\nIS_STARTED=true\n")
+
   UpdateMap()
   UiInventoryUpdate(player)
   

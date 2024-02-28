@@ -29,7 +29,7 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
 {
     static const Vector2 ZEROS(0.0f, 0.0f);
     static const Vector4 ONES (1.0f, 1.0f, 1.0f, 1.0f);
-    
+    //printf("gw:drawstring look at (%f, %f) at (%f, %f) '%s' \n", lookAt.x, lookAt.y, at.x, at.y, s);
     Matrix ms, m;
     ms.scale(Vector3(size, size, 1.0f));
     m.translate(Vector3(lookAt.x + at.x, lookAt.y + at.y, 0.0f));

@@ -3,6 +3,8 @@ print "Lua:dialog.lua"
 CANVAS = nil
 GENERIC_DIALOG = nil
 DIALOG_QUEUE = {}
+WIDTH = _G.UI_RIGHT
+HEIGHT = _G.UI_BOTTOM
 
 function QueueDialog(fn, args)
   if GENERIC_DIALOG == nil then
@@ -328,25 +330,27 @@ function CreateGenericDialogOptionArea(options, x, y, width)
 end
 
 function CreateDialog(text, characterName, alreadySeen, options)
-  local screenwidth = 480
+  local x, y, w, h = GetUiBounds()
   local margin = 20
-  local width = screenwidth - margin * 2
-  local height = 280
-  local dialogContainer   = Ui_CreateMenu("", "", "", margin, 20, screenwidth - margin, height, 1.0, 18.75)
-  local dialogBackground1 = Ui_CreateButton("", "dropshadow", "",  5, 5, width, height, 1.0, 18.75)  
-  local dialogBackground2 = Ui_CreateButton("", "darkborder", "", 0, 0, width, height, 1.0, 18.75)    
-  local dialog            = Ui_CreateMenu("", "darkborder", "", 0, 0, width, 100, 1.0, 18.75)
+  local wm = w - margin
+  local hm = h - margin
+  local xm = x + margin
+  local ym = y + margin
+  local dialogContainer   = Ui_CreateMenu("", "", "", xm, ym, wm, hm, 1.0, 18.75)
+  local dialogBackground1 = Ui_CreateButton("", "dropshadow", "",  xm + 5, ym + 5, wm + 5, hm + 5, 1.0, 18.75)
+  local dialogBackground2 = Ui_CreateButton("", "darkborder", "", xm, ym, wm, hm, 1.0, 18.75)
+  local dialog            = Ui_CreateMenu("", "darkborder", "", xm, ym, wm, 100, 1.0, 18.75)
   local titleControl      = Ui_CreateDialogText("", "\\#8080ff" .. characterName .. "\\#ffffff", 10, 20, 400, 100, 1.0, 22.5, false)
   local textControl       = nil
-  
+
   if alreadySeen ~= true then
-    textControl = Ui_CreateDialogText("", text, 10, 40, 400, 100, 1.0, 26.25, false)
+    textControl = Ui_CreateDialogText("", text, xm, ym, wm, hm, 1.0, 26.25, false)
   else
-    textControl = Ui_CreateText("", text, 10, 40, 400, 100, 1.0, 26.25, false)  
+    textControl = Ui_CreateText("", text, xm, ym, wm, hm, 1.0, 26.25, false)
   end
                             
   local buttonsMargin = 10
-  local options = CreateDialogOptionArea(options, buttonsMargin, 190 - 22 * (#options - 3), width - buttonsMargin * 2)
+  local options = CreateDialogOptionArea(options, buttonsMargin, wm - 22 * (#options - 3), hm - buttonsMargin * 2)
   UiControl_SetActive(dialogBackground1, false)
   UiControl_SetActive(dialogBackground2, false)
   UiControl_AddChild(dialog, options)
@@ -359,7 +363,7 @@ function CreateDialog(text, characterName, alreadySeen, options)
 end
 
 function CreateGenericDialog(text, title, typewriterText, options)
-  local screenwidth = 480
+  local screenwidth = WIDTH
   local margin = 20
   local width = screenwidth - margin * 2
   local height = 280
@@ -390,20 +394,20 @@ function CreateGenericDialog(text, title, typewriterText, options)
 end
 
 function CreateScreenDialog(text, title, typewriterText)
-  local screenwidth = 480
+  local screenwidth = WIDTH
   local margin = 20
   local width = screenwidth - margin * 2
   local height = 280
-  local dialogContainer   = Ui_CreateMenu("", "", "", 0, 0, 480, 320, 1.0, 18.75)
-  local dialogBackground1 = Ui_CreateButton("", "dropshadow", "",  -5, -5, 485, 325, 1.0, 18.75)
+  local dialogContainer   = Ui_CreateMenu("", "", "", 0, 0, screenwidth, HEIGHT, 1.0, 18.75)
+  local dialogBackground1 = Ui_CreateButton("", "dropshadow", "",  -5, -5, screenwidth + 5, HEIGHT + 5, 1.0, 18.75)
   local dialog            = Ui_CreateMenu("", "darkborder", "", 0, 0, width, 100, 1.0, 18.75)
-  local titleControl      = Ui_CreateDialogText("", "\\#8080ff" .. title .. "\\#ffffff", 10, 30, 400, 100, 1.0, 30.0, false)  
+  local titleControl      = Ui_CreateDialogText("", "\\#8080ff" .. title .. "\\#ffffff", 10, 30, screenwidth - 80, 100, 1.0, 30.0, false)
   local textControl       = nil
   
   if typewriterText then
-    textControl = Ui_CreateDialogText("", text, 10, 50, 400, 100, 1.0, 22.5, false)
+    textControl = Ui_CreateDialogText("", text, 10, 50, screenwidth - 80, 100, 1.0, 22.5, false)
   else
-    textControl = Ui_CreateText("", text, 2, 2, 400, 100, 1.0, 20.625, false)  
+    textControl = Ui_CreateText("", text, 2, 2, screenwidth - 80, 100, 1.0, 20.625, false)
   end
                             
   local buttonsMargin = 10
@@ -416,13 +420,13 @@ function CreateScreenDialog(text, title, typewriterText)
 end
 
 function CreateImageDialog(image, options)  
-  local screenwidth = 480
+  local screenwidth = WIDTH
   local margin = 20
   local width = screenwidth - margin * 2
   local height = 280
-  local dialogContainer   = Ui_CreateMenu("", "", "", 0, 0, 480, 320, 1.0, 18.75)
-  local dialogBackground1 = Ui_CreateImageButton("", image, "", 0, 0, 480, 320, 1.0, 18.75, 0, 1, 1, 0, 0)
-  local dialog            = Ui_CreateMenu("", "darkborder", "", 0, 0, 480, 320, 1.0, 18.75)
+  local dialogContainer   = Ui_CreateMenu("", "", "", 0, 0, screenwidth, 320, 1.0, 18.75)
+  local dialogBackground1 = Ui_CreateImageButton("", image, "", 0, 0, screenwidth, 320, 1.0, 18.75, 0, 1, 1, 0, 0)
+  local dialog            = Ui_CreateMenu("", "darkborder", "", 0, 0, screenwidth, 320, 1.0, 18.75)
                             
   local buttonsMargin = 10
   local options = CreateGenericDialogOptionArea(options, buttonsMargin, 250 - 22 * (#options - 3), 480 - buttonsMargin * 2)
@@ -434,7 +438,7 @@ function CreateImageDialog(image, options)
 end
 
 function CreateJournalDialog(text, title, options)  
-  local screenwidth = 480
+  local screenwidth = WIDTH
   local margin = 20
   local width = screenwidth - margin * 2
   local height = 280
@@ -456,7 +460,7 @@ function CreateJournalDialog(text, title, options)
 end
 
 function CreateCenteredDialog(text, title, options)  
-  local screenwidth = 480
+  local screenwidth = WIDTH
   local margin = 20
   local width = screenwidth - margin * 2
   local height = 280

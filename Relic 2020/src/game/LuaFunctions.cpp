@@ -332,7 +332,7 @@ static int Audio_StopAmbient(lua_State *lua)
     return 0;
 }
 
-//// $TODO This DEFERRED CALL STUFF NEEDS TO GO ELSEWHERE & GENERALIZED
+// $TODO This DEFERRED CALL STUFF NEEDS TO GO ELSEWHERE & GET GENERALIZED
 extern void DestroyCharacter(Character *);
 extern Character *GetCharacter(lua_State *, int index = 1);
 
@@ -605,7 +605,7 @@ static int CollideBounceVector(lua_State *lua)
           y    = (float)lua_tonumber(lua, -2),
           z    = (float)lua_tonumber(lua, -1);
 
-    enum { UP_MASK    =   2 |  4 |  8,
+    enum { UP_MASK    =   2 |  4 |   8,
            RIGHT_MASK =   8 | 16 |  32,
            DOWN_MASK  =  32 | 64 | 128,
            LEFT_MASK  = 128 |  1 |   2 };
@@ -704,21 +704,17 @@ static int GetStartPoint(lua_State *lua)
     return 3;
 }
 
-static Vector4 GetUiBackgroundOffsetSize()
-{
-    Vector4 sz(-88.0f, 0.0f, 568.f, 320.0f);
-    if (GetPlatformIsiPad()) {
-        sz = Vector4(-30.0f, -20.0f, 510.0f, 340.0f);
-    }
-    return sz;
-}
-
 static Vector4 GetUiBounds()
 {
     const GameDimensions &dim = GameState::GetInstance()->GetDimensions();
     Tuple3f min = dim.GetBounds().minimum,
             max = dim.GetBounds().maximum;
     return Tuple4f(min.x, min.y, max.x, max.y);
+}
+
+static Vector4 GetUiBackgroundOffsetSize()
+{
+    return GetUiBounds();
 }
 
 static Vector4 GetReferenceBounds()
@@ -741,6 +737,12 @@ static int GetBackgroundSize(lua_State *lua)
     Vector4 sz = GetUiBackgroundOffsetSize();
     ReturnVector2(lua, Vector2(sz.z, sz.w));
     return 2;
+}
+
+static int Lua_GetLookAt(lua_State *lua)
+{
+    ReturnVector3(lua, GameState::GetInstance()->GetCamera()->GetLookAt());
+    return 3;
 }
 
 static int Lua_GetUiBounds(lua_State *lua)
@@ -1811,7 +1813,7 @@ void SetLuaLights(GraphicsDevice &device)
     }
 }
 
-static int SetLightingEnabled(lua_State *lua)
+static int Lua_SetLightingEnabled(lua_State *lua)
 {
     luaL_checktype(lua, -1, LUA_TBOOLEAN);
     _gLuaLightsEnabled = (lua_toboolean(lua, -1) != 0);
@@ -2090,7 +2092,7 @@ static int HexColor(lua_State *lua)
            g = (double)lua_tonumber(lua, -2),
            b = (double)lua_tonumber(lua, -1);
     char color[16];
-    sprintf(color, "%02x%02x%02x", (int)(r * 255.f), (int)(g * 255.f), (int)(b * 255.f));
+    snprintf(color, sizeof(color) - 1, "%02x%02x%02x", (int)(r * 255.f), (int)(g * 255.f), (int)(b * 255.f));
     lua_pushstring(lua, color);
     return 1;
 }
@@ -2106,7 +2108,7 @@ static int HexColorAlpha(lua_State *lua)
            b = (double)lua_tonumber(lua, -2),
            a = (double)lua_tonumber(lua, -1);
     char color[16];
-    sprintf(color, "%02x%02x%02x%02x", (int)(r * 255.f), (int)(g * 255.f), (int)(b * 255.f), (int)(a * 255.f));
+    snprintf(color, sizeof(color) - 1, "%02x%02x%02x%02x", (int)(r * 255.f), (int)(g * 255.f), (int)(b * 255.f), (int)(a * 255.f));
     lua_pushstring(lua, color);
     return 1;
 }
@@ -2435,6 +2437,7 @@ void RegisterLuaFunctions(lua_State *lua)
     lua_register(lua, "GetBackgroundOffsetSize",       GetBackgroundOffsetSize);
     lua_register(lua, "GetBackgroundSize",             GetBackgroundSize);
     lua_register(lua, "GetUiBounds",                   Lua_GetUiBounds);
+    lua_register(lua, "GetLookAt",                     Lua_GetLookAt);
     lua_register(lua, "GetReferenceBounds",            Lua_GetReferenceBounds);
 
     lua_register(lua, "SetOverlayColor",               SetOverlayColor);
@@ -2460,13 +2463,13 @@ void RegisterLuaFunctions(lua_State *lua)
     lua_register(lua, "Alert",                         Alert);
 	lua_register(lua, "SendMemoryWarning",             SendMemoryWarning);
 
-    lua_register(lua, "CreateCloud",                   CreateCloud);
-    lua_register(lua, "CreatePerpetualCloud",          CreatePerpetualCloud);
-    lua_register(lua, "CreateCloudIndependent",          CreateCloudIndependent);
-    lua_register(lua, "CreatePerpetualCloudIndependent", CreatePerpetualCloudIndependent);
+    lua_register(lua, "CreateCloud",                        CreateCloud);
+    lua_register(lua, "CreatePerpetualCloud",               CreatePerpetualCloud);
+    lua_register(lua, "CreateCloudIndependent",             CreateCloudIndependent);
+    lua_register(lua, "CreatePerpetualCloudIndependent",    CreatePerpetualCloudIndependent);
 
-    lua_register(lua, "CreateCloudLit",                   CreateCloudLit);
-    lua_register(lua, "CreatePerpetualCloudLit",          CreatePerpetualCloudLit);
+    lua_register(lua, "CreateCloudLit",                     CreateCloudLit);
+    lua_register(lua, "CreatePerpetualCloudLit",            CreatePerpetualCloudLit);
     lua_register(lua, "CreateCloudLitIndependent",          CreateCloudLitIndependent);
     lua_register(lua, "CreatePerpetualCloudLitIndependent", CreatePerpetualCloudLitIndependent);
     
@@ -2512,7 +2515,7 @@ void RegisterLuaFunctions(lua_State *lua)
     lua_register(lua, "Sync_PopDataMessage",           Sync_PopDataMessage);
 
     // lights
-    lua_register(lua, "SetLightingEnabled",            SetLightingEnabled);
+    lua_register(lua, "SetLightingEnabled",            Lua_SetLightingEnabled);
     lua_register(lua, "CreateLight",                   CreateLight);
     lua_register(lua, "SetLightPosition",              SetLightPosition);
     lua_register(lua, "SetLightAmbient",               SetLightAmbient);

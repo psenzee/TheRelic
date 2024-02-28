@@ -65,8 +65,8 @@ void EventTimer::RemoveBefore(unsigned time)
 void EventTimer::Update(unsigned time)
 {
     elapsed += time;
-    for (std::vector<Event>::iterator i = events.begin(), e = events.end(); i != e; ++i)
-        if ((*i).time < elapsed && (*i).function)
-            (*i).function((*i).context);
+    for (auto e: events)
+        if (e.time < elapsed && e.function)
+            e.function(e.context);
     RemoveBefore(elapsed);
 }

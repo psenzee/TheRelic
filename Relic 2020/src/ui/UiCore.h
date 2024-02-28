@@ -22,7 +22,7 @@ public:
    
     void             SetRootControl(IUiControl *control);
     IUiControl      *GetRootControl();
-
+    
     Vector2          InputToScreen(const Vector2 &p) const;
 
     IUiControl      *CreateText(const char *name, const char *text, const UiBounds &bounds, float alpha, float size, bool center);
@@ -38,6 +38,8 @@ public:
 
     // ----------
 
+    inline const GameDimensions &GetDimensions() const { return mDimensions; }
+    
     RenderContext   &GetRenderContext();
     XmlReadContext  *GetRenderables()                              { return mRenderables; }
     void             SetRenderables(XmlReadContext *renderables)   { mRenderables = renderables; }

@@ -127,7 +127,7 @@ GlyphExtent GlyphWriter::ReadExtent(XmlElement *glyphs, int32_t character)
     // more later perhaps
     default:
         if ((uchar8_t)(*s) >= 128) {
-            sprintf(s, "&#%u;", (uchar8_t)*s);
+            snprintf(s, sizeof(s) - 1, "&#%u;", (uchar8_t)*s);
         }
         break;
     }

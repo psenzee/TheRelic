@@ -140,9 +140,8 @@ extern "C" void UnloadAll();
     self.eagl = eagl;
     [eagl initialize];
     [v addSubview:eagl];
-
     animating = FALSE;
-    animationFrameInterval = 2;
+    animationFrameInterval = 1;
 
     self.displayLink = nil;
 }
@@ -296,6 +295,11 @@ extern "C" void UnloadAll();
         return FALSE;
     }
     
+    return TRUE;
+}
+
+- (BOOL)prefersStatusBarHidden
+{
     return TRUE;
 }
 

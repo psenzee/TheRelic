@@ -17,6 +17,7 @@ bool UiBasicControl::Notify(UiCore &core, const UiEvent &event)
         {
         case UiState::FOCUSED:  core.GetEventDispatcher().Fire(GetName(), "FOCUSED");  break;
         case UiState::SELECTED: core.GetEventDispatcher().Fire(GetName(), "SELECTED"); break;
+        default:                                                                       break;
         }
         return true;
     }

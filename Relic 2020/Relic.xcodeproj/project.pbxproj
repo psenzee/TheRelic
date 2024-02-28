@@ -3026,6 +3026,7 @@
 		439DB8B412DE3F0400B06546 /* lua */ = {
 			isa = PBXGroup;
 			children = (
+				439DB8C912DE3FB800B06546 /* game.lua */,
 				DAEFF7F223BD04670062B630 /* globals.lua */,
 				626AA1B2135915EB00D29E13 /* buttons.lua */,
 				439DB8BF12DE3FB800B06546 /* common.lua */,
@@ -3040,7 +3041,6 @@
 				439DB8C412DE3FB800B06546 /* door.lua */,
 				439DB8C512DE3FB800B06546 /* enemies.lua */,
 				439DB8C712DE3FB800B06546 /* fx.lua */,
-				439DB8C912DE3FB800B06546 /* game.lua */,
 				439DB8CB12DE3FB800B06546 /* gamestate.lua */,
 				439DB8CC12DE3FB800B06546 /* generatorghost.lua */,
 				439DB8CE12DE3FB800B06546 /* guide.lua */,

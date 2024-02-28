@@ -11,7 +11,7 @@ extern "C"
 #include "core/core_assert.h"
 
 #include "Pack.h"
-#include "LuaUtil/LuaValue.h"
+#include "luautil/LuaValue.h"
 #include "core/Dictionary.h"
 
 namespace Serialize

@@ -65,6 +65,21 @@
                   endingLineNumber = "39"
                   offsetFromSymbolStart = "42">
                </Location>
+               <Location
+                  uuid = "BC02AAAC-E846-44C5-8123-1AD3FFD1FEE3 - c268496d1263749e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "LuaReportError(char const*)"
+                  moduleName = "Relic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/Relic%202020/src/luautil/LuaCall.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "40"
+                  endingLineNumber = "40"
+                  offsetFromSymbolStart = "80">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -94,8 +109,8 @@
             filePath = "src/game/GameState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "313"
-            endingLineNumber = "313"
+            startingLineNumber = "321"
+            endingLineNumber = "321"
             landmarkName = "GameState::LoadRenderables()"
             landmarkType = "7">
          </BreakpointContent>

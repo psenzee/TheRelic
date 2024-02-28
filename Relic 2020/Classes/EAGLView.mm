@@ -74,7 +74,7 @@ inline core::Point GetAdjustedPoint(int x, int y)
     );
     */
 	core::Point p = core::Point((int)(x * gTouchRatioX + gTouchOffsetX), (int)(y * gTouchRatioY + gTouchOffsetY));
-    printf("touched %d, %d\n", p.x, p.y);
+    //printf("touched %d, %d\n", p.x, p.y);
 	return p;
 }
 
@@ -217,7 +217,8 @@ extern "C" void SetupGame()
     
     printf("viewport %d %d\n", gBackingWidth, gBackingHeight);
 	
-    int refWidth = 320, refHeight = 480;
+    //int refWidth = 320, refHeight = 630; //480;
+    int refWidth = 375, refHeight = 812; //480;
     //int backingWidth = 320, backingHeight = 480;
     //backingWidth = (int)(gBackingWidth * ((float)backingHeight / (float)gBackingHeight));
     //backingHeight = (int)(gBackingHeight * ((float)backingWidth / (float)gBackingWidth));

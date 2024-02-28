@@ -123,8 +123,9 @@ void Text::Render(RenderContext &context, const Matrix &transform, const Vector4
     }
     Matrix nt(animated * transform);
     anchor = (nt * Vector3(1.0f, 1.0f, 1.0f));
-    for (std::vector<GlyphDrawList *>::iterator i = lists.begin(), e = lists.end(); i != e; ++i)
-        (*i)->Render(context, nt, clr);
+    //for (std::vector<GlyphDrawList *>::iterator i = lists.begin(), e = lists.end(); i != e; ++i)
+    for (auto dl : lists)
+        dl->Render(context, nt, clr);
 }
 
 void Text::Reset()

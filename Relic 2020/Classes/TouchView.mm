@@ -20,7 +20,7 @@ inline core::Point GetAdjustedPoint(int x, int y)
 {
     TouchTransform tt;
     core::Point p = core::Point((int)(x * tt.ratio.width + tt.offset.x), (int)(y * tt.ratio.height + tt.offset.y));
-    printf("touched %d, %d\n", p.x, p.y);
+  //  printf("touched %d, %d\n", p.x, p.y);
     return p;
 }
 
@@ -32,7 +32,7 @@ extern "C" void SetScreenTouchStationary(int index, int x, int y);
 static void UpdateTouch(UITouch *touch, UIView *view)
 {
     CGPoint pt = [touch locationInView:view];
-    PrintCGPoint(pt, "touched", true);
+    //PrintCGPoint(pt, "touched", true);
     //core::Point p = GetAdjustedPoint(pt.x, pt.y);
     switch ([touch phase])
     {

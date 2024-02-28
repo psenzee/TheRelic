@@ -240,6 +240,7 @@ end
 
 function UiUpdateAndRender(instance)
 
+  SetDefaultLightingType(0)
   UpdateErrorOccurred("\\#ff00ff")
   UpdateMemoryStats()
 
@@ -277,6 +278,7 @@ function UiUpdateAndRender(instance)
   
   local player = GetPlayer()
   
+  -- DrawAlignment()
   DrawHud(player)
   DrawLevelUp(player)
   UpdateOverlays()

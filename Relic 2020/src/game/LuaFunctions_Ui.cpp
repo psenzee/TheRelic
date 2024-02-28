@@ -34,7 +34,7 @@ static GameUI &GetGameUi()
 static UiCore *GetUiCore()
 {
     GameState *state = GameState::GetInstance();
-    return state->GetUiCore();
+    return state ? state->GetUiCore() : nullptr;
 }
 
 static int Ui_SendRisingMessage(lua_State *lua)
@@ -106,7 +106,9 @@ static int Ui_DrawString(lua_State *lua)
     const char *text  = lua_tostring(lua, -5);
     float x    = static_cast<float>(lua_tonumber(lua, -4)), y     = static_cast<float>(lua_tonumber(lua, -3)),
           size = static_cast<float>(lua_tonumber(lua, -2)), alpha = static_cast<float>(lua_tonumber(lua, -1));
-    GetUiCore()->DrawString(text, Vector2(x, y), JUSTIFY_LEFT, alpha, size);
+    if (GetUiCore()) {
+        GetUiCore()->DrawString(text, Vector2(x, y), JUSTIFY_LEFT, alpha, size);
+    }
     return 0;
 }
 
@@ -635,6 +637,15 @@ static int Ui_ScreenToDrawPosition(lua_State *lua)
     return 2;
 }
 
+static int Ui_ScreenSize(lua_State *lua)
+{
+    const GameDimensions &gd = GetUiCore()->GetDimensions();
+    // this is probably not best
+    lua_pushnumber(lua, gd.GetRightEdge());
+    lua_pushnumber(lua, gd.GetBottomEdge());
+    return 2;
+}
+
 static int Ui_DrawToScreenPosition(lua_State *lua)
 {
     luaL_checktype(lua, -2,  LUA_TNUMBER); // at.x
@@ -900,7 +911,7 @@ void RegisterLuaUiFunctions(lua_State *lua)
     lua_register(lua, "Ui_CreateRenderableButtonJustified", Ui_CreateRenderableButtonJustified);
     lua_register(lua, "Ui_CreateMenu",                 Ui_CreateMenu);
     lua_register(lua, "Ui_NotifyInput",                Ui_NotifyInput);
-
+    lua_register(lua, "Ui_ScreenSize",                 Ui_ScreenSize);
     lua_register(lua, "Ui_ScreenToDrawPosition",       Ui_ScreenToDrawPosition);
     lua_register(lua, "Ui_DrawToScreenPosition",       Ui_DrawToScreenPosition);
 

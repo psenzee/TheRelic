@@ -79,6 +79,6 @@ Level *LevelManager::Load(int index)
     if (index < 0)
         return 0;
     char filename[1024]; // should be plenty
-    sprintf(filename, "level%d.xml", index);
+    snprintf(filename, sizeof(filename) - 1, "level%d.xml", index);
     return new Level(ContentLoader::GetInstance(), filename, index, mMultiplayer);
 }

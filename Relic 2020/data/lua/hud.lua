@@ -20,6 +20,17 @@ function StartHud()
   InitializeIndicators()  
 end
 
+function DrawAlignment()
+  local x, y, w, h = GetUiBounds()
+  local sz = 30
+  local s2 = sz / 2
+  Ui_DrawStringCentered("xy", x+s2, y+s2, sz, 1.0)
+  Ui_DrawStringCentered("xh", x+s2, h-s2, sz, 1.0)
+  Ui_DrawStringCentered("wy", w-s2, y+s2, sz, 1.0)
+  Ui_DrawStringCentered("wh", w-s2, h-s2, sz, 1.0)
+  Ui_DrawStringCentered("cc", w * 0.5 + x, h * 0.5 + y, sz, 1.0)
+end
+
 function DrawMapHud(player)
   if IsMapOn() then
     local x, y, w, h = GetUiBounds()
@@ -253,16 +264,18 @@ function DrawBar(fillImage1, fillImage2, x, y, w, h, value)
 end
 
 function DrawBarRatio(fillImage1, fillImage2, x, y, w, h, value, max)
-  if max > 0 then -- don't draw if denominator is zero
+  if max > 0 then -- draw only if denominator is not zero
     DrawBar(fillImage1, fillImage2, x, y, w, h, value / max)
   end
 end
 
 function DrawLevelInformation(player)
+--[[
   local x, y, w, h = GetUiBounds()
   Ui_DrawString("L" .. tostring(GetLevelNumber()), x + 5, y + 20, 30, 1.0)
   Ui_DrawString(" " .. GetPlaceName(player:GetPosition()), x + 5, h - 15, 20, 0.6)
   Ui_DrawString(string.format("mv: %d", GetMovableCount()), w * 0.8, h - 15, 20, 0.6)
+]]--
 end
 
 function DrawPlaceNameAndHealth()
@@ -451,7 +464,7 @@ function UpdateHud(player)
       spellType = ""
     else
       --if     multiplier >= 4.0 and data.mana >= MIN_MAGIC_ATTACK_COST * 4.0 then 
-      if     multiplier >= 4.0 and data.mana >= MANA_ATOMIC_TOUCH and data.isAtomicTouchEnabled then
+      if     multiplier >= 5.0 and data.mana >= MANA_ATOMIC_TOUCH and data.isAtomicTouchEnabled then
 --        spellType = "cataclysm" -- "\\%40ff40ffcataclysm"
         spellType = GetColorTextAlpha((GetGameStateFrames() % 20) * 0.05, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0) .. "cataclysm"
         --"\\%ffffffffcataclysm"

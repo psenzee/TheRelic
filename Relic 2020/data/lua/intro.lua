@@ -1,5 +1,8 @@
 print "Lua:intro.lua"
 
+WIDTH  = _G.UI_RIGHT
+HEIGHT = _G.UI_BOTTOM
+
 INITIAL_TIME        = nil
 UI_TIME             = nil
 INITIAL_LOADED_TIME = nil
@@ -66,7 +69,7 @@ SEGMENTED_HORIZONTAL_OFFSET = 0
 
 function DrawSegmentedHorizontal(file, alpha, offset)
   local overallScale = 1.0
-  local offsetHeight = (320 - 320 * overallScale) * 0.5
+  local offsetHeight = (HEIGHT - HEIGHT * overallScale) * 0.5
   local width = 1024 * 1.25 -- adjust for the fact that we're mapping a 256 height piece of texture to 320px
   local offsetWidth = offset * 4096 * (1 / 1.25)
   SEGMENTED_HORIZONTAL_OFFSET = offsetWidth
@@ -320,12 +323,13 @@ local TEXT_PARTS =
 }
 
 function WriteSequenceTextItem(item, alpha)
+  local x, y, w, h = GetUiBounds()
   if item == nil then
     return
   end
   local text   = item.text
   local y      = item.y
-  Ui_DrawStringCenteredGlow(text,   240, y,     40, alpha * 1.0)
+  Ui_DrawStringCenteredGlow(text, w * 0.5 + x, y, 40, alpha * 1.0)
 end
 
 function GetCurrentSegmentIndex(text, time, initialTime)
@@ -429,8 +433,7 @@ SEQUENCE_START = { nil, nil, nil, nil,
                    nil, nil, nil, nil }
 
 function DrawIntroBackground()
---DrawBackgroundPartial(GetTitleAlpha(-10000, 100), "chillingo_partial")
---DrawBackgroundPartial(GetTitleAlpha(-10000, 2500), "as2_partial")  
+
 --DrawBackgroundPartial(GetTitleAlpha(3000, 4500), "background_partial")   
 end
 
