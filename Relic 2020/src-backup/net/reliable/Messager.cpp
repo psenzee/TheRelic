@@ -1,0 +1,42 @@
+#include "Messager.h"
+
+#include "core/core_assert.h"
+#include <string.h>
+
+#include "Message.h"
+#include "MessageReceiver.h" // handles combining
+#include "MessageSender.h"   // handles guarantees
+#include "MessageCombiner.h" // handles combining (low-level) and splitting
+
+Messager::Messager(SendFunctionContext send, ReceiveFunctionContext receive) 
+    : mReceiver(send, receive), mSender(send)
+{
+}
+
+int Messager::Receive(char *data, int length)
+{
+    int size = mReceiver.Receive(data, length);
+    while (IsAcknowledge(data, size))
+    {
+        printf("A");
+        mSender.Acknowledge(GetMUID(data));
+        size = mReceiver.Receive(data, length);
+    }
+    return size;
+}
+
+bool Messager::Send(const char *data, int length)
+{
+    return SplitMessage(data, length, MessagerSend, this);
+}
+
+void Messager::Update()
+{
+    mSender.Update();
+}
+
+bool Messager::MessagerSend(void *user, const char *data, int length)
+{
+    Messager *messager = (Messager *)user;
+    return messager->mSender.Send(data, length);
+}

@@ -1,0 +1,13 @@
+#ifndef _CHANNELS_H
+#define _CHANNELS_H
+
+class IChannel;
+class IAddress;
+
+class Channels
+{
+public:
+    static IChannel *Open(const IAddress *address);
+};
+
+#endif // _CHANNELS_H

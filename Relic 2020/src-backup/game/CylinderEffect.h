@@ -1,0 +1,49 @@
+#ifndef _CYLINDEREFFECT_H
+#define _CYLINDEREFFECT_H
+
+#include "core/core.h"
+#include "IEffect.h"
+#include "fast/Allocator.h"
+
+class Drawable;
+
+class CylinderEffect : public IEffect
+{
+public:
+
+    CLASS_NEW_DELETE()
+
+    CylinderEffect(const char *filename, float rotate, float radius, float radiusDelta, float height, float heightUvDelta);
+    ~CylinderEffect();
+
+    Type GetType() const                  { return IEffect::FX_CYLINDER; }
+    void SetPosition(const Vector3 &p)    {}
+
+    void SetRadiusDelta(float value)      { mRadiusDelta = value; }
+    void SetHeightUvDelta(float value)    { mHeightUvDelta = value; }
+
+    void SetDrawable(Drawable *drawable);
+
+    void Update(const GameTime &time);
+    void Complete();
+    bool IsComplete() const;
+
+    void Render(RenderContext &context);
+
+private:
+
+    enum { COMPLETE_FRAMES = 20 };
+
+    Drawable *mDrawable;
+    float     mAngle; // currently we rotate it
+    String    mFilename;
+    float     mRotate;
+    float     mRadiusDelta,
+              mHeightUvDelta,
+              mRadius,
+              mHeightUv,
+              mHeight;
+    int       mCompleteFrames;
+};
+
+#endif // _CYLINDEREFFECT_H

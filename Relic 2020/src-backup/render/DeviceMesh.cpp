@@ -1,0 +1,102 @@
+#include "DeviceMesh.h"
+#include "render/GLUtils.h"
+#include "platform/GLIncludes.h"
+#include "render/OpenGLESMesh.h"
+#include "OverheadCamera.h"
+#include "RenderContext.h"
+#include "Visibility.h"
+
+DeviceMesh::DeviceMesh(const char *filename, bool compact) : mMesh(0)
+{
+    char newname[1024];
+    mMesh = new OpenGLESMesh;
+    snprintf(newname, sizeof(newname) - 1, "%s.ips", filename);
+    if (!mMesh->Read(newname, compact))
+    {
+        delete mMesh;
+        mMesh = 0;
+
+        mMesh = new OpenGLESMesh;
+        snprintf(newname, sizeof(newname) - 1, "%s.ipi", filename);
+        if (!mMesh->Read(newname, compact))
+        {
+            printf("Unable to read file '%s'!\n", filename);
+            delete mMesh;
+            mMesh = 0;
+        }
+    }
+}
+
+DeviceMesh::DeviceMesh(const void *data, int size, bool compact) : mMesh(0)
+{
+    mMesh = new OpenGLESMesh;
+    if (!mMesh->ReadFromData((const char *)data, size, compact))
+    {
+        printf("Unable to read mesh from data!\n");
+        delete mMesh;
+        mMesh = 0;
+    }
+}
+
+bool DeviceMesh::SetNormalAction(const char *action)
+{
+    if (!mMesh) return false;
+
+    if      (!action) return false;
+    else if (strcmp(action, "NORMALIZE") == 0) { mMesh->SetNormalAction(OpenGLESMesh::NORMALIZE); return true; }
+    else if (strcmp(action, "true")      == 0) { mMesh->SetNormalAction(OpenGLESMesh::NORMALIZE); return true; }
+    else if (strcmp(action, "RESCALE"  ) == 0) { mMesh->SetNormalAction(OpenGLESMesh::RESCALE);   return true; }
+    else if (strcmp(action, "NONE"     ) == 0) { mMesh->SetNormalAction(OpenGLESMesh::NONE);      return true; }
+    else if (strcmp(action, "false"    ) == 0) { mMesh->SetNormalAction(OpenGLESMesh::NONE);      return true; }
+    return false;
+}
+
+bool DeviceMesh::SetProperty(const char *key, const char *value)
+{
+    if (!key) return false;
+    else if (strcmp(key, "normalize") == 0) return SetNormalAction(value);
+    return false;
+}
+
+const AABox &DeviceMesh::GetBounds() const
+{
+    const static AABox empty;
+    if (!mMesh)
+        return empty;
+    return mMesh->GetBounds();
+}
+
+DeviceMesh::~DeviceMesh()
+{
+    if (mMesh)
+        delete mMesh;
+    mMesh = 0;
+}
+
+void DeviceMesh::RenderImmediate(RenderContext &context)
+{
+    if (mMesh)
+    {
+        glLoadMatrixf((float *)context.camera.GetView().data);
+        glMultMatrixf((float *)context.transform.data);
+        mMesh->Render();
+    }
+}
+
+bool DeviceMesh::IsVisible(const RenderContext &context) const
+{
+    if (!mMesh)
+        return false;
+    return Visibility::IsVisible(context.camera.GetViewProjection(), context.transform, mMesh->GetBounds());
+}
+
+void DeviceMesh::Retain()
+{
+    mRef++;
+}
+
+void DeviceMesh::Release() 
+{
+    if (!--mRef)
+        delete this;
+}

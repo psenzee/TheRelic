@@ -1,0 +1,47 @@
+#ifndef _LOCATIONEVENTS_H
+#define _LOCATIONEVENTS_H
+
+#include "core/core.h"
+#include "fast/Allocator.h"
+
+class EventDispatcher;
+struct lua_State;
+
+class LocationEvents
+{
+public:
+    
+    CLASS_NEW_DELETE()
+    
+    void AddEvent(const char *event, const Vector3 &location, float radius);
+    void RemoveEvent(const char *event);
+    
+    void NotifyLocation(const Vector3 &location);    
+    
+    static void            CreateInstance(EventDispatcher *ed) { if (!sInstance) sInstance = new LocationEvents(ed); }
+    static LocationEvents *GetInstance()                       { return sInstance; }
+    static void            DestroyInstance()                   { if (sInstance) delete sInstance; sInstance = 0; }
+       
+private:
+    
+    static LocationEvents *sInstance;
+    
+    inline LocationEvents(EventDispatcher *dispatcher) : mDispatcher(dispatcher) {}
+    
+    struct Location
+    {
+        String  name;
+        Vector3 location;
+        float   radius;
+        bool    inside;
+    };
+
+    std::vector<Location>::iterator FindLocation(const char *event);
+
+    EventDispatcher       *mDispatcher;
+    std::vector<Location>  mLocations;
+};
+
+void RegisterLuaLocationEventFunctions(lua_State *lua);
+
+#endif // _LOCATIONEVENTS_H

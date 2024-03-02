@@ -1,0 +1,267 @@
+#include "DebrisMap.h"
+
+#include "core/core.h"
+#include "core/mathcore.h"
+#include "math/MathUtil.h"
+#include "fast/Allocator.h"
+#include "render/RenderContext.h"
+#include "gamecore/IGameObject.h"
+#include "gamecore/IRenderable.h"
+
+#include <math.h>
+#include <string.h>
+
+inline unsigned char GetUCharFromFloatAngle(float radians)
+{
+    static const float INV_2PI_255 = (1.f / math::TWOPIf) * 255.f;
+    return (unsigned char)(MathUtil::NormalizeAngle2Pi(radians) * INV_2PI_255);
+}
+
+inline float GetFloatFromUCharAngle(unsigned char angle)
+{
+    static const float INV_255_2PI = (1.f / 255.f) * math::TWOPIf;
+    return angle * INV_255_2PI;
+}
+
+int rendercount_tmp = 0;
+
+void DebrisItem::Render(const RenderContext &context, const Vector3 &at)
+{
+    if (!object)
+        return;
+    RenderContext rc(context);
+    Matrix ms;
+    ms.scale(GetScale());
+    Matrix rot;
+    rot.rotationx(math::HALFPIf);            // halfpi to turn the character upright (thanks blender! :S )
+    if (rotationz)
+    {
+        Matrix r;
+        r.rotationz(GetFloatFromUCharAngle(rotationz));
+        rot = rot * r;
+    }
+    rc.transform = rc.transform * ms;
+    rc.transform = rc.transform * rot;
+    Matrix t;        
+    t.translate(Vector3(at.x + offset[0], at.y + offset[1], at.z + offset[2]));
+    rc.transform = rc.transform * t;
+    rc.color.x = rc.color.y = rc.color.z = rc.color.w = timer / 255.f;
+    IRenderable &r = object->GetRenderable();
+    r.Render(rc);
+    rendercount_tmp++;
+}
+
+void DebrisItem::Update(const GameTime &time)
+{
+    rendercount_tmp = 0;
+    if (object)    
+        object->Update(time);
+    if (timer > 0)
+        timer--;
+    if (timer == 0)
+        Clear();
+}
+
+void DebrisItem::Clear()
+{
+    memset(this, 0, sizeof(DebrisItem));
+}
+
+DebrisList::DebrisList()
+{
+    Clear();
+}
+
+void DebrisList::Add(IGameObject *object, const Vector3 &translate, float rotationz, float scale)
+{
+    DebrisItem item;
+    memset(&item, 0, sizeof(item));
+    item.object = object;
+    item.offset[0] = (unsigned char)translate.x;
+    item.offset[1] = (unsigned char)translate.y;
+    core_assert(translate.x < 256.0 && translate.y < 256.0);
+    item.offset[2] = (char)(translate.z + 0.5f);
+    item.SetScale(scale);
+    item.rotationz = GetUCharFromFloatAngle(rotationz);
+    item.timer = 255;
+    Add(item);
+}
+
+void DebrisList::Compact()
+{
+    // reduce the number of debris items here to COMPACT_TARGET
+    // kill the ones at the beginning of the list, move them up
+    int count = GetActiveCount() - COMPACT_TARGET;
+    if (count > 0)
+    {
+        DebrisItem list[MAX_DEBRIS];
+        memset(list, 0, sizeof(list));
+        for (int i = 0, j = 0; i < MAX_DEBRIS && j < COMPACT_TARGET; i++)
+            if (mItems[i].object)
+                list[j++] = mItems[i];
+        memcpy(mItems, list, sizeof(mItems));
+    }
+}
+
+void DebrisList::Update(const GameTime &time)
+{
+    for (int i = 0; i < MAX_DEBRIS; i++)
+        mItems[i].Update(time);
+}
+
+void DebrisList::Render(const RenderContext &rc, const Vector3 &at)
+{
+    for (int i = 0; i < MAX_DEBRIS; i++)
+        mItems[i].Render(rc, at);
+}
+
+void DebrisList::Clear()
+{
+    memset(mItems, 0, sizeof(mItems));
+}
+
+void DebrisList::Add(DebrisItem &debris)
+{
+    if (debris.object)
+    {
+        int available = FirstAvailable();
+        if (available == -1)
+            // no space - don't add
+            return;
+        memcpy(&mItems[available], &debris, sizeof(DebrisItem));
+    }
+}
+
+int DebrisList::GetActiveCount() const
+{
+    int count = 0;
+    for (int i = 0; i < MAX_DEBRIS; i++)
+        if (mItems[i].object)
+            count++;
+    return count;
+}
+
+int DebrisList::FirstAvailable() const
+{
+    for (int i = 0; i < MAX_DEBRIS; i++)
+        if (!mItems[i].object)
+            return i;
+    return -1;
+}
+
+DebrisMap::DebrisMap(const core::Size &size, const core::Size &elementSize) : mSize(size), mElementSize(elementSize)
+{
+    mData = new DebrisList [mSize.width * mSize.height];
+    memset(mData, 0, sizeof(DebrisList) * mSize.width * mSize.height);
+    memset(&mDefault, 0, sizeof(DebrisList));
+    //mFile = fopen("dm-debug.txt", "w");
+}
+
+DebrisMap::~DebrisMap()
+{
+    //fclose(mFile);
+    delete [] mData;
+}
+
+void DebrisMap::Add(IGameObject *object, const Vector3 &at, float rotation, float scale)
+{
+    Vector2 mapat(floorf(at.x / mElementSize.width), floorf(at.y / mElementSize.height));
+    Vector3 base(mapat.x * mElementSize.width, mapat.y * mElementSize.height, 0.f),
+            offset(at - base);
+    DebrisList &list = GetList(core::Point(int32_t(mapat.x), int32_t(mapat.y)));
+    //fprintf(mFile, "**DEBRISMAP ADD AT (%d, %d)\n", int(mapat.x), int(mapat.y));
+    list.Add(object, offset, rotation, scale);
+}
+
+int32_t DebrisMap::GetActiveCount(const core::Rectangle &r) const
+{
+    int32_t count = 0;
+    for (int32_t j = r.y; j < r.y + r.height; j++)
+        for (int32_t i = r.x; i < r.x + r.width; i++)
+            count += GetList(core::Point(i, j)).GetActiveCount(); 
+    return count;
+}
+
+void DebrisMap::PrintActiveCount() const
+{/*
+    fprintf(mFile, "debris map:\n");
+    for (int j = 0; j < mSize.height; j++)
+    {
+        for (int i = 0; i < mSize.width; i++)
+        {
+            int count = GetList(core::Point(i, j)).GetActiveCount();
+            if (count == 0) fprintf(mFile, ".");
+            else            fprintf(mFile, "%d", count);
+        }
+        fprintf(mFile, "\n");
+    }*/
+}
+
+void DebrisMap::Update(const GameTime &time, const core::Rectangle &r)
+{
+    // first compact on the periphery
+    Compact(r);
+    // then we really 'update' within the range
+    for (int j = r.y; j < r.y + r.height; j++)
+        for (int i = r.x; i < r.x + r.width; i++)
+            GetList(core::Point(i, j)).Update(time);
+//    int activeCount = GetActiveCount(core::Rectangle(r.x - 1, r.y - 1, r.width + 2, r.height + 2));
+//    if (activeCount > 0)
+//        printf("***** ActiveCount, DebrisMap %d ******\n", activeCount);
+    static int count = 0;
+    if (count % 30 == 0)
+        PrintActiveCount();
+    count++;
+}
+
+void DebrisMap::Render(const RenderContext &rc, const core::Rectangle &r)
+{
+    for (int j = r.y; j < r.y + r.height; j++)
+        for (int i = r.x; i < r.x + r.width; i++)
+            Render(rc, core::Point(i, j));
+//    printf("Debris Rendered: %d\n", rendercount_tmp);
+}
+
+void DebrisMap::Clear()
+{
+    memset(mData, 0, sizeof(DebrisList) * mSize.width * mSize.height);
+}
+
+void DebrisMap::Compact(const core::Rectangle &r)
+{
+    // here we do **compaction** on the OUTSIDE of the rectangle r
+    // just outside (on the periphery) of visibility range we reduce
+    // the number of debris items
+    for (int i = r.x; i < r.x + r.width + 1; i++) // horizontal
+    {
+        GetList(core::Point(i - 1, r.y - 1           )).Compact();
+        GetList(core::Point(i,     r.y + r.height + 1)).Compact();
+    }
+    for (int i = r.y; i < r.y + r.height + 1; i++) // vertical
+    {
+        GetList(core::Point(r.x - 1,           i    )).Compact();
+        GetList(core::Point(r.x + r.width + 1, i - 1)).Compact();
+    }
+}
+
+void DebrisMap::Render(const RenderContext &rc, const core::Point &at)
+{
+    DebrisList &list = GetList(at);
+    if (&list == &mDefault)
+        return;
+    list.Render(rc, Vector3(float(at.x) * mElementSize.width, float(at.y) * mElementSize.height, 0.f));
+}
+
+DebrisList &DebrisMap::GetList(const core::Point &at)
+{
+    if (at.x < 0 || at.x >= mSize.width || at.y < 0 || at.y >= mSize.height)
+        return mDefault;
+    return mData[at.y * mSize.width + at.x];
+}
+
+const DebrisList &DebrisMap::GetList(const core::Point &at) const
+{
+    if (at.x < 0 || at.x >= mSize.width || at.y < 0 || at.y >= mSize.height)
+        return mDefault;
+    return mData[at.y * mSize.width + at.x];
+}

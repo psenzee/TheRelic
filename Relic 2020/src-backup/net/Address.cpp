@@ -1,0 +1,95 @@
+#include "Address.h"
+#include "Sockets.h"
+#include <string.h> // memset/memcpy, str*
+#include <stdio.h> // printf
+
+bool Address::Resolve(const char *address, int port)
+{
+    memset(mAddress, 0, sizeof(sockaddr_in));
+    hostent *host = gethostbyname(address);
+    if (!host)
+    {
+        printf("Unknown host '%s'\n", address);
+        return false;
+    }
+    
+    printf("Resolving '%s' to '%s' (IP : %s) \n",
+           address,
+           host->h_name,
+           inet_ntoa(*(struct in_addr *)host->h_addr_list[0]));
+    
+  //mAddress->sin_family = host->h_addrtype;
+    mAddress->sin_family = AF_INET;
+    memcpy(&(mAddress->sin_addr.s_addr), host->h_addr_list[0], host->h_length);
+    mAddress->sin_port = htons(port);
+    return true;
+}
+
+void Address::SetPort(int port)
+{
+    mAddress->sin_port = htons(port);
+}
+
+int Address::GetPort() const
+{
+    return ntohs(mAddress->sin_port);
+}
+
+const char *Address::GetAsString() const
+{
+    static char address[1024];
+    // print received message 
+    snprintf(address, sizeof(address) - 1, "%s:%u",
+            inet_ntoa(mAddress->sin_addr),
+            ntohs(mAddress->sin_port));
+    return address;
+}
+
+Address::Address() : mAddress(0)
+{
+    mAddress = new sockaddr_in;
+    memset(mAddress, 0, sizeof(sockaddr_in));
+    mAddress->sin_family = AF_INET;
+}
+
+Address::Address(const sockaddr_in &s) : mAddress(0)
+{
+    mAddress = new sockaddr_in;
+    memcpy(mAddress, &s, sizeof(sockaddr_in));
+}
+
+void Address::Zero()
+{
+    memset(mAddress, 0, sizeof(sockaddr_in));
+}
+
+void Address::Copy(const Address &other)
+{
+    if (mAddress)
+        delete mAddress;
+    mAddress = new sockaddr_in;
+    memcpy(mAddress, other.mAddress, sizeof(sockaddr_in));    
+}
+
+Address::~Address()
+{
+    delete mAddress;
+    mAddress = 0;
+}
+
+Address &Address::operator=(const Address &other)
+{
+    if (&other != this)
+        Copy(other);
+    return *this;
+}
+
+bool Address::operator==(const Address &other) const
+{
+    return other.mAddress != 0 && mAddress != 0 && memcmp(other.mAddress, mAddress, sizeof(sockaddr_in)) == 0;
+}
+
+void Address::SetAddress(const sockaddr_in &s)
+{ 
+    memcpy(mAddress, &s, sizeof(sockaddr_in));
+}

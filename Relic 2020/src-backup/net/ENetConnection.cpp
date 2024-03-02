@@ -1,0 +1,451 @@
+#include "ENetConnection.h"
+#include "luautil/LuaInterpreter.h"
+#include "luautil/LuaCall.h"
+
+#include <stdio.h> // printf
+#include <string.h> // memset
+
+#include "enet/enet.h"
+#include "time/Timer.h"
+
+namespace Connection
+{
+
+ENetClientConnection::ENetClientConnection(ENetClientConnector *connector) 
+    :  mClientConnector(connector), mId(0), mENetAddress(0), mLocal(0), mPeer(0), mReceiveCallback(0), mReceiveUser(0), 
+       mDisconnectCallback(0), mDisconnectUser(0)
+{
+}
+
+ENetClientConnection::~ENetClientConnection()
+{
+    Close();
+}
+
+bool ENetClientConnection::Connect(const char *addressStr, int port)
+{      
+    ENetHost *local = 0;
+    local = enet_host_create(NULL, // $TODO specify a local address for server, if NULL, creates a client host
+                             1,    // only allow 1 outgoing connection
+                             1000000,    // unlimited downstream bandwidth,
+                             1000000     // unlimited upstream bandwidth
+                             );
+    
+    lua_State *lua = LuaInterpreter::GetInstance()->GetState();
+
+    if (!local)
+    {
+        fprintf(stderr,  "An error occurred while trying to create an enet client host.\n");
+//      LuaCall(lua, "MultiplayerConnectFailed", 0, 0);
+        return false;
+    }
+    
+    mLocal = local;
+
+    ENetAddress address;
+    ENetEvent   event;
+  
+    enet_address_set_host(&address, addressStr);
+    address.port = port;
+
+    // Initiate the connection, allocating four channels 0, 1, 2, 3. (0 = unreliable unsequenced, 1 = unreliable sequenced, 2 = reliable unsequenced, 3 = reliable sequenced)
+    ENetPeer *peer = enet_host_connect(mLocal, &address, 4);
+
+    if (!peer)
+    {
+       fprintf(stderr, "No available peers for initiating a connection.\n");
+//     LuaCall(lua, "MultiplayerConnectFailed", 0, 0);
+       return false;
+    }
+
+    mPeer = peer;
+    
+    // Wait up to 5 seconds for the connection attempt to succeed.
+    if (enet_host_service(mLocal, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT)
+    {
+        puts("Connection succeeded.");
+       // LuaCall(lua, "MultiplayerConnectSucceeded", 0, 0);
+    }
+    else
+    {
+        // Either the 5 seconds are up or a disconnect event was 
+        // received. Reset the peer in the event the 5 seconds 
+        // had run out without any significant event.
+        enet_peer_reset(mPeer);
+        puts("Connection failed.");
+      //LuaCall(lua, "MultiplayerConnectFailed", 0, 0);
+        return false;
+    }
+    return true;
+}
+
+void ENetServerConnector::Start()
+{	
+}
+
+ENetPeerConnection *ENetServerConnector::CreatePeerConnection(ENetPeer *peer)
+{
+    ENetPeerConnection *c = new ENetPeerConnection(this, peer);
+    c->SetId(ConnectionIdAssigner::GetNewId());
+    mConnections[peer] = c;
+    return c;
+}
+
+ENetPeerConnection *ENetServerConnector::GetPeerConnection(ENetPeer *peer)
+{
+    return mConnections[peer];
+}
+
+bool ENetClientConnection::Close()
+{
+    if (!mPeer)
+        return false;
+
+    ENetEvent event;
+    memset(&event, 0, sizeof(ENetEvent));
+    
+    enet_peer_disconnect(mPeer, 0);
+
+    // Allow up to 3 seconds for the disconnect to succeed and drop any packets received packets. 
+    while (enet_host_service(mLocal, &event, 3000) > 0)
+    {
+        switch (event.type)
+        {
+        case ENET_EVENT_TYPE_RECEIVE:
+            enet_packet_destroy(event.packet);
+            break;
+
+        case ENET_EVENT_TYPE_DISCONNECT:
+            puts("Disconnection succeeded.");
+            return true;
+        }
+    }
+    
+    // We've arrived here, so the disconnect attempt didn't 
+    // succeed yet.  Force the connection down.          
+    enet_peer_reset(mPeer);
+    enet_host_destroy(mLocal);
+    mLocal = 0;
+
+    mPeer = 0;
+
+    return true;
+}
+
+enum { TOTAL_TIME = 5 };
+
+static void ReportSentBandwidth(int bytes)
+{
+    static unsigned total = 0, lastTime = GetCurrentTimeMs();
+    total += bytes;
+    if (GetCurrentTimeMs() > lastTime + TOTAL_TIME * 1000)
+    {
+        lastTime = GetCurrentTimeMs();
+        printf("Data rate (bytes sent) last %d seconds = %.2fkbps\n", TOTAL_TIME, total * 8 / static_cast<float>(TOTAL_TIME * 1024));
+        total = 0;
+    }
+}
+
+static void ReportReceivedBandwidth(int bytes)
+{
+    static unsigned total = 0, lastTime = GetCurrentTimeMs();
+    total += bytes;
+    if (GetCurrentTimeMs() > lastTime + TOTAL_TIME * 1000)
+    {
+        lastTime = GetCurrentTimeMs();
+        printf("Data rate (bytes received) last %d seconds = %.2fkbps\n", TOTAL_TIME, total * 8 / static_cast<float>(TOTAL_TIME * 1024));
+        total = 0;
+    }
+}
+
+bool ENetClientConnection::Send(const char *data, int length, bool reliable, bool sequenced)
+{
+    // Create a reliable packet containing data
+    int options = (reliable ? ENET_PACKET_FLAG_RELIABLE : 0) | (sequenced ? 0 : ENET_PACKET_FLAG_UNSEQUENCED);
+    ENetPacket *packet = enet_packet_create(data, length, options);
+    
+    // Send the packet to the peer over channel id 0.
+    // One could also broadcast the packet by
+    // enet_host_broadcast(host, 0, packet);
+    // Using four channels 0, 1, 2, 3. (0 = unreliable unsequenced, 1 = unreliable sequenced, 2 = reliable unsequenced, 3 = reliable sequenced)
+    int channel = (reliable ? 2 : 0) + (sequenced ? 1 : 0);
+    enet_peer_send(mPeer, channel, packet);
+
+    // One could just use enet_host_service() instead. 
+    enet_host_flush(mLocal);
+    
+    ReportSentBandwidth(length);
+    return true;
+}
+
+void ENetClientConnector::ConnectInternal(ENetClientConnection *connection)
+{
+    if (mConnectCallback)
+        mConnectCallback(connection, mConnectCallbackUser);
+}
+
+void ENetClientConnection::Process()
+{
+    ENetEvent event;
+    memset(&event, 0, sizeof(ENetEvent));    
+    if (!mLocal)
+        return;
+    
+    // Wait up to 1 millisecond for an event.
+    while (enet_host_service(mLocal, &event, 0) > 0)
+    {
+        switch (event.type)
+        {
+        case ENET_EVENT_TYPE_CONNECT:
+            printf("A new client connected from %x:%u.\n", 
+                   event.peer->address.host,
+                   event.peer->address.port);
+            // $TODO Store any relevant client information here. 
+            event.peer->data = 0;
+            mClientConnector->ConnectInternal(this);
+            break;
+
+        case ENET_EVENT_TYPE_RECEIVE:
+            ReportReceivedBandwidth((int)event.packet->dataLength);                   
+            if (mReceiveCallback)
+                mReceiveCallback(mId, event.packet->data, (int)event.packet->dataLength, mReceiveUser);
+            // Clean up the packet now that we're done using it.
+            enet_packet_destroy(event.packet);
+            break;
+           
+        case ENET_EVENT_TYPE_DISCONNECT:
+            //printf("%s disconnected.\n", event.peer->data);
+            // Reset the peer's client information.
+            event.peer->data = NULL;
+            if (mDisconnectCallback)
+                mDisconnectCallback(mId, 0, mDisconnectUser);
+            break;
+        }
+    }
+}
+
+
+ENetPeerConnection::ENetPeerConnection(ENetServerConnector *serverConnector, ENetPeer *peer) 
+    :  mId(0), mServerConnector(serverConnector), mPeer(peer), mReceiveCallback(0), mReceiveUser(0), 
+       mDisconnectCallback(0), mDisconnectUser(0)
+{
+}
+
+ENetPeerConnection::~ENetPeerConnection()
+{
+    Close();
+}
+
+void ENetPeerConnection::ReceiveInternal(const void *data, int length)
+{
+    if (mReceiveCallback)
+        mReceiveCallback(mId, data, length, mReceiveUser);
+}
+
+void ENetPeerConnection::DisconnectInternal()
+{
+    if (mDisconnectCallback)
+        mDisconnectCallback(mId, 0, mDisconnectUser);
+}
+
+bool ENetPeerConnection::Close()
+{
+    if (!mPeer)
+        return false;
+
+    ENetEvent event;
+    memset(&event, 0, sizeof(ENetEvent));
+    
+    enet_peer_disconnect(mPeer, 0);
+
+    // Allow up to 3 seconds for the disconnect to succeed and drop any packets received packets. 
+    while (enet_host_service(mServerConnector->GetHost(), &event, 3000) > 0)
+    {
+        switch (event.type)
+        {
+        case ENET_EVENT_TYPE_RECEIVE:
+            enet_packet_destroy(event.packet);
+            break;
+
+        case ENET_EVENT_TYPE_DISCONNECT:
+            puts("Disconnection succeeded.");
+            return true;
+        }
+    }
+    
+    // We've arrived here, so the disconnect attempt didn't */
+    // succeed yet.  Force the connection down.             */
+    enet_peer_reset(mPeer);
+
+    mPeer = 0;
+
+    return true;
+}
+
+bool ENetPeerConnection::Send(const char *data, int length, bool reliable, bool sequenced)
+{
+    // Create a reliable packet containing data
+    int options = (reliable ? ENET_PACKET_FLAG_RELIABLE : 0) | (sequenced ? 0 : ENET_PACKET_FLAG_UNSEQUENCED);
+    ENetPacket *packet = enet_packet_create(data, length, options);
+    
+    // Send the packet to the peer over channel id 0.
+    // One could also broadcast the packet by
+    // enet_host_broadcast (host, 0, packet);
+    // Using four channels 0, 1, 2, 3. (0 = unreliable unsequenced, 1 = unreliable sequenced, 2 = reliable unsequenced, 3 = reliable sequenced)
+    int channel = (reliable ? 2 : 0) + (sequenced ? 1 : 0);
+    enet_peer_send(mPeer, channel, packet);
+
+    // One could just use enet_host_service() instead. 
+    enet_host_flush(mServerConnector->GetHost());
+    
+    ReportSentBandwidth(length);
+    return true;
+}
+
+void ENetPeerConnection::Process()
+{
+    // $NOTE do we need anything here?
+}
+
+ENetServerConnector::~ENetServerConnector()
+{
+    if (mLocal)
+        enet_host_destroy(mLocal);
+}
+
+bool ENetServerConnector::Open(int port)
+{
+    ENetHost *local = 0;
+    ENetAddress address;
+    address.host = ENET_HOST_ANY;
+    address.port = port;
+    local = enet_host_create(&address, // $TODO specify a local address for server, if NULL, creates a client host
+                             4,    // only allow 4 outgoing connection
+                             1000000,    // unlimited downstream bandwidth,
+                             1000000     // unlimited upstream bandwidth
+                             );
+
+    if (!local)
+    {
+        fprintf(stderr, "An error occurred while trying to create an enet server host.\n");
+        return false;
+    }
+    fprintf(stderr, "*** enet server created successfully ***\n");
+
+    mLocal = local;
+    return true;
+}
+
+void ENetServerConnector::Process()
+{
+    ENetEvent event;
+    memset(&event, 0, sizeof(ENetEvent));    
+    ENetPeerConnection *connection = 0;
+
+    if (!mLocal)
+        return;
+    
+    // Wait up to 1 millisecond for an event.
+    while (enet_host_service(mLocal, &event, 0) > 0)
+    {
+        switch (event.type)
+        {
+        case ENET_EVENT_TYPE_CONNECT:
+            printf("A new client connected from %x:%u.\n", 
+                   event.peer->address.host,
+                   event.peer->address.port);
+            // $TODO Store any relevant client information here. 
+            event.peer->data = 0;
+            // create the peer here
+            // and pass it into the callback
+            connection = CreatePeerConnection(event.peer);
+            if (mConnectCallback)
+                mConnectCallback(connection, mConnectCallbackUser);
+            break;
+
+        case ENET_EVENT_TYPE_RECEIVE:
+            ReportReceivedBandwidth((int)event.packet->dataLength);
+            connection = GetPeerConnection(event.peer);
+            if (connection)
+                connection->ReceiveInternal(event.packet->data, (int)event.packet->dataLength);
+            // Clean up the packet now that we're done using it.
+            enet_packet_destroy(event.packet);
+            break;
+           
+        case ENET_EVENT_TYPE_DISCONNECT:
+           // printf("%s disconnected.\n", event.peer->data);
+            // Reset the peer's client information.
+            event.peer->data = NULL;
+            connection = GetPeerConnection(event.peer);
+            if (connection)
+                connection->DisconnectInternal();
+            break;
+        }
+    }
+}
+
+void ENetServerConnector::SetOnConnect(OnConnectCallback callback, void *user)
+{
+    mConnectCallback = callback;
+    mConnectCallbackUser = user;
+}
+
+void ENetClientConnector::SetOnConnect(OnConnectCallback callback, void *user)
+{
+    mConnectCallback = callback;
+    mConnectCallbackUser = user;
+}
+
+void ENetClientConnector::SetOnAbortConnect(OnAbortConnectCallback callback, void *user)
+{
+    mAbortConnectCallback = callback;
+    mAbortConnectCallbackUser = user;
+}
+
+void ENetClientConnector::Process()
+{
+    // I don't think we have too much to do here.
+    // probably need to capture the disconnect tho
+}
+
+void ENetClientConnector::SetAddress(const char *address, int port)
+{ 
+    mAddress = address; mPort = port;
+}
+
+bool ENetClientConnector::Connect()
+{
+    ENetClientConnection *connection = new ENetClientConnection(this);
+    connection->SetId(ConnectionIdAssigner::GetNewId());
+    if (!connection->Connect(mAddress.c_str(), mPort))
+        return false;
+    if (mConnectCallback)
+        mConnectCallback(connection, mConnectCallbackUser);
+    return true;
+}
+
+void ENetClientConnection::SetOnReceive(OnReceiveCallback callback, void *user)
+{ 
+    mReceiveCallback = callback;
+    mReceiveUser = user;
+}
+
+void ENetClientConnection::SetOnDisconnect(OnDisconnectCallback callback, void *user)
+{ 
+    mDisconnectCallback = callback;
+    mDisconnectUser = user;
+}
+
+void ENetPeerConnection::SetOnReceive(OnReceiveCallback callback, void *user)
+{ 
+    mReceiveCallback = callback;
+    mReceiveUser = user;
+}
+
+void ENetPeerConnection::SetOnDisconnect(OnDisconnectCallback callback, void *user)
+{ 
+    mDisconnectCallback = callback;
+    mDisconnectUser = user;
+}
+
+}

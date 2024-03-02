@@ -1,0 +1,1674 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+extern "C"
+{
+#include <lua.h>
+#include <lualib.h>
+#include <lauxlib.h>
+
+LUALIB_API void luaL_checktypeornil(lua_State *L, int narg, int t)
+{
+    if (lua_type(L, narg) != LUA_TNIL)
+        luaL_checktype(L, narg, t);
+}
+
+LUALIB_API void *luaL_checkudataornil(lua_State *L, int ud, const char *tname)
+{
+    if (lua_type(L, ud) == LUA_TNIL)
+        return 0;
+    return luaL_checkudata(L, ud, tname);
+}
+
+}
+
+#include "Character.h"
+#include "CircleEffect.h"
+#include "CylinderEffect.h"
+#include "GameState.h"
+#include "Sync.h"
+#include "level/LevelManager.h"
+#include "LuaCharacter.h"
+#include "luautil/LuaThread.h"
+#include "luautil/LuaUtils.h"
+#include "luautil/LuaCall.h"
+#include "luautil/LuaValue.h"
+#include "Selector.h"
+#include "Meter.h"
+#include "behaviors/Behaviors.h"
+#include "behaviors/KillableBehavior.h"
+#include "behaviors/DriftApproach.h"
+#include "behaviors/DieDriftBehavior.h"
+#include "behaviors/AnimationBehavior.h"
+#include "behaviors/AggressiveApproach.h"
+#include "behaviors/HitAndRunApproach.h"
+#include "behaviors/AloofApproach.h"
+#include "behaviors/MeleeAttack.h"
+#include "behaviors/DieCollapseBehavior.h"
+#include "behaviors/RolePlayer.h"
+#include "behaviors/GeneratedRolePlayer.h"
+#include "render/DrawableUtils.h"
+#include "render/Drawable.h"
+#include "game/Game.h"
+#include "render/ParticleEffects.h"
+#include "game/ParticleSystemEffect.h"
+
+#include "LuaCharacterMacros.h"
+
+extern Game *GetGlobalGame();
+
+extern "C" void Autosave()
+{
+    Game *game = GetGlobalGame();
+	if (game != 0)
+		game->Autosave();
+}
+
+static Character *CreateCharacter(int id, const Vector3 &position, const char *type, const char *luaFunctionName)
+{
+    GameState *state = GameState::GetInstance();
+    Character *ch = new Character(position, state->GetRenderables(), type, luaFunctionName);
+    if (id == -1) id = GetGlobalGame()->GetLevel()->GetFreeCharacterId();
+    ch->SetId(id);
+    GetGlobalGame()->GetLevel()->AddCharacter(ch);
+    return ch;
+}
+
+void DestroyCharacter(Character *ch)
+{
+    int id = -1;
+    if (ch && Character::IsCharacterValid(ch))
+    {
+        id = ch->GetId();
+        GetGlobalGame()->GetLevels()->RemoveCharacter(ch);
+        delete ch;
+        LuaValue args[] = { LuaValue::Int(id) };
+        LuaCall(GetGlobalGame()->GetGameThread()->GetLuaState(), "OnDestroyCharacterComplete", args, 1);
+    }
+}
+
+// here we're going to use a pointer and allocate the actual object in C++
+static int NewCharacter(lua_State *lua)
+{
+    enum { OFFSET_ID = -6, OFFSET_LUA_FUNCTION = -5, OFFSET_TYPE = -4, OFFSET_V3 = -1 };
+
+    int id = GetInt(lua, OFFSET_ID);
+    const char *luaFunction = GetString(lua, OFFSET_LUA_FUNCTION);
+    const char *type = GetString(lua, OFFSET_TYPE);
+    Vector3 position(GetVector3(lua, OFFSET_V3));
+    Character **data = (Character **)lua_newuserdata(lua, sizeof(Character *));    
+    luaL_getmetatable(lua, "D.Character");
+    lua_setmetatable(lua, -2);
+    
+    lua_State *global = LuaInterpreter::GetInstance()->GetState();
+
+    *data = CreateCharacter(id, position, type, luaFunction);
+    (*data)->SetLuaTable(LuaTable::New(global));
+
+    lua_pushvalue(lua, -1);
+    lua_xmove(lua, global, 1);
+    int ref = luaL_ref(global, LUA_REGISTRYINDEX);
+    (*data)->SetLuaReference(ref);
+    (*data)->GetLuaThread()->SetUserData(ref);
+
+    return 1; // new userdatum is already on the stack
+}
+
+Character *GetCharacter(lua_State *lua, int index = 1)
+{
+    void *ud = luaL_checkudataornil(lua, index, "D.Character");
+    if (!ud || !Character::IsCharacterValid(*(Character **)ud))
+        return 0;
+    luaL_argcheck(lua, ud != NULL, index, "'Character' expected");
+    return *(Character **)ud;
+}
+
+inline void InvalidCharacterCall(const char *function)
+{
+    printf("Attempting to call '%s' on an invalid Character.\n", function);
+}
+
+static int GetFieldVectorAt(lua_State *lua)
+{
+	Vector3 v(GetVector3(lua, -1));
+    v = GetGlobalGame()->GetLevel()->GetFieldVector(v);
+    ReturnVector3(lua, v);
+    return 3;
+}
+
+/*
+static int DestroyCharacter(lua_State *lua)
+{
+    DestroyCharacter(GetCharacter(lua));
+    return 0;
+}
+*/
+
+// $TODO NEED TO FIX THIS ONE
+static int DestroyCharacterById(lua_State *lua)
+{
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    DestroyCharacter(GetGlobalGame()->GetLevel()->GetCharacter(static_cast<int>(lua_tointeger(lua, -1))));
+    return 0;
+}
+
+static int GetCharacterLuaTable(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_NIL(instance, "data()");
+    lua_State *global = LuaInterpreter::GetInstance()->GetState();
+    instance->GetLuaTable().Push();
+    lua_xmove(global, lua, 1);
+    return 1;
+}
+
+static int AddDiscEffect(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    luaL_checktype(lua, -7, LUA_TSTRING); // filename
+    luaL_checktype(lua, -6, LUA_TNUMBER); // rotate
+    luaL_checktype(lua, -5, LUA_TNUMBER); // inner radius
+    luaL_checktype(lua, -4, LUA_TNUMBER); // inner radius delta
+    luaL_checktype(lua, -3, LUA_TNUMBER); // outer radius
+    luaL_checktype(lua, -2, LUA_TNUMBER); // outer radius delta
+    luaL_checktype(lua, -1, LUA_TNUMBER); // at z
+    CHECK_CHARACTER_RETURN_VOID(instance, "AddDiscEffect()")
+    instance->AddEffect(new CircleEffect(lua_tostring(lua, -7),        /* filename */
+                                         float(lua_tonumber(lua, -6)), /* rotate */
+                                         float(lua_tonumber(lua, -5)), /* inner radius */
+                                         float(lua_tonumber(lua, -4)), /* inner radius delta */
+                                         float(lua_tonumber(lua, -3)), /* outer radius */
+                                         float(lua_tonumber(lua, -2)), /* outer radius delta */
+                                         float(lua_tonumber(lua, -1))  /* at z */  
+                                         ));
+    return 0;
+}
+
+static int AddParticleEffect(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_VOID(instance, "AddParticleEffect()")
+    luaL_checktype(lua, -2, LUA_TLIGHTUSERDATA);
+    luaL_checktype(lua, -1, LUA_TNUMBER); // z
+    ParticleSystem *ps = (ParticleSystem *)lua_touserdata(lua, -2);
+    instance->AddEffect(new ParticleSystemEffect(ps, float(lua_tonumber(lua, -1))));
+    return 0;
+}
+
+static int AddCylinderEffect(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    luaL_checktype(lua, -6, LUA_TSTRING); // filename
+    luaL_checktype(lua, -5, LUA_TNUMBER); // rotate
+    luaL_checktype(lua, -4, LUA_TNUMBER); // inner radius
+    luaL_checktype(lua, -3, LUA_TNUMBER); // inner radius delta
+    luaL_checktype(lua, -2, LUA_TNUMBER); // outer radius
+    luaL_checktype(lua, -1, LUA_TNUMBER); // outer radius delta
+    CHECK_CHARACTER_RETURN_VOID(instance, "AddCylinderEffect()")
+    instance->AddEffect(new CylinderEffect(lua_tostring(lua, -6),      // filename 
+                                         float(lua_tonumber(lua, -5)), // rotate 
+                                         float(lua_tonumber(lua, -4)), // radius 
+                                         float(lua_tonumber(lua, -3)), // radius delta 
+                                         float(lua_tonumber(lua, -2)), // height 
+                                         float(lua_tonumber(lua, -1))  // height uv 
+                                         ));
+    return 0;
+}
+
+static int CompleteEffects(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_VOID(instance, "CompleteEffects()")
+    instance->CompleteEffects();
+    return 0;
+}
+
+static int SetSelector(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_VOID(instance, "SetSelector()");
+
+    luaL_checktype(lua, -5, LUA_TSTRING);
+    luaL_checktype(lua, -4, LUA_TNUMBER);
+    luaL_checktype(lua, -3, LUA_TNUMBER);
+    luaL_checktype(lua, -2, LUA_TNUMBER);
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+
+    int   segments    = (int)  lua_tointeger(lua, -4);
+    float innerRadius = (float)lua_tonumber (lua, -3),
+          outerRadius = (float)lua_tonumber (lua, -2),
+          speed       = (float)lua_tonumber (lua, -1);
+    Drawable *ring = CreateRing("selector", lua_tostring(lua, -5), segments, innerRadius, outerRadius, 0.f);
+    Selector *s = new Selector(ring, speed);
+    instance->SetSelector(s);
+    ring->Release();
+    return 0;
+}
+
+static int SetAlpha(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_VOID(instance, "SetAlpha()");
+
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    float alpha = (float)lua_tonumber (lua, -1);
+    instance->SetAlpha(alpha);
+    return 0;
+}
+
+static int SetUpdateFrequency(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_VOID(instance, "SetUpdateFrequency()");
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    instance->SetAlpha((int)lua_tointeger(lua, -1));
+    return 0;
+}
+
+static int RemoveSelector(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_VOID(instance, "RemoveSelector()");
+    Selector *s = instance->GetSelector();
+    if (s)
+    {
+        delete s;
+        instance->SetSelector(0);
+    }
+    return 0;
+}
+
+static int IsCharacterValid(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushboolean(lua, instance != 0);
+    return 1; // new userdatum is already on the stack
+}
+
+static int IsPersistent(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_BOOL(instance, "IsPersistent()", false);
+    lua_pushboolean(lua, instance->IsPersistent());
+    return 1;
+}
+
+static int SetPersistent(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_VOID(instance, "SetPersistent()");
+    luaL_checktype(lua, -1, LUA_TBOOLEAN);
+    instance->SetPersistent(lua_toboolean(lua, -1) != 0);
+    return 1;
+}
+
+static int GetTypeId(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_NUMBER(instance, "GetTypeId()", false);
+    lua_pushnumber(lua, instance->GetTypeId());
+    return 1;
+}
+
+static int SetTypeId(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_VOID(instance, "SetTypeId()");
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    instance->SetTypeId(lua_tointeger(lua, -1));
+    return 1;
+}
+
+static int GetSeed(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_NUMBER(instance, "GetSeed()", false);
+    lua_pushnumber(lua, instance->GetSeed());
+    return 1;
+}
+
+static int SetSeed(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_VOID(instance, "SetSeed()");
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    instance->SetSeed(lua_tointeger(lua, -1));
+    return 1;
+}
+
+static int IsStatic(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_BOOL(instance, "IsStatic()", false);
+    lua_pushboolean(lua, instance->IsStatic());
+    return 1;
+}
+
+static int SetStatic(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_VOID(instance, "SetStatic()");
+    luaL_checktype(lua, -1, LUA_TBOOLEAN);
+    instance->SetStatic(lua_toboolean(lua, -1) != 0);
+    return 1;
+}
+
+static int Signal(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_VOID(instance, "Signal()");
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    instance->Signal(lua_tonumber(lua, -1));
+    return 1;
+}
+
+static int ResetBehaviors(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    instance->ResetBehaviors();
+    return 0;
+}
+
+static int SetMeter(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_VOID(instance, "SetMeter()");
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    float width = (float)lua_tonumber(lua, -1);
+    Meter *meter = new Meter(width);
+    instance->SetMeter(meter);
+    meter->SetVisible(true);
+    return 0;
+}
+
+static int HasMeter(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_BOOL(instance, "HasMeter()", false);
+    lua_pushboolean(lua, instance->GetMeter() != 0);
+    return 1;
+}
+
+static int SetMeterVisible(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_VOID(instance, "SetMeterVisible()");
+    luaL_checktype(lua, -1, LUA_TBOOLEAN);
+    bool visible = lua_toboolean(lua, -1) != 0;
+    if (!instance->GetMeter())
+    {
+        printf("SetMeterVisible: no meter attached!\n");
+        return 0;
+    }
+    instance->GetMeter()->SetVisible(visible);
+    return 0;
+}
+
+static int AddSignalHandler(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_VOID(instance, "AddSignalHandler()");
+    luaL_checktype(lua, -2, LUA_TNUMBER);
+    luaL_checktype(lua, -1, LUA_TSTRING);
+    instance->AddLuaSignalHandler((int)lua_tointeger(lua, -2), lua_tostring(lua, -1));
+    return 0;
+}
+
+static int SetMeterValue(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_VOID(instance, "SetMeterValue()");
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    float value = (float)lua_tonumber(lua, -1);
+    if (!instance->GetMeter())
+    {
+        printf("SetMeterValue: no meter attached!\n");
+        return 0;
+    }
+    instance->GetMeter()->SetValue(value);
+    return 0;
+}
+
+static int SetHitPoints(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_VOID(instance, "SetHitPoints()");
+    Character *from = GetCharacter(lua, -1);
+    luaL_checktype(lua, -2, LUA_TNUMBER);
+    SetHitPoints(instance, from, (float)lua_tonumber(lua, -2));
+    return 1;
+}
+
+static int SetLevel(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_VOID(instance, "SetLevel()");
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    SetLevel(instance, (int)lua_tonumber(lua, -1));
+    return 1;
+}
+
+static int SetExperience(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_VOID(instance, "SetExperience()");
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    SetExperience(instance, (unsigned)lua_tonumber(lua, -1));
+    return 1;
+}
+
+BEHAVIOR_METHOD_VOID_NUMBER (SetKnockSpin, float)
+BEHAVIOR_METHOD_NUMBER_VOID (GetKnockSpin)
+BEHAVIOR_METHOD_VOID_NUMBER (SetKnockBack, float)
+BEHAVIOR_METHOD_NUMBER_VOID (GetKnockBack)
+
+static int GetHitPoints(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushnumber(lua, GetHitPoints(instance));
+    return 1;
+}
+
+static int GetExperience(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushnumber(lua, GetExperience(instance));
+    return 1;
+}
+
+static int GetLevel(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushnumber(lua, GetLevel(instance));
+    return 1;
+}
+
+static int GetLevelFromExperience(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushnumber(lua, GetLevelFromPlayerExperience(GetExperience(instance)));
+    return 1;
+}
+
+static int GetNextLevelExperience(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushnumber(lua, GetPlayerExperienceFromLevel(GetLevelFromPlayerExperience(GetExperience(instance)) + 1));
+    return 1;
+}
+
+static int IsDestroyed(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushboolean(lua, IsDestroyed(instance) ? 1 : 0);
+    return 1;
+}
+
+static int IsInvulnerable(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushboolean(lua, IsInvulnerable(instance) ? 1 : 0);
+    return 1;
+}
+
+static int SetInvulnerable(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    luaL_checktype(lua, -1, LUA_TBOOLEAN);
+    SetInvulnerable(instance, lua_toboolean(lua, -1) != 0 ? true : false);
+    return 0;
+}
+
+static int IsKillable(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushboolean(lua, IsKillable(instance) ? 1 : 0);
+    return 1;
+}
+
+static int SetMaxHitPoints(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    SetMaxHitPoints(instance, (float)lua_tonumber(lua, -1));
+    return 1;
+}
+
+static int GetMaxHitPoints(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushnumber(lua, GetMaxHitPoints(instance));
+    return 1;
+}
+
+static int IsAnimation(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushboolean(lua, IsAnimation(instance) ? 1 : 0);
+    return 1;
+}
+
+static int IsInAttack(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushboolean(lua, IsInAttack(instance) ? 1 : 0);
+    return 1;
+}
+
+static int SetForce(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    SetForce(instance, GetVector3(lua, -1));
+    return 0;
+}
+
+static int SetAttackTypeCount(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    SetAttackTypeCount(instance, (int)lua_tointeger(lua, -1));
+    return 0;
+}
+
+static int SetAction(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    SetAction(instance, GetString(lua, -1));
+    return 0;
+}
+
+static int SetCanMove(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    luaL_checktype(lua, -1, LUA_TBOOLEAN);
+    SetCanMove(instance, lua_toboolean(lua, -1) != 0 ? true : false);
+    return 0;
+}
+
+static int CanMove(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushboolean(lua, CanMove(instance) ? 1 : 0);
+    return 1;
+}
+
+static int SetWalkAndAttack(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    luaL_checktype(lua, -1, LUA_TBOOLEAN);
+    SetWalkAndAttack(instance, lua_toboolean(lua, -1) != 0 ? true : false);
+    return 0;
+}
+
+static int GetWalkAndAttack(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushboolean(lua, GetWalkAndAttack(instance) ? 1 : 0);
+    return 1;
+}
+
+// Approach
+static int IsApproach(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushboolean(lua, IsApproach(instance) ? 1 : 0);
+    return 1;
+}
+
+static int IsApproachActive(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushboolean(lua, IsApproachActive(instance) ? 1 : 0);
+    return 1;
+}
+
+static int SetApproachSpeed(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    SetApproachSpeed(instance, (float)lua_tonumber(lua, -1));
+    return 1;
+}
+
+static int GetApproachSpeed(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushnumber(lua, GetApproachSpeed(instance));
+    return 1;
+}
+
+static int GetApproachMinDistance(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushnumber(lua, GetApproachMinDistance(instance));
+    return 1;
+}
+
+static int GetApproachTooFar(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushnumber(lua, GetApproachTooFar(instance));
+    return 1;
+}
+
+static int GetApproachCollide(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushboolean(lua, GetApproachCollide(instance));
+    return 1;
+}
+
+static int SetFilterPosition(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_VOID(instance, "SetFilterPosition");
+    luaL_checktype(lua, -1, LUA_TBOOLEAN);
+    instance->SetFilterPosition(lua_toboolean(lua, -1) != 0);
+    return 0;
+}
+
+static int SetApproachMinDistance(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    SetApproachMinDistance(instance, (float)lua_tonumber(lua, -1));
+    return 1;
+}
+
+static int SetApproachTooFar(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    SetApproachTooFar(instance, (float)lua_tonumber(lua, -1));
+    return 1;
+}
+
+static int SetApproachCollide(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    luaL_checktype(lua, -1, LUA_TBOOLEAN);
+    SetApproachCollide(instance, lua_toboolean(lua, -1) ? true : false);
+    return 1;
+}
+
+static int SetApproachTarget(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    Character *target = GetCharacter(lua, -1);
+    SetApproachTarget(instance, target);
+    return 1;
+}
+
+// Attack
+static int IsAttack(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushboolean(lua, IsAttack(instance) ? 1 : 0);
+    return 1;
+}
+
+static int IsAttackActive(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushboolean(lua, IsAttackActive(instance) ? 1 : 0);
+    return 1;
+}
+
+static int SetAttackSpeed(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    SetAttackSpeed(instance, (float)lua_tonumber(lua, -1));
+    return 1;
+}
+
+static int SetAttackMultiplier(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    SetAttackMultiplier(instance, (float)lua_tonumber(lua, -1));
+    return 1;
+}
+
+static int GetAttackMultiplier(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushnumber(lua, GetAttackMultiplier(instance));
+    return 1;
+}
+
+static int SetMaxAttackDistance(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    SetMaxAttackDistance(instance, (float)lua_tonumber(lua, -1));
+    return 1;
+}
+
+static int SetAttackTarget(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    Character *from = GetCharacter(lua, -1);
+    SetAttackTarget(instance, from);
+    return 1;
+}
+
+BEHAVIOR_METHOD_VOID_BOOLEAN(SetAutoAttack)
+BEHAVIOR_METHOD_VOID_VOID   (TriggerAttack)
+
+// DieBehaviors
+static int IsDieBehavior(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushboolean(lua, IsDieBehavior(instance) ? 1 : 0);
+    return 1;
+}
+
+static int IsDeathComplete(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushboolean(lua, IsDeathComplete(instance) ? 1 : 0);
+    return 1;
+}
+
+// RolePlayer
+BEHAVIOR_METHOD_VOID_NUMBER          (SetStrength,  unsigned)
+BEHAVIOR_METHOD_VOID_NUMBER          (SetDexterity, unsigned)
+BEHAVIOR_METHOD_VOID_NUMBER          (SetVitality,  unsigned)
+BEHAVIOR_METHOD_VOID_NUMBER          (SetEnergy,    unsigned)
+BEHAVIOR_METHOD_VOID_NUMBER          (SetLuck,      unsigned)
+BEHAVIOR_METHOD_VOID_NUMBER          (SetOverallAttackMultiplier, float)
+BEHAVIOR_METHOD_VOID_VOID            (SetRolePlayerDefaultAttributes)
+BEHAVIOR_METHOD_NUMBER_VOID          (GetStrength)
+BEHAVIOR_METHOD_NUMBER_VOID          (GetDexterity)
+BEHAVIOR_METHOD_NUMBER_VOID          (GetVitality)
+BEHAVIOR_METHOD_NUMBER_VOID          (GetEnergy)
+BEHAVIOR_METHOD_NUMBER_VOID          (GetLuck)
+BEHAVIOR_METHOD_NUMBER_VOID          (GetClassBonus)
+BEHAVIOR_METHOD_NUMBER_VOID          (GetRatingBonus)
+BEHAVIOR_METHOD_NUMBER_VOID          (GetAttackRating)
+BEHAVIOR_METHOD_NUMBER_VOID          (GetDefenseRating)
+BEHAVIOR_METHOD_NUMBER_VOID          (GetOverallAttackMultiplier)
+BEHAVIOR_METHOD_NUMBER_NUMBER_NUMBER (GetRolePlayerRandom, float, float)
+BEHAVIOR_METHOD_NUMBER_CHARACTER     (GetChanceToHit)
+
+static int SetMeterDistance(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    float distance = (float)lua_tonumber(lua, -1);
+    if (!instance->GetMeter())
+    {
+        printf("SetMeterDistance: no meter attached!\n");
+        return 0;
+    }
+    instance->GetMeter()->SetDistance(distance);
+    return 0;
+}
+
+static int SetMeterWidth(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    float width = (float)lua_tonumber(lua, -1);
+    if (!instance->GetMeter())
+    {
+        printf("SetMeterWidth: no meter attached!\n");
+        return 0;
+    }
+    instance->GetMeter()->SetWidth(width);
+    return 0;
+}
+
+static int RemoveMeter(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    Meter *meter = instance->GetMeter();
+    if (meter)
+    {
+        delete meter;
+        instance->SetMeter(0);
+    }
+    return 0;
+}
+
+// Animation will be lightuserdata
+static int GetAnimation(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushlightuserdata(lua, instance->GetAnimation());
+    return 1;
+}
+
+int CharacterToString(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushfstring(lua, "Character(%p)", instance);
+    return 1;
+}
+
+static void LuaPushCharacter(lua_State *lua, Character *character)
+{
+    if (!character)
+        lua_pushnil(lua);
+    else
+    {
+        int ref = character->GetLuaReference();
+        lua_State *global = LuaInterpreter::GetInstance()->GetState();
+        lua_rawgeti(global, LUA_REGISTRYINDEX, ref);
+        lua_xmove(global, lua, 1);
+    }
+}
+
+// functions:
+
+static int GetPlayer(lua_State *lua)
+{
+    Character *instance = GetGlobalGame()->GetPlayer();
+    LuaPushCharacter(lua, instance);
+    return 1;
+}
+
+static int GetClosest(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    Character *closest = static_cast<Character *>(instance->GetDynamicMap()->GetClosest(instance, GetFloat(lua, -1)));
+    LuaPushCharacter(lua, closest);
+    return 1;
+}
+
+static int ReceiveHit(lua_State *lua)
+{
+    Character *instance  = GetCharacter(lua);
+    float      distance  = GetFloat(lua, -1),
+               hp        = GetFloat(lua, -2);
+    Character *from      = GetCharacter(lua, -3);
+    ReceiveHit(instance, from, hp, distance);
+    return 0;
+}
+
+static int ReceiveHitInMotion(lua_State *lua)
+{
+    Character *instance  = GetCharacter(lua);
+    float      distance  = GetFloat(lua, -1),
+               hp        = GetFloat(lua, -2);
+    Character *from      = GetCharacter(lua, -3);
+    ReceiveHitInMotion(instance, from, hp, distance);
+    return 0;
+}
+
+static int GetClosestAttackable(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    Character *closest = instance->GetClosestAttackable(GetFloat(lua, -1));
+    LuaPushCharacter(lua, closest);
+    return 1;
+}
+
+static int GetClosestFacing(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_NIL(instance, "GetClosestFacing()");
+    Character *closest = instance->GetClosestFacing(GetFloat(lua, -1));
+    LuaPushCharacter(lua, closest);
+    return 1;
+}
+
+static int GetClosestFacingAndAttackable(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_NIL(instance, "GetClosestFacingAndAttackable()");
+    Character *closest = instance->GetClosestFacingAndAttackable(GetFloat(lua, -1));
+    LuaPushCharacter(lua, closest);
+    return 1;
+}
+
+static int GetPosition(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_VECTOR3(instance, "GetPosition()", Vector3(0.f, 0.f, 0.f));
+    ReturnVector3(lua, instance->GetPosition());
+    return 3;
+}
+
+static int GetId(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_NUMBER(instance, "GetId()", 0);
+    lua_pushinteger(lua, instance->GetId());
+    return 1;
+}
+
+static int SetId(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    GetGlobalGame()->GetLevel()->GetCharacterSync()->SetCharacterId(instance, GetInt(lua, -1));
+    return 0;
+}
+
+static int SetPosition(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    instance->SetPosition(GetVector3(lua, -1));
+    return 0;
+}
+
+static int HasChanged(lua_State *lua)
+{
+    lua_pushboolean(lua, GetCharacter(lua)->HasChanged());
+    return 1;
+}
+
+static int MarkChanged(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    instance->MarkChanged();
+    return 0;
+}
+
+static int SetPositionRaw(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    instance->SetPositionRaw(GetVector3(lua, -1));
+    return 0;
+}
+
+static int SetTranslate(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    instance->SetTranslate(GetVector3(lua, -1));
+    return 0;
+}
+
+static int SetScale(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    instance->SetScale(GetFloat(lua, -1));
+    return 0;
+}
+
+static int SetRadius(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    instance->SetRadius(GetFloat(lua, -1));
+    return 0;
+}
+
+static int GetVelocity(lua_State *lua)
+{
+    ReturnVector3(lua, GetCharacter(lua)->GetVelocity());
+    return 3;
+}
+
+static int GetSpeed(lua_State *lua)
+{
+    lua_pushnumber(lua, GetCharacter(lua)->GetVelocity().length());
+    return 1;
+}
+/*
+static int CollidesAt(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    Vector3 v(GetVector3(lua, -1));
+    lua_pushboolean(lua, instance->CollidesAt(v) ? 1 : 0);
+    return 1;
+}
+*/
+
+static int CollidesAtRadius(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    Vector3 v(GetVector3(lua, -2));
+    float r = GetFloat(lua, -1);
+    lua_pushinteger(lua, instance->CollidesAt(v, r));
+    return 1;
+}
+
+static int StaticCollides(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    Vector3 v(GetVector3(lua, -2)), resolve;
+    float r = GetFloat(lua, -1);
+    lua_pushboolean(lua, instance->StaticCollides(v, r, resolve));
+    lua_pushnumber(lua, resolve.x);
+    lua_pushnumber(lua, resolve.y);
+    lua_pushnumber(lua, resolve.z);
+    return 4;
+}
+
+static int IsFacing(lua_State *lua)
+{
+    lua_pushboolean(lua, GetCharacter(lua)->IsFacing(GetVector3(lua, -2), GetFloat(lua, -1)));
+    return 1;
+}
+
+// getter float
+static int GetOrientation(lua_State *lua)
+{
+    lua_pushnumber(lua, GetCharacter(lua)->GetOrientationAngle());
+    return 1;
+}
+
+// setter float
+static int SetOrientation(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    instance->SetOrientationAngle(GetFloat(lua, -1));
+    return 0;
+}
+
+// setter float
+static int ForceOrientation(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    instance->ForceOrientationAngle(GetFloat(lua, -1));
+    return 0;
+}
+
+// getter float
+static int GetWeight(lua_State *lua)
+{
+    lua_pushnumber(lua, GetCharacter(lua)->GetWeight());
+    return 1;
+}
+
+// setter float
+static int SetWeight(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    instance->SetWeight(GetFloat(lua, -1));
+    return 0;
+}
+
+// setter float
+static int SetRotation(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    instance->SetRotation(GetFloat(lua, -1));
+    return 0;
+}
+
+static int GetRotation(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushnumber(lua, instance->GetRotation());
+    return 1;
+}
+
+static int IsVisible(lua_State *lua)
+{
+    lua_pushboolean(lua, GetCharacter(lua)->IsVisible() ? 1 : 0);
+    return 1;
+}
+
+static int GetAnimationName(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);	
+    CHECK_CHARACTER_RETURN_NIL(instance, "GetAnimationName()");	
+    lua_pushstring(lua, instance->GetAnimationName());
+    return 1;
+}
+
+static int GetType(lua_State *lua)
+{
+    lua_pushstring(lua, GetCharacter(lua)->GetType());
+    return 1;
+}
+
+static int SetVisible(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_NIL(instance, "SetVisible()");
+    instance->SetVisible(GetBool(lua, -1));
+    return 0;
+}
+
+static int SetFilterAngle(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    instance->SetFilterAngle(GetBool(lua, -1));
+    return 0;
+}
+
+static int IsMovable(lua_State *lua)
+{
+    lua_pushboolean(lua, GetCharacter(lua)->IsMovable() ? 1 : 0);
+    return 1;
+}
+
+static int SetMovable(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    instance->SetMovable(GetBool(lua, -1));
+    return 0;
+}
+
+static int IsFixed(lua_State *lua)
+{
+    lua_pushboolean(lua, GetCharacter(lua)->IsFixed() ? 1 : 0);
+    return 1;
+}
+
+static int SetFixed(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    instance->SetFixed(GetBool(lua, -1));
+    return 0;
+}
+
+static int IsCollidable(lua_State *lua)
+{
+    lua_pushboolean(lua, GetCharacter(lua)->IsCollidable() ? 1 : 0);
+    return 1;
+}
+
+static int SetCollidable(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    instance->SetCollidable(GetBool(lua, -1));
+    return 0;
+}
+
+static int SetVelocity(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    Vector3 p(GetVector3(lua, -1));
+    instance->SetVelocity(p);
+    return 0;
+}
+
+static int ResetAnimation(lua_State *lua)
+{
+    GetCharacter(lua)->ResetAnimation();
+    return 0;
+}
+
+static int SetAnimation(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CHECK_CHARACTER_RETURN_VOID(instance, "SetAnimation()");
+    if (lua_isnil(lua, -1))
+       return 0;
+    instance->SetAnimation(GetString(lua, -1));
+    return 0;
+}
+
+static int Uncollide(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    lua_pushboolean(lua, instance->GetDynamicMap()->Uncollide(instance) ? 1 : 0);
+    return 1;
+}
+
+static int UncollideAll(lua_State *lua)
+{
+    lua_pushboolean(lua, GetGlobalGame()->GetLevel()->UncollideVisible() ? 1 : 0);
+    return 1;
+}
+
+static int GetCharacterById(lua_State *lua)
+{
+    luaL_checktype(lua, -1, LUA_TNUMBER);    
+    LuaPushCharacter(lua, GetGlobalGame()->GetLevel()->GetCharacter(static_cast<int>(lua_tointeger(lua, -1))));
+    return 1;
+}
+
+static int GetAllCharacters(lua_State *lua)
+{
+    LuaTable table = LuaTable::New(lua);
+    MovableRegistry &registry = GetGlobalGame()->GetLevel()->GetDynamicMap()->GetRegistry();
+    int id = registry.GetNext(-1);
+	int count = 0;
+    while (id != -1)
+    {
+        Character *c = static_cast<Character *>(registry.GetAt(id));
+        LuaPushCharacter(lua, c);
+        table.AddFromStack();
+        id = registry.GetNext(id);
+        count++;
+	}
+	printf("** GetAllCharacters returned %d chars\n", count);
+    table.Push();
+    return 1;
+}
+
+static int GetAllCharactersInRadius(lua_State *lua)
+{
+    float radiusSq = GetFloat(lua, -1);
+    radiusSq *= radiusSq;
+    LuaTable table = LuaTable::New(lua);
+    Vector3 player = GetGlobalGame()->GetPlayer()->GetPosition();
+    MovableRegistry &registry = GetGlobalGame()->GetLevel()->GetDynamicMap()->GetRegistry();
+    int id = registry.GetNext(-1);
+    while (id != -1)
+    {
+        Character *c = static_cast<Character *>(registry.GetAt(id));
+        if (c->GetPosition().distancesq(player) < radiusSq)
+        {
+            LuaPushCharacter(lua, c);
+            table.AddFromStack();
+        }
+        id = registry.GetNext(id);
+    }
+    table.Push();
+    return 1;
+}
+
+static int GetFreeCharacterId(lua_State *lua)
+{ 
+    lua_pushinteger(lua, GetGlobalGame()->GetLevel()->GetFreeCharacterId());
+    return 1;
+}
+
+static int GetCharacterIdOwner(lua_State *lua)
+{
+    luaL_checktype(lua, -1, LUA_TNUMBER);    
+    lua_pushinteger(lua, Level::GetCharacterIdOwner(static_cast<int>(lua_tointeger(lua, -1))));
+    return 1;
+}
+
+static int GetCharacterIdFromPositionPacket(lua_State *lua)
+{
+    luaL_checktype(lua, -1, LUA_TSTRING);
+    size_t sz = 0;
+    const char *str = lua_tolstring(lua, -1, &sz);
+    const CharacterPositionPacket *packet = reinterpret_cast<const CharacterPositionPacket *>(str);
+    int id = GetCharacterIdFromPositionPacket(*packet);
+    lua_pushinteger(lua, id);
+    return 1;
+}
+
+static int GetCharacterPositionPacket(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    CharacterPositionPacket packet = GetCharacterPositionPacket(instance);
+    lua_pushlstring(lua, (const char *)&packet, sizeof(packet));
+    return 1;
+}
+
+static int SetCharacterPositionPacket(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    luaL_checktype(lua, -1, LUA_TSTRING);
+    size_t sz = 0;
+    const char *str = lua_tolstring(lua, -1, &sz);
+    if (sz != sizeof(CharacterPositionPacket))
+        printf("Position packet is broken.\n");
+    else
+    {
+        CharacterPositionPacket packet;
+        memcpy(&packet, str, sz);
+        SetCharacterPositionPacket(instance, packet);
+    }
+    return 0;
+}
+
+// Animation code - these are not members, but they take an animation lightuserdata instance
+// as their first arg
+static int Animation_Reset(lua_State *lua)
+{
+    luaL_checktype(lua, -1, LUA_TLIGHTUSERDATA);
+    Animation *animation = reinterpret_cast<Animation *>(lua_touserdata(lua, -1));
+    if (animation)
+        animation->Reset();
+    return 0;
+}
+
+static int Animation_SetFrame(lua_State *lua)
+{
+    luaL_checktype(lua, -2, LUA_TLIGHTUSERDATA);
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    Animation *animation = reinterpret_cast<Animation *>(lua_touserdata(lua, -2));
+    int frame = (int)lua_tointeger(lua, -1);
+    if (animation)
+        animation->SetFrame(frame);
+    return 0;
+}
+
+static int Animation_GetFrame(lua_State *lua)
+{
+    luaL_checktype(lua, -1, LUA_TLIGHTUSERDATA);
+    Animation *animation = reinterpret_cast<Animation *>(lua_touserdata(lua, -2));
+    int n = 0;
+    if (animation)
+        n = animation->GetFrameNumber();
+    lua_pushinteger(lua, n);
+    return 1;
+}
+
+static int Animation_SetLoopMode(lua_State *lua)
+{
+    luaL_checktype(lua, -2, LUA_TLIGHTUSERDATA);
+    luaL_checktype(lua, -1, LUA_TBOOLEAN);
+    Animation *animation = reinterpret_cast<Animation *>(lua_touserdata(lua, -2));
+    bool loop = lua_toboolean(lua, -1) != 0;
+    if (animation)
+        animation->SetLoopMode(loop);
+    return 0;
+}
+
+static int Animation_SetFrameTime(lua_State *lua)
+{
+    luaL_checktype(lua, -2, LUA_TLIGHTUSERDATA);
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    Animation *animation = reinterpret_cast<Animation *>(lua_touserdata(lua, -2));
+    int time = (int)lua_tointeger(lua, -1);
+    if (animation)
+        animation->SetFrameTime(time);
+    return 0;
+}
+
+static int Animation_SetAlpha(lua_State *lua)
+{
+    luaL_checktype(lua, -2, LUA_TLIGHTUSERDATA);
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    Animation *animation = reinterpret_cast<Animation *>(lua_touserdata(lua, -2));
+    float alpha = (float)lua_tonumber(lua, -1);
+    if (animation)
+        animation->SetAlpha(alpha);
+    return 0;
+}
+
+// behaviors will be lightuserdata
+template <typename T>
+static int LuaFunction_ReturnNewLightUserData0(lua_State *lua)
+{
+    lua_pushlightuserdata(lua, new T);
+    return 1;
+}
+
+template <typename T>
+static int LuaFunction_ReturnNewLightUserDataInt1(lua_State *lua)
+{
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    int value = (int)lua_tointeger(lua, -1);
+    lua_pushlightuserdata(lua, new T(value));
+    return 1;
+}
+
+template <int IntT>
+static int LuaFunction_ReturnConstantInt(lua_State *lua)
+{
+    lua_pushinteger(lua, int(IntT));
+    return 1;
+}
+
+static int AddBehavior(lua_State *lua)
+{
+    luaL_checktype(lua, -1, LUA_TLIGHTUSERDATA);
+    IBehavior *behavior = reinterpret_cast<IBehavior *>(lua_touserdata(lua, -1));
+    GetCharacter(lua)->AddBehavior(behavior);
+    return 0;
+}
+
+static int RemoveBehavior(lua_State *lua)
+{
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    GetCharacter(lua)->RemoveBehavior((int)lua_tointeger(lua, -1));
+    return 0;
+}
+
+static int GetBehavior(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    lua_pushlightuserdata(lua, instance->GetBehavior((int)lua_tointeger(lua, -1)));
+    return 1;
+}
+
+static int HasBehavior(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    lua_pushboolean(lua, instance->HasBehavior((int)lua_tointeger(lua, -1)));
+    return 1;
+}
+
+static int SuspendBehavior(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    instance->SuspendBehavior((int)lua_tointeger(lua, -1));
+    return 0;
+}
+
+static int ResumeBehavior(lua_State *lua)
+{
+    Character *instance = GetCharacter(lua);
+    luaL_checktype(lua, -1, LUA_TNUMBER);
+    instance->SuspendBehavior((int)lua_tointeger(lua, -1));
+    return 0;
+}
+
+// REGISTRATION CODE
+static const struct luaL_reg CharacterLib_f[] =
+{
+    { "new", NewCharacter },
+    { NULL, NULL }
+};
+
+static const struct luaL_reg CharacterLib_m[] =
+{
+    { "__tostring",           CharacterToString },
+
+    { "data",                 GetCharacterLuaTable },
+
+    { "GetId",                GetId },
+    { "SetId",                SetId },
+    { "MarkChanged",          MarkChanged },
+    { "HasChanged",           HasChanged },
+    { "SetFilterPosition",    SetFilterPosition },
+    { "SetSelector",          SetSelector },
+    { "AddDiscEffect",        AddDiscEffect },
+    { "AddCylinderEffect",    AddCylinderEffect },
+    { "AddParticleEffect",    AddParticleEffect },    
+    { "CompleteEffects",      CompleteEffects },
+    { "RemoveSelector",       RemoveSelector },
+    { "GetPosition",          GetPosition },
+    { "SetPosition",          SetPosition },
+    { "SetPositionRaw",       SetPositionRaw },
+    { "GetOrientation",       GetOrientation },    
+    { "SetOrientation",       SetOrientation },
+    { "SetTypeId",            SetTypeId },
+    { "GetTypeId",            GetTypeId },    
+    { "SetSeed",              SetSeed },
+    { "GetSeed",              GetSeed }, 
+    { "ForceOrientation",     ForceOrientation },
+    { "SetRotation",          SetRotation },
+    { "GetRotation",          GetRotation },
+    { "GetVelocity",          GetVelocity },
+    { "SetVelocity",          SetVelocity },
+    { "GetSpeed",             GetSpeed },
+    { "SetAlpha",             SetAlpha },
+    { "SetUpdateFrequency",   SetUpdateFrequency },
+    { "SetWeight",            SetWeight },
+    { "GetWeight",            GetWeight },
+//  { "CollidesAt",           CollidesAt },
+    { "CollidesAtRadius",     CollidesAtRadius },
+    { "StaticCollides",       StaticCollides },
+    { "ResetAnimation",       ResetAnimation },
+    { "SetAnimation",         SetAnimation },
+    { "GetAnimation",         GetAnimation },
+    { "GetAnimationName",     GetAnimationName },
+    { "GetType",              GetType },
+    { "SetTranslate",         SetTranslate },
+    { "SetScale",             SetScale },
+    { "SetRadius",            SetRadius },
+    { "Uncollide",            Uncollide },
+    { "UncollideAll",         UncollideAll },
+    { "IsVisible",            IsVisible },
+    { "SetVisible",           SetVisible },
+    { "SetFilterAngle",       SetFilterAngle },
+    { "IsMovable",            IsMovable },
+    { "SetMovable",           SetMovable },
+    { "IsFixed",              IsFixed },
+    { "SetFixed",             SetFixed },
+    { "IsCollidable",         IsCollidable },
+    { "SetCollidable",        SetCollidable },
+    { "GetClosest",           GetClosest },
+    { "GetClosestAttackable", GetClosestAttackable },
+    { "GetClosestFacing",     GetClosestFacing },
+    { "GetClosestFacingAndAttackable", GetClosestFacingAndAttackable },
+    { "GetPlayer",            GetPlayer },
+
+    { "IsPersistent",         IsPersistent },
+    { "SetPersistent",        SetPersistent },
+    { "IsStatic",             IsStatic },
+    { "SetStatic",            SetStatic },
+
+    { "Signal",               Signal },
+
+    { "HasMeter",             HasMeter },
+    { "SetMeter",             SetMeter },
+    { "RemoveMeter",          RemoveMeter },
+    { "SetMeterVisible",      SetMeterVisible },
+    { "SetMeterValue",        SetMeterValue }, // don't use directly..
+    { "SetMeterWidth",        SetMeterWidth },
+    { "SetMeterDistance",     SetMeterDistance },
+
+    { "IsFacing",             IsFacing },
+
+    { "AddBehavior",          AddBehavior },
+    { "RemoveBehavior",       RemoveBehavior },
+    { "GetBehavior",          GetBehavior },
+    { "HasBehavior",          HasBehavior },
+    { "ResetBehaviors",       ResetBehaviors },
+    { "SuspendBehavior",      SuspendBehavior },
+    { "ResumeBehavior",       ResumeBehavior },
+    { "AddSignalHandler",     AddSignalHandler },
+
+    // behaviors
+    // killable behavior
+    { "ReceiveHit",           ReceiveHit },
+    { "ReceiveHitInMotion",   ReceiveHitInMotion },
+    { "IsDestroyed",          IsDestroyed },
+    { "IsKillable",           IsKillable },
+    { "SetHitPoints",         SetHitPoints },
+    { "SetMaxHitPoints",      SetMaxHitPoints },
+    { "GetHitPoints",         GetHitPoints },
+    { "GetMaxHitPoints",      GetMaxHitPoints },
+    { "SetExperience",        SetExperience },
+    { "GetExperience",        GetExperience },
+    { "SetInvulnerable",      SetInvulnerable },
+    { "IsInvulnerable",       IsInvulnerable },
+    { "SetLevel",             SetLevel },
+    { "GetLevel",             GetLevel },
+    { "GetLevelFromExperience",             GetLevelFromExperience },
+    { "GetNextLevelExperience",             GetNextLevelExperience },
+    { "SetKnockSpin",         SetKnockSpin },
+    { "GetKnockSpin",         GetKnockSpin },
+    { "SetKnockBack",         SetKnockBack },
+    { "GetKnockBack",         GetKnockBack },
+    { "GetCharacterPositionPacket",    GetCharacterPositionPacket },
+    { "SetCharacterPositionPacket",    SetCharacterPositionPacket },
+    // animation behavior
+    { "IsAnimation",          IsAnimation },
+    { "IsInAttack",           IsInAttack },
+    { "SetForce",             SetForce },
+    { "SetAction",            SetAction },
+    { "SetAttackTypeCount",   SetAttackTypeCount },
+    { "SetCanMove",           SetCanMove },
+    { "SetWalkAndAttack",     SetWalkAndAttack },
+    { "GetWalkAndAttack",     GetWalkAndAttack },
+    { "CanMove",              CanMove },
+    // approach 
+    { "IsApproach",           IsApproach },
+    { "IsApproachActive",     IsApproachActive },
+    { "SetApproachSpeed",     SetApproachSpeed },
+    { "SetApproachMinDistance", SetApproachMinDistance },
+    { "SetApproachTooFar",    SetApproachTooFar },
+    { "SetApproachCollide",   SetApproachCollide },
+    { "SetApproachTarget",    SetApproachTarget },
+    { "GetApproachSpeed",     GetApproachSpeed },
+    { "GetApproachMinDistance", GetApproachMinDistance },
+    { "GetApproachTooFar",    GetApproachTooFar },
+    { "GetApproachCollide",   GetApproachCollide },
+    // attack
+    { "IsAttack",             IsAttack },
+    { "IsAttackActive",       IsAttackActive },
+    { "SetAttackSpeed",       SetAttackSpeed },
+    { "SetAttackMultiplier",  SetAttackMultiplier },
+    { "GetAttackMultiplier",  GetAttackMultiplier },    
+    { "SetMaxAttackDistance", SetMaxAttackDistance },
+    { "SetAttackTarget",      SetAttackTarget },
+    { "SetAutoAttack",        SetAutoAttack },
+    { "TriggerAttack",        TriggerAttack },
+    // die behavior
+    { "IsDieBehavior",        IsDieBehavior },
+    { "IsDeathComplete",      IsDeathComplete },
+    // role player
+    { "SetStrength",                    SetStrength },
+    { "SetDexterity",                   SetDexterity },
+    { "SetVitality",                    SetVitality },
+    { "SetEnergy",                      SetEnergy },
+    { "SetLuck",                        SetLuck },
+    { "GetStrength",                    GetStrength },
+    { "GetDexterity",                   GetDexterity },
+    { "GetVitality",                    GetVitality },
+    { "GetEnergy",                      GetEnergy },
+    { "GetLuck",                        GetLuck },
+	{ "GetOverallAttackMultiplier",     GetOverallAttackMultiplier },
+	{ "SetOverallAttackMultiplier",     SetOverallAttackMultiplier },
+    { "GetRolePlayerRandom",            GetRolePlayerRandom },
+    { "SetRolePlayerDefaultAttributes", SetRolePlayerDefaultAttributes },
+    { "GetClassBonus",                  GetClassBonus },
+    { "GetRatingBonus",                 GetRatingBonus },
+    { "GetAttackRating",                GetAttackRating },
+    { "GetDefenseRating",               GetDefenseRating },
+    { "GetChanceToHit",                 GetChanceToHit },
+    // end
+    { NULL, NULL }
+};
+
+int luaopen_Character(lua_State *L)
+{
+    luaL_newmetatable(L, "D.Character");
+    
+    lua_pushstring(L, "__index");
+    lua_pushvalue (L, -2);  // pushes the metatable 
+    lua_settable  (L, -3);  // metatable.__index = metatable 
+    
+    luaL_openlib(L, 0,           CharacterLib_m, 0);
+    luaL_openlib(L, "Character", CharacterLib_f, 0);
+
+    // register non-member functions
+    lua_register(L, "Animation_Reset",          Animation_Reset);
+    lua_register(L, "Animation_SetFrame",       Animation_SetFrame);
+    lua_register(L, "Animation_GetFrame",       Animation_GetFrame);
+    lua_register(L, "Animation_SetLoopMode",    Animation_SetLoopMode);
+    lua_register(L, "Animation_SetFrameTime",   Animation_SetFrameTime);
+    lua_register(L, "Animation_SetAlpha",       Animation_SetAlpha);
+
+    lua_register(L, "NewKillableBehavior",      LuaFunction_ReturnNewLightUserData0<KillableBehavior>);
+    lua_register(L, "NewDriftApproach",         LuaFunction_ReturnNewLightUserData0<DriftApproach>);
+    lua_register(L, "NewAnimationBehavior",     LuaFunction_ReturnNewLightUserData0<AnimationBehavior>);
+    lua_register(L, "NewAggressiveApproach",    LuaFunction_ReturnNewLightUserData0<AggressiveApproach>);
+    lua_register(L, "NewHitAndRunApproach",     LuaFunction_ReturnNewLightUserData0<HitAndRunApproach>);    
+    lua_register(L, "NewAloofApproach",         LuaFunction_ReturnNewLightUserData0<AloofApproach>);       
+    lua_register(L, "NewDieCollapseBehavior",   LuaFunction_ReturnNewLightUserData0<DieCollapseBehavior>);
+    lua_register(L, "NewDieDriftBehavior",      LuaFunction_ReturnNewLightUserData0<DieDriftBehavior>);
+    lua_register(L, "NewMeleeAttack",           LuaFunction_ReturnNewLightUserData0<MeleeAttack>);
+    lua_register(L, "NewRolePlayer",            LuaFunction_ReturnNewLightUserData0<RolePlayer>);
+    lua_register(L, "NewGeneratedRolePlayer",   LuaFunction_ReturnNewLightUserDataInt1<GeneratedRolePlayer>);
+
+    lua_register(L, "Behavior_KillableType",    LuaFunction_ReturnConstantInt<KillableBehavior::TYPE>);
+    lua_register(L, "Behavior_AnimationType",   LuaFunction_ReturnConstantInt<AnimationBehavior::TYPE>);
+    lua_register(L, "Behavior_ApproachType",    LuaFunction_ReturnConstantInt<Approach::TYPE>);
+    lua_register(L, "Behavior_AttackType",      LuaFunction_ReturnConstantInt<Attack::TYPE>);
+    lua_register(L, "Behavior_DieType",         LuaFunction_ReturnConstantInt<DieBehavior::TYPE>);
+    lua_register(L, "Behavior_RolePlayerType",  LuaFunction_ReturnConstantInt<RolePlayer::TYPE>);
+
+    lua_register(L, "GetCharacterIdFromPositionPacket", GetCharacterIdFromPositionPacket);
+
+    lua_register(L, "GetFieldVectorAt",         GetFieldVectorAt);
+    lua_register(L, "GetCharacterById",         GetCharacterById);
+    lua_register(L, "GetAllCharacters",         GetAllCharacters);
+    lua_register(L, "GetAllCharactersInRadius", GetAllCharactersInRadius);
+//  lua_register(L, "DestroyCharacter",         DestroyCharacter);
+    lua_register(L, "DestroyCharacterById",     DestroyCharacterById);    
+    lua_register(L, "GetFreeCharacterId",       GetFreeCharacterId);
+    lua_register(L, "GetCharacterIdOwner",      GetCharacterIdOwner);
+    lua_register(L, "IsCharacterValid",         IsCharacterValid);
+    
+    return 1;
+}
