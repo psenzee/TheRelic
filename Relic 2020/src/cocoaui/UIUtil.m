@@ -44,7 +44,8 @@ BOOL iPhoneIdiom(void)
 
 BOOL IsLandscape(void)
 {
-    return IS_LANDSCAPE;
+    UIInterfaceOrientation iorient = [[UIApplication sharedApplication] statusBarOrientation];
+    return UIInterfaceOrientationIsLandscape(iorient);
 }
 
 void SetIsLandscape(BOOL value)

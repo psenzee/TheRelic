@@ -48,6 +48,9 @@
 
 #include "level/PauseState.h"
 
+#include "GLUtils.h"
+#include <OpenGLES/ES1/glext.h>
+
 extern "C"
 {
 #include <lua.h>
@@ -274,7 +277,6 @@ void GameState::Initialize(const GameDimensions &dimensions)
 	  
     mGameUi = new GameUI(pages);
     mUiCore = new UiCore(dimensions, *mGameUi, *mQuads, mUiEventDispatcher);
-   // UiCore *ui = new UiCore(dimensions, *mGameUi, *mQuads, mUiEventDispatcher);
 
     Vector2 v = dimensions.GetViewportSize();
     core::Size sz = core::Size(int(v.x), int(v.y));
@@ -334,6 +336,7 @@ void GameState::StartGameState()
 FrameRateTracker  leveldrawlogic  ("level draw logic",         0),
                   leveldrawsubmit ("level draw submit",        0),
                   uidraw          ("ui draw",                  0),
+                  huddraw         ("hud draw",                 0),
                   gamestatedraw   ("game state draw (total)",  0),
                   total           ("total",                   40),
                   update          ("update",                   0);
@@ -393,8 +396,6 @@ void GameState::RenderEffects(const GameTime &time)
 //  mQuads->RenderOverlay(mBackground, Vector4(1.0f, 1.0f, 1.0f, mEffects.white.GetValue()), 2.0f);
 }
 
-void SetLuaLights(GraphicsDevice &device);
-
 void GameState::UnloadAll()
 {
 	Game *game = GetGame();
@@ -406,11 +407,81 @@ void GameState::UnloadAll()
 	ContentLoader::GetInstance()->UnloadAllTextures();
 }
 
-void GameState::DrawOverlay()
+Character *GameState::GetPlayer()
+{
+    return mGame ? mGame->GetPlayer() : 0;
+}
+
+PauseState GameState::GetPauseState() const
+{
+    if (!mGame) {
+        return PauseState(true, true, true);
+    }
+    return PauseState(mGame->IsRenderPaused(), mGame->IsPaused(), mGame->IsCharacterPaused());
+}
+
+void GameState::LookAt(const Vector3 &p)
+{
+    GetGlobalCamera()->SetLookAt(p);
+    GraphicsDevice *device = GraphicsDevice::GetInstance();
+    device->SetProjection(GetGlobalCamera()->GetProjection());
+}
+
+void GameState::LookAt(Movable *movable)
+{
+    LookAt(movable ? movable->GetPosition() : Vector3(0.f, 0.f, 0.f));
+}
+
+void GameState::DrawParticles(const GameTime &time)
+{
+    GraphicsDevice *device = GraphicsDevice::GetInstance();
+    SetDefaultLightingType(2);
+    //GetLights(PASS_PARTICLES).Apply(*device);
+    ParticleFxDrawable::SetGameTime(time);
+    profiler->StartTime("particles");
+    //PushLightingType();
+
+    device->SetColor(Vector4(1.f, 1.f, 1.f, 1.f));
+    PauseState paused(GetPauseState());
+    if (mGame && !paused.render) {
+        ParticleEffects::GetInstance()->Render(GetGlobalRenderContext(), time);
+        mQuads->RenderQuads();
+    }
+    RenderEffects(time); // this doesn't currently do anything
+    //PopLightingType();
+    profiler->EndTime("particles");
+}
+
+void GameState::DrawUi(const GameTime &time)
+{
+    GraphicsDevice *device = GraphicsDevice::GetInstance();
+    uidraw.StartFrame();
+    SetDefaultLightingType(1);
+    GetLights(PASS_UI).Apply(*device, *mCamera);
+    mUiInstance->UpdateAndRender(time, GetGlobalRenderContext());
+    uidraw.EndFrame();
+}
+
+void GameState::DrawHud(const GameTime &time)
+{
+    GraphicsDevice *device = GraphicsDevice::GetInstance();
+    SetDefaultLightingType(0);
+    GetLights(PASS_UI).Apply(*device, *mCamera);
+    huddraw.StartFrame();
+    device->SetColor(Vector4(1.f, 1.f, 1.f, 1.f));
+    profiler->StartTime("messages_hud");
+    mUiCore->GetGameUi().Draw(GetGlobalRenderContext());
+    huddraw.EndFrame();
+    profiler->EndTime("messages_hud");
+}
+
+void GameState::DrawOverlay(const GameTime &time)
 {
     GraphicsDevice *device = GraphicsDevice::GetInstance();
     if (mOverlayColor.w >= 0.05f)
     {
+        SetDefaultLightingType(2);
+        GetLights(PASS_OVERLAY).Apply(*device, *mCamera);
         // terrible hack, but it works..
         OverheadCamera c(*device, 45.f);
         // I wish I had commented what I am trying to accomplish here at the time I wrote it
@@ -448,42 +519,6 @@ void GameState::DrawOverlay()
     }
 }
 
-void GameState::DrawParticles(const GameTime &time)
-{
-    ParticleFxDrawable::SetGameTime(time);
-    profiler->StartTime("fx");
-    PushLightingType();
-    SetDefaultLightingType(2);
-    RenderEffects(time);
-    PopLightingType();
-    profiler->EndTime("fx");
-}
-
-Character *GameState::GetPlayer()
-{
-    return mGame ? mGame->GetPlayer() : 0;
-}
-
-PauseState GameState::GetPauseState() const
-{
-    if (!mGame) {
-        return PauseState(true, true, true);
-    }
-    return PauseState(mGame->IsRenderPaused(), mGame->IsPaused(), mGame->IsCharacterPaused());
-}
-
-void GameState::LookAt(const Vector3 &p)
-{
-    GetGlobalCamera()->SetLookAt(p);
-    GraphicsDevice *device = GraphicsDevice::GetInstance();
-    device->SetProjection(GetGlobalCamera()->GetProjection());
-}
-
-void GameState::LookAt(Movable *movable)
-{
-    LookAt(movable ? movable->GetPosition() : Vector3(0.f, 0.f, 0.f));
-}
-
 void GameState::DrawLevel(const GameTime &time)
 {
     static Material material;
@@ -491,17 +526,15 @@ void GameState::DrawLevel(const GameTime &time)
     GraphicsDevice *device = GraphicsDevice::GetInstance();
     RenderContext renderContext(*device, *GetGlobalCamera());
     SetGlobalRenderContext(renderContext);
-    
-    SetLuaLights(*device);
 
     LookAt(GetPlayer());
 
-    device->SetMaterial(material);
-
     PauseState paused(GetPauseState());
 
-    if (mGame && !paused.render)
-    {
+    device->SetMaterial(material);
+    //glEnable(GL_COLOR_MATERIAL);
+    if (mGame && !paused.render) {
+        GetLights(PASS_LEVEL).Apply(*device, *mCamera);
         leveldrawlogic.StartFrame();
         mGame->GetLevels()->Draw(renderContext, time, paused);
         leveldrawlogic.EndFrame();
@@ -517,52 +550,29 @@ void GameState::DrawLevel(const GameTime &time)
 
         RenderSet::GetInstance()->Render("selector", renderContext);
         QuadRenderer::RenderDeferred();
-        
-        profiler->StartTime("messages_hud");
-        uidraw.StartFrame();
-        mUiCore->GetGameUi().Draw(renderContext);
-        uidraw.EndFrame();
-        profiler->EndTime("messages_hud");
     }
 }
 
 void GameState::Draw(const GameTime &time)
 {
     GraphicsDevice *device = GraphicsDevice::GetInstance();
-
     device->StartFrame();
+    
     total.EndFrame();
     total.StartFrame();
 
-    SetLuaLights(*device);	
-	
     static Material material;
     device->EnableColorMaterial(false);
     device->SetMaterial(material);
 
-    //ParticleFxDrawable::SetGameTime(time);
     RenderContext renderContext(*device, *mCamera);
     SetGlobalRenderContext(renderContext);
 
-//  SetLuaLights(*device);
-
-    //mGame->Draw(time);
     DrawLevel(time);
-    device->SetColor(Vector4(1.f, 1.f, 1.f, 1.f));
-
-    if (!mGame->IsRenderPaused())
-    {
-        ParticleEffects::GetInstance()->Render(renderContext, time);
-        mQuads->RenderQuads();
-    }
-
     DrawParticles(time);
-
-    mUiInstance->UpdateAndRender(time, renderContext);
-    uidraw.EndFrame();
-    device->SetColor(Vector4(1.f, 1.f, 1.f, 1.f));
-
-    DrawOverlay();
+    DrawHud(time);
+    DrawUi(time);
+    DrawOverlay(time);
 
     device->EndFrame();
 }

@@ -28,7 +28,7 @@ void FrameRateTracker::EndFrame()
     sumtimescount++;
     if (logfrequency && sumtimescount == logfrequency)
     {
-        double time = sumtimes / (double)sumtimescount;
+        //double time = sumtimes / (double)sumtimescount;
         //printf("[%-10s] fps %.2f (%.2fms/frame)\n", label, 1000.0f / time, time);
         sumtimes      = 0;
         sumtimescount = 0;

@@ -277,8 +277,6 @@ bool Game::Notify(const char *e, const char *info)
     return true;
 }
 
-extern void SetLuaLights(GraphicsDevice &device);
-
 void Game::SetFog(bool enable)
 {
     GraphicsDevice *device = GraphicsDevice::GetInstance();
@@ -306,8 +304,6 @@ void Game::Draw(const GameTime &time)
     RenderContext renderContext(*device, *GetGlobalCamera());
 
     SetGlobalRenderContext(renderContext);
-
-    SetLuaLights(*device);
 
     if (GetPlayer())
        GetGlobalCamera()->SetLookAt(GetPlayer()->GetPosition());

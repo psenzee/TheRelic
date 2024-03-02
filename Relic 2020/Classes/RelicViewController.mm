@@ -130,11 +130,15 @@ extern "C" void UnloadAll();
     CGRect frame;
     frame.origin = CGPointMake(0.0, 0.0);
     frame.size = sz;
-    if (!IsLandscape()) {
-        //frame.size = CGSizeSwap(frame.size);
+    
+    if (IsLandscape()) {
+        frame.size = CGSizeSwap(frame.size);
     }
     TouchView *v = [[TouchView alloc] initWithFrame:frame];
     self.view = v;
+    if (IsLandscape()) {
+        self.view.transform = CGAffineTransformMakeRotation(M_PI * 1.5);
+    }
     EAGLView *eagl = [[EAGLView alloc] initWithFrame:frame];
     eagl.backgroundColor = [UIColor colorNamed:@"green"];
     self.eagl = eagl;

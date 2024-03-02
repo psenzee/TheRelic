@@ -399,6 +399,8 @@ local lastSpellType = ''
 local multiplierAchievements = { false, false, false, false, false, false, false, false, false }
 
 function UpdateHud(player)
+  Lux_EnableLighting(LUX_PASS_UI, false)
+
   HUD_ON = not (IS_LOADING or SUPPRESS_HUD or GetGameStateId() ~= GAMESTATE_INGAME)
   if HUD_ON then
     local count = GetInventoryItemCount(GetPlayer(), 'Potion0')

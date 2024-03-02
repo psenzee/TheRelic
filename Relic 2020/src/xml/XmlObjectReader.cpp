@@ -392,11 +392,11 @@ Light XmlObjectReader::ReadLight(XmlElement *xml)
 {
     Light light;
     light.id = XmlUtil::GetInt(xml, "id", 0);
-    ReadInlineVector(xml, "position", 3, (float *)&light.position);
-    ReadColor       (xml, "ambient",  light.ambient);
-    ReadColor       (xml, "diffuse",  light.diffuse);
-    ReadColor       (xml, "specular", light.specular);
-    light.shininess = XmlUtil::GetFloat(xml, "shininess", light.shininess);
+    ReadInlineVector(xml, "position", 3, (float *)&light.vectors[Light::V4_WORLD_POSITION]);
+    ReadColor       (xml, "ambient",     light.vectors[Light::V4_AMBIENT]);
+    ReadColor       (xml, "diffuse",     light.vectors[Light::V4_DIFFUSE]);
+    ReadColor       (xml, "specular",    light.vectors[Light::V4_SPECULAR]);
+    light.floats[Light::F1_SHININESS] = XmlUtil::GetFloat(xml, "shininess", light.floats[Light::F1_SHININESS]);
     return light;
 }
 

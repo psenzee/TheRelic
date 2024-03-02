@@ -3,29 +3,39 @@
 
 #include "core/core.h"
 #include "fast/Allocator.h"
+#include <array>
 
-class Light
+struct Light
 {
-public:
-    
     CLASS_NEW_DELETE()
     
-    size_t  id;
-    bool    enabled;
-    Vector4 position;
-    Vector4 ambient,
-            diffuse,
-            specular;
-    float   shininess;
+    enum VectorType { V4_WORLD_POSITION, V4_AMBIENT, V4_DIFFUSE, V4_SPECULAR, V4_SPOT_DIRECTION, V4_COUNT };
+    enum FloatType  {
+        F1_SHININESS, F1_SPOT_EXPONENT, F1_SPOT_CUTOFF,
+        F1_CONSTANT_ATTENUATION, F1_LINEAR_ATTENUATION, F1_QUADRATIC_ATTENUATION, F1_COUNT
+    };
 
-    inline Light(const Light &u) : id(u.id), enabled(u.enabled), position(u.position), ambient(u.ambient), diffuse(u.diffuse), specular(u.specular), shininess(u.shininess) {}
-    inline Light(size_t id = 0,
-                 bool enabled = false,
-                 const Vector4 &position = Vector4(0, 0, 0, 0),
-                 const Vector4 &ambient  = Vector4(0, 0, 0, 0),
-                 const Vector4 &diffuse  = Vector4(0, 0, 0, 0),
-                 const Vector4 &specular = Vector4(0, 0, 0, 0), float shininess = 1.f) :
-        id(id), enabled(enabled), position(position), ambient(ambient), diffuse(diffuse), specular(specular), shininess(shininess) {}
+    typedef std::array<Vector4, V4_COUNT> array_v4_t;
+    typedef std::array<float, F1_COUNT>   array_f_t;
+
+    size_t     id;
+    bool       enabled;
+    array_v4_t vectors;
+    array_f_t  floats;
+
+    inline Light(const Light &u) : id(u.id), enabled(u.enabled), floats{ 0 }, vectors({ _1, _1, _1, _1, _1 }) {}
+    inline Light(size_t id = 0, bool enabled = false) : id(id), enabled(enabled), floats{ 0 } {}
+
+    inline Light         &Set(VectorType type, const Vector4 &v)  { vectors[type] = v; return *this; }
+    inline const Vector4 &Get(VectorType type)              const { return vectors[type]; }
+    
+    inline Light         &Set(FloatType type, float v)            { floats[type] = v; return *this; }
+    inline float          Get(FloatType type)               const { return floats[type]; }
+    
+private:
+    
+    static constexpr const Vector4 _0 { 0.f, 0.f, 0.f, 0.f };
+    static constexpr const Vector4 _1 { 1.f, 1.f, 1.f, 1.f };
 };
 
 #endif // _LIGHT_H

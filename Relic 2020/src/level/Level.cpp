@@ -374,8 +374,8 @@ char *Level::GetVisitedData(int32_t *size)
     int32_t size1    = mVisited->map.width * mVisited->map.height,
             size2    = mVisitedMap->map.width * mVisitedMap->map.height;
     *size = size1 + size2 + sizeof(int32_t) + sizeof(int32_t);
-    uchar8_t *data = new uchar8_t [*size];
-    uchar8_t *p = data;
+    uint8_t *data = new uint8_t [*size];
+    uint8_t *p = data;
     memcpy(p, &size1, sizeof(int32_t)); p += sizeof(int32_t);
     memcpy(p, &size2, sizeof(int32_t)); p += sizeof(int32_t);
     memcpy(p, mVisited->map.data,    size1); p += size1;
@@ -387,7 +387,7 @@ bool Level::SetVisitedData(const char *data, int32_t size)
 {
     int32_t size1    = 0,
             size2    = 0;
-    const uchar8_t *p = (const uchar8_t *)data;
+    const uint8_t *p = (const uint8_t *)data;
     memcpy(&size1, p, sizeof(int32_t)); p += sizeof(int32_t);
     memcpy(&size2, p, sizeof(int32_t)); p += sizeof(int32_t);
     int32_t prevsize1 = mVisited->map.width * mVisited->map.height,

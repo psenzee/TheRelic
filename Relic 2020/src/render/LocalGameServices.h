@@ -14,10 +14,8 @@ public:
     GraphicsDevice *device;
     ContentLoader  *loader;
 
-    LocalGameServices(const core::Size &frame, GraphicsDevice *device, ContentLoader *loader)
-        : frame(frame), device(device), loader(loader)
-    {
-    }
+    inline LocalGameServices(const core::Size &frame, GraphicsDevice *device, ContentLoader *loader)
+        : frame(frame), device(device), loader(loader) {}
 };
 
 #endif // _LOCALGAMESERVICES_H

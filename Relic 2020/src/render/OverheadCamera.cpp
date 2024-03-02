@@ -6,17 +6,24 @@
 #include <math.h>
 
 OverheadCamera::OverheadCamera(GraphicsDevice &device, float fovDegrees) 
-: tiltScale(1.0f, 1.0f), depthScale(1.0f), device(device)
+: mTiltScale(1.0f, 1.0f), mDepthScale(1.0f), mDevice(device), mUp(Vector3(1.0f, 0.0f, 0.0f))
 {
     SetFovDegrees(fovDegrees);
 }
 
 Vector3 OverheadCamera::GetCameraPosition(const Vector3 &lookAt, float depthScale)
 {
-    float tanAngle = tanf(fov * 0.5f);
-    core::Size frame(device.GetFrameSize());
+    float tanAngle = tanf(mFov * 0.5f);
+    core::Size frame(mDevice.GetFrameSize());
     return Vector3(lookAt.x, lookAt.y,
                    -((0.5f * frame.height / tanAngle) * depthScale) + lookAt.z);
+}
+
+Vector3 OverheadCamera::GetLightPositionFromWorld(const Vector3 &world) const
+{
+    return (mInvViewProjection * Vector4(world, 0.f)).xyz();
+    //Ray r = GetRayFromNormalizedScreen(world.xy());
+    //return r.origin + r.direction * world.z;
 }
 
 Vector3 OverheadCamera::GetCameraPositionTilt(const Vector3 &lookAt, const Vector2 &tilt, const Vector2 &tiltScale, float depthScale)
@@ -102,36 +109,23 @@ Matrix CreateGLPerspectiveFov(float fovy, float aspect, float zNear, float zFar)
     return m;
 }
 
-#define IPHONE_PORTRAIT 0
-
 void OverheadCamera::Update()
 {
-    core::Size frame(device.GetFrameSize());
+    core::Size frame(mDevice.GetFrameSize());
     float ratio = frame.width / float(frame.height);
-    const Vector3 UP = Vector3(1.0f, 0.0f, 0.0f);
-    /*
-#ifdef WIN32
-        Vector3(0.0f, 1.0f, 0.0f);
-//      ratio = frame.height / float(frame.width);
-#else
-#ifdef IPHONE_PORTRAIT
-        Vector3(0.0f, 1.0f, 0.0f);
-#else
-        Vector3(1.0f, 0.0f, 0.0f); // rotated for iphone
-#endif
-#endif
-     */
-    position       = GetCameraPositionTilt(lookAt, tilt, tiltScale, depthScale);
-    view           = CreateXNALookAt(position, lookAt, UP);
+    mPosition             = GetCameraPositionTilt(mLookAt, mTilt, mTiltScale, mDepthScale);
+    mView                 = CreateXNALookAt(mPosition, mLookAt, GetUp());
 // $TODO WE'RE GOING TO HAVE TO REEVALUATE THIS FAR PLANE CHANGE!
-    projection     = CreateXNAPerspectiveFov(fov, ratio, 10.0f, 20000.0f);
-    viewProjection = view * projection;
-    inverse        = viewProjection.invert();
+    mProjection           = CreateXNAPerspectiveFov(mFov, ratio, 10.0f, 20000.0f);
+    mViewProjection       = mView * mProjection;
+    mInvViewProjection    = mViewProjection.invert();
+    mInvView              = mView.invert();
+    mInvProjection        = mProjection.invert();
 }
  
 Ray OverheadCamera::GetRayFromNormalizedScreen(const Vector2 &from) const
 {
-    return MathUtil::CreateRayFromNormalizedScreen(from, inverse);
+    return MathUtil::CreateRayFromNormalizedScreen(from, mInvViewProjection);
 }
 
 bool OverheadCamera::PickPlanePoint(const Vector4 &plane, const Vector2 &from, Vector3 &at) const

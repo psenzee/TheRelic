@@ -15,51 +15,61 @@ public:
         
     OverheadCamera(GraphicsDevice &device, float fovDegrees);
         
-    inline const Vector3   &GetLookAt()                    const { return lookAt; }
-    inline void             SetLookAt(const Vector3 &v)          { lookAt = v; Update(); }
-    inline float            GetFovDegrees()                const { return float(fov * RAD_TO_DEG); }
-    inline void             SetFovDegrees(float v)               { fov = float(v * DEG_TO_RAD); Update(); }
-    inline float            GetFovRadians()                const { return fov; }    
-    inline void             SetFovRadians(float v)               { fov = v; Update(); }
-    inline float            GetDepthScale()                const { return depthScale; }
-    inline void             SetDepthScale(float v)               { depthScale = v; Update(); }
-    inline const Vector2   &GetTilt()                      const { return tilt; }
-    inline void             SetTilt(const Vector2 &v)            { tilt = v; Update(); }
-    inline const Vector2   &GetTiltScale()                 const { return tiltScale; }
-    inline void             SetTiltScale(const Vector2 &v)       { tiltScale = v; Update(); }
+    inline const Vector3   &GetLookAt()                    const { return mLookAt; }
+    inline OverheadCamera  &SetLookAt(const Vector3 &v)          { mLookAt = v; Update(); return *this; }
+    inline float            GetFovDegrees()                const { return float(mFov * RAD_TO_DEG); }
+    inline OverheadCamera  &SetFovDegrees(float v)               { mFov = float(v * DEG_TO_RAD); Update(); return *this; }
+    inline float            GetFovRadians()                const { return mFov; }
+    inline OverheadCamera  &SetFovRadians(float v)               { mFov = v; Update(); return *this; }
+    inline float            GetDepthScale()                const { return mDepthScale; }
+    inline OverheadCamera  &SetDepthScale(float v)               { mDepthScale = v; Update(); return *this; }
+    inline const Vector3   &GetUp()                        const { return mUp; }
+    inline OverheadCamera  &SetUp(const Vector3 &up)             { mUp = up; return *this; }
+    inline const Vector2   &GetTilt()                      const { return mTilt; }
+    inline OverheadCamera  &SetTilt(const Vector2 &v)            { mTilt = v; Update(); return *this; }
+    inline const Vector2   &GetTiltScale()                 const { return mTiltScale; }
+    inline OverheadCamera  &SetTiltScale(const Vector2 &v)       { mTiltScale = v; Update(); return *this; }
 
-    inline Vector3          GetViewVector()                const { return (lookAt - position).normal(); }
+    inline Vector3          GetViewVector()                const { return (mLookAt - mPosition).normal(); }
 
-    inline const Vector3   &GetPosition()                  const { return position; }
-    inline const Matrix    &GetView()                      const { return view; }
-    inline const Matrix    &GetProjection()                const { return projection; }
-    inline const Matrix    &GetViewProjection()            const { return viewProjection; }
-    inline const Matrix    &GetInverseViewProjection()     const { return inverse; }        
+    inline const Vector3   &GetPosition()                  const { return mPosition; }
+    inline const Matrix    &GetView()                      const { return mView; }
+    inline const Matrix    &GetProjection()                const { return mProjection; }
+    inline const Matrix    &GetViewProjection()            const { return mViewProjection; }
+    inline const Matrix    &GetInverseViewProjection()     const { return mInvViewProjection; }
+    inline const Matrix    &GetInverseView()               const { return mInvView; }
+    inline const Matrix    &GetInverseProjection()         const { return mInvProjection; }
+    
+
+    inline OverheadCamera  &_SetView(const Matrix &m)            { mView = m; return *this; } // *hack* for tweaking
+    inline OverheadCamera  &_SetProjection(const Matrix &m)      { mProjection = m; return *this; } // *hack* for tweaking
+    
+    Vector3                 GetLightPositionFromWorld(const Vector3 &world) const;
     
     Ray                     GetRayFromNormalizedScreen(const Vector2 &at) const;
     bool                    PickPlanePoint(const Vector4 &plane, const Vector2 &from, Vector3 &at) const;
-    
-    Vector3                 GetCameraPosition(const Vector3 &lookAt, float depthScale);
-    Vector3                 GetCameraPositionTilt(const Vector3 &lookAt, const Vector2 &tilt, const Vector2 &tiltScale, float depthScale);
-
-    inline const void       _SetView(const Matrix &m) { view = m; } // *hack* for tweaking
-    inline const void       _SetProjection(const Matrix &m) { projection = m; } // *hack* for tweaking
         
 private:
         
-    Vector3            position,
-                       lookAt;
-    Vector2            tilt,
-                       tiltScale;
-    Matrix             view,
-                       projection,
-                       viewProjection,
-                       inverse;
-    float              fov,
-                       depthScale;
-    GraphicsDevice    &device;
+    Vector3            mPosition,
+                       mLookAt,
+                       mUp;
+    Vector2            mTilt,
+                       mTiltScale;
+    Matrix             mView,
+                       mProjection,
+                       mViewProjection,
+                       mInvView,
+                       mInvProjection,
+                       mInvViewProjection;
+    float              mFov,
+                       mDepthScale;
+    GraphicsDevice    &mDevice;
         
     void               Update();
+    
+    Vector3            GetCameraPosition(const Vector3 &lookAt, float depthScale);
+    Vector3            GetCameraPositionTilt(const Vector3 &lookAt, const Vector2 &tilt, const Vector2 &tiltScale, float depthScale);
 };
 
 class VisibleBounds

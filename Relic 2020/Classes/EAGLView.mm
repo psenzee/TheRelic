@@ -223,7 +223,7 @@ extern "C" void SetupGame()
     //backingWidth = (int)(gBackingWidth * ((float)backingHeight / (float)gBackingHeight));
     //backingHeight = (int)(gBackingHeight * ((float)backingWidth / (float)gBackingWidth));
     //printf("viewport (2) %d %d\n", backingWidth, backingHeight);
-    GameDimensions dim(Vector2(gBackingWidth, gBackingHeight), Vector2(refWidth, refHeight), Vector2(refWidth, refHeight), true);
+    GameDimensions dim(Vector2(gBackingWidth, gBackingHeight), Vector2(refWidth, refHeight), Vector2(refWidth, refHeight), IsLandscape());
     //GameDimensions dim(Vector2(gBackingHeight, gBackingWidth), Vector2(refHeight, refWidth), Vector2(refHeight, refWidth), true);
     GameState::CreateInstance(dim);
 }
@@ -342,12 +342,7 @@ BOOL hasRetinaDisplay(void)
     if (self)
     {
         PrintScreenSizes();
-        
-        if (hasRetinaDisplay())
-        {
-            //__isHiResDevice = true;
-            [self setContentScaleFactor:2.0f];
-        }
+        [self setContentScaleFactor:[[UIScreen mainScreen] scale]];
 
         CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
 
@@ -378,20 +373,7 @@ BOOL hasRetinaDisplay(void)
 
 extern "C" bool IsHiResDevice()
 {
-    static bool isIPad = GetPlatformIsiPad();
-    static bool isRetina = hasRetinaDisplay() == YES;
-	
-    if (isIPad)
-    {
-        /*
-	gTouchRatioY = 480.f / 1024.f;
-//	gTouchRatioX = 320.f / 768.f;
-        gTouchRatioX = 360.f / 768.f; // this is required to account for the different aspect ratio
-        gTouchOffsetX = -(360.f - 320.f) * 0.5f;
-        gTouchOffsetY = 0.f;
-         */
-    }
-    return isRetina || isIPad;
+    return true; // always now
 }
 
 - (void)initialize
@@ -443,8 +425,14 @@ extern "C" bool IsHiResDevice()
         glGenFramebuffers(1, &defaultFramebuffer);
         glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
 
-        framebufferWidth = (GLint)self.bounds.size.width;
-        framebufferHeight = (GLint)self.bounds.size.height;
+        CGSize size(self.bounds.size);
+        
+        //if (IsLandscape()) {
+        //    size = CGSizeSwap(size);
+        //}
+        
+        framebufferWidth = size.width;
+        framebufferHeight = size.height;
         
         // Create color render buffer and allocate backing store.
         glGenRenderbuffers(1, &colorRenderbuffer);

@@ -66,7 +66,7 @@ Ray MathUtil::CreateRayFromNormalizedScreen(const Vector2 &from, const Matrix &i
 {
     Vector4 a(Unproject(Vector3(from.x, from.y, 0.0f), inverseCamera)),
             b(Unproject(Vector3(from.x, from.y, 1.0f), inverseCamera)),
-    c(b - a);
+            c(b - a);
     return Ray(Vector3(a.x, a.y, a.z), Vector3(c.x, c.y, c.z).normalize());
 }
 
@@ -74,8 +74,7 @@ Vector4 MathUtil::CreatePlaneFromVertices(const Vector3 &a, const Vector3 &b, co
 {
     Vector3 n((b - a).cross(c - a));        
     float   distance = -n.dot(a), m = n.length();
-    if (m == 0.f)
-    {
+    if (m == 0.f) {
         printf("invalid vertices!!\n");
         return Vector4(0.0f, 0.0f, 0.0f, 0.0f);
     }

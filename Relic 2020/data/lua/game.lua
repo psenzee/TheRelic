@@ -119,12 +119,6 @@ function GameStateInitialize(instance)
   
   RegisterUiListener("SaveGameEvent",  "SaveGameListener", {})  
 
-  SetLightingEnabled(true)
-  A_LIGHT = CreateLight()
-  SetLight(1, A_LIGHT)
-  -- local x, y, z = GetLookAt()
-  -- SetLightPosition(A_LIGHT, x, y, z, 1)
-
 end
 
 function StartGame(instance)
@@ -216,6 +210,62 @@ end
 LAST_PRINTED_TEXTURES = 0
 GS_FRAME              = 0
 
+LUX_PASS_UI           = 0
+LUX_PASS_LEVEL        = 1
+LUX_PASS_OVERLAY      = 2
+LUX_PASS_PARTICLES    = 3
+
+LIGHT_X    = 8192
+LIGHT_Y    = 8192
+
+function AddBaseLight(id)
+    local pass = LUX_PASS_LEVEL
+    Lux_SetDiffuse              (pass, id,  1, 1, 1, 1)
+    Lux_SetAmbient              (pass, id,  5, 5, 5, 1)
+    Lux_SetSpecular             (pass, id,  1, 1, 1, 1)
+    Lux_SetSpotDirection        (pass, id, -1, 0, 0, 1) -- best; these also work: 0, 0, 1; 0, -1, 0
+    Lux_SetSpotExponent         (pass, id, 0)
+    Lux_SetSpotCutoff           (pass, id, 180)
+    Lux_SetConstantAttenuation  (pass, id, 1)
+    Lux_SetLinearAttenuation    (pass, id, 0)
+    Lux_SetQuadraticAttenuation (pass, id, 0)
+    Lux_Enable                  (pass, id, true)
+end
+
+function AddBaseLightAtPlayer(id, positional)
+    local x, y, z = GetPlayer():GetPosition()
+    local pass = LUX_PASS_LEVEL
+    AddBaseLight(id)
+    Lux_SetWorldPosition(pass, id, x, y, z, positional)
+end
+
+function AddSpotLightAtPlayer(id)
+    local pass = LUX_PASS_LEVEL
+    local m = 40
+    Lux_SetDiffuse              (pass, id,  m, m,   m, 1)
+    Lux_SetAmbient              (pass, id,  m, m,   m, 1)
+    Lux_SetSpecular             (pass, id,  m, m,   m, 1)
+    Lux_SetSpotDirection        (pass, id, -1, 0,   0, 1)
+    Lux_SetSpotExponent         (pass, id, 0)
+    Lux_SetSpotCutoff           (pass, id, 180)
+    Lux_SetConstantAttenuation  (pass, id, 1)
+    Lux_SetLinearAttenuation    (pass, id, 1)
+    Lux_SetQuadraticAttenuation (pass, id, 1)
+    Lux_Enable                  (pass, id, true)
+    -- local x, y, z = GetPlayer():GetPosition()
+    LIGHT_X = LIGHT_X - 10
+    if LIGHT_X < -8192 then
+        LIGHT_Y = LIGHT_Y - 10
+        LIGHT_X = 8192
+    end
+    if LIGHT_Y < -8192 then
+        LIGHT_Y = 8192
+    end
+    local positional = 0
+    -- Lux_SetWorldPosition(pass, id, LIGHT_X, LIGHT_Y, LIGHT_X, positional)
+    -- print ("LX " .. LIGHT_X .. " Y " .. LIGHT_Y .. " Z " ..LIGHT_Z)
+end
+
 function UpdateGameState(instance)
 
   UpdateHudGlobals()
@@ -232,14 +282,11 @@ function UpdateGameState(instance)
   
   if GetPlayer() ~= nil then
     local x, y, z = GetPlayer():GetPosition()
-    SetLightingEnabled(true)
-    SetLightPosition(A_LIGHT, x, y, z - 64, 1)
-    -- SetLightDiffuse(A_LIGHT, 1.0, 1.0, 1.0, 1000.0)
-    SetLightAmbient(A_LIGHT, 1.0, 1.0, 1.0, 1.0)
-    SetDefaultLightingType(4)
-    -- SetLight0OnPlayer()
+    Lux_EnableLighting(LUX_PASS_LEVEL, true)
+    AddBaseLightAtPlayer(100, 0)
+    AddSpotLightAtPlayer(101)
   end
-  
+
   IS_STARTED = false
   if not IS_STARTED and not PreloadAndStart() then
     return
@@ -375,8 +422,6 @@ function DisplayPlaceName()
 end
 
 function UpdateGame(instance)
-
-  SetLightingEnabled(false)
 
  -- local b5x, b5y = Ui_DrawToScreenPosition((478 + 436) * 0.5, (305 + 265) * 0.5)
   local b5y, b5x = (478 + 436) * 0.5, 320 - (305 + 265) * 0.5

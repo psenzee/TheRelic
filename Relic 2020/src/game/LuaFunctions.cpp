@@ -6,6 +6,7 @@
 #include <string>
 
 #include "net/NetGame.h"
+#include "render/Light.h"
 
 extern "C"
 {
@@ -54,7 +55,7 @@ LUALIB_API void *luaL_checkudataornil(lua_State *L, int ud, const char *tname);
 #include "input/GameInput.h"
 #include "map/ObjectTileSet.h"
 
-#include "level/level.h"
+#include "level/Level.h"
 
 #include "fast/Allocator.h"
 
@@ -82,6 +83,8 @@ extern "C" void Alert(const char *title, const char *text);
 extern "C" void SendMemoryWarning();
 //extern "C" bool IsCrystalActive();
 //extern "C" bool ShouldCrystalActivate();
+
+void LuaReportError(const char *string);
 
 class GraphicsDevice;
 
@@ -1801,169 +1804,128 @@ static int GetOverlayColor(lua_State *lua)
     return 3;
 }
 
-
-//Lights _gLuaLights;
-
-Light *_gLuaLights[8] = { 0, 0, 0, 0,
-                          0, 0, 0, 0, };
-bool _gLuaLightsEnabled = false;
-const int ALLOWED_LIGHT_COUNT = sizeof(_gLuaLights) / sizeof(_gLuaLights[0]);
-
-void SetLuaLights(GraphicsDevice &device)
+static GameState::Pass CheckType_LuxPass(lua_State *lua, int arg)
 {
-    GLStates::lighting.Set(_gLuaLightsEnabled);
-    if (_gLuaLightsEnabled)
-    {
-        for (int i = 0; i < ALLOWED_LIGHT_COUNT; i++)
-        {
-//            if (_gLuaLights[i] != 0)
-//                device.SetLight(*_gLuaLights[i], true);
-//            else device.EnableLight(i, false);
-        }
+    luaL_checktype(lua, arg, LUA_TNUMBER);  // pass
+    int passi = (int)lua_tointeger(lua, arg);
+    if (passi >= (int)GameState::PASS_COUNT) {
+        char buffer[1024];
+        snprintf(buffer, sizeof(buffer) - 1, "lux - pass (%d) is not a valid value", passi);
+        LuaReportError(buffer);
+        return GameState::PASS_COUNT;
     }
+    return (GameState::Pass)passi;
 }
 
-static int Lua_SetLightingEnabled(lua_State *lua)
+static int CheckType_LuxLightId(lua_State *lua, int arg)
 {
-    luaL_checktype(lua, -1, LUA_TBOOLEAN);
-    _gLuaLightsEnabled = (lua_toboolean(lua, -1) != 0);
+    luaL_checktype(lua, arg, LUA_TNUMBER);
+    int id = (int)lua_tointeger(lua, arg);
+    if (id < 0) {
+        char buffer[1024];
+        snprintf(buffer, sizeof(buffer) - 1, "lux - light id (%d) is not a valid value", id);
+        LuaReportError(buffer);
+        return GameState::PASS_COUNT;
+    }
+    return id;
+}
+
+static int Lua_LuxEnableLighting(lua_State *lua)
+{
+    GameState::Pass pass = CheckType_LuxPass(lua, -2);
+    luaL_checktype(lua, -1, LUA_TBOOLEAN); // enable
+    bool enable = (lua_toboolean(lua, -1) != 0);
+    if (pass < GameState::PASS_COUNT)
+        GameState::GetInstance()->GetLights(pass).Enable(enable);
     return 0;
 }
 
-static int CreateLight(lua_State *lua)
+static int Lua_LuxEnable(lua_State *lua)
 {
-    Light *light = new Light;
-    light->id = -1;
-    lua_pushlightuserdata(lua, light);
+    GameState::Pass pass   = CheckType_LuxPass(lua, -3);
+    int             id     = CheckType_LuxLightId(lua, -2);
+    luaL_checktype(lua, -1, LUA_TBOOLEAN); // enable
+    bool            enable = (lua_toboolean(lua, -1) != 0);
+    if (pass < GameState::PASS_COUNT && id >= 0) {
+        GameState::GetInstance()->GetLights(pass).Enable(size_t(id), enable);
+    }
+    return 0;
+}
+
+static int Lua_LuxSetVector(lua_State *lua, Light::VectorType type)
+{
+    GameState::Pass pass = CheckType_LuxPass(lua, -6);
+    size_t          id   = CheckType_LuxLightId(lua, -5);
+    Vector4 v(GetVector4(lua, -1));
+    if (pass < GameState::PASS_COUNT && id >= 0) {
+        GameState::GetInstance()->GetLights(pass).SetVector(size_t(id), type, v);
+    }
+    return 0;
+}
+
+static int Lua_LuxGetVector(lua_State *lua, Light::VectorType type)
+{
+    GameState::Pass pass = CheckType_LuxPass(lua, -2);
+    size_t          id   = CheckType_LuxLightId(lua, -1);
+    Vector4 v;
+    v.set(0.f);
+    if (pass < GameState::PASS_COUNT && id >= 0) {
+        const Vector4 *p = GameState::GetInstance()->GetLights(pass).GetVector(size_t(id), type);
+        v = p ? *p : v;
+    }
+    ReturnVector4(lua, v);
+    return 4;
+}
+
+static int Lua_LuxSetFloat(lua_State *lua, Light::FloatType type)
+{
+    GameState::Pass pass  = CheckType_LuxPass(lua, -3);
+    size_t          id    = CheckType_LuxLightId(lua, -2);
+    float           value = GetFloat(lua, -1);
+    if (pass < GameState::PASS_COUNT && id >= 0) {
+        GameState::GetInstance()->GetLights(pass).SetFloat(size_t(id), type, value);
+    }
+    return 0;
+}
+
+static int Lua_LuxGetFloat(lua_State *lua, Light::FloatType type)
+{
+    GameState::Pass pass  = CheckType_LuxPass(lua, -2);
+    size_t          id    = CheckType_LuxLightId(lua, -1);
+    float           value = 0.f;
+    if (pass < GameState::PASS_COUNT && id >= 0) {
+        const float *p = GameState::GetInstance()->GetLights(pass).GetFloat(size_t(id), type);
+        value = p ? *p : 0.f;
+    }
+    lua_pushnumber(lua, value);
     return 1;
 }
 
-static int SetLightPosition(lua_State *lua)
-{
-    luaL_checktype(lua, -5, LUA_TLIGHTUSERDATA);
-    Light *light = (Light *)lua_touserdata(lua, -5);
-    Vector4 position = GetVector4(lua, -1);
-    if (light) light->position = position;
-    return 0;
-}
+static int Lua_LuxGetWorldPosition(lua_State *lua)        { return Lua_LuxGetVector(lua, Light::V4_WORLD_POSITION); }
+static int Lua_LuxGetAmbient(lua_State *lua)              { return Lua_LuxGetVector(lua, Light::V4_AMBIENT); }
+static int Lua_LuxGetDiffuse(lua_State *lua)              { return Lua_LuxGetVector(lua, Light::V4_DIFFUSE); }
+static int Lua_LuxGetSpecular(lua_State *lua)             { return Lua_LuxGetVector(lua, Light::V4_SPECULAR); }
+static int Lua_LuxGetSpotDirection(lua_State *lua)        { return Lua_LuxGetVector(lua, Light::V4_SPOT_DIRECTION); }
 
-static int SetLightAmbient(lua_State *lua)
-{
-    luaL_checktype(lua, -5, LUA_TLIGHTUSERDATA);
-    Light *light = (Light *)lua_touserdata(lua, -5);
-    Vector4 color = GetVector4(lua, -1);
-    if (light) light->ambient = color;
-    return 0;
-}
+static int Lua_LuxGetShininess(lua_State *lua)            { return Lua_LuxGetFloat (lua, Light::F1_SHININESS); }
+static int Lua_LuxGetSpotExponent(lua_State *lua)         { return Lua_LuxGetFloat (lua, Light::F1_SPOT_EXPONENT); }
+static int Lua_LuxGetSpotCutoff(lua_State *lua)           { return Lua_LuxGetFloat (lua, Light::F1_SPOT_CUTOFF); }
+static int Lua_LuxGetConstantAttenuation(lua_State *lua)  { return Lua_LuxGetFloat (lua, Light::F1_CONSTANT_ATTENUATION); }
+static int Lua_LuxGetLinearAttenuation(lua_State *lua)    { return Lua_LuxGetFloat (lua, Light::F1_LINEAR_ATTENUATION); }
+static int Lua_LuxGetQuadraticAttenuation(lua_State *lua) { return Lua_LuxGetFloat (lua, Light::F1_QUADRATIC_ATTENUATION); }
 
-static int SetLightDiffuse(lua_State *lua)
-{
-    luaL_checktype(lua, -5, LUA_TLIGHTUSERDATA);
-    Light *light = (Light *)lua_touserdata(lua, -5);
-    Vector4 color = GetVector4(lua, -1);
-    if (light) light->diffuse = color;
-    return 0;
-}
+static int Lua_LuxSetWorldPosition(lua_State *lua)        { return Lua_LuxSetVector(lua, Light::V4_WORLD_POSITION); }
+static int Lua_LuxSetAmbient(lua_State *lua)              { return Lua_LuxSetVector(lua, Light::V4_AMBIENT); }
+static int Lua_LuxSetDiffuse(lua_State *lua)              { return Lua_LuxSetVector(lua, Light::V4_DIFFUSE); }
+static int Lua_LuxSetSpecular(lua_State *lua)             { return Lua_LuxSetVector(lua, Light::V4_SPECULAR); }
+static int Lua_LuxSetSpotDirection(lua_State *lua)        { return Lua_LuxSetVector(lua, Light::V4_SPOT_DIRECTION); }
 
-static int SetLightSpecular(lua_State *lua)
-{
-    luaL_checktype(lua, -5, LUA_TLIGHTUSERDATA);
-    Light *light = (Light *)lua_touserdata(lua, -5);
-    Vector4 color = GetVector4(lua, -1);
-    if (light) light->specular = color;
-    return 0;
-}
-
-static int SetLightShininess(lua_State *lua)
-{
-    luaL_checktype(lua, -2, LUA_TLIGHTUSERDATA);
-    Light *light = (Light *)lua_touserdata(lua, -2);
-    float value = GetFloat(lua, -1);
-    if (light) light->shininess = value;
-    return 0;
-}
-
-static int CopyLight(lua_State *lua)
-{
-    luaL_checktype(lua, -1, LUA_TLIGHTUSERDATA);
-    Light *light = (Light *)lua_touserdata(lua, -1);
-    Light *copy = new Light(*light);
-    copy->id = -1;
-    lua_pushlightuserdata(lua, copy);
-    return 1;
-}
-
-static int DestroyLight(lua_State *lua)
-{
-    luaL_checktype(lua, -1, LUA_TLIGHTUSERDATA);
-    Light *light = (Light *)lua_touserdata(lua, -1);
-    if (light)
-    {
-        // clear it out of the list if it's there
-        for (int i = 0; i < ALLOWED_LIGHT_COUNT; i++)
-            if (_gLuaLights[i] == light)
-                _gLuaLights[i] = 0;
-        delete light;
-    }
-    return 0;
-}
-
-static int SetLight(lua_State *lua)
-{
-    luaL_checktype(lua, -1, LUA_TLIGHTUSERDATA);
-    luaL_checktype(lua, -2, LUA_TNUMBER);
-    int id = (int)lua_tointeger(lua, -2);
-    if (id < 0 || id >= ALLOWED_LIGHT_COUNT)
-    {
-        printf("Can't set light, id (%d) is not in acceptable range (0-%d) allowed!\n", id, ALLOWED_LIGHT_COUNT);
-        return 0;
-    }
-    Light *light = (Light *)lua_touserdata(lua, -1);
-    if (light)
-    {
-        if (light->id != -1 && _gLuaLights[light->id] == light)
-        {
-            printf("Can't set light, light is already set at id %d!\n", light->id);
-            return 0;
-        }
-        light->id = id;
-        _gLuaLights[id] = light;
-    }
-    return 0;
-}
-
-static int GetLight(lua_State *lua)
-{
-    luaL_checktype(lua, -1, LUA_TNUMBER);
-    int id = (int)lua_tointeger(lua, -2);
-    if (id < 0 || id >= ALLOWED_LIGHT_COUNT)
-    {
-        printf("Can't get light, id (%d) is not in acceptable range (0-%d)!\n", id, ALLOWED_LIGHT_COUNT);
-        return 0;
-    }
-    Light *light = _gLuaLights[id];
-    if (light)
-        lua_pushlightuserdata(lua, light);
-    else
-        lua_pushnil(lua);
-    return 1;
-}
-
-static int UnsetLight(lua_State *lua)
-{
-    int ALLOWED_LIGHT_COUNT = sizeof(_gLuaLights) / sizeof(_gLuaLights[0]);
-    luaL_checktype(lua, -1, LUA_TNUMBER);
-    int id = (int)lua_tointeger(lua, -1);
-    if (id < 0 || id >= ALLOWED_LIGHT_COUNT)
-    {
-        printf("Can't unset light, id (%d) is not in acceptable range (0-%d) allowed!\n", id, ALLOWED_LIGHT_COUNT);
-        return 0;
-    }
-    if (_gLuaLights[id])
-        _gLuaLights[id]->id = -1;
-    _gLuaLights[id] = 0;
-    return 0;
-}
+static int Lua_LuxSetShininess(lua_State *lua)            { return Lua_LuxSetFloat (lua, Light::F1_SHININESS); }
+static int Lua_LuxSetSpotExponent(lua_State *lua)         { return Lua_LuxSetFloat (lua, Light::F1_SPOT_EXPONENT); }
+static int Lua_LuxSetSpotCutoff(lua_State *lua)           { return Lua_LuxSetFloat (lua, Light::F1_SPOT_CUTOFF); }
+static int Lua_LuxSetConstantAttenuation(lua_State *lua)  { return Lua_LuxSetFloat (lua, Light::F1_CONSTANT_ATTENUATION); }
+static int Lua_LuxSetLinearAttenuation(lua_State *lua)    { return Lua_LuxSetFloat (lua, Light::F1_LINEAR_ATTENUATION); }
+static int Lua_LuxSetQuadraticAttenuation(lua_State *lua) { return Lua_LuxSetFloat (lua, Light::F1_QUADRATIC_ATTENUATION); }
 
 static int SetBaseUvTransform(lua_State *lua)
 {
@@ -2526,19 +2488,35 @@ void RegisterLuaFunctions(lua_State *lua)
     lua_register(lua, "Sync_PopDataMessage",           Sync_PopDataMessage);
 
     // lights
-    lua_register(lua, "SetLightingEnabled",            Lua_SetLightingEnabled);
-    lua_register(lua, "CreateLight",                   CreateLight);
-    lua_register(lua, "SetLightPosition",              SetLightPosition);
-    lua_register(lua, "SetLightAmbient",               SetLightAmbient);
-    lua_register(lua, "SetLightDiffuse",               SetLightDiffuse);
-    lua_register(lua, "SetLightSpecular",              SetLightSpecular);
-    lua_register(lua, "SetLightShininess",             SetLightShininess);
-    lua_register(lua, "CopyLight",                     CopyLight);
-    lua_register(lua, "DestroyLight",                  DestroyLight);
-    lua_register(lua, "SetLight",                      SetLight);
-    lua_register(lua, "GetLight",                      GetLight);
-    lua_register(lua, "UnsetLight",                    UnsetLight);
-	
+    lua_register(lua, "Lux_EnableLighting",            Lua_LuxEnableLighting);
+    lua_register(lua, "Lux_Enable",                    Lua_LuxEnable);
+
+    lua_register(lua, "Lux_SetAmbient",                Lua_LuxSetAmbient);
+    lua_register(lua, "Lux_SetDiffuse",                Lua_LuxSetDiffuse);
+    lua_register(lua, "Lux_SetSpecular",               Lua_LuxSetSpecular);
+    lua_register(lua, "Lux_SetWorldPosition",          Lua_LuxSetWorldPosition);
+    lua_register(lua, "Lux_SetSpotDirection",          Lua_LuxSetSpotDirection);
+    
+    lua_register(lua, "Lux_GetAmbient",                Lua_LuxGetAmbient);
+    lua_register(lua, "Lux_GetDiffuse",                Lua_LuxGetDiffuse);
+    lua_register(lua, "Lux_GetSpecular",               Lua_LuxGetSpecular);
+    lua_register(lua, "Lux_GetWorldPosition",          Lua_LuxGetWorldPosition);
+    lua_register(lua, "Lux_GetSpotDirection",          Lua_LuxGetSpotDirection);
+
+    lua_register(lua, "Lux_SetShininess",              Lua_LuxSetShininess);
+    lua_register(lua, "Lux_SetSpotExponent",           Lua_LuxSetSpotExponent);
+    lua_register(lua, "Lux_SetSpotCutoff",             Lua_LuxSetSpotCutoff);
+    lua_register(lua, "Lux_SetConstantAttenuation",    Lua_LuxSetConstantAttenuation);
+    lua_register(lua, "Lux_SetLinearAttenuation",      Lua_LuxSetLinearAttenuation);
+    lua_register(lua, "Lux_SetQuadraticAttenuation",   Lua_LuxSetQuadraticAttenuation);
+    
+    lua_register(lua, "Lux_GetShininess",              Lua_LuxGetShininess);
+    lua_register(lua, "Lux_GetSpotExponent",           Lua_LuxGetSpotExponent);
+    lua_register(lua, "Lux_GetSpotCutoff",             Lua_LuxGetSpotCutoff);
+    lua_register(lua, "Lux_GetConstantAttenuation",    Lua_LuxGetConstantAttenuation);
+    lua_register(lua, "Lux_GetLinearAttenuation",      Lua_LuxGetLinearAttenuation);
+    lua_register(lua, "Lux_GetQuadraticAttenuation",   Lua_LuxGetQuadraticAttenuation);
+
     lua_register(lua, "SetBaseUvTransform",            SetBaseUvTransform);
     lua_register(lua, "UnsetBaseUvTransform",          UnsetBaseUvTransform);
 }

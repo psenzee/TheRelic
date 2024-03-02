@@ -140,11 +140,10 @@ void ContentLoader::PrintLoadedTextures() const
 void ContentLoader::RemoveBundle(const char *name)
 {
     Bundle *bundle = FindBundle(name);
-    if (bundle)
+    if (bundle) {
         mBundles.erase(
-            std::remove_if(mBundles.begin(), mBundles.end(),
-                                             std::bind2nd(std::equal_to<Bundle *>(), bundle)),
-            mBundles.end());
+           std::remove_if(mBundles.begin(), mBundles.end(), [bundle](auto a) { return a == bundle; }), mBundles.end());
+    }
 }
 
 DeviceMesh *ContentLoader::LoadMesh(const char *name)

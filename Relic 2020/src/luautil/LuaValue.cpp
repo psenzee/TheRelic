@@ -203,18 +203,14 @@ void LuaValue::SetFunctionValue(const void *value)
 const char *LuaValue::GetFunction() const
 {
     if (!Verify(LUATYPE_FUNCTION))
-    {
-        return false;
-    }
+        return nullptr;
     return mString.c_str();
 }
 
 const void *LuaValue::GetFunctionValue() const
 {
     if (!Verify(LUATYPE_FUNCTION))
-    {
-        return false;
-    }
+        return nullptr;
     return mFunction;
 }
 
@@ -229,9 +225,7 @@ void LuaValue::SetLightUserData(void *value)
 void *LuaValue::GetLightUserData()
 {
     if (!Verify(LUATYPE_LIGHTUSERDATA))
-    {
-        return false;
-    }
+        return nullptr;
     return mLightUserData;
 }
 
@@ -245,9 +239,7 @@ void LuaValue::SetUserData(int value)
 int LuaValue::GetUserData() const
 {
     if (!Verify(LUATYPE_USERDATA))
-    {
-        return false;
-    }
+        return 0;
     return mUserData;
 }
 

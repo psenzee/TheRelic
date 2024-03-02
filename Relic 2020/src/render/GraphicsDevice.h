@@ -5,6 +5,8 @@
 #include "Material.h"
 #include "Light.h"
 
+class OverheadCamera;
+
 class GraphicsDevice
 {
 public:
@@ -33,7 +35,7 @@ public:
     Matrix            GetProjection() const;
     void              SetMaterial(const Material &m);
     
-    void              SetLight(size_t slot, const Light &light, bool enable = true);
+    void              SetLight(const OverheadCamera &camera, size_t slot, const Light &light, bool enable = true);
     void              EnableLight(size_t slot, bool enable = true);
     bool              IsLightingEnabled() const;
     

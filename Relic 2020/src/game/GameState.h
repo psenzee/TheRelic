@@ -48,6 +48,8 @@ class GameState : public IEventListener
 {
 public:
     
+    enum Pass { PASS_UI = 0, PASS_LEVEL, PASS_OVERLAY, PASS_PARTICLES, PASS_COUNT };
+    
     static GameState       *GetInstance();
     static bool             HasInstance();
     static GameState       *CreateInstance(const GameDimensions &dimensions);
@@ -95,6 +97,9 @@ public:
 
     Character              *GetPlayer();
     PauseState              GetPauseState() const;
+    
+    const Lights           &GetLights(Pass pass)            const { return mLights[pass]; }
+    Lights                 &GetLights(Pass pass)                  { return mLights[pass]; }
 	
 private:
     
@@ -110,7 +115,7 @@ private:
 
     Multiplayer        mMultiplayer;
     
-    Lights             mLights;
+    Lights             mLights[PASS_COUNT];
 
     LuaThread         *mGameThread;
     UiInstance        *mUiInstance;    
@@ -141,11 +146,15 @@ private:
     void               Initialize(const GameDimensions &dimensions);
     void               RenderEffects(const GameTime &time);
 	void               UpdateFpsAverage(unsigned framesToAdd, unsigned elapsed);
-    void               DrawOverlay();
-    void               DrawParticles(const GameTime &time);
+
     void               LookAt(Movable *m);
     void               LookAt(const Vector3 &v);
+
     void               DrawLevel(const GameTime &time);
+    void               DrawParticles(const GameTime &time);
+    void               DrawHud(const GameTime &time);
+    void               DrawUi(const GameTime &time);
+    void               DrawOverlay(const GameTime &time);
 };
 
 void            SetGlobalRenderContext(const RenderContext &rc);

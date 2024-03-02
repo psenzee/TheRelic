@@ -4,6 +4,7 @@
 #include "GLUtils.h"
 #include "platform/GLIncludes.h"
 #include "render/GLStates.h"
+#include "OverheadCamera.h"
 
 GraphicsDevice *GraphicsDevice::sInstance = 0;
 
@@ -141,18 +142,30 @@ bool GraphicsDevice::IsLightingEnabled() const
     return GLStates::lighting.Get();
 }
 
-void GraphicsDevice::SetLight(size_t slot, const Light &light, bool enable)
+void GraphicsDevice::SetLight(const OverheadCamera &camera, size_t slot, const Light &light, bool enable)
 {
     glLoadIdentity();
 
     int id = GL_LIGHT0 + slot;
 
-    glLightfv(id, GL_AMBIENT,  (const float *)&light.ambient);
-    glLightfv(id, GL_DIFFUSE,  (const float *)&light.diffuse);
-    glLightfv(id, GL_SPECULAR, (const float *)&light.specular);
+    Vector4 world = light.vectors[Light::V4_WORLD_POSITION];
+    Vector3 pos = camera.GetLightPositionFromWorld(world.xyz());
+    float eye[4] = { pos.x, pos.y, pos.z, world.w };
+    printf("light at %.f, %.f, %.f (%f) from (%.f, %.f, %.f)\n", pos.x, pos.y, pos.z, world.w, world.x, world.y, world.z);
+    
+    glLightfv(id, GL_POSITION,              eye);
 
-    float position[] = { light.position.x, light.position.y, light.position.z, light.position.w };
-    glLightfv(id, GL_POSITION, position);
+    glLightfv(id, GL_AMBIENT,               (const float *)&light.vectors[Light::V4_AMBIENT]);
+    glLightfv(id, GL_DIFFUSE,               (const float *)&light.vectors[Light::V4_DIFFUSE]);
+    glLightfv(id, GL_SPECULAR,              (const float *)&light.vectors[Light::V4_SPECULAR]);
+    glLightfv(id, GL_SPOT_DIRECTION,        (const float *)&light.vectors[Light::V4_SPOT_DIRECTION]);
+
+    glLightf (id, GL_SHININESS,             light.floats[Light::F1_SHININESS]);
+    glLightf (id, GL_SPOT_EXPONENT,         light.floats[Light::F1_SPOT_EXPONENT]);
+    glLightf (id, GL_SPOT_CUTOFF,           light.floats[Light::F1_SPOT_CUTOFF]);
+    glLightf (id, GL_CONSTANT_ATTENUATION,  light.floats[Light::F1_CONSTANT_ATTENUATION]);
+    glLightf (id, GL_LINEAR_ATTENUATION,    light.floats[Light::F1_LINEAR_ATTENUATION]);
+    glLightf (id, GL_QUADRATIC_ATTENUATION, light.floats[Light::F1_QUADRATIC_ATTENUATION]);
 
     if (enable)
         EnableLight(slot, true);

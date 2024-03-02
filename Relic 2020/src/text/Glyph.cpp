@@ -59,7 +59,7 @@ Vector2 GlyphWriter::GetSize(const char *s, const Vector2 &scale, bool stopAtNew
         }
         else
         {
-            int32_t c = ((uchar8_t)*s) - GLYPH_START;
+            int32_t c = ((uint8_t)*s) - GLYPH_START;
             if (c < 0 || c >= MAX_GLYPHS)
                 c = 0;
             GlyphExtent &ex = extents[c];
@@ -80,7 +80,7 @@ GlyphDrawList *GlyphWriter::Write(const char *s, const Vector2 &pos, const Vecto
 GlyphDrawList *GlyphWriter::Write(const char *s, const Vector2 &start, const Vector2 &pos, const Vector2 &scale, const Vector4 &color)
 {
     if (!s) return 0;
-  //const uchar8_t *us = static_cast<const uchar8_t *>(s);
+  //const uint8_t *us = static_cast<const uint8_t *>(s);
     GlyphDrawList *list    = new GlyphDrawList(texture, Vector3(scale.x, scale.y, 1.0f), color);
     Vector3        initial = v3(start), position(v3(pos));
     list->SetInitialPosition(initial);
@@ -94,7 +94,7 @@ GlyphDrawList *GlyphWriter::Write(const char *s, const Vector2 &start, const Vec
         }
         else
         {
-            int32_t c = (uchar8_t)s[i] - GLYPH_START;
+            int32_t c = (uint8_t)s[i] - GLYPH_START;
             if (c < 0 || c >= MAX_GLYPHS)
                 c = 0;
             GlyphExtent &ex = extents[c];
@@ -126,8 +126,8 @@ GlyphExtent GlyphWriter::ReadExtent(XmlElement *glyphs, int32_t character)
     case '<':  strcpy((char *)s, "&lt;");   break;
     // more later perhaps
     default:
-        if ((uchar8_t)(*s) >= 128) {
-            snprintf(s, sizeof(s) - 1, "&#%u;", (uchar8_t)*s);
+        if ((uint8_t)(*s) >= 128) {
+            snprintf(s, sizeof(s) - 1, "&#%u;", (uint8_t)*s);
         }
         break;
     }

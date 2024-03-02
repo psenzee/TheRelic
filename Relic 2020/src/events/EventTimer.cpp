@@ -3,9 +3,7 @@
 
 extern unsigned GetCurrentTimeMs();
 
-EventTimer::EventTimer() : elapsed(GetCurrentTimeMs())
-{
-}
+EventTimer::EventTimer() : elapsed(GetCurrentTimeMs()) {}
 
 void EventTimer::Add(function_t function, void *context, unsigned time)
 {

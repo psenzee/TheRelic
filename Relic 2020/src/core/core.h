@@ -29,9 +29,6 @@ inline Vector2 v2(const Vector3 &v)                 { return Vector2(v.x, v.y); 
 inline Vector3 v3(const Vector2 &v, float z = 0.0f) { return Vector3(v.x, v.y, z); }
 inline Vector4 v4(const Vector3 &v, float w = 0.0f) { return Vector4(v.x, v.y, v.z, w); }
 
-typedef unsigned char uchar8_t;
-typedef char          char8_t;
-
 typedef FastString<64> String;
 
 class TriState
