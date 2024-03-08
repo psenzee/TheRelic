@@ -48,11 +48,13 @@ static void _RenderQuads(RenderContext &context, float *vertices, float *uvs, in
     Vector4 ambient(color * Vector4(2.0f, 2.0f, 2.0f, 0.0f)),
             diffuse(1.0f, 1.0f, 1.0f, color.w);
 
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, (GLfloat *)&ambient);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (GLfloat *)&diffuse);
-    
-    glVertexPointer  (3, GL_FLOAT,         0, (GLfloat *)&vertices[0]);
-    glTexCoordPointer(2, GL_FLOAT,         0, (GLfloat *)&uvs[0]);
+    //glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, (GLfloat *)&ambient);
+    //glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (GLfloat *)&diffuse);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLfloat *)&vertices[0]);
+    glEnableVertexAttribArray(0);
+
+    //glTexCoordPointer(2, GL_FLOAT,         0, (GLfloat *)&uvs[0]);
 
     glDrawArrays(GL_TRIANGLES, 0, count);
 }
@@ -218,8 +220,8 @@ int ParticleSystem::RenderParticles(RenderContext &context)
                         *puvs      = uvs;
     uint32_t             vcount    = 0;
 
-    glLoadMatrixf((GLfloat *)context.camera.GetView().data);
-    glMultMatrixf((GLfloat *)context.transform.data);
+    //glLoadMatrixf((GLfloat *)context.camera.GetView().data);
+    //glMultMatrixf((GLfloat *)context.transform.data);
 
     ClearCachedPointers();
     if (mBlendType == PARTICLE_BLEND_DARK) {
@@ -229,9 +231,9 @@ int ParticleSystem::RenderParticles(RenderContext &context)
     }
     //mTexture->Set(context.device, GL_SRC_ALPHA, GL_DST_COLOR);
 
-    glDisableClientState(GL_NORMAL_ARRAY);  
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    //glDisableClientState(GL_NORMAL_ARRAY);
+    //glEnableClientState(GL_VERTEX_ARRAY);
+    //glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
     glDisable(GL_CULL_FACE);  // we can eliminate this if we ensure the correct orientation of the vertices
 
@@ -263,7 +265,7 @@ int ParticleSystem::RenderParticles(RenderContext &context)
         }
     }
 
-    GLStates::depthWrite.Set(false);
+    //GLStates::depthWrite.Set(false);
 
     if (vcount)
     {
@@ -272,7 +274,7 @@ int ParticleSystem::RenderParticles(RenderContext &context)
         _RenderQuads(context, vertices, uvs, vcount, color);
     }
     
-    GLStates::depthWrite.Set(true);
+    //GLStates::depthWrite.Set(true);
     glEnable(GL_CULL_FACE); // we can eliminate this if we ensure the correct orientation of the vertices
     
     //mTexture->Set(context.device, GL_ONE, GL_ONE);

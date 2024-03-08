@@ -117,7 +117,7 @@ void UiCore::DrawQuad(const char *filename, const Vector4 &color,
 {
     DeviceTexture *texture = ContentLoader::GetInstance()->GetTexture(filename);
     GLStates::depthTest.Set(false);
-    GLStates::depthWrite.Set(false);
+    //GLStates::depthWrite.Set(false);
     if (angle == 0.f)
     {
         mQuadRenderer.RenderScreenAlignedQuad(
@@ -132,7 +132,7 @@ void UiCore::DrawQuad(const char *filename, const Vector4 &color,
             v3(ScreenToDrawPosition(start)),
             v3(ScreenToDrawPosition(end)), t0, t1, angle);            
     }
-    GLStates::depthWrite.Set(true);
+    //GLStates::depthWrite.Set(true);
     GLStates::depthTest.Set(true);
 }
 
@@ -141,9 +141,9 @@ void UiCore::DrawScreenQuad(const char *filename, const Vector4 &color, const Ve
     Tuple3f min = mDimensions.GetBounds().minimum,
             max = mDimensions.GetBounds().maximum;
     GLStates::depthTest.Set(false);
-    GLStates::depthWrite.Set(false);
+    //GLStates::depthWrite.Set(false);
     DrawQuad(filename, color, min.xy(), max.xy(), t0, t1, 0.0f);
-    GLStates::depthWrite.Set(true);
+    //GLStates::depthWrite.Set(true);
     GLStates::depthTest.Set(true);
 }
 
@@ -161,9 +161,9 @@ void UiCore::DrawRing(const char *filename, const Vector4 &color, const Vector3 
 	transform = transform * translate;
 	Drawable *drawable = CreateRingTransform("fx", filename, 64, innerradius, outerradius, transform);
     GLStates::depthTest.Set(false);
-    GLStates::depthWrite.Set(false);
+    //GLStates::depthWrite.Set(false);
 	drawable->RenderImmediate(GetRenderContext());
-    GLStates::depthWrite.Set(true);
+    //GLStates::depthWrite.Set(true);
     GLStates::depthTest.Set(true);
 	drawable->Release();
 }

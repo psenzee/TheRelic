@@ -40,7 +40,7 @@ void SetAsTexture1(int id)
 {
    SetActiveTexture(GL_TEXTURE1);
    glBindTexture(GL_TEXTURE_2D, id);
-   glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+   //glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
 }
 
 void SetColorCombineMode(int combine) // combine GL_ADD/GL_MODULATE/GL_INTERPOLATE
@@ -96,6 +96,7 @@ int GetDefaultLightingType()
 
 void SetDefaultLighting()
 {    
+#if 0
     glLoadIdentity();
 
     if (!_g_lightingType)
@@ -182,6 +183,7 @@ void SetDefaultLighting()
         glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
         glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);             
     }
+#endif
 }
 
 enum PointerType { VERTEX = 0, NORMAL, UV, MAX_POINTER_TYPES };
@@ -212,9 +214,10 @@ void SetVertexPointer(void *data)
     if (cachedPointers[VERTEX] != data)
     {
         ClearBuffers();        
-        if (data)
-            GLStates::vertices.Set(true);
-        glVertexPointer(3, GL_FLOAT, 0, data);
+        //if (data)
+        //    GLStates::vertices.Set(true);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, data);
+        glEnableVertexAttribArray(0);
         cachedPointers[VERTEX] = data;
     }
 }
@@ -224,9 +227,9 @@ void SetNormalPointer(void *data)
     if (cachedPointers[NORMAL] != data)
     {
         ClearBuffers();        
-        if (data)
-            GLStates::normals.Set(true);
-        glNormalPointer(GL_FLOAT, 0, data);    
+        //if (data)
+        //    GLStates::normals.Set(true);
+        //glNormalPointer(GL_FLOAT, 0, data);
         cachedPointers[NORMAL] = data;
     }
 }
@@ -236,9 +239,9 @@ void SetUvPointer(void *data)
     if (cachedPointers[UV] != data)
     {
         ClearBuffers();        
-        if (data)
-            GLStates::uvs.Set(true);
-        glTexCoordPointer(2, GL_FLOAT, 0, data);        
+        //if (data)
+        //    GLStates::uvs.Set(true);
+        //glTexCoordPointer(2, GL_FLOAT, 0, data);
         cachedPointers[UV] = data;
     }
 }
@@ -258,92 +261,27 @@ void SetBuffers(unsigned vb, unsigned ib, unsigned vertices)
 
 #ifndef WIN32
     // Activate the VBOs to draw
-    glBindBuffer(GL_ARRAY_BUFFER,         vb);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
+    //glBindBuffer(GL_ARRAY_BUFFER,         vb);
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
 #endif
 
     const GLsizeiptr vertexSize = vertices * 3 * sizeof(float);
     const GLsizeiptr uvSize     = vertices * 2 * sizeof(float);
 
     // Describe to OpenGL where the vertex data is in the buffer
-    glVertexPointer(3, GL_FLOAT, 0, (GLvoid*)((char*)NULL));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)((char*)NULL));
+    glEnableVertexAttribArray(0);
     // Describe to OpenGL where the uv data is in the buffer
-    glTexCoordPointer(2, GL_FLOAT, 0, (GLvoid*)((char*)NULL + vertexSize));    
+    //glTexCoordPointer(2, GL_FLOAT, 0, (GLvoid*)((char*)NULL + vertexSize));
     // Describe to OpenGL where the normal data is in the buffer
-    glNormalPointer(GL_FLOAT, 0, (GLvoid*)((char*)NULL + vertexSize + uvSize));
+    //glNormalPointer(GL_FLOAT, 0, (GLvoid*)((char*)NULL + vertexSize + uvSize));
 
     // This could actually be moved into the setup since we never disable it
-    GLStates::vertices.Set(true);
-    GLStates::normals.Set(true);
-    GLStates::uvs.Set(true);
+    //GLStates::vertices.Set(true);
+    //GLStates::normals.Set(true);
+    //GLStates::uvs.Set(true);
     
     cachedBuffers[0] = vb; cachedBuffers[1] = ib;
-}
-
-// this is essentially for Win32 only
-void SetPointersInterleaved(void *data, unsigned vertices, bool normals) 
-{
-    memset(&cachedPointers[0], 0, sizeof(cachedPointers));
-
-    GLStates::vertices.Set(true);
-    GLStates::normals.Set(normals);
-    GLStates::uvs.Set(true);
-
-    int size = 20;
-    if (normals)
-        size += 12;
-
-    // Describe to OpenGL where the vertex data is in the buffer
-    glVertexPointer  (3, GL_FLOAT, size, ((char*)data + 0));
-    // Describe to OpenGL where the uv data is in the buffer
-    glTexCoordPointer(2, GL_FLOAT, size, ((char*)data + 12));    
-    // Describe to OpenGL where the normal data is in the buffer
-    if (normals)
-        glNormalPointer(GL_FLOAT, size, ((char*)data + 20));
-}
-
-// this is essentially for Win32 only
-void SetPointersInterleavedShortPos(void *data, unsigned vertices, bool normals) 
-{
-    memset(&cachedPointers[0], 0, sizeof(cachedPointers));
-
-    GLStates::vertices.Set(true);
-    GLStates::normals.Set(normals);
-    GLStates::uvs.Set(true);
-
-    int size = 16;
-    if (normals)
-        size += 12;
-
-    // Describe to OpenGL where the vertex data is in the buffer
-    glVertexPointer  (3, GL_SHORT, size, ((char*)data + 0));
-    // Describe to OpenGL where the uv data is in the buffer
-    glTexCoordPointer(2, GL_FLOAT, size, ((char*)data + 8));    
-    // Describe to OpenGL where the normal data is in the buffer
-    if (normals)
-        glNormalPointer(GL_FLOAT, size, ((char*)data + 16));
-}
-
-// this is essentially for Win32 only
-void SetPointersInterleavedCharPos(void *data, unsigned vertices, bool normals) 
-{
-    memset(&cachedPointers[0], 0, sizeof(cachedPointers));
-
-    GLStates::vertices.Set(true);
-    GLStates::normals.Set(normals);
-    GLStates::uvs.Set(true);
-
-    int size = 12;
-    if (normals)
-        size += 12;
-
-    // Describe to OpenGL where the vertex data is in the buffer
-    glVertexPointer  (3, GL_BYTE,  size, ((char*)data + 0));
-    // Describe to OpenGL where the uv data is in the buffer
-    glTexCoordPointer(2, GL_FLOAT, size, ((char*)data + 4));
-    // Describe to OpenGL where the normal data is in the buffer
-    if (normals)
-        glNormalPointer(GL_FLOAT, size, ((char*)data + 20));
 }
 
 void SetBuffersInterleaved(unsigned vb, unsigned ib, unsigned vertices, bool normals)
@@ -361,8 +299,8 @@ void SetBuffersInterleaved(unsigned vb, unsigned ib, unsigned vertices, bool nor
 
 #ifndef WIN32
     // Activate the VBOs to draw
-    glBindBuffer(GL_ARRAY_BUFFER,         vb);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
+    //glBindBuffer(GL_ARRAY_BUFFER,         vb);
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
 #endif
 
     int size = 20;
@@ -370,17 +308,18 @@ void SetBuffersInterleaved(unsigned vb, unsigned ib, unsigned vertices, bool nor
         size += 12;
 
     // Describe to OpenGL where the vertex data is in the buffer
-    glVertexPointer  (3, GL_FLOAT, size, ((char*)NULL + 0));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, size, ((char*)NULL + 0));
+    glEnableVertexAttribArray(0);
     // Describe to OpenGL where the uv data is in the buffer
-    glTexCoordPointer(2, GL_FLOAT, size, ((char*)NULL + 12));    
+    //glTexCoordPointer(2, GL_FLOAT, size, ((char*)NULL + 12));
     // Describe to OpenGL where the normal data is in the buffer
-    if (normals)
-        glNormalPointer(GL_FLOAT, size, ((char*)NULL + 20));
+    //if (normals)
+    //    glNormalPointer(GL_FLOAT, size, ((char*)NULL + 20));
     
     // This could actually be moved into the setup since we never disable it
-    GLStates::vertices.Set(true);
-    GLStates::normals.Set(normals);
-    GLStates::uvs.Set(true);
+    //GLStates::vertices.Set(true);
+    //GLStates::normals.Set(normals);
+    //GLStates::uvs.Set(true);
     
     cachedBuffers[0] = vb; cachedBuffers[1] = ib;
 }
@@ -400,8 +339,8 @@ void SetBuffersInterleavedCharPos(unsigned vb, unsigned ib, unsigned vertices, b
 
 #ifndef WIN32
     // Activate the VBOs to draw
-    glBindBuffer(GL_ARRAY_BUFFER,         vb);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
+    //glBindBuffer(GL_ARRAY_BUFFER,         vb);
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
 #endif
 
     int size = 12;
@@ -409,17 +348,17 @@ void SetBuffersInterleavedCharPos(unsigned vb, unsigned ib, unsigned vertices, b
         size += 12;
 
     // Describe to OpenGL where the vertex data is in the buffer
-    glVertexPointer  (3, GL_SHORT, size, ((char*)NULL + 0));
+    //glVertexPointer  (3, GL_SHORT, size, ((char*)NULL + 0));
     // Describe to OpenGL where the uv data is in the buffer
-    glTexCoordPointer(2, GL_FLOAT, size, ((char*)NULL + 8));    
+    //glTexCoordPointer(2, GL_FLOAT, size, ((char*)NULL + 8));
     // Describe to OpenGL where the normal data is in the buffer
-    if (normals)
-        glNormalPointer(GL_FLOAT, size, ((char*)NULL + 16));
+    //if (normals)
+    //    glNormalPointer(GL_FLOAT, size, ((char*)NULL + 16));
     
     // This could actually be moved into the setup since we never disable it
-    GLStates::vertices.Set(true);
-    GLStates::normals.Set(normals);
-    GLStates::uvs.Set(true);
+    //GLStates::vertices.Set(true);
+    //GLStates::normals.Set(normals);
+    //GLStates::uvs.Set(true);
     
     cachedBuffers[0] = vb; cachedBuffers[1] = ib;
 }
@@ -439,8 +378,8 @@ void SetBuffersInterleavedShortPos(unsigned vb, unsigned ib, unsigned vertices, 
 
 #ifndef WIN32
     // Activate the VBOs to draw
-    glBindBuffer(GL_ARRAY_BUFFER,         vb);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
+    //glBindBuffer(GL_ARRAY_BUFFER,         vb);
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
 #endif
 
     int size = 12;
@@ -448,17 +387,17 @@ void SetBuffersInterleavedShortPos(unsigned vb, unsigned ib, unsigned vertices, 
         size += 12;
 
     // Describe to OpenGL where the vertex data is in the buffer
-    glVertexPointer  (3, GL_BYTE,  size, ((char*)NULL + 0));
+    //glVertexPointer  (3, GL_BYTE,  size, ((char*)NULL + 0));
     // Describe to OpenGL where the uv data is in the buffer
-    glTexCoordPointer(2, GL_FLOAT, size, ((char*)NULL + 8));    
+    //glTexCoordPointer(2, GL_FLOAT, size, ((char*)NULL + 8));
     // Describe to OpenGL where the normal data is in the buffer
-    if (normals)
-        glNormalPointer(GL_FLOAT, size, ((char*)NULL + 16));
+    //if (normals)
+    //    glNormalPointer(GL_FLOAT, size, ((char*)NULL + 16));
     
     // This could actually be moved into the setup since we never disable it
-    GLStates::vertices.Set(true);
-    GLStates::normals.Set(normals);
-    GLStates::uvs.Set(true);
+    //GLStates::vertices.Set(true);
+    //GLStates::normals.Set(normals);
+    //GLStates::uvs.Set(true);
     
     cachedBuffers[0] = vb; cachedBuffers[1] = ib;
 }
@@ -494,8 +433,8 @@ void PrintGLError()
     case GL_INVALID_OPERATION: errs = "GL_INVALID_OPERATION"; break;
     case GL_INVALID_VALUE:     errs = "GL_INVALID_VALUE";     break;
     case GL_OUT_OF_MEMORY:     errs = "GL_OUT_OF_MEMORY";     break;
-    case GL_STACK_OVERFLOW:    errs = "GL_STACK_OVERFLOW";    break;
-    case GL_STACK_UNDERFLOW:   errs = "GL_STACK_UNDERFLOW";   break;            
+  //case GL_STACK_OVERFLOW:    errs = "GL_STACK_OVERFLOW";    break;
+  //case GL_STACK_UNDERFLOW:   errs = "GL_STACK_UNDERFLOW";   break;
   //case GL_TABLE_TOO_LARGE:   errs = "GL_TABLE_TOO_LARGE";   break;
     }
     printf("OpenGL error '%s' (%d)\n", errs, error);
@@ -504,6 +443,6 @@ void PrintGLError()
 void PrintTextureMatrix()
 {
     Matrix m;
-    glGetFloatv(GL_TEXTURE_MATRIX, (float *)&m);
+    //glGetFloatv(GL_TEXTURE_MATRIX, (float *)&m);
     Print("texture", m);
 }

@@ -59,7 +59,7 @@ void DeviceTexture::Set(GraphicsDevice &device, unsigned int blendsrc, unsigned 
         return;
     if (texid != 0)
     {    
-        GLStates::texture.Set(true);
+    GLStates::texture.Set(true);
         if (device.HasGlobalAlpha()) {
             blenddst = GL_ONE_MINUS_SRC_ALPHA;
         }

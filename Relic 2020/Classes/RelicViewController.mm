@@ -141,6 +141,7 @@ extern "C" void UnloadAll();
     }
     EAGLView *eagl = [[EAGLView alloc] initWithFrame:frame];
     eagl.backgroundColor = [UIColor colorNamed:@"green"];
+    [self loadShaders];
     self.eagl = eagl;
     [eagl initialize];
     [v addSubview:eagl];
@@ -280,7 +281,7 @@ extern "C" void UnloadAll();
     glShaderSource(*shader, 1, &source, NULL);
     glCompileShader(*shader);
     
-#if defined(DEBUG)
+//#if defined(DEBUG)
     GLint logLength;
     glGetShaderiv(*shader, GL_INFO_LOG_LENGTH, &logLength);
     if (logLength > 0)
@@ -290,7 +291,7 @@ extern "C" void UnloadAll();
         NSLog(@"Shader compile log:\n%s", log);
         free(log);
     }
-#endif
+//#endif
     
     glGetShaderiv(*shader, GL_COMPILE_STATUS, &status);
     if (status == 0)
@@ -357,10 +358,10 @@ extern "C" void UnloadAll();
 {
     GLuint vertShader, fragShader;
     NSString *vertShaderPathname, *fragShaderPathname;
-    
+
     // Create shader program.
     program = glCreateProgram();
-    
+
     // Create and compile vertex shader.
     vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"vsh"];
     if (![self compileShader:&vertShader type:GL_VERTEX_SHADER file:vertShaderPathname])
@@ -368,7 +369,7 @@ extern "C" void UnloadAll();
         NSLog(@"Failed to compile vertex shader");
         return FALSE;
     }
-    
+
     // Create and compile fragment shader.
     fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"fsh"];
     if (![self compileShader:&fragShader type:GL_FRAGMENT_SHADER file:fragShaderPathname])
@@ -392,7 +393,7 @@ extern "C" void UnloadAll();
     if (![self linkProgram:program])
     {
         NSLog(@"Failed to link program: %d", program);
-        
+
         if (vertShader)
         {
             glDeleteShader(vertShader);
@@ -408,7 +409,7 @@ extern "C" void UnloadAll();
             glDeleteProgram(program);
             program = 0;
         }
-        
+
         return FALSE;
     }
     

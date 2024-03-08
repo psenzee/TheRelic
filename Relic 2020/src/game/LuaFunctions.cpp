@@ -249,7 +249,7 @@ static int Lua_SetLight0OnPlayer(lua_State *lua)
 {
     Vector3 v = GetGlobalGame()->GetPlayer()->GetPosition();
     Vector4 v4(v.x, v.y, v.z - 64, 1.0);
-    glLightfv(GL_LIGHT0, GL_POSITION, v4.data());
+    //glLightfv(GL_LIGHT0, GL_POSITION, v4.data());
     return 0;
 }
 

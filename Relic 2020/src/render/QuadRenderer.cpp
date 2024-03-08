@@ -297,36 +297,36 @@ void QuadRenderer::RenderScreenAligned(DeviceTexture *texture, const Vector4 &co
 
     RenderContext &context = GetGlobalRenderContext();
 
-    GraphicsDevice::GetInstance()->SetColor(color); // clear color
-
+    context.device.SetColor(color);
     context.device.EnableDepthTest(true);
     context.device.EnableDepthWrite(false);
     
-    glMatrixMode(GL_MODELVIEW);
-    glLoadMatrixf((GLfloat *)(context.camera.GetView().data));
-    
-    glDisable(GL_CULL_FACE);    
-    
+    ShaderProgram *p = context.device.SetShaderProgram("ScreenQuad");
+    p->SetUniform("u_view", context.camera.GetView());
+
+    glDisable(GL_CULL_FACE);
+
     ClearCachedPointers();
-    
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glDisableClientState(GL_NORMAL_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);    
-    
-    glVertexPointer(3, GL_FLOAT, 0, vertices);
-    
+
+    //glEnableClientState(GL_VERTEX_ARRAY);
+    //glDisableClientState(GL_NORMAL_ARRAY);
+    //glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vertices);
+    glEnableVertexAttribArray(0);
+
     glEnable(GL_BLEND);    
-    
+
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    
+
     if (!texture || !texture->Loaded())
     {
-        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+        //glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glDisable(GL_TEXTURE_2D);
     }
     else
     {
-        glTexCoordPointer(2, GL_FLOAT, 0, uvs);            
+        //glTexCoordPointer(2, GL_FLOAT, 0, uvs);
         glEnable(GL_TEXTURE_2D);
       //texture->Set(context.device, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
         texture->Set(context.device, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -339,14 +339,13 @@ void QuadRenderer::RenderScreenAligned(DeviceTexture *texture, const Vector4 &co
 void QuadRenderer::RenderScreenQuad(DeviceTexture *texture, const Vector4 &color, float width, float height, const Vector3 &s, const Vector3 &t,
                                     const Vector2 &us, const Vector2 &uvt)
 {
-//return; // $TODO ?
     if (color.w <= 0.01f)
         return;
 
     RenderContext &context = GetGlobalRenderContext();
     GraphicsDevice::GetInstance()->SetColor(color); // clear color
     
-    glLoadMatrixf((GLfloat *)(context.camera.GetView().data));    
+    //glLoadMatrixf((GLfloat *)(context.camera.GetView().data));
     
     glDisable(GL_CULL_FACE);    
     GLStates::depthTest.Set(false);    
@@ -356,11 +355,11 @@ void QuadRenderer::RenderScreenQuad(DeviceTexture *texture, const Vector4 &color
     float vertices[] =
     { 
         -halfw * s.x + t.x,  halfh * s.y + t.y, t.z,
-         halfw * s.x + t.x, -halfh * s.y + t.y, t.z,        
+         halfw * s.x + t.x, -halfh * s.y + t.y, t.z,
         -halfw * s.x + t.x, -halfh * s.y + t.y, t.z,
         
-        -halfw * s.x + t.x,  halfh * s.y + t.y, t.z,        
-         halfw * s.x + t.x,  halfh * s.y + t.y, t.z,                
+        -halfw * s.x + t.x,  halfh * s.y + t.y, t.z,
+         halfw * s.x + t.x,  halfh * s.y + t.y, t.z,
          halfw * s.x + t.x, -halfh * s.y + t.y, t.z
     };
     
@@ -377,11 +376,12 @@ void QuadRenderer::RenderScreenQuad(DeviceTexture *texture, const Vector4 &color
     
     ClearCachedPointers();
     
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glDisableClientState(GL_NORMAL_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    //glEnableClientState(GL_VERTEX_ARRAY);
+    //glDisableClientState(GL_NORMAL_ARRAY);
+    //glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     
-    glVertexPointer(3, GL_FLOAT, 0, vertices);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vertices);
+    glEnableVertexAttribArray(0);
     
     glEnable(GL_BLEND);    
     
@@ -389,20 +389,15 @@ void QuadRenderer::RenderScreenQuad(DeviceTexture *texture, const Vector4 &color
     
     if (!texture || !texture->Loaded())
     {
-        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+        //glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glDisable(GL_TEXTURE_2D);
     }
     else
     {
-        glTexCoordPointer(2, GL_FLOAT, 0, uvs);            
+        //glTexCoordPointer(2, GL_FLOAT, 0, uvs);
         glEnable(GL_TEXTURE_2D);
-#ifdef WIN32
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);        
-#else
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);		
-#endif
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         texture->Set(context.device, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
     glDrawArrays(GL_TRIANGLES, 0, 6);

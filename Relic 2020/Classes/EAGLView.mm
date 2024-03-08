@@ -379,26 +379,22 @@ extern "C" bool IsHiResDevice()
 - (void)initialize
 {
     EAGLContext *aContext = NULL;
-        
+
     if (!aContext) {
-        aContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
+        aContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     }
-        
+
     if (!aContext) {
         NSLog(@"Failed to create ES context");
     } else if (![EAGLContext setCurrentContext:aContext]) {
         NSLog(@"Failed to set ES context current");
     }
-        
+
     self.context = aContext;
     [aContext release];
-        
+
     [self setContext:context];
     [self setFramebuffer];
-        
-    if ([context API] == kEAGLRenderingAPIOpenGLES2) {
-        [self loadShaders];
-    }
 }
 
 - (void)setContext:(EAGLContext *)newContext

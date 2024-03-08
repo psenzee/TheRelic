@@ -1,5 +1,4 @@
-#ifndef _FILE_H
-#define _FILE_H
+#pragma once
 
 #include <string>
 #include <sys/stat.h>
@@ -40,4 +39,3 @@ const char  *fopen_error();
 
 }
 
-#endif  // _FILE_H

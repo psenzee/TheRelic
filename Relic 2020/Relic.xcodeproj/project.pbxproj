@@ -1179,6 +1179,17 @@
 		DA7AB2B423B826C300DDC4AF /* black_button_potion.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7AB2B323B826C300DDC4AF /* black_button_potion.png */; };
 		DA7AB2B623B82A1100DDC4AF /* tick_new.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7AB2B523B82A1100DDC4AF /* tick_new.png */; };
 		DA7AB2B823B9376100DDC4AF /* black_button_ring.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7AB2B723B9376100DDC4AF /* black_button_ring.png */; };
+		DAC9F9BC2B9AC301006FF6B7 /* VertexFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAC9F9B52B9AC300006FF6B7 /* VertexFormat.cpp */; };
+		DAC9F9BD2B9AC301006FF6B7 /* VertexFormats.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAC9F9B72B9AC300006FF6B7 /* VertexFormats.cpp */; };
+		DAC9F9BE2B9AC301006FF6B7 /* VertexFormatGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAC9F9B82B9AC300006FF6B7 /* VertexFormatGL.cpp */; };
+		DAC9F9BF2B9AC301006FF6B7 /* VertexBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAC9F9BA2B9AC301006FF6B7 /* VertexBuffer.cpp */; };
+		DAC9F9C22B9AC3C3006FF6B7 /* ValueType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAC9F9C02B9AC3C2006FF6B7 /* ValueType.cpp */; };
+		DAE7DC382B9526E300B2623E /* ShaderProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAE7DC372B9526E300B2623E /* ShaderProgram.cpp */; };
+		DAE7DC3E2B954EF400B2623E /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAE7DC3D2B954EF400B2623E /* Shader.cpp */; };
+		DAE7DC442B95732200B2623E /* ShaderRegistry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAE7DC422B95732200B2623E /* ShaderRegistry.cpp */; };
+		DAE7DC472B96CC6D00B2623E /* ScreenQuad.vsh in Resources */ = {isa = PBXBuildFile; fileRef = DAE7DC452B96CC6C00B2623E /* ScreenQuad.vsh */; };
+		DAE7DC482B96CC6D00B2623E /* ScreenQuad.fsh in Resources */ = {isa = PBXBuildFile; fileRef = DAE7DC462B96CC6C00B2623E /* ScreenQuad.fsh */; };
+		DAE7DC4B2B97B28000B2623E /* GLBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAE7DC492B97B28000B2623E /* GLBuffer.cpp */; };
 		DAEFF7F123BC17540062B630 /* tick_new_2.png in Resources */ = {isa = PBXBuildFile; fileRef = DAEFF7F023BC17540062B630 /* tick_new_2.png */; };
 		DAEFF7F323BD04670062B630 /* globals.lua in Resources */ = {isa = PBXBuildFile; fileRef = DAEFF7F223BD04670062B630 /* globals.lua */; };
 		DAEFF7F623BD2F390062B630 /* GameDimensions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAEFF7F423BD2F390062B630 /* GameDimensions.cpp */; };
@@ -2632,6 +2643,27 @@
 		DA7AB2B323B826C300DDC4AF /* black_button_potion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = black_button_potion.png; path = data/textures/black_button_potion.png; sourceTree = "<group>"; };
 		DA7AB2B523B82A1100DDC4AF /* tick_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tick_new.png; path = data/textures/tick_new.png; sourceTree = "<group>"; };
 		DA7AB2B723B9376100DDC4AF /* black_button_ring.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = black_button_ring.png; path = data/textures/black_button_ring.png; sourceTree = "<group>"; };
+		DAC9F9B42B9AC300006FF6B7 /* VertexFormats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexFormats.h; path = src/render/VertexFormats.h; sourceTree = "<group>"; };
+		DAC9F9B52B9AC300006FF6B7 /* VertexFormat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VertexFormat.cpp; path = src/render/VertexFormat.cpp; sourceTree = "<group>"; };
+		DAC9F9B62B9AC300006FF6B7 /* VertexFormatGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexFormatGL.h; path = src/render/VertexFormatGL.h; sourceTree = "<group>"; };
+		DAC9F9B72B9AC300006FF6B7 /* VertexFormats.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VertexFormats.cpp; path = src/render/VertexFormats.cpp; sourceTree = "<group>"; };
+		DAC9F9B82B9AC300006FF6B7 /* VertexFormatGL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VertexFormatGL.cpp; path = src/render/VertexFormatGL.cpp; sourceTree = "<group>"; };
+		DAC9F9B92B9AC300006FF6B7 /* VertexFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexFormat.h; path = src/render/VertexFormat.h; sourceTree = "<group>"; };
+		DAC9F9BA2B9AC301006FF6B7 /* VertexBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VertexBuffer.cpp; path = src/render/VertexBuffer.cpp; sourceTree = "<group>"; };
+		DAC9F9BB2B9AC301006FF6B7 /* VertexBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexBuffer.h; path = src/render/VertexBuffer.h; sourceTree = "<group>"; };
+		DAC9F9C02B9AC3C2006FF6B7 /* ValueType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ValueType.cpp; path = src/render/ValueType.cpp; sourceTree = "<group>"; };
+		DAC9F9C12B9AC3C2006FF6B7 /* ValueType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ValueType.h; path = src/render/ValueType.h; sourceTree = "<group>"; };
+		DAE7DC272B93FFBA00B2623E /* GLIncludes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GLIncludes.h; path = src/platform/GLIncludes.h; sourceTree = "<group>"; };
+		DAE7DC342B9526D200B2623E /* ShaderProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShaderProgram.h; path = src/render/ShaderProgram.h; sourceTree = "<group>"; };
+		DAE7DC372B9526E300B2623E /* ShaderProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShaderProgram.cpp; path = src/render/ShaderProgram.cpp; sourceTree = "<group>"; };
+		DAE7DC3C2B954EF400B2623E /* Shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Shader.h; path = src/render/Shader.h; sourceTree = "<group>"; };
+		DAE7DC3D2B954EF400B2623E /* Shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Shader.cpp; path = src/render/Shader.cpp; sourceTree = "<group>"; };
+		DAE7DC422B95732200B2623E /* ShaderRegistry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShaderRegistry.cpp; path = src/render/ShaderRegistry.cpp; sourceTree = "<group>"; };
+		DAE7DC432B95732200B2623E /* ShaderRegistry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShaderRegistry.h; path = src/render/ShaderRegistry.h; sourceTree = "<group>"; };
+		DAE7DC452B96CC6C00B2623E /* ScreenQuad.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = ScreenQuad.vsh; path = Shaders/ScreenQuad.vsh; sourceTree = "<group>"; };
+		DAE7DC462B96CC6C00B2623E /* ScreenQuad.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = ScreenQuad.fsh; path = Shaders/ScreenQuad.fsh; sourceTree = "<group>"; };
+		DAE7DC492B97B28000B2623E /* GLBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLBuffer.cpp; path = src/render/GLBuffer.cpp; sourceTree = "<group>"; };
+		DAE7DC4A2B97B28000B2623E /* GLBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLBuffer.h; path = src/render/GLBuffer.h; sourceTree = "<group>"; };
 		DAEFF7F023BC17540062B630 /* tick_new_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tick_new_2.png; path = data/textures/tick_new_2.png; sourceTree = "<group>"; };
 		DAEFF7F223BD04670062B630 /* globals.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = globals.lua; path = data/lua/globals.lua; sourceTree = "<group>"; };
 		DAEFF7F423BD2F390062B630 /* GameDimensions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameDimensions.cpp; path = src/GameDimensions.cpp; sourceTree = "<group>"; };
@@ -2702,6 +2734,8 @@
 		2514C27610084DB600A42282 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				DAE7DC462B96CC6C00B2623E /* ScreenQuad.fsh */,
+				DAE7DC452B96CC6C00B2623E /* ScreenQuad.vsh */,
 				2514C27910084DCA00A42282 /* Shader.fsh */,
 				2514C27A10084DCA00A42282 /* Shader.vsh */,
 			);
@@ -3897,6 +3931,7 @@
 		439DB96312DE411500B06546 /* platform */ = {
 			isa = PBXGroup;
 			children = (
+				DAE7DC272B93FFBA00B2623E /* GLIncludes.h */,
 				439DBC4E12DE608000B06546 /* global.cpp */,
 				439DBC4F12DE608000B06546 /* LoadTexture.mm */,
 				439DBC5012DE608000B06546 /* PVRTexture.h */,
@@ -4016,6 +4051,24 @@
 				439DBB1312DE4B8900B06546 /* Light.h */,
 				DA4A54B52B90D27D00094E78 /* Lights.cpp */,
 				DA65A76E2B8F68D40041B6F5 /* Lights.h */,
+				DAE7DC3D2B954EF400B2623E /* Shader.cpp */,
+				DAE7DC3C2B954EF400B2623E /* Shader.h */,
+				DAE7DC372B9526E300B2623E /* ShaderProgram.cpp */,
+				DAE7DC342B9526D200B2623E /* ShaderProgram.h */,
+				DAE7DC422B95732200B2623E /* ShaderRegistry.cpp */,
+				DAE7DC432B95732200B2623E /* ShaderRegistry.h */,
+				DAE7DC492B97B28000B2623E /* GLBuffer.cpp */,
+				DAE7DC4A2B97B28000B2623E /* GLBuffer.h */,
+				DAC9F9C02B9AC3C2006FF6B7 /* ValueType.cpp */,
+				DAC9F9C12B9AC3C2006FF6B7 /* ValueType.h */,
+				DAC9F9BA2B9AC301006FF6B7 /* VertexBuffer.cpp */,
+				DAC9F9BB2B9AC301006FF6B7 /* VertexBuffer.h */,
+				DAC9F9B52B9AC300006FF6B7 /* VertexFormat.cpp */,
+				DAC9F9B92B9AC300006FF6B7 /* VertexFormat.h */,
+				DAC9F9B82B9AC300006FF6B7 /* VertexFormatGL.cpp */,
+				DAC9F9B62B9AC300006FF6B7 /* VertexFormatGL.h */,
+				DAC9F9B72B9AC300006FF6B7 /* VertexFormats.cpp */,
+				DAC9F9B42B9AC300006FF6B7 /* VertexFormats.h */,
 				439DBB1412DE4B8900B06546 /* LocalGameServices.h */,
 				439DBB1512DE4B8900B06546 /* Material.cpp */,
 				439DBB1612DE4B8900B06546 /* Material.h */,
@@ -4770,6 +4823,7 @@
 				439DBD9E12DF746400B06546 /* prototypes-amaranth.xml in Resources */,
 				439DBD9F12DF746400B06546 /* prototypes-future-2.xml in Resources */,
 				439DBDA012DF746400B06546 /* prototypes-future.xml in Resources */,
+				DAE7DC472B96CC6D00B2623E /* ScreenQuad.vsh in Resources */,
 				439DBDA112DF746400B06546 /* prototypes-icewall-2.xml in Resources */,
 				439DBDA212DF746400B06546 /* prototypes-icewall-3.xml in Resources */,
 				439DBDA312DF746400B06546 /* prototypes-icewall.xml in Resources */,
@@ -5491,6 +5545,7 @@
 				439DC31612DF7F3300B06546 /* WallTypesB_14.png.pvrhi in Resources */,
 				439DC31712DF7F3300B06546 /* WallTypesB_14.png.pvrlo in Resources */,
 				439DC54712E0D59700B06546 /* achievements.lua in Resources */,
+				DAE7DC482B96CC6D00B2623E /* ScreenQuad.fsh in Resources */,
 				439DC55B12E0E00700B06546 /* blueringfirepotion_opaq.png.pvrtc in Resources */,
 				439DC55C12E0E00700B06546 /* blueringfirepotion.png.pvrtc in Resources */,
 				439DC55D12E0E00700B06546 /* intro11d.png.pvrtc in Resources */,
@@ -5547,6 +5602,7 @@
 				439DB9C812DE43CC00B06546 /* format.cpp in Sources */,
 				439DB9C912DE43CC00B06546 /* global.cpp in Sources */,
 				439DB9CA12DE43CC00B06546 /* images.cpp in Sources */,
+				DAE7DC382B9526E300B2623E /* ShaderProgram.cpp in Sources */,
 				439DB9CB12DE43CC00B06546 /* matrix_operations.cpp in Sources */,
 				439DB9CC12DE43CC00B06546 /* parse.cpp in Sources */,
 				439DB9CD12DE43CC00B06546 /* paths.cpp in Sources */,
@@ -5564,10 +5620,12 @@
 				439DB9EB12DE450C00B06546 /* GameInput.cpp in Sources */,
 				439DB9F412DE456800B06546 /* Level.cpp in Sources */,
 				439DB9F512DE456800B06546 /* LevelManager.cpp in Sources */,
+				DAE7DC3E2B954EF400B2623E /* Shader.cpp in Sources */,
 				439DB9F612DE456800B06546 /* LevelOptions.cpp in Sources */,
 				DAEFF7F623BD2F390062B630 /* GameDimensions.cpp in Sources */,
 				439DB9F712DE456800B06546 /* PlaceNameGenerator.cpp in Sources */,
 				439DBA0D12DE459500B06546 /* LocationEvents.cpp in Sources */,
+				DAC9F9BC2B9AC301006FF6B7 /* VertexFormat.cpp in Sources */,
 				439DBA0E12DE459500B06546 /* LuaCall.cpp in Sources */,
 				439DBA0F12DE459500B06546 /* LuaDefer.cpp in Sources */,
 				439DBA1012DE459500B06546 /* LuaEvents.cpp in Sources */,
@@ -5585,6 +5643,7 @@
 				439DBA3E12DE469E00B06546 /* MapLoader.cpp in Sources */,
 				439DBA3F12DE469E00B06546 /* Movable.cpp in Sources */,
 				439DBA4012DE469E00B06546 /* MovableRegistry.cpp in Sources */,
+				DAC9F9BD2B9AC301006FF6B7 /* VertexFormats.cpp in Sources */,
 				439DBA4112DE469E00B06546 /* ObjectTile.cpp in Sources */,
 				439DBA4212DE469E00B06546 /* ObjectTileSet.cpp in Sources */,
 				439DBA4312DE469E00B06546 /* PositionVelocity.cpp in Sources */,
@@ -5617,6 +5676,7 @@
 				439DBA9F12DE487400B06546 /* lopcodes.c in Sources */,
 				439DBAA012DE487400B06546 /* loslib.c in Sources */,
 				439DBAA112DE487400B06546 /* lparser.c in Sources */,
+				DAC9F9BF2B9AC301006FF6B7 /* VertexBuffer.cpp in Sources */,
 				439DBAA212DE487400B06546 /* lstate.c in Sources */,
 				439DBAA312DE487400B06546 /* lstring.c in Sources */,
 				439DBAA412DE487400B06546 /* lstrlib.c in Sources */,
@@ -5650,6 +5710,7 @@
 				439DBAF412DE4ABE00B06546 /* LuaSerialize.cpp in Sources */,
 				439DBAF512DE4ABE00B06546 /* Pack.cpp in Sources */,
 				439DBB2F12DE4B8900B06546 /* Animator.cpp in Sources */,
+				DAE7DC4B2B97B28000B2623E /* GLBuffer.cpp in Sources */,
 				439DBB3012DE4B8900B06546 /* ContentLoader.cpp in Sources */,
 				439DBB3112DE4B8900B06546 /* CreateGeometry.cpp in Sources */,
 				439DBB3212DE4B8900B06546 /* DeviceMesh.cpp in Sources */,
@@ -5694,6 +5755,7 @@
 				439DBB9412DE4DB100B06546 /* HitAndRunApproach.cpp in Sources */,
 				439DBB9512DE4DB100B06546 /* KillableBehavior.cpp in Sources */,
 				439DBB9612DE4DB100B06546 /* LuaBehavior.cpp in Sources */,
+				DAC9F9C22B9AC3C3006FF6B7 /* ValueType.cpp in Sources */,
 				439DBB9712DE4DB100B06546 /* MeleeAttack.cpp in Sources */,
 				439DBB9812DE4DB100B06546 /* RolePlayer.cpp in Sources */,
 				439DBB9912DE4DB100B06546 /* RolePlayRules.cpp in Sources */,
@@ -5727,6 +5789,7 @@
 				439DBBFB12DE4E8600B06546 /* UiCollection.cpp in Sources */,
 				439DBBFC12DE4E8600B06546 /* UiCore.cpp in Sources */,
 				439DBBFD12DE4E8600B06546 /* UiDialogText.cpp in Sources */,
+				DAE7DC442B95732200B2623E /* ShaderRegistry.cpp in Sources */,
 				439DBBFE12DE4E8600B06546 /* UiImageButton.cpp in Sources */,
 				439DBBFF12DE4E8600B06546 /* UiRenderableButton.cpp in Sources */,
 				439DBC0012DE4E8600B06546 /* UiText.cpp in Sources */,
@@ -5750,6 +5813,7 @@
 				439DBC5912DE608000B06546 /* PVRTexture.m in Sources */,
 				439DBC5A12DE608000B06546 /* SoundEngine.cpp in Sources */,
 				439DBC5B12DE608000B06546 /* TextPopup.m in Sources */,
+				DAC9F9BE2B9AC301006FF6B7 /* VertexFormatGL.cpp in Sources */,
 				439DBC5C12DE608000B06546 /* Timer.cpp in Sources */,
 				439DC39A12DFBDC700B06546 /* BonjourSupport.cpp in Sources */,
 			);

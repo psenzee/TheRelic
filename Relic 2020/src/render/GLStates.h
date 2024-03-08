@@ -31,7 +31,7 @@ public:
     inline void Set(bool value) { glDepthMask(value ? GL_TRUE : GL_FALSE); }
 private:
 };
-
+/*
 class BoolClientStateSetter
 {
 public:
@@ -78,7 +78,7 @@ public:
 private:
     int mState;
 };
-
+*/
 template <typename SetterT, typename T>
 class State
 {
@@ -99,6 +99,7 @@ private:
 
 class GLBoolState            : public State<BoolStateSetter, bool>                  { public: inline GLBoolState(int state) : State<BoolStateSetter, bool>(BoolStateSetter(state)) {} };
 //class GLTriState             : public State<TriStateSetter, TriState>               { public: inline GLTriState(int state) : State<TriStateSetter, bool>(TriStateSetter(state)) {} };
+/*
 class GLBoolClientState      : public State<BoolClientStateSetter, bool>            { public: inline GLBoolClientState(int state) : State<BoolClientStateSetter, bool>(BoolClientStateSetter(state)) {} };
 class GLDepthWriteState      : public State<DepthWriteSetter, bool>                 { public: inline GLDepthWriteState() : State<DepthWriteSetter, bool>(DepthWriteSetter()) {} };
 class GLLightScalarState     : public State<LightScalarSetter, float>               { public: inline GLLightScalarState(int light, int state) : State<LightScalarSetter, float>(LightScalarSetter(light, state)) {} };
@@ -143,27 +144,27 @@ struct GLMaterialState
           specular (GL_SPECULAR),
           emissive (GL_EMISSION) {}
 };
-
+*/
 struct GLStates
 {
     static GLBoolState       blend;
     static GLBoolState       cullFace;
     static GLBoolState       depthTest;
     static GLBoolState       fog;
-    static GLDepthWriteState depthWrite;
+    //static GLDepthWriteState depthWrite;
                                     
     static GLBoolState       lighting;
     static GLBoolState       texture;
     static GLBoolState       normalize;
     static GLBoolState       rescaleNormal;
     
-    static GLBoolClientState vertices;
-    static GLBoolClientState normals;
-    static GLBoolClientState uvs;
+    //static GLBoolClientState vertices;
+    //static GLBoolClientState normals;
+    //static GLBoolClientState uvs;
     
-    static GLLightState      light[];
+    //static GLLightState      light[];
                                     
-    static GLMaterialState   material;
+    //static GLMaterialState   material;
 };
-
+ 
 #endif // _GLSTATES_H

@@ -5,6 +5,7 @@
 #include "OverheadCamera.h"
 #include "RenderContext.h"
 #include "Visibility.h"
+#include "GraphicsDevice.h"
 
 DeviceMesh::DeviceMesh(const char *filename, bool compact) : mMesh(0)
 {
@@ -75,10 +76,14 @@ DeviceMesh::~DeviceMesh()
 
 void DeviceMesh::RenderImmediate(RenderContext &context)
 {
-    if (mMesh)
-    {
-        glLoadMatrixf((float *)context.camera.GetView().data);
-        glMultMatrixf((float *)context.transform.data);
+    if (mMesh) {
+        Matrix4f m(context.camera.GetView());
+        m *= context.transform;
+        auto program = context.device.SetShaderProgram("Shader");
+        program->SetActive();
+        program->SetUniform("u_transform", m);
+        //glLoadMatrixf((float *)context.camera.GetView().data);
+        //glMultMatrixf((float *)context.transform.data);
         mMesh->Render();
     }
 }

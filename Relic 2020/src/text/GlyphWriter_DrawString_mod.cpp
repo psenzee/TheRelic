@@ -51,9 +51,10 @@ static void _RenderString(RenderContext &context, float *vertices, float *uvs, i
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, (GLfloat *)&ambient);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (GLfloat *)&diffuse);
     */
-    
-    glVertexPointer  (3, GL_FLOAT,         0, (GLfloat *)&vertices[0]);
-    glTexCoordPointer(2, GL_FLOAT,         0, (GLfloat *)&uvs[0]);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLfloat *)&vertices[0]);
+    glEnableVertexAttribArray(0);
+  //glTexCoordPointer(2, GL_FLOAT,         0, (GLfloat *)&uvs[0]);
 
     glDrawArrays(GL_TRIANGLES, 0, count);
 }
@@ -132,19 +133,19 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
                         *puvs      = uvs;
     uint32_t             vcount    = 0;
 
-    glLoadMatrixf((GLfloat *)view.data);
-    glMultMatrixf((GLfloat *)transform.data);
+    //glLoadMatrixf((GLfloat *)view.data);
+    //glMultMatrixf((GLfloat *)transform.data);
 
     ClearCachedPointers();
     texture->Set(context.device, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glDisableClientState(GL_NORMAL_ARRAY);  
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    //glDisableClientState(GL_NORMAL_ARRAY);
+    //glEnableClientState(GL_VERTEX_ARRAY);
+    //glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
     glDisable(GL_CULL_FACE);  // we can eliminate this if we ensure the correct orientation of the vertices
-    GLStates::depthWrite.Set(false);
-    GLStates::depthTest.Set(false);        
+    //GLStates::depthWrite.Set(false);
+    //GLStates::depthTest.Set(false);
     
     Vector4 scolor(1.0f, 1.0f, 1.0f, 1.0f), prev(scolor);
 
@@ -242,8 +243,8 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
         _RenderString(context, vertices, uvs, vcount, prev * color);  
     }
 
-    GLStates::depthWrite.Set(true);
-    GLStates::depthTest.Set(true);
+    //GLStates::depthWrite.Set(true);
+    //GLStates::depthTest.Set(true);
     glEnable(GL_CULL_FACE); // we can eliminate this if we ensure the correct orientation of the vertices   
     
     if (!buffer)

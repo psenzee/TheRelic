@@ -3,21 +3,21 @@
 GLBoolState       GLStates::blend(GL_BLEND);
 GLBoolState       GLStates::cullFace(GL_CULL_FACE);
 GLBoolState       GLStates::depthTest(GL_DEPTH_TEST);
-GLBoolState       GLStates::fog(GL_FOG);
-GLDepthWriteState GLStates::depthWrite;
+//GLBoolState       GLStates::fog(GL_FOG);
+//GLDepthWriteState GLStates::depthWrite;
                                 
-GLBoolState       GLStates::lighting(GL_LIGHTING);
+//GLBoolState       GLStates::lighting(GL_LIGHTING);
 GLBoolState       GLStates::texture(GL_TEXTURE_2D);
-GLBoolState       GLStates::normalize(GL_NORMALIZE);
-GLBoolState       GLStates::rescaleNormal(GL_RESCALE_NORMAL);
+//GLBoolState       GLStates::normalize(GL_NORMALIZE);
+//GLBoolState       GLStates::rescaleNormal(GL_RESCALE_NORMAL);
 
-GLBoolClientState GLStates::vertices(GL_VERTEX_ARRAY);
-GLBoolClientState GLStates::normals(GL_NORMAL_ARRAY);
-GLBoolClientState GLStates::uvs(GL_TEXTURE_COORD_ARRAY);
+//GLBoolClientState GLStates::vertices(GL_VERTEX_ARRAY);
+//GLBoolClientState GLStates::normals(GL_NORMAL_ARRAY);
+//GLBoolClientState GLStates::uvs(GL_TEXTURE_COORD_ARRAY);
 
-GLLightState      GLStates::light[]  = { GLLightState(GL_LIGHT0), GLLightState(GL_LIGHT1),
-                                         GLLightState(GL_LIGHT2), GLLightState(GL_LIGHT3),
-                                         GLLightState(GL_LIGHT4), GLLightState(GL_LIGHT5),
-                                         GLLightState(GL_LIGHT6), GLLightState(GL_LIGHT7) };
+//GLLightState      GLStates::light[]  = { GLLightState(GL_LIGHT0), GLLightState(GL_LIGHT1),
+//                                         GLLightState(GL_LIGHT2), GLLightState(GL_LIGHT3),
+//                                         GLLightState(GL_LIGHT4), GLLightState(GL_LIGHT5),
+//                                         GLLightState(GL_LIGHT6), GLLightState(GL_LIGHT7) };
                                 
-GLMaterialState   GLStates::material;
+//GLMaterialState   GLStates::material;

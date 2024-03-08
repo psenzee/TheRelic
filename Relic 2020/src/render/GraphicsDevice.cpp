@@ -11,8 +11,8 @@ GraphicsDevice *GraphicsDevice::sInstance = 0;
 void GraphicsDevice::Initialize()
 {
     glViewport(0, 0, mFrameSize.width, mFrameSize.height);
-    glShadeModel(GL_SMOOTH);
     SetColor(Vector4(1.f, 1.f, 1.f, 1.f));
+    SetShaderProgram("Shader");
 }
 
 void GraphicsDevice::ClearZBuffer()
@@ -27,7 +27,7 @@ void GraphicsDevice::ClearAll()
 
 void GraphicsDevice::EnableDepthTest(bool v)
 {
-    GLStates::depthTest.Set(v);
+    //GLStates::depthTest.Set(v);
 }
 
 void GraphicsDevice::EnableCullFace(bool v)
@@ -37,12 +37,12 @@ void GraphicsDevice::EnableCullFace(bool v)
 
 void GraphicsDevice::EnableDepthWrite(bool v)
 {
-    GLStates::depthWrite.Set(v);
+    //GLStates::depthWrite.Set(v);
 }
 
 void GraphicsDevice::EnableLighting(bool v)
 {
-    GLStates::lighting.Set(v);
+    //GLStates::lighting.Set(v);
 }
 
 void GraphicsDevice::SetUvTransform(const Matrix &m)
@@ -50,10 +50,10 @@ void GraphicsDevice::SetUvTransform(const Matrix &m)
     if (memcmp(&mUvTransform, &m, sizeof(Matrix)) == 0)
         return;
     mUvTransform = m;
-    glMatrixMode(GL_TEXTURE);
+    //glMatrixMode(GL_TEXTURE);
     Matrix mm(mBaseUvTransform * mUvTransform);
-    glLoadMatrixf((float *)&mm);
-    glMatrixMode(GL_MODELVIEW);
+    //glLoadMatrixf((float *)&mm);
+    //glMatrixMode(GL_MODELVIEW);
 }
 
 void GraphicsDevice::SetBaseUvTransform(const Matrix &m)
@@ -61,19 +61,47 @@ void GraphicsDevice::SetBaseUvTransform(const Matrix &m)
     if (memcmp(&mUvTransform, &m, sizeof(Matrix)) == 0)
         return;
     mBaseUvTransform = m;
-    glMatrixMode(GL_TEXTURE);
-    Matrix mm(mBaseUvTransform * mUvTransform);
-    glLoadMatrixf((float *)&mm);
-    glMatrixMode(GL_MODELVIEW);
+    //glMatrixMode(GL_TEXTURE);
+    //Matrix mm(mBaseUvTransform * mUvTransform);
+    //glLoadMatrixf((float *)&mm);
+    //glMatrixMode(GL_MODELVIEW);
 }
         
 void GraphicsDevice::SetProjection(const Matrix &m)
 {
     //Set the OpenGL projection matrix
-    glMatrixMode(GL_PROJECTION);
-    mProjection = m;
-    glLoadMatrixf((float *)&m);
-    glMatrixMode(GL_MODELVIEW); //Make the OpenGL modelview matrix the default
+    //glMatrixMode(GL_PROJECTION);
+    //mProjection = m;
+    //glLoadMatrixf((float *)&m);
+    //glMatrixMode(GL_MODELVIEW); //Make the OpenGL modelview matrix the default
+
+    //auto program = context.device.SetShaderProgram("Shader");
+    //program->SetActive();
+    if (mShaderProgram) {
+        mShaderProgram->SetActive();
+        mShaderProgram->SetUniform("u_transform", m);
+    }
+}
+
+void GraphicsDevice::SetModelViewProjection(const Matrix &m)
+{
+    if (mShaderProgram) {
+        mShaderProgram->SetActive();
+        mShaderProgram->SetUniform("u_transform", m);
+        //uint64_t transformId = glGetUniformLocation(programId, "u_transform");
+        //glUniformMatrix4fv(transformId, 1, GL_FALSE, m.data);
+    }
+}
+
+ShaderProgram *GraphicsDevice::SetShaderProgram(const char *name)
+{
+    if (!name || !*name) {
+        return nullptr;
+    }
+    if (mCurrentShaderName && mShaderProgram && strcmp(name, mCurrentShaderName) == 0) {
+        return mShaderProgram;
+    }
+    return (mShaderProgram = mShaders.GetShaderProgram(name));
 }
 
 Matrix GraphicsDevice::GetProjection() const
@@ -83,10 +111,10 @@ Matrix GraphicsDevice::GetProjection() const
 
 void GraphicsDevice::SetColor(const Vector4 &color)
 {
-    if (mColor.x != color.x || mColor.y != color.y || mColor.z != color.z || mColor.w != color.w)
-    {
+    if (mColor.x != color.x || mColor.y != color.y || mColor.z != color.z || mColor.w != color.w) {
         mColor = color;
-        glColor4f(mColor.x, mColor.y, mColor.z, mColor.w);
+        //glColor4f(mColor.x, mColor.y, mColor.z, mColor.w);
+        // set shader color
     }
 }
 
@@ -101,12 +129,14 @@ bool GraphicsDevice::HasGlobalAlpha() const
 }
 
 void GraphicsDevice::SetMaterial(const Material &m)
-{                                     
+{           
+    /*
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   (const float *)&m.ambient);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   (const float *)&m.diffuse);
     glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION,  (const float *)&m.emissive);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  (const float *)&m.specular);
     glMaterialf (GL_FRONT_AND_BACK, GL_SHININESS,                 m.shininess);
+     */
 }
 
 void GraphicsDevice::SetFog(const Vector4 &color, float density)
@@ -127,23 +157,24 @@ void GraphicsDevice::EnableFog(const TriState &value)
 {
     if (!value.IsUnknown())
     {
-        GLStates::fog.Set(value.ToBool());
+        //GLStates::fog.Set(value.ToBool());
         mEnableFog = value;
     }
 }
 
 void GraphicsDevice::EnableColorMaterial(bool v)
 {
-   if (v) glEnable(GL_COLOR_MATERIAL); else glDisable(GL_COLOR_MATERIAL);
+   //if (v) glEnable(GL_COLOR_MATERIAL); else glDisable(GL_COLOR_MATERIAL);
 }
 
 bool GraphicsDevice::IsLightingEnabled() const
 {
-    return GLStates::lighting.Get();
+    return false;//GLStates::lighting.Get();
 }
 
 void GraphicsDevice::SetLight(const OverheadCamera &camera, size_t slot, const Light &light, bool enable)
 {
+    /*
     glLoadIdentity();
 
     int id = GL_LIGHT0 + slot;
@@ -169,9 +200,10 @@ void GraphicsDevice::SetLight(const OverheadCamera &camera, size_t slot, const L
 
     if (enable)
         EnableLight(slot, true);
+     */
 }
 
 void GraphicsDevice::EnableLight(size_t slot, bool enable)
 {
-    GLStates::light[slot].enable.Set(enable);
+    //GLStates::light[slot].enable.Set(enable);
 }

@@ -234,26 +234,34 @@ void OpenGLESMesh::Render()
         switch (mNormalAction)
         {
         default:                                     break; // FAST   if we're not scaling, do nothing here
-        case RESCALE:   glEnable(GL_RESCALE_NORMAL); break; // MEDIUM if we're scaling uniformly, use this
-        case NORMALIZE: glEnable(GL_NORMALIZE);      break; // SLOW   if we're scaling non-uniformly, use this
+       // case RESCALE:   glEnable(GL_RESCALE_NORMAL); break; // MEDIUM if we're scaling uniformly, use this
+       // case NORMALIZE: glEnable(GL_NORMALIZE);      break; // SLOW   if we're scaling non-uniformly, use this
         }
     }
     //glEnable(GL_CULL_FACE);
     if (usage == USE_NO_BUFFERS)
     {
-        if (mCompact)
+        if (mCompact) {
             SetPointersInterleavedShortPos(mCompact, static_cast<unsigned>(mVerticesCount), false);
-        else
+            printf("\nCOMPACT IS TRUE NB\n");
+        }
+        else {
             SetPointersInterleaved(mInterleaved, static_cast<unsigned>(mVerticesCount), useNormals);
+            printf("\bNB\n");
+        }
         glDrawElements(mType == INTERLEAVED_STRIP ? GL_TRIANGLE_STRIP : GL_TRIANGLES, static_cast<GLsizei>(mIndicesCount), GL_UNSIGNED_SHORT, mIndices);
     }
 #ifndef WIN32
     else if (usage == USE_BUFFERS)
     {
-        if (mCompact)
+        if (mCompact) {
             SetBuffersInterleavedShortPos(mVb, mIb, static_cast<unsigned>(mVerticesCount), false);
-        else
+            //printf("COMPACT IS TRUE B");
+        }
+        else {
             SetBuffersInterleaved(mVb, mIb, static_cast<unsigned>(mVerticesCount), useNormals);
+            //printf("\nB\n");
+        }
         // This is the actual draw command
         glDrawElements(mType == INTERLEAVED_STRIP ? GL_TRIANGLE_STRIP : GL_TRIANGLES, mIndicesCount, GL_UNSIGNED_SHORT, 0);
     }
@@ -265,8 +273,8 @@ void OpenGLESMesh::Render()
         switch (mNormalAction)
         {
         default:                                      break; // FAST   if we're not scaling, do nothing here            
-        case RESCALE:   glDisable(GL_RESCALE_NORMAL); break; // MEDIUM if we're scaling uniformly, use this        
-        case NORMALIZE: glDisable(GL_NORMALIZE);      break; // SLOW   if we're scaling non-uniformly, use this 
+        //case RESCALE:   glDisable(GL_RESCALE_NORMAL); break; // MEDIUM if we're scaling uniformly, use this
+        //case NORMALIZE: glDisable(GL_NORMALIZE);      break; // SLOW   if we're scaling non-uniformly, use this
         }
     }
 }

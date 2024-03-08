@@ -9,6 +9,7 @@
 #include "platform/Win32/glext.h"
 #else
 #include <OpenGLES/ES1/glext.h>
+#include <OpenGLES/ES2/glext.h>
 #endif
 
 #endif // _GLINCLUDES_H

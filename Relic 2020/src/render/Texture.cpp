@@ -60,7 +60,7 @@ static unsigned int GetBlendFactorFromName(const char *s)
 static unsigned int GetCombineOpFromName(const char *s)
 {
     if (!s)    return ~0u;
-    
+    /*
     struct Pair { const char *name; unsigned int value; };
     Pair pairs[] = { { "INTERPOLATE",              GL_INTERPOLATE },
                      { "MODULATE",                 GL_MODULATE }, 
@@ -70,7 +70,7 @@ static unsigned int GetCombineOpFromName(const char *s)
 
     for (Pair *p = pairs; p->name; p++)
         if (strcmp(p->name, s) == 0)
-            return p->value;
+            return p->value;*/
     return ~0u;
 }
 
@@ -149,8 +149,8 @@ void Texture::Initialize(ContentLoader *content, const char *filename, const cha
             printf("Unrecognized blend-destination name '%s'!\n", blendDst);
         blendDstValue = GL_ZERO;
     }
-    if (colorOpValue == ~0u) colorOpValue = GL_MODULATE;
-    if (alphaOpValue == ~0u) alphaOpValue = GL_MODULATE;
+    //if (colorOpValue == ~0u) colorOpValue = GL_MODULATE;
+    //if (alphaOpValue == ~0u) alphaOpValue = GL_MODULATE;
     Initialize(content, filename, combine, colorOpValue, alphaOpValue, blendSrcValue, blendDstValue);
 }
 
@@ -194,13 +194,13 @@ void Texture::Set(GraphicsDevice &device)
             glEnable(GL_TEXTURE_2D);
             //texture->Set(device, blendSrc, blendDst);
             glBindTexture(GL_TEXTURE_2D, texture->GetId());
-            glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+            //glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
             SetActiveTexture(GL_TEXTURE1);
             glEnable(GL_TEXTURE_2D);
             //combineTexture->Set(device, blendSrc, blendDst);
             glBindTexture(GL_TEXTURE_2D, combineTexture->GetId());
-            glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+            //glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
 
             SetColorCombineMode(colorOp);
             SetAlphaCombineMode(alphaOp);

@@ -66,20 +66,21 @@ void GlyphDrawList::Render(RenderContext &context, const Matrix &transform, cons
     */
     GraphicsDevice::GetInstance()->SetColor(clr);
     
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glDisableClientState(GL_NORMAL_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    GLStates::depthWrite.Set(false);
-    GLStates::depthTest.Set(false);    
+    //glEnableClientState(GL_VERTEX_ARRAY);
+    //glDisableClientState(GL_NORMAL_ARRAY);
+    //glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    //GLStates::depthWrite.Set(false);
+    //GLStates::depthTest.Set(false);
     
-    glVertexPointer  (3, GL_FLOAT, 0, (GLfloat *)&vertices[0]);
-    glTexCoordPointer(2, GL_FLOAT, 0, (GLfloat *)&uvs[0]);    
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLfloat *)&vertices[0]);
+    glEnableVertexAttribArray(0);
+    //glTexCoordPointer(2, GL_FLOAT, 0, (GLfloat *)&uvs[0]);
 
-    glLoadMatrixf((GLfloat *)(context.camera.GetView().data));
-    glMultMatrixf((GLfloat *)transform.data);        
+    //glLoadMatrixf((GLfloat *)(context.camera.GetView().data));
+    //glMultMatrixf((GLfloat *)transform.data);
     
     glDrawArrays(GL_TRIANGLES, 0, (GLsizei)vertices.size());
     
-    GLStates::depthWrite.Set(true);
-    GLStates::depthTest.Set(true);    
+    //GLStates::depthWrite.Set(true);
+    //GLStates::depthTest.Set(true);    
 }
