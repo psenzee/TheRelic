@@ -2,17 +2,7 @@
 #define _GLUTILS_H
 
 #include "core/core.h"
-
-void _oglError(const char *function, const char *file, int line);
-
-template <typename T>
-inline T gl_error(T return_value, const char *function, const char *file, int line)
-{
-    _oglError(function, file, line);
-    return return_value;
-}
-
-#define _GL(x) gl_error((x), #x, __FILE__, __LINE__) // (x); _oglError(#x, __FILE__, __LINE__);
+#include "glError.h"
 
 void     SetDefaultLightingType(int type);
 int      GetDefaultLightingType();
@@ -51,6 +41,6 @@ void     Print(const Vector3 &v);
 void     Print(const char *label, const Vector3 &v);
 void     Print(const char *label, const Matrix &v);
 
-void     PrintGLError();
+//void     PrintGLError();
 
 #endif // _GLUTILS_H

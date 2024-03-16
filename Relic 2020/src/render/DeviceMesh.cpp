@@ -9,18 +9,14 @@
 
 DeviceMesh::DeviceMesh(const char *filename, bool compact) : mMesh(0)
 {
-    char newname[1024];
+    char name[1024] = "";
     mMesh = new OpenGLESMesh;
-    snprintf(newname, sizeof(newname) - 1, "%s.ips", filename);
-    if (!mMesh->Read(newname, compact))
-    {
+    snprintf(name, sizeof(name) - 1, "%s.ips", filename);
+    if (!mMesh->Read(name, compact)) {
         delete mMesh;
-        mMesh = 0;
-
         mMesh = new OpenGLESMesh;
-        snprintf(newname, sizeof(newname) - 1, "%s.ipi", filename);
-        if (!mMesh->Read(newname, compact))
-        {
+        snprintf(name, sizeof(name) - 1, "%s.ipi", filename);
+        if (!mMesh->Read(name, compact)) {
             printf("Unable to read file '%s'!\n", filename);
             delete mMesh;
             mMesh = 0;
@@ -31,8 +27,7 @@ DeviceMesh::DeviceMesh(const char *filename, bool compact) : mMesh(0)
 DeviceMesh::DeviceMesh(const void *data, int size, bool compact) : mMesh(0)
 {
     mMesh = new OpenGLESMesh;
-    if (!mMesh->ReadFromData((const char *)data, size, compact))
-    {
+    if (!mMesh->ReadFromData((const char *)data, size, compact)) {
         printf("Unable to read mesh from data!\n");
         delete mMesh;
         mMesh = 0;
@@ -41,11 +36,9 @@ DeviceMesh::DeviceMesh(const void *data, int size, bool compact) : mMesh(0)
 
 bool DeviceMesh::SetNormalAction(const char *action)
 {
-    if (!mMesh) return false;
-
-    if      (!action) return false;
+    if (!mMesh || !action) return false;
     else if (strcmp(action, "NORMALIZE") == 0) { mMesh->SetNormalAction(OpenGLESMesh::NORMALIZE); return true; }
-    else if (strcmp(action, "true")      == 0) { mMesh->SetNormalAction(OpenGLESMesh::NORMALIZE); return true; }
+    else if (strcmp(action, "true"     ) == 0) { mMesh->SetNormalAction(OpenGLESMesh::NORMALIZE); return true; }
     else if (strcmp(action, "RESCALE"  ) == 0) { mMesh->SetNormalAction(OpenGLESMesh::RESCALE);   return true; }
     else if (strcmp(action, "NONE"     ) == 0) { mMesh->SetNormalAction(OpenGLESMesh::NONE);      return true; }
     else if (strcmp(action, "false"    ) == 0) { mMesh->SetNormalAction(OpenGLESMesh::NONE);      return true; }
@@ -62,9 +55,7 @@ bool DeviceMesh::SetProperty(const char *key, const char *value)
 const AABox &DeviceMesh::GetBounds() const
 {
     const static AABox empty;
-    if (!mMesh)
-        return empty;
-    return mMesh->GetBounds();
+    return !mMesh ? empty : mMesh->GetBounds();
 }
 
 DeviceMesh::~DeviceMesh()
@@ -90,9 +81,7 @@ void DeviceMesh::RenderImmediate(RenderContext &context)
 
 bool DeviceMesh::IsVisible(const RenderContext &context) const
 {
-    if (!mMesh)
-        return false;
-    return Visibility::IsVisible(context.camera.GetViewProjection(), context.transform, mMesh->GetBounds());
+    return !mMesh ? false : Visibility::IsVisible(context.camera.GetViewProjection(), context.transform, mMesh->GetBounds());
 }
 
 void DeviceMesh::Retain()

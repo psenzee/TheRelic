@@ -255,20 +255,31 @@ static void CopyQuadTo(float *vertices, const Vector3 &start, const Vector3 &end
     memcpy(vertices, qvertices, sizeof(qvertices));
 }
 
-static void CopyQuadTo(float *vertices, const Vector3 &start, const Vector3 &end, const Vector2 &t0, const Vector2 &t1)
+static void CopyQuadTo(float *vertices, float *uvs, const Vector3 &start, const Vector3 &end, const Vector2 &t0, const Vector2 &t1)
 {
     float qvertices[] =
     {
-        start.x,  end.y,    start.z,        t0.x, t1.y,
-        end.x,    start.y,  start.z,        t1.x, t0.y,
-        start.x,  start.y,  start.z,        t0.x, t0.y,
+        start.x,  end.y,    start.z,
+        end.x,    start.y,  start.z,
+        start.x,  start.y,  start.z,
         
-        start.x,  end.y,    start.z,        t0.x, t1.y,
-        end.x,    end.y,    start.z,        t1.x, t1.y,
-        end.x,    start.y,  start.z,        t1.x, t0.y,
+        start.x,  end.y,    start.z,
+        end.x,    end.y,    start.z,
+        end.x,    start.y,  start.z
     };
-
+    
+    float quvs[] =
+    {
+        t0.x, t1.y,
+        t1.x, t0.y,
+        t0.x, t0.y,
+        
+        t0.x, t1.y,
+        t1.x, t1.y,
+        t1.x, t0.y
+    };
     memcpy(vertices, qvertices, sizeof(qvertices));
+    memcpy(uvs,      quvs,      sizeof(quvs));
 }
 
 inline float mix(float a, float b, float t)

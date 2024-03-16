@@ -1174,6 +1174,7 @@
 		DA3BDDE223E47F9A0078F549 /* keyButton128B.png in Resources */ = {isa = PBXBuildFile; fileRef = DA3BDDDE23E47F9A0078F549 /* keyButton128B.png */; };
 		DA3BDDE323E47F9A0078F549 /* keyButton128W.png in Resources */ = {isa = PBXBuildFile; fileRef = DA3BDDDF23E47F9A0078F549 /* keyButton128W.png */; };
 		DA3BDDE423E47F9A0078F549 /* keyButton128Y.png in Resources */ = {isa = PBXBuildFile; fileRef = DA3BDDE023E47F9A0078F549 /* keyButton128Y.png */; };
+		DA44FE2A2BA547E6002DE0EE /* glError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA44FE292BA547E6002DE0EE /* glError.cpp */; };
 		DA4A54B62B90D27D00094E78 /* Lights.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA4A54B52B90D27D00094E78 /* Lights.cpp */; };
 		DA7AB2B223B8208100DDC4AF /* black_button_sword.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7AB2B123B8208000DDC4AF /* black_button_sword.png */; };
 		DA7AB2B423B826C300DDC4AF /* black_button_potion.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7AB2B323B826C300DDC4AF /* black_button_potion.png */; };
@@ -2636,6 +2637,8 @@
 		DA3BDDDE23E47F9A0078F549 /* keyButton128B.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = keyButton128B.png; path = data/textures/keyButton128B.png; sourceTree = "<group>"; };
 		DA3BDDDF23E47F9A0078F549 /* keyButton128W.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = keyButton128W.png; path = data/textures/keyButton128W.png; sourceTree = "<group>"; };
 		DA3BDDE023E47F9A0078F549 /* keyButton128Y.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = keyButton128Y.png; path = data/textures/keyButton128Y.png; sourceTree = "<group>"; };
+		DA44FE272BA542FA002DE0EE /* glError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = glError.h; path = src/render/glError.h; sourceTree = "<group>"; };
+		DA44FE292BA547E6002DE0EE /* glError.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glError.cpp; path = src/render/glError.cpp; sourceTree = "<group>"; };
 		DA4A54B52B90D27D00094E78 /* Lights.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Lights.cpp; path = src/render/Lights.cpp; sourceTree = "<group>"; };
 		DA65A76E2B8F68D40041B6F5 /* Lights.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Lights.h; path = src/render/Lights.h; sourceTree = "<group>"; };
 		DA65A76F2B8F9FED0041B6F5 /* PauseState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PauseState.h; path = src/level/PauseState.h; sourceTree = "<group>"; };
@@ -4019,6 +4022,8 @@
 		439DB96612DE412600B06546 /* render */ = {
 			isa = PBXGroup;
 			children = (
+				DA44FE292BA547E6002DE0EE /* glError.cpp */,
+				DA44FE272BA542FA002DE0EE /* glError.h */,
 				439DBAF612DE4B8900B06546 /* Animator.cpp */,
 				439DBAF712DE4B8900B06546 /* Animator.h */,
 				439DBAF812DE4B8900B06546 /* ContentLoader.cpp */,
@@ -5787,6 +5792,7 @@
 				439DBBF912DE4E8600B06546 /* UiBasicControl.cpp in Sources */,
 				439DBBFA12DE4E8600B06546 /* UiButton.cpp in Sources */,
 				439DBBFB12DE4E8600B06546 /* UiCollection.cpp in Sources */,
+				DA44FE2A2BA547E6002DE0EE /* glError.cpp in Sources */,
 				439DBBFC12DE4E8600B06546 /* UiCore.cpp in Sources */,
 				439DBBFD12DE4E8600B06546 /* UiDialogText.cpp in Sources */,
 				DAE7DC442B95732200B2623E /* ShaderRegistry.cpp in Sources */,

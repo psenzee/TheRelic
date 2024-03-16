@@ -2,41 +2,12 @@
 #include "core/global.h"
 #include "platform/GLIncludes.h"
 #include "render/GLStates.h"
+#include "glError.h"
 
 #include <cstring>
 #include <vector>
 #include <cstdio>
 #include <iostream>
-
-const char *glErrorString(int error)
-{
-    switch (error)
-    {
-    case GL_NO_ERROR:          return "GL_NO_ERROR";
-    case GL_INVALID_ENUM:      return "GL_INVALID_ENUM";
-    case GL_INVALID_OPERATION: return "GL_INVALID_OPERATION";
-    case GL_INVALID_VALUE:     return "GL_INVALID_VALUE";
-    case GL_OUT_OF_MEMORY:     return "GL_OUT_OF_MEMORY";
-    default:                   return "GL_NO_ERROR";
-    }
-    return "<unknown>";
-}
-
-void _oglError(const char *function, const char *file, int line)
-{
-    GLenum error = glGetError();
-    if (error == GL_NO_ERROR) {
-        return;
-    }
-    const char *str = (const char *)glErrorString(error);
-    char buf[2048] = "";
-    size_t end = snprintf(buf, sizeof(buf) - 1, "OpenGL error in %s at line %d calling %s: ", file, line, function),
-           size = sizeof(buf) - end - 1;
-    char *p = buf + end;
-    if (str) { std::snprintf(p, size, "'%s'", str); }
-    else     { std::snprintf(p, size, "'%d 0x%X'", error, error); }
-    std::cerr << buf << std::endl;
-}
 
 int _g_lightingType = 0;
 
@@ -52,7 +23,7 @@ void SetDefaultLightingType(int type)
 
 void SetActiveTexture(int value)
 {
-    glActiveTexture(value);
+    _GLv(glActiveTexture(value));
 }
 
 void SetAsTexture0(int id)
@@ -66,7 +37,7 @@ void SetAsTexture1(int id)
 {
    SetActiveTexture(GL_TEXTURE1);
    glBindTexture(GL_TEXTURE_2D, id);
-   //glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+ //glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
 }
 
 void SetColorCombineMode(int combine) // combine GL_ADD/GL_MODULATE/GL_INTERPOLATE
@@ -428,7 +399,7 @@ void Print(const char *label, const Matrix &v)
     printf("| %-8.2f %-8.2f %-8.2f %-8.2f |\n", v.data[8],  v.data[9],  v.data[10], v.data[11]);        
     printf("| %-8.2f %-8.2f %-8.2f %-8.2f |\n", v.data[12], v.data[13], v.data[14], v.data[15]);
 }
-
+/*
 void PrintGLError()
 {
     int error = glGetError();
@@ -445,8 +416,8 @@ void PrintGLError()
   //case GL_STACK_UNDERFLOW:   errs = "GL_STACK_UNDERFLOW";   break;
   //case GL_TABLE_TOO_LARGE:   errs = "GL_TABLE_TOO_LARGE";   break;
     }
-    printf("OpenGL error '%s' (%d)\n", errs, error);
-}
+    printf("\nOpenGL error '%s' (%d)\n", errs, error);
+}*/
 
 void PrintTextureMatrix()
 {

@@ -198,7 +198,7 @@ static uint32_t LoadPVRTexture(const char *filename, core::Size *size)
 		    int err = glGetError();
 		    if (err != GL_NO_ERROR)
 		    {
-			    printf("Error uploading compressed texture level: %d. glError: 0x%04X", i, err);
+			    printf("\nError uploading compressed texture level: %d. glError: 0x%04X", i, err);
                 glDeleteTextures(1, &_name);
 			    delete [] (char *)data.data;
 			    return 0;

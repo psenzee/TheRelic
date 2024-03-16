@@ -196,7 +196,7 @@ typedef struct _PVRTexHeader
 		
 		err = glGetError();
 		if (err != GL_NO_ERROR) {
-			NSLog(@"Error uploading compressed texture level: %d. glError: 0x%04X", i, err);
+			NSLog(@"\nError uploading compressed texture level: %d. glError: 0x%04X", i, err);
 			return FALSE;
 		}
 		

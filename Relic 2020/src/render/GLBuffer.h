@@ -5,6 +5,7 @@
 #include <utility>
 #include <cassert>
 #include "GLIncludes.h"
+#include "glError.h"
 
 struct GLBuffer
 {
@@ -17,27 +18,27 @@ struct GLBuffer
     GLBuffer(GLenum target, const void *data, size_t elementStride, size_t elementCount, size_t componentSize)
         : elementCount(elementCount), componentSize(componentSize), elementStride(elementStride)
     {
-        glGenBuffers(1, &bufferId);
+        _GLv(glGenBuffers(1, &bufferId));
         if (bufferId > 0) {
-            glBindBuffer(target, bufferId); // bind
-            glBufferData(target, elementCount * elementStride, data, GL_STATIC_DRAW); // copy data
-            glBindBuffer(target, 0); // unbind
+            _GLv(glBindBuffer(target, bufferId)); // bind
+            _GLv(glBufferData(target, elementCount * elementStride, data, GL_STATIC_DRAW)); // copy data
+            _GLv(glBindBuffer(target, 0)); // unbind
         }
     }
     
     void Bind()
     {
-        glBindBuffer(target, bufferId);         // unbind
+        _GLv(glBindBuffer(target, bufferId));         // unbind
     }
 
     void Unbind()
     {
-        glBindBuffer(target, 0);         // unbind
+        _GLv(glBindBuffer(target, 0));         // unbind
     }
 
     ~GLBuffer()
     {
-        glDeleteBuffers(1, &bufferId);
+        _GLv(glDeleteBuffers(1, &bufferId));
     }
 /*
     void BindToDrawAsPositionWithIndices(unsigned uPositionId)

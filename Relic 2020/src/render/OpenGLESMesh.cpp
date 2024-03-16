@@ -138,13 +138,13 @@ void OpenGLESMesh::CreateBuffers(int dataSize, int indicesSize)
         // http://playcontrol.net/ewing/jibberjabber/opengl_vertex_buffer_object.html
         
         // allocate a new buffer
-        glGenBuffers(1, &mVb);
+        _GLv(glGenBuffers(1, &mVb));
         
         // bind the buffer object to use
-        glBindBuffer(GL_ARRAY_BUFFER, mVb);
+        _GLv(glBindBuffer(GL_ARRAY_BUFFER, mVb));
         
         // allocate enough space for the VBO
-        glBufferData(GL_ARRAY_BUFFER, dataSize, 0, GL_STATIC_DRAW);
+        _GLv(glBufferData(GL_ARRAY_BUFFER, dataSize, 0, GL_STATIC_DRAW));
 
         void *vbuffer = MapBuffer();
 
@@ -153,17 +153,15 @@ void OpenGLESMesh::CreateBuffers(int dataSize, int indicesSize)
         UnmapBuffer();
         
         // create index buffer
-        glGenBuffers(1, &mIb);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIb);
+        _GLv(glGenBuffers(1, &mIb));
+        _GLv(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIb));
         // For constrast, instead of glBufferSubData and glMapBuffer, we can directly supply the data in one-shot
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize, mIndices, GL_STATIC_DRAW);
+        _GLv(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize, mIndices, GL_STATIC_DRAW));
         
         // END CREATE BUFFERS 
         
-        glBindBuffer(GL_ARRAY_BUFFER, 0); 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-        
-        PrintGLError();        
+        _GLv(glBindBuffer(GL_ARRAY_BUFFER, 0));
+        _GLv(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
     }
 #endif
 }
@@ -185,8 +183,7 @@ bool OpenGLESMesh::ReadFromData(const char *data, int size, bool asCompact)
     Clear();
     uint32_t sz = (*(const int *)data), totalsz = 0;
     totalsz = sz;
-    if (!data || !sz || size != sz + sizeof(int32_t))
-    {
+    if (!data || !sz || size != sz + sizeof(int32_t)) {
         mData = 0;
         return false;
     }
@@ -249,7 +246,7 @@ void OpenGLESMesh::Render()
             SetPointersInterleaved(mInterleaved, static_cast<unsigned>(mVerticesCount), useNormals);
             printf("\bNB\n");
         }
-        glDrawElements(mType == INTERLEAVED_STRIP ? GL_TRIANGLE_STRIP : GL_TRIANGLES, static_cast<GLsizei>(mIndicesCount), GL_UNSIGNED_SHORT, mIndices);
+        _GLv(glDrawElements(mType == INTERLEAVED_STRIP ? GL_TRIANGLE_STRIP : GL_TRIANGLES, static_cast<GLsizei>(mIndicesCount), GL_UNSIGNED_SHORT, mIndices));
     }
 #ifndef WIN32
     else if (usage == USE_BUFFERS)
@@ -263,7 +260,7 @@ void OpenGLESMesh::Render()
             //printf("\nB\n");
         }
         // This is the actual draw command
-        glDrawElements(mType == INTERLEAVED_STRIP ? GL_TRIANGLE_STRIP : GL_TRIANGLES, mIndicesCount, GL_UNSIGNED_SHORT, 0);
+        _GLv(glDrawElements(mType == INTERLEAVED_STRIP ? GL_TRIANGLE_STRIP : GL_TRIANGLES, mIndicesCount, GL_UNSIGNED_SHORT, 0));
     }
 #endif
 
