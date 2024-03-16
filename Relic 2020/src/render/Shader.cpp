@@ -2,6 +2,7 @@
 #include "core/file.h"
 #include "platform/GLIncludes.h"
 #include "ShaderProgram.h"
+#include "GLUtils.h"
 
 Shader::~Shader()
 {
@@ -27,7 +28,7 @@ bool Shader::Compile()
         return false;
     }
     GLuint type = mType == TYPE_FRAGMENT ? GL_FRAGMENT_SHADER : GL_VERTEX_SHADER;
-    mShaderId = glCreateShader(type);
+    mShaderId = _GL(glCreateShader(type));
     const char *text = mText.data();
     glShaderSource(mShaderId, 1, &text, NULL);
     glCompileShader(mShaderId);

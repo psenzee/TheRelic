@@ -1,11 +1,12 @@
 #include "ShaderProgram.h"
 #include "Shader.h"
 #include "platform/GLIncludes.h"
+#include "GLUtils.h"
 #include <iostream>
 
 ShaderProgram::ShaderProgram() : mProgramId(0)
 {
-    mProgramId = glCreateProgram();
+    mProgramId = _GL(glCreateProgram());
     for (size_t i = 0; i < Shader::MAX_SHADER_TYPES; i++) {
         mShaders[i] = nullptr;
     }

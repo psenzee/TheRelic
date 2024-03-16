@@ -1,0 +1,83 @@
+// wrong original
+unsigned int div7_0(unsigned int n)
+{
+    unsigned int d = n >> 3;
+	return d + (n - 7 * d);
+}
+
+// version 1 (naive; horrible performance)
+unsigned int div7_1(unsigned int n)
+{
+    int c = 0;
+    while (n >= 7) { n -= 7; c++; }
+	return c;
+}
+
+// version 2 (constant performance..)
+unsigned int div7_2(unsigned int n)
+{
+    if (!n) return 0;
+
+    unsigned int div = 7 << (sizeof(unsigned int) * 8 - 3),
+                 or  = 1 << (sizeof(unsigned int) * 8 - 3),
+                 quo = 0;
+    while (n >= 7)
+    {
+        if (n >= div)
+        {
+            n -= div;
+            quo |= or;
+        }
+        div >>= 1;
+        or  >>= 1;
+    }
+    return quo;
+}
+
+#include "bits.h"
+
+// version 3
+unsigned int div7_3(unsigned int n)
+{
+    if (!n) return 0;
+
+    int          bits = bithi(n) - 3 /* width of 7 (0111) */;
+    unsigned int or   = 1 << bits,
+                 div  = 7 << bits,
+                 quo  = 0;
+    while (n >= 7)
+    {
+        if (n >= div)
+        {
+            n -= div;
+            quo |= or;
+        }
+        div >>= 1;
+        or  >>= 1;
+    }
+    return quo;
+}
+
+// generalized
+unsigned int div(unsigned int n, unsigned int divisor)
+{
+    if (!n) return 0;
+    if (!divisor)
+        throw std::exception("division by zero.");
+
+    int          bits = bithi(n) - (bithi(divisor) + 1);
+    unsigned int or   = 1       << bits,
+                 div  = divisor << bits,
+                 quo  = 0;
+    while (n >= divisor)
+    {
+        if (n >= div)
+        {
+            n -= div;
+            quo |= or;
+        }
+        div >>= 1;
+        or  >>= 1;
+    }
+    return quo;
+}

@@ -182,8 +182,8 @@ static uint32_t LoadPVRTexture(const char *filename, core::Size *size)
 		success = true;
 	}
 
-    if (success)
-    {
+    if (success) {
+
 	    width  = maxWidth;
 	    height = maxHeight;
     

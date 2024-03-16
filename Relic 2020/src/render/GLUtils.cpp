@@ -3,9 +3,40 @@
 #include "platform/GLIncludes.h"
 #include "render/GLStates.h"
 
-#include <stdio.h>
-#include <string.h>
+#include <cstring>
 #include <vector>
+#include <cstdio>
+#include <iostream>
+
+const char *glErrorString(int error)
+{
+    switch (error)
+    {
+    case GL_NO_ERROR:          return "GL_NO_ERROR";
+    case GL_INVALID_ENUM:      return "GL_INVALID_ENUM";
+    case GL_INVALID_OPERATION: return "GL_INVALID_OPERATION";
+    case GL_INVALID_VALUE:     return "GL_INVALID_VALUE";
+    case GL_OUT_OF_MEMORY:     return "GL_OUT_OF_MEMORY";
+    default:                   return "GL_NO_ERROR";
+    }
+    return "<unknown>";
+}
+
+void _oglError(const char *function, const char *file, int line)
+{
+    GLenum error = glGetError();
+    if (error == GL_NO_ERROR) {
+        return;
+    }
+    const char *str = (const char *)glErrorString(error);
+    char buf[2048] = "";
+    size_t end = snprintf(buf, sizeof(buf) - 1, "OpenGL error in %s at line %d calling %s: ", file, line, function),
+           size = sizeof(buf) - end - 1;
+    char *p = buf + end;
+    if (str) { std::snprintf(p, size, "'%s'", str); }
+    else     { std::snprintf(p, size, "'%d 0x%X'", error, error); }
+    std::cerr << buf << std::endl;
+}
 
 int _g_lightingType = 0;
 
@@ -21,11 +52,6 @@ void SetDefaultLightingType(int type)
 
 void SetActiveTexture(int value)
 {
-#ifdef WIN32
-    static PFNGLACTIVETEXTUREPROC glActiveTexture = 0;
-    if (!glActiveTexture)
-        glActiveTexture = (PFNGLACTIVETEXTUREPROC)wglGetProcAddress("glActiveTexture");
-#endif
     glActiveTexture(value);
 }
 
@@ -297,12 +323,6 @@ void SetBuffersInterleaved(unsigned vb, unsigned ib, unsigned vertices, bool nor
     if (vb == cachedBuffers[0] && ib == cachedBuffers[1])
         return;
 
-#ifndef WIN32
-    // Activate the VBOs to draw
-    //glBindBuffer(GL_ARRAY_BUFFER,         vb);
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
-#endif
-
     int size = 20;
     if (normals)
         size += 12;
@@ -337,12 +357,6 @@ void SetBuffersInterleavedCharPos(unsigned vb, unsigned ib, unsigned vertices, b
     if (vb == cachedBuffers[0] && ib == cachedBuffers[1])
         return;
 
-#ifndef WIN32
-    // Activate the VBOs to draw
-    //glBindBuffer(GL_ARRAY_BUFFER,         vb);
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
-#endif
-
     int size = 12;
     if (normals)
         size += 12;
@@ -375,12 +389,6 @@ void SetBuffersInterleavedShortPos(unsigned vb, unsigned ib, unsigned vertices, 
     
     if (vb == cachedBuffers[0] && ib == cachedBuffers[1])
         return;
-
-#ifndef WIN32
-    // Activate the VBOs to draw
-    //glBindBuffer(GL_ARRAY_BUFFER,         vb);
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
-#endif
 
     int size = 12;
     if (normals)

@@ -9,3 +9,4 @@ void main()
     // The pixel colors are set to the texture according to texture coordinates.
     gl_FragColor = texture2D(_texture0, v_texuv0);
 }
+ 

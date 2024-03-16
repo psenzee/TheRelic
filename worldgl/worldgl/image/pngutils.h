@@ -1,0 +1,1 @@
+#ifndef _PNGUTILS_H#define _PNGUTILS_H#include <cstddef>class Image // 32bpp image{public:        int      width,             height;    uint8_t *data;        Image(int width, int height, uint8_t *data) : width(width), height(height), data(data) {}    };bool read_png_file(const char *filename, Image *image);#endif // _PNGUTILS_H

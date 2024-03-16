@@ -1,0 +1,20 @@
+{ p.x = 1, p.y = 0, p.z = 0 }
+{ q.x = 0, q.y = 1, q.z = 0 }
+
+cross (gives a third, perpendicular vector):
+
+x = p.y * q.z - p.z * q.y
+y = p.z * q.x - p.x * q.z
+z = p.x * q.y - p.y * q.x
+
+x = 0 = 0 * 0 - 0 * 1
+y = 0 = 0 * 0 - 1 * 0
+z = 1 = 1 * 1 - 0 * 0
+
+
+dot (0 if perpendicular, 1 [given normalized vectors] if coincident, -1 if anticoincident):
+
+p.x * q.x + p.y * q.y + p.z * q.z
+
+0 = 1 * 0 + 0 * 1 + 1 * 0 (perpendicular)
+

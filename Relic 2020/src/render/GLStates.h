@@ -3,8 +3,8 @@
 
 #include "core/core.h"
 #include "platform/GLIncludes.h"
-
 #include "core/core_assert.h"
+#include "GLUtils.h"
 
 class BoolStateSetter
 {

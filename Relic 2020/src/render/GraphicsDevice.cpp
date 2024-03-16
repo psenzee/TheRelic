@@ -104,11 +104,6 @@ ShaderProgram *GraphicsDevice::SetShaderProgram(const char *name)
     return (mShaderProgram = mShaders.GetShaderProgram(name));
 }
 
-Matrix GraphicsDevice::GetProjection() const
-{
-    return mProjection;
-}
-
 void GraphicsDevice::SetColor(const Vector4 &color)
 {
     if (mColor.x != color.x || mColor.y != color.y || mColor.z != color.z || mColor.w != color.w) {

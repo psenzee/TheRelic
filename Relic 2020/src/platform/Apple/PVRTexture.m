@@ -181,8 +181,9 @@ typedef struct _PVRTexHeader
 	
 	if ([_imageData count] > 0)
 	{
-		if (_name != 0)
-			glDeleteTextures(1, &_name);
+        if (_name != 0) {
+            glDeleteTextures(1, &_name);
+        }
 		
 		glGenTextures(1, &_name);
 		glBindTexture(GL_TEXTURE_2D, _name);
@@ -194,8 +195,7 @@ typedef struct _PVRTexHeader
 		glCompressedTexImage2D(GL_TEXTURE_2D, i, _internalFormat, width, height, 0, [data length], [data bytes]);
 		
 		err = glGetError();
-		if (err != GL_NO_ERROR)
-		{
+		if (err != GL_NO_ERROR) {
 			NSLog(@"Error uploading compressed texture level: %d. glError: 0x%04X", i, err);
 			return FALSE;
 		}

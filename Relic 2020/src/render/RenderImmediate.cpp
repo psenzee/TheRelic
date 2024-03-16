@@ -4,6 +4,7 @@
 #include "DeviceTexture.h"
 #include "Texture.h"
 #include "platform/GLIncludes.h"
+#include "GraphicsDevice.h"
 
 extern void ClearCachedPointers();
 
@@ -15,17 +16,14 @@ void RenderImmediate(const RenderContext   &context,
     //glMultMatrixf((GLfloat *)context.transform.data);
     auto program = context.device.SetShaderProgram("Shader");
     program->SetActive();
-    program->SetUniform("u_transform", m);
+    //context.device.
+    //program->SetUniform("u_transform", m);
 
-    ClearCachedPointers();
-
-    //glDisableClientState(GL_NORMAL_ARRAY);
-    //glEnableClientState(GL_VERTEX_ARRAY);
-    //glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    //ClearCachedPointers();
 
     // Describe to OpenGL where the vertex and uv data is in the buffer
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 20, reinterpret_cast<const void *>(vertices));
-    glEnableVertexAttribArray(0);
+    //glEnableVertexAttribArray(0);
     //glTexCoordPointer(2, GL_FLOAT, 20, reinterpret_cast<const char *>(vertices) + sizeof(float) * 3);
 
     glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(count));

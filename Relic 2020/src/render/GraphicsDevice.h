@@ -35,7 +35,7 @@ public:
     TriState               GetEnableFog() const { return mEnableFog; }
 
     void                   SetProjection(const Matrix &m);
-    Matrix                 GetProjection() const;
+    const Matrix          &GetProjection() const { return mProjection; }
     void                   SetMaterial(const Material &m);
     
     void                   SetLight(const OverheadCamera &camera, size_t slot, const Light &light, bool enable = true);
@@ -45,6 +45,12 @@ public:
     void                   SetFog(const Vector4 &color, float density = 0.3f);
     void                   SetUvTransform(const Matrix &m);
     void                   SetModelViewProjection(const Matrix &m);
+    
+    /*
+    const Matrix          &GetModelViewProjection() const
+    {
+    }
+    */
 
     void                   SetBaseUvTransform(const Matrix &m);
 

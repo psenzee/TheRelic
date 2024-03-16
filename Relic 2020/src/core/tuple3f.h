@@ -4,10 +4,9 @@
 #include "mathcore.h"
 #include "tuple2f.h"
 
-#include <float.h>
-#include <math.h>
-
-//extern "C" double sqrt(double);
+#include <float.h>  // TODO get rid of
+#include <math.h> // TODO get rid of
+#include <cmath>
 
 class Tuple3f
 {
@@ -74,9 +73,10 @@ public:
     inline self         &operator/=(float p)                                     { float q = 1.0f / p; x *= q; y *= q; z *= q; return *this; }
 
     inline float         lengthsq()                                        const { return x * x + y * y + z * z; }
-    inline float         length()                                          const { return sqrtf(lengthsq()); }
+    inline float         length()                                          const { return std::sqrt(lengthsq()); }
     inline float         distancesq(const self &p)                         const { float dx = p.x - x, dy = p.y - y, dz = p.z - z; return dx * dx + dy * dy + dz * dz; }
-    inline float         distance(const self &p)                           const { return sqrtf(distancesq(p)); }
+    inline float         distance(const self &p)                           const { return std::sqrt(distancesq(p)); }
+    inline float         manhattan(const self &p)                          const { return std::abs(p.x - x) + std::abs(p.y - y) + std::abs(p.z - z); }
 
     inline void          set(float x, float y, float z)                          { this->x = x; this->y = y; this->z = z; }
 

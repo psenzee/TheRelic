@@ -56,13 +56,13 @@ void QuadRenderer::RenderScreenAlignedQuad(DeviceTexture *texture, const Vector4
 
     float vertices[] =
     { 
-        start.x,  end.y,    start.z,
-        end.x,    start.y,  start.z,        
-        start.x,  start.y,  start.z,
+        start.x,  end.y,    start.z,   //     t0.x, t1.y,
+        end.x,    start.y,  start.z,   //     t1.x, t0.y,
+        start.x,  start.y,  start.z,   //     t0.x, t0.y,
         
-        start.x,  end.y,    start.z,        
-        end.x,    end.y,    start.z,                
-        end.x,    start.y,  start.z
+        start.x,  end.y,    start.z,   //     t0.x, t1.y,
+        end.x,    end.y,    start.z,   //     t1.x, t1.y,
+        end.x,    start.y,  start.z,   //     t1.x, t0.y,
     };
     
     float uvs[] =
@@ -73,7 +73,7 @@ void QuadRenderer::RenderScreenAlignedQuad(DeviceTexture *texture, const Vector4
         
         t0.x, t1.y,
         t1.x, t1.y,
-        t1.x, t0.y        
+        t1.x, t0.y,
     };
 
     RenderScreenAligned(texture, color, vertices, uvs, 6);
@@ -239,32 +239,76 @@ void QuadRenderer::RenderScreenAlignedPanoramaRotate(DeviceTexture *texture, con
     RenderScreenAligned(texture, color, vertices, uvs, 6 * 4);
 }
 
-static void CopyQuadTo(float *vertices, float *uvs, const Vector3 &start, const Vector3 &end, const Vector2 &t0, const Vector2 &t1)
+static void CopyQuadTo(float *vertices, const Vector3 &start, const Vector3 &end, const Vector2 &t0, const Vector2 &t1)
 {
     float qvertices[] =
     { 
-        start.x,  end.y,    start.z,
-        end.x,    start.y,  start.z,        
-        start.x,  start.y,  start.z,
+        start.x,  end.y,    start.z,        t0.x, t1.y,
+        end.x,    start.y,  start.z,        t1.x, t0.y,
+        start.x,  start.y,  start.z,        t0.x, t0.y,
         
-        start.x,  end.y,    start.z,        
-        end.x,    end.y,    start.z,                
-        end.x,    start.y,  start.z
+        start.x,  end.y,    start.z,        t0.x, t1.y,
+        end.x,    end.y,    start.z,        t1.x, t1.y,
+        end.x,    start.y,  start.z,        t1.x, t0.y,
     };
-    
-    float quvs[] =
-    {
-        t0.x, t1.y,
-        t1.x, t0.y,
-        t0.x, t0.y,
-        
-        t0.x, t1.y,
-        t1.x, t1.y,
-        t1.x, t0.y        
-    };
+
     memcpy(vertices, qvertices, sizeof(qvertices));
-    memcpy(uvs,      quvs,      sizeof(quvs));
 }
+
+static void CopyQuadTo(float *vertices, const Vector3 &start, const Vector3 &end, const Vector2 &t0, const Vector2 &t1)
+{
+    float qvertices[] =
+    {
+        start.x,  end.y,    start.z,        t0.x, t1.y,
+        end.x,    start.y,  start.z,        t1.x, t0.y,
+        start.x,  start.y,  start.z,        t0.x, t0.y,
+        
+        start.x,  end.y,    start.z,        t0.x, t1.y,
+        end.x,    end.y,    start.z,        t1.x, t1.y,
+        end.x,    start.y,  start.z,        t1.x, t0.y,
+    };
+
+    memcpy(vertices, qvertices, sizeof(qvertices));
+}
+
+inline float mix(float a, float b, float t)
+{
+    return (b - a) * t + a;
+}
+/*
+static size_t IndexedAAQuad(const Vector3 &vb, const Vector3 &ve, const Vector2 &tb, const Vector2 &te)
+{
+    // degenerate -- it's a point
+    if (math::zero(vb.manhattan(ve))) {
+        return 0;
+    }
+    bool eq_x = math::eq(vb.x, ve.x),
+         eq_y = math::eq(vb.y, ve.y),
+         eq_z = math::eq(vb.z, ve.z);
+    // degenerate -- it's a line
+    if ((eq_x && eq_y) || (eq_y && eq_z) || (eq_x && eq_z)) {
+        return 0;
+    } else if (eq_z || eq_y) { // I only know that eq_z has the correct normals.  I will have to test the rest
+        const float vertices [] = {
+            ve.x, vb.y, vb.z, te.x, tb.y,
+            ve.x, ve.y, ve.z, te.x, te.y,
+            vb.x, vb.y, vb.z, tb.x, tb.y,
+            vb.x, ve.y, ve.z, tb.x, te.y,
+        };
+    } else if (eq_x) {
+        const float vertices [] = {
+            ve.x, ve.y, vb.z, te.x, tb.y,
+            vb.x, ve.y, ve.z, te.x, te.y,
+            ve.x, vb.y, vb.z, tb.x, tb.y,
+            vb.x, vb.y, ve.z, tb.x, te.y,
+        };
+    }
+    const uint16_t indices [] = {
+        0, 1, 2, 2, 1, 3
+    };
+    return 6;
+}
+*/
 
 void QuadRenderer::Render9Slice(DeviceTexture *texture, const Vector4 &color, const Vector3 &start, const Vector3 &end, float cornerSize, float middleRange)
 {

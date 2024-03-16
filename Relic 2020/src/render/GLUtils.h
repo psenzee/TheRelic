@@ -3,6 +3,17 @@
 
 #include "core/core.h"
 
+void _oglError(const char *function, const char *file, int line);
+
+template <typename T>
+inline T gl_error(T return_value, const char *function, const char *file, int line)
+{
+    _oglError(function, file, line);
+    return return_value;
+}
+
+#define _GL(x) gl_error((x), #x, __FILE__, __LINE__) // (x); _oglError(#x, __FILE__, __LINE__);
+
 void     SetDefaultLightingType(int type);
 int      GetDefaultLightingType();
 void     SetDefaultLighting();

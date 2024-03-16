@@ -1,0 +1,90 @@
+Adding Fractions with Different Denominators
+To Add Fractions with different denominators:
+
+Find the Least Common Denominator (LCD) of the fractions
+Rename the fractions to have the LCD
+Add the numerators of the fractions
+Simplify the Fraction
+Example: Find the Sum of 2/9 and 3/12
+
+Determine the Greatest Common Factor of 9 and 12 which is 3
+Either multiply the denominators and divide by the GCF (9*12=108, 108/3=36)
+OR - Divide one of the denominators by the GCF and multiply the answer by the other denominator (9/3=3, 3*12=36)
+Rename the fractions to use the Least Common Denominator(2/9=8/36, 3/12=9/36)
+The result is 8/36 + 9/36
+Add the numerators and put the sum over the LCD = 17/36
+Simplify the fraction if possible. In this case it is not possible
+Return to Top
+
+
+----------
+
+Least Common Denominator
+The Least Common Denominator (LCD) is the Least Common Multiple of two or more denominators.
+
+To find the Least Common Denominator:
+
+Find the Greatest Common Factor of the denominators
+Multiply the denominators together
+Divide the product of the denominators by the Greatest Common Factor.
+Example: Find the LCD of 2/9 and 3/12
+
+Determine the Greatest Common Factor of 9 and 12 which is 3
+Either multiply the denominators and divide by the GCF (9*12=108, 108/3=36)
+OR - Divide one of the denominators by the GCF and multiply the quotient times the other denominator (9/3=3, 3*12=36)
+To rename fractions and use the Least Common Denominator:
+
+Divide the LCD by one denominator.
+Multiply the numerator times this quotient.
+Repeat the process for the other fraction(s)
+2/9 + 3/12
+LCD is 36
+First fraction (2/9): 36/9 = 4, 4*2 = 8, first fraction is renamed as 8/36
+Second fraction (3/12): 36/12 = 3, 3*3 = 9, second fraction is renamed as 9/36
+
+It is possible to add or subtract fractions that have the same denominator
+8/36 + 9/36 = 17/36
+
+--------------------
+
+The greatest common factor, or GCF, is the greatest factor that divides two numbers. To find the GCF of two numbers:
+List the prime factors of each number.
+Multiply those factors both numbers have in common. If there are no common prime factors, the GCF is 1.
+
+#include "primes.h"
+
+inline bool isfactor(int v, int factor) { return (v / factor) * factor == factor; }
+
+int gcf(int a, int b)
+{
+    int v = min(a, b),
+        p = 0,
+        t = 1;
+    for (int i = 0; (p = primes[i]) <= v; i++)
+        if (isfactor(a, p) && isfactor(b, p))
+            t *= p;
+    return t;
+}
+
+--------------------
+
+A common multiple is a number that is a multiple of two or more numbers. The common multiples of 3 and 4 are 0, 12, 24, ....
+The least common multiple (LCM) of two numbers is the smallest number (not zero) that is a multiple of both.
+
+(paul upper bound would be A * B)
+
+int min(int a, int b) { return a < b ? a : b; }
+int max(int a, int b) { return a > b ? a : b; }
+
+int lcm(int a, int b)
+{
+    if (a == b)
+        return a;
+    else if (a == 0 || b == 0)
+        return 0; // ???
+    int inc = max(a, b), other = min(a, b);
+    for (int i = 0, e = a * b; i < e; i += inc)
+        if (i == (i / other) * other)
+            return i;
+    return -1;
+}
