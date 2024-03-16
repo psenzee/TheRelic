@@ -2,7 +2,7 @@
 #define _GLSTATES_H
 
 #include "core/core.h"
-#include "platform/GLIncludes.h"
+#include "render/GLIncludes.h"
 
 #include "core/core_assert.h"
 

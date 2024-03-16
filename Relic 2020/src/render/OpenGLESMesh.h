@@ -51,9 +51,6 @@ public:
 private:
 
     enum Type { NONINTERLEAVED_LIST = 0, INTERLEAVED_LIST = 1, INTERLEAVED_STRIP = 2, _ = 0x7fffffff };
-    enum Usage { USE_NO_BUFFERS = 0, USE_BUFFERS };
-    
-    static const Usage usage;
     
     unsigned        mVb, mIb;
     bool            mOwner;

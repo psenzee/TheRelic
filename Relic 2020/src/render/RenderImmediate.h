@@ -1,7 +1,7 @@
 #ifndef _RENDERIMMEDIATE_H
 #define _RENDERIMMEDIATE_H
 
-#include "platform/GLIncludes.h"
+#include "render/GLIncludes.h"
 
 class RenderContext;
 class DeviceTexture;

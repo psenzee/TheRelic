@@ -1,7 +1,7 @@
 #include "Glyph.h"
 #include "render/GLUtils.h"
 #include "render/GLStates.h"
-#include "platform/GLIncludes.h"
+#include "render/GLIncludes.h"
 #include "core/global.h"
 
 #include "render/OverheadCamera.h"

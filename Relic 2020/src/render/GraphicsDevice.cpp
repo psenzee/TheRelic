@@ -2,7 +2,7 @@
 
 #include "core/core.h"
 #include "GLUtils.h"
-#include "platform/GLIncludes.h"
+#include "render/GLIncludes.h"
 #include "render/GLStates.h"
 #include "OverheadCamera.h"
 
@@ -151,7 +151,7 @@ void GraphicsDevice::SetLight(const OverheadCamera &camera, size_t slot, const L
     Vector4 world = light.vectors[Light::V4_WORLD_POSITION];
     Vector3 pos = camera.GetLightPositionFromWorld(world.xyz());
     float eye[4] = { pos.x, pos.y, pos.z, world.w };
-    printf("light at %.f, %.f, %.f (%f) from (%.f, %.f, %.f)\n", pos.x, pos.y, pos.z, world.w, world.x, world.y, world.z);
+    //printf("light at %.f, %.f, %.f (%f) from (%.f, %.f, %.f)\n", pos.x, pos.y, pos.z, world.w, world.x, world.y, world.z);
     
     glLightfv(id, GL_POSITION,              eye);
 

@@ -1,6 +1,6 @@
 #include "DeviceMesh.h"
 #include "render/GLUtils.h"
-#include "platform/GLIncludes.h"
+#include "render/GLIncludes.h"
 #include "render/OpenGLESMesh.h"
 #include "OverheadCamera.h"
 #include "RenderContext.h"

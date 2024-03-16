@@ -1179,6 +1179,7 @@
 		DA7AB2B423B826C300DDC4AF /* black_button_potion.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7AB2B323B826C300DDC4AF /* black_button_potion.png */; };
 		DA7AB2B623B82A1100DDC4AF /* tick_new.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7AB2B523B82A1100DDC4AF /* tick_new.png */; };
 		DA7AB2B823B9376100DDC4AF /* black_button_ring.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7AB2B723B9376100DDC4AF /* black_button_ring.png */; };
+		DA9CAEA92BA6201A0062B8E1 /* GLAbstract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9CAEA72BA620190062B8E1 /* GLAbstract.cpp */; };
 		DAEFF7F123BC17540062B630 /* tick_new_2.png in Resources */ = {isa = PBXBuildFile; fileRef = DAEFF7F023BC17540062B630 /* tick_new_2.png */; };
 		DAEFF7F323BD04670062B630 /* globals.lua in Resources */ = {isa = PBXBuildFile; fileRef = DAEFF7F223BD04670062B630 /* globals.lua */; };
 		DAEFF7F623BD2F390062B630 /* GameDimensions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAEFF7F423BD2F390062B630 /* GameDimensions.cpp */; };
@@ -2632,6 +2633,8 @@
 		DA7AB2B323B826C300DDC4AF /* black_button_potion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = black_button_potion.png; path = data/textures/black_button_potion.png; sourceTree = "<group>"; };
 		DA7AB2B523B82A1100DDC4AF /* tick_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tick_new.png; path = data/textures/tick_new.png; sourceTree = "<group>"; };
 		DA7AB2B723B9376100DDC4AF /* black_button_ring.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = black_button_ring.png; path = data/textures/black_button_ring.png; sourceTree = "<group>"; };
+		DA9CAEA72BA620190062B8E1 /* GLAbstract.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLAbstract.cpp; path = src/render/GLAbstract.cpp; sourceTree = "<group>"; };
+		DA9CAEA82BA620190062B8E1 /* GLAbstract.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLAbstract.h; path = src/render/GLAbstract.h; sourceTree = "<group>"; };
 		DAEFF7F023BC17540062B630 /* tick_new_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tick_new_2.png; path = data/textures/tick_new_2.png; sourceTree = "<group>"; };
 		DAEFF7F223BD04670062B630 /* globals.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = globals.lua; path = data/lua/globals.lua; sourceTree = "<group>"; };
 		DAEFF7F423BD2F390062B630 /* GameDimensions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameDimensions.cpp; path = src/GameDimensions.cpp; sourceTree = "<group>"; };
@@ -4005,6 +4008,8 @@
 				439DBB0812DE4B8900B06546 /* GLIncludes.h */,
 				439DBB0912DE4B8900B06546 /* GLStates.cpp */,
 				439DBB0A12DE4B8900B06546 /* GLStates.h */,
+				DA9CAEA72BA620190062B8E1 /* GLAbstract.cpp */,
+				DA9CAEA82BA620190062B8E1 /* GLAbstract.h */,
 				439DBB0B12DE4B8900B06546 /* GLUtils.cpp */,
 				439DBB0C12DE4B8900B06546 /* GLUtils.h */,
 				439DBB0D12DE4B8900B06546 /* GraphicsDevice.cpp */,
@@ -5551,6 +5556,7 @@
 				439DB9CC12DE43CC00B06546 /* parse.cpp in Sources */,
 				439DB9CD12DE43CC00B06546 /* paths.cpp in Sources */,
 				439DB9CE12DE43CC00B06546 /* plane.cpp in Sources */,
+				DA9CAEA92BA6201A0062B8E1 /* GLAbstract.cpp in Sources */,
 				439DB9CF12DE43CC00B06546 /* Profiler.cpp in Sources */,
 				439DB9D012DE43CC00B06546 /* quaternion.cpp in Sources */,
 				439DB9D112DE43CC00B06546 /* simplexml.cpp in Sources */,

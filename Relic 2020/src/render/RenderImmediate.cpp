@@ -3,7 +3,7 @@
 #include "RenderContext.h"
 #include "DeviceTexture.h"
 #include "Texture.h"
-#include "platform/GLIncludes.h"
+#include "render/GLIncludes.h"
 
 extern void ClearCachedPointers();
 

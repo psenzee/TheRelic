@@ -1,6 +1,6 @@
 #include "GLUtils.h"
 #include "core/global.h"
-#include "platform/GLIncludes.h"
+#include "render/GLIncludes.h"
 #include "render/GLStates.h"
 
 #include <stdio.h>
@@ -21,11 +21,6 @@ void SetDefaultLightingType(int type)
 
 void SetActiveTexture(int value)
 {
-#ifdef WIN32
-    static PFNGLACTIVETEXTUREPROC glActiveTexture = 0;
-    if (!glActiveTexture)
-        glActiveTexture = (PFNGLACTIVETEXTUREPROC)wglGetProcAddress("glActiveTexture");
-#endif
     glActiveTexture(value);
 }
 
@@ -193,10 +188,8 @@ void ClearBuffers()
 {
     if (cachedBuffers[0] || cachedBuffers[1])
     {
-#ifndef WIN32
         glBindBuffer(GL_ARRAY_BUFFER,         0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-#endif
         cachedBuffers[0] = cachedBuffers[1] = 0;
     }
 }
@@ -256,11 +249,9 @@ void SetBuffers(unsigned vb, unsigned ib, unsigned vertices)
     if (vb == cachedBuffers[0] && ib == cachedBuffers[1])
         return;
 
-#ifndef WIN32
     // Activate the VBOs to draw
     glBindBuffer(GL_ARRAY_BUFFER,         vb);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
-#endif
 
     const GLsizeiptr vertexSize = vertices * 3 * sizeof(float);
     const GLsizeiptr uvSize     = vertices * 2 * sizeof(float);
@@ -359,11 +350,9 @@ void SetBuffersInterleaved(unsigned vb, unsigned ib, unsigned vertices, bool nor
     if (vb == cachedBuffers[0] && ib == cachedBuffers[1])
         return;
 
-#ifndef WIN32
     // Activate the VBOs to draw
     glBindBuffer(GL_ARRAY_BUFFER,         vb);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
-#endif
 
     int size = 20;
     if (normals)
@@ -398,11 +387,9 @@ void SetBuffersInterleavedCharPos(unsigned vb, unsigned ib, unsigned vertices, b
     if (vb == cachedBuffers[0] && ib == cachedBuffers[1])
         return;
 
-#ifndef WIN32
     // Activate the VBOs to draw
     glBindBuffer(GL_ARRAY_BUFFER,         vb);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
-#endif
 
     int size = 12;
     if (normals)
@@ -428,8 +415,7 @@ void SetBuffersInterleavedShortPos(unsigned vb, unsigned ib, unsigned vertices, 
 {
     memset(&cachedPointers[0], 0, sizeof(cachedPointers));    
     
-    if (!vb)
-    {
+    if (!vb) {
         ClearBuffers();
         return;
     }

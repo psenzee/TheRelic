@@ -2,7 +2,7 @@
 #include "GraphicsDevice.h"
 #include "render/GLUtils.h"
 #include "platform/LoadTexture.h"
-#include "platform/GLIncludes.h"
+#include "render/GLIncludes.h"
 #include "render/GLStates.h"
 
 DeviceTexture::DeviceTexture(const char *filename) : texid(0), size(0, 0)

@@ -5,7 +5,7 @@
 #include "Glyph.h"
 #include "render/GLUtils.h"
 #include "render/GLStates.h"
-#include "platform/GLIncludes.h"
+#include "render/GLIncludes.h"
 #include "render/DeviceTexture.h"
 #include "render/GraphicsDevice.h"
 #include "render/Material.h"

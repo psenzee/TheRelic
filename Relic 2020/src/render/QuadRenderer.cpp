@@ -1,7 +1,7 @@
 #include "QuadRenderer.h"
 #include "render/GLUtils.h"
 #include "render/GLStates.h"
-#include "platform/GLIncludes.h"
+#include "render/GLIncludes.h"
 #include "Material.h"
 #include "OverheadCamera.h"
 #include "DeviceTexture.h"
