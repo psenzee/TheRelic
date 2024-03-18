@@ -4,6 +4,7 @@
 #include "core/core.h"
 #include "core/aabox.h"
 #include "fast/Allocator.h"
+#include "GLAbstract.h"
 
 //#define NORMALS 1 // no
 
@@ -32,8 +33,6 @@ class OpenGLESMesh
 public:
     
     CLASS_NEW_DELETE()
-
-    enum NormalAction { NONE, RESCALE, NORMALIZE };
         
     OpenGLESMesh();
     ~OpenGLESMesh();

@@ -5,6 +5,8 @@
 #include "OverheadCamera.h"
 #include "RenderContext.h"
 #include "Visibility.h"
+#include "render/glError.h"
+#include "GLAbstract.h"
 
 DeviceMesh::DeviceMesh(const char *filename, bool compact) : mMesh(0)
 {
@@ -43,11 +45,11 @@ bool DeviceMesh::SetNormalAction(const char *action)
     if (!mMesh) return false;
 
     if      (!action) return false;
-    else if (strcmp(action, "NORMALIZE") == 0) { mMesh->SetNormalAction(OpenGLESMesh::NORMALIZE); return true; }
-    else if (strcmp(action, "true")      == 0) { mMesh->SetNormalAction(OpenGLESMesh::NORMALIZE); return true; }
-    else if (strcmp(action, "RESCALE"  ) == 0) { mMesh->SetNormalAction(OpenGLESMesh::RESCALE);   return true; }
-    else if (strcmp(action, "NONE"     ) == 0) { mMesh->SetNormalAction(OpenGLESMesh::NONE);      return true; }
-    else if (strcmp(action, "false"    ) == 0) { mMesh->SetNormalAction(OpenGLESMesh::NONE);      return true; }
+    else if (strcmp(action, "NORMALIZE") == 0) { mMesh->SetNormalAction(NORMALIZE_ACTION_NORMALIZE); return true; }
+    else if (strcmp(action, "true")      == 0) { mMesh->SetNormalAction(NORMALIZE_ACTION_NORMALIZE); return true; }
+    else if (strcmp(action, "RESCALE"  ) == 0) { mMesh->SetNormalAction(NORMALIZE_ACTION_RESCALE);   return true; }
+    else if (strcmp(action, "NONE"     ) == 0) { mMesh->SetNormalAction(NORMALIZE_ACTION_NONE);      return true; }
+    else if (strcmp(action, "false"    ) == 0) { mMesh->SetNormalAction(NORMALIZE_ACTION_NONE);      return true; }
     return false;
 }
 
@@ -75,10 +77,9 @@ DeviceMesh::~DeviceMesh()
 
 void DeviceMesh::RenderImmediate(RenderContext &context)
 {
-    if (mMesh)
-    {
-        glLoadMatrixf((float *)context.camera.GetView().data);
-        glMultMatrixf((float *)context.transform.data);
+    if (mMesh) {
+        GLLoadMatrix(context.camera.GetView());
+        GLMultMatrix(context.transform);
         mMesh->Render();
     }
 }

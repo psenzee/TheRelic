@@ -2,21 +2,13 @@
 #include "core/global.h"
 #include "render/GLUtils.h"
 #include "render/GLIncludes.h"
+#include "GLAbstract.h"
+#include "glError.h"
 
 #include <stdio.h>
 #include <string.h>
 
-static void *MapBuffer()
-{
-    return glMapBufferOES(GL_ARRAY_BUFFER, GL_WRITE_ONLY_OES);
-}
-
-static void UnmapBuffer()
-{
-    glUnmapBufferOES(GL_ARRAY_BUFFER);
-}
-
-OpenGLESMesh::OpenGLESMesh() : mData(0), mNormalAction(NONE), mVb(0), mIb(0), mInterleaved(0), mCompact(0), mOwner(false)
+OpenGLESMesh::OpenGLESMesh() : mData(0), mNormalAction(NORMALIZE_ACTION_NONE), mVb(0), mIb(0), mInterleaved(0), mCompact(0), mOwner(false)
 {
     Clear();
 }
@@ -66,9 +58,7 @@ bool OpenGLESMesh::Read(const char *filename, bool asCompact)
 {
     Clear();
     FILE *file = fopen(globalTranslatePath(filename), "rb");
-    if (!file)
-    {
-   //   globalErrorHandler("Unable to open file '%s'.", filename);
+    if (!file) {
         return false;
     }    
     uint32_t sz = 0, totalsz = 0;
@@ -93,8 +83,9 @@ bool OpenGLESMesh::Read(const char *filename, bool asCompact)
     p += sz;
     mVerticesCount = sz / sizeof(GLVertex);
     
-    if (asCompact)
+    if (asCompact) {
         Compact();
+    }
     CalculateBounds();
 
     uint32_t dataSize = sz;
@@ -105,8 +96,9 @@ bool OpenGLESMesh::Read(const char *filename, bool asCompact)
     p += sz;
     uint32_t indicesSize = sz;
     mIndicesCount = sz / sizeof(unsigned short);
-    if ((uint32_t)(p - (char *)mData) != totalsz)
+    if ((uint32_t)(p - (char *)mData) != totalsz) {
         return false;
+    }
 
     CreateBuffers(dataSize, indicesSize);
     return true;
@@ -114,44 +106,15 @@ bool OpenGLESMesh::Read(const char *filename, bool asCompact)
 
 void OpenGLESMesh::CreateBuffers(int dataSize, int indicesSize)
 {
-    // BEGIN CREATE BUFFERS
-    // http://playcontrol.net/ewing/jibberjabber/opengl_vertex_buffer_object.html
-    
-    // allocate a new buffer
-    glGenBuffers(1, &mVb);
-    
-    // bind the buffer object to use
-    glBindBuffer(GL_ARRAY_BUFFER, mVb);
-    
-    // allocate enough space for the VBO
-    glBufferData(GL_ARRAY_BUFFER, dataSize, 0, GL_STATIC_DRAW);
-
-    void *vbuffer = MapBuffer();
-
-    // transfer the vertex data to the VBO
-    memcpy(vbuffer, mInterleaved, dataSize);
-    UnmapBuffer();
-    
-    // create index buffer
-    glGenBuffers(1, &mIb);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIb);
-    // For constrast, instead of glBufferSubData and glMapBuffer, we can directly supply the data in one-shot
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize, mIndices, GL_STATIC_DRAW);
-    
-    // END CREATE BUFFERS
-    
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    
-    PrintGLError();
+    auto ids = GLCreateBuffers(mInterleaved, mIndices, dataSize, indicesSize);
+    mVb = ids[0];
+    mIb = ids[1];
 }
 
 void OpenGLESMesh::DestroyBuffers()
 {
-    if (mIb || mVb) {
-        glDeleteBuffers(1, &mIb);
-        glDeleteBuffers(1, &mVb);
-    }
+    std::array<unsigned, 2> ids { mIb, mVb };
+    GLDestroyBuffers(ids);
     mIb = mVb = 0;
 }
 
@@ -202,35 +165,11 @@ void OpenGLESMesh::Render()
 #ifndef NORMALS
     useNormals = false;
 #endif
-    //glEnable(GL_RESCALE_NORMAL); // $HACK testing
-    if (useNormals)
-    {
-        // we want to cache these values somewhere..
-        switch (mNormalAction)
-        {
-        default:                                     break; // FAST   if we're not scaling, do nothing here
-        case RESCALE:   glEnable(GL_RESCALE_NORMAL); break; // MEDIUM if we're scaling uniformly, use this
-        case NORMALIZE: glEnable(GL_NORMALIZE);      break; // SLOW   if we're scaling non-uniformly, use this
-        }
-    }
-    //glEnable(GL_CULL_FACE);
-    if (mCompact) {
-        SetBuffersInterleavedShortPos(mVb, mIb, static_cast<unsigned>(mVerticesCount), false);
-        printf("\n**shortpos**\n");
-    }
-    else
-        SetBuffersInterleaved(mVb, mIb, static_cast<unsigned>(mVerticesCount), useNormals);
+    GLSetNormalAction(useNormals, mNormalAction, true);
+    GLSetEnabled(GL_CULL_FACE, true);
+    SetBuffersInterleaved(mVb, mIb, static_cast<unsigned>(mVerticesCount), useNormals);
     // This is the actual draw command
-    glDrawElements(mType == INTERLEAVED_STRIP ? GL_TRIANGLE_STRIP : GL_TRIANGLES, mIndicesCount, GL_UNSIGNED_SHORT, 0);
-
-    if (useNormals)
-    {
-        // we want to cache these values somewhere..
-        switch (mNormalAction)
-        {
-        default:                                      break; // FAST   if we're not scaling, do nothing here            
-        case RESCALE:   glDisable(GL_RESCALE_NORMAL); break; // MEDIUM if we're scaling uniformly, use this        
-        case NORMALIZE: glDisable(GL_NORMALIZE);      break; // SLOW   if we're scaling non-uniformly, use this 
-        }
-    }
+    GLDrawElements(mType == INTERLEAVED_STRIP ? GL_TRIANGLE_STRIP : GL_TRIANGLES, mIndicesCount);
+    //_GLv(glDrawElements(mType == INTERLEAVED_STRIP ? GL_TRIANGLE_STRIP : GL_TRIANGLES, mIndicesCount, GL_UNSIGNED_SHORT, 0));
+    GLSetNormalAction(useNormals, mNormalAction, false);
 }

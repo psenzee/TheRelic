@@ -5,24 +5,26 @@
 #include "render/GLIncludes.h"
 #include "render/GLStates.h"
 #include "OverheadCamera.h"
+#include "GLAbstract.h"
+#include "glError.h"
 
 GraphicsDevice *GraphicsDevice::sInstance = 0;
 
 void GraphicsDevice::Initialize()
 {
-    glViewport(0, 0, mFrameSize.width, mFrameSize.height);
-    glShadeModel(GL_SMOOTH);
+    _GLv(glViewport(0, 0, mFrameSize.width, mFrameSize.height));
+    GLShadeModelSmooth();
     SetColor(Vector4(1.f, 1.f, 1.f, 1.f));
 }
 
 void GraphicsDevice::ClearZBuffer()
 {
-    ::ClearZBuffer();
+    GLClearZBuffer();
 }
 
 void GraphicsDevice::ClearAll()
 {
-    ::ClearAll();
+    GLClearAll();
 }
 
 void GraphicsDevice::EnableDepthTest(bool v)
@@ -47,33 +49,29 @@ void GraphicsDevice::EnableLighting(bool v)
 
 void GraphicsDevice::SetUvTransform(const Matrix &m)
 {
-    if (memcmp(&mUvTransform, &m, sizeof(Matrix)) == 0)
+    if (memcmp(&mUvTransform, &m, sizeof(Matrix)) == 0) {
         return;
+    }
     mUvTransform = m;
-    glMatrixMode(GL_TEXTURE);
     Matrix mm(mBaseUvTransform * mUvTransform);
-    glLoadMatrixf((float *)&mm);
-    glMatrixMode(GL_MODELVIEW);
+    GLLoadTextureMatrix(mm);
 }
 
 void GraphicsDevice::SetBaseUvTransform(const Matrix &m)
 {
-    if (memcmp(&mUvTransform, &m, sizeof(Matrix)) == 0)
+    if (memcmp(&mUvTransform, &m, sizeof(Matrix)) == 0) {
         return;
+    }
     mBaseUvTransform = m;
-    glMatrixMode(GL_TEXTURE);
     Matrix mm(mBaseUvTransform * mUvTransform);
-    glLoadMatrixf((float *)&mm);
-    glMatrixMode(GL_MODELVIEW);
+    GLLoadTextureMatrix(mm);
 }
         
 void GraphicsDevice::SetProjection(const Matrix &m)
 {
     //Set the OpenGL projection matrix
-    glMatrixMode(GL_PROJECTION);
     mProjection = m;
-    glLoadMatrixf((float *)&m);
-    glMatrixMode(GL_MODELVIEW); //Make the OpenGL modelview matrix the default
+    GLLoadProjectionMatrix(m);
 }
 
 Matrix GraphicsDevice::GetProjection() const
@@ -83,10 +81,9 @@ Matrix GraphicsDevice::GetProjection() const
 
 void GraphicsDevice::SetColor(const Vector4 &color)
 {
-    if (mColor.x != color.x || mColor.y != color.y || mColor.z != color.z || mColor.w != color.w)
-    {
+    if (mColor.x != color.x || mColor.y != color.y || mColor.z != color.z || mColor.w != color.w) {
         mColor = color;
-        glColor4f(mColor.x, mColor.y, mColor.z, mColor.w);
+        _GLv(glColor4f(mColor.x, mColor.y, mColor.z, mColor.w));
     }
 }
 
@@ -101,12 +98,11 @@ bool GraphicsDevice::HasGlobalAlpha() const
 }
 
 void GraphicsDevice::SetMaterial(const Material &m)
-{                                     
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   (const float *)&m.ambient);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   (const float *)&m.diffuse);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION,  (const float *)&m.emissive);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  (const float *)&m.specular);
-    glMaterialf (GL_FRONT_AND_BACK, GL_SHININESS,                 m.shininess);
+{
+    GLSetMaterial4(GL_DIFFUSE,   m.diffuse);
+    GLSetMaterial4(GL_EMISSION,  m.emissive);
+    GLSetMaterial4(GL_SPECULAR,  m.specular);
+    GLSetMaterial (GL_SHININESS, m.shininess);
 }
 
 void GraphicsDevice::SetFog(const Vector4 &color, float density)
@@ -134,7 +130,7 @@ void GraphicsDevice::EnableFog(const TriState &value)
 
 void GraphicsDevice::EnableColorMaterial(bool v)
 {
-   if (v) glEnable(GL_COLOR_MATERIAL); else glDisable(GL_COLOR_MATERIAL);
+    GLSetEnabled(GL_COLOR_MATERIAL, v);
 }
 
 bool GraphicsDevice::IsLightingEnabled() const
@@ -144,31 +140,31 @@ bool GraphicsDevice::IsLightingEnabled() const
 
 void GraphicsDevice::SetLight(const OverheadCamera &camera, size_t slot, const Light &light, bool enable)
 {
-    glLoadIdentity();
+    GLLoadIdentityMatrix();
 
     int id = GL_LIGHT0 + slot;
 
     Vector4 world = light.vectors[Light::V4_WORLD_POSITION];
     Vector3 pos = camera.GetLightPositionFromWorld(world.xyz());
     float eye[4] = { pos.x, pos.y, pos.z, world.w };
-    //printf("light at %.f, %.f, %.f (%f) from (%.f, %.f, %.f)\n", pos.x, pos.y, pos.z, world.w, world.x, world.y, world.z);
-    
-    glLightfv(id, GL_POSITION,              eye);
 
-    glLightfv(id, GL_AMBIENT,               (const float *)&light.vectors[Light::V4_AMBIENT]);
-    glLightfv(id, GL_DIFFUSE,               (const float *)&light.vectors[Light::V4_DIFFUSE]);
-    glLightfv(id, GL_SPECULAR,              (const float *)&light.vectors[Light::V4_SPECULAR]);
-    glLightfv(id, GL_SPOT_DIRECTION,        (const float *)&light.vectors[Light::V4_SPOT_DIRECTION]);
+    GLSetLight4(id, GL_POSITION,              (const float *)eye);
 
-    glLightf (id, GL_SHININESS,             light.floats[Light::F1_SHININESS]);
-    glLightf (id, GL_SPOT_EXPONENT,         light.floats[Light::F1_SPOT_EXPONENT]);
-    glLightf (id, GL_SPOT_CUTOFF,           light.floats[Light::F1_SPOT_CUTOFF]);
-    glLightf (id, GL_CONSTANT_ATTENUATION,  light.floats[Light::F1_CONSTANT_ATTENUATION]);
-    glLightf (id, GL_LINEAR_ATTENUATION,    light.floats[Light::F1_LINEAR_ATTENUATION]);
-    glLightf (id, GL_QUADRATIC_ATTENUATION, light.floats[Light::F1_QUADRATIC_ATTENUATION]);
+    GLSetLight4(id, GL_AMBIENT,               (const float *)&light.vectors[Light::V4_AMBIENT]);
+    GLSetLight4(id, GL_DIFFUSE,               (const float *)&light.vectors[Light::V4_DIFFUSE]);
+    GLSetLight4(id, GL_SPECULAR,              (const float *)&light.vectors[Light::V4_SPECULAR]);
+    GLSetLight4(id, GL_SPOT_DIRECTION,        (const float *)&light.vectors[Light::V4_SPOT_DIRECTION]);
 
-    if (enable)
+    GLSetLight (id, GL_SHININESS,             light.floats[Light::F1_SHININESS]);
+    GLSetLight (id, GL_SPOT_EXPONENT,         light.floats[Light::F1_SPOT_EXPONENT]);
+    GLSetLight (id, GL_SPOT_CUTOFF,           light.floats[Light::F1_SPOT_CUTOFF]);
+    GLSetLight (id, GL_CONSTANT_ATTENUATION,  light.floats[Light::F1_CONSTANT_ATTENUATION]);
+    GLSetLight (id, GL_LINEAR_ATTENUATION,    light.floats[Light::F1_LINEAR_ATTENUATION]);
+    GLSetLight (id, GL_QUADRATIC_ATTENUATION, light.floats[Light::F1_QUADRATIC_ATTENUATION]);
+
+    if (enable) {
         EnableLight(slot, true);
+    }
 }
 
 void GraphicsDevice::EnableLight(size_t slot, bool enable)

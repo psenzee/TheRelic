@@ -4,12 +4,13 @@
 #include "platform/LoadTexture.h"
 #include "render/GLIncludes.h"
 #include "render/GLStates.h"
+#include "GLAbstract.h"
 
 DeviceTexture::DeviceTexture(const char *filename) : texid(0), size(0, 0)
 {
-    char newname[1024];
-    snprintf(newname, sizeof(newname) - 1, "%s.png", filename);
-    texid = LoadTexture(newname, &size);
+    char name[1024];
+    snprintf(name, sizeof(name) - 1, "%s.png", filename);
+    texid = LoadTexture(name, &size);
 }
 
 DeviceTexture::~DeviceTexture()
@@ -18,7 +19,7 @@ DeviceTexture::~DeviceTexture()
     if (Loaded())
     {
         GLuint tid = texid;
-        glDeleteTextures(1, &tid);
+        _GLv(glDeleteTextures(1, &tid));
         texid = 0;
     }
 }
@@ -28,32 +29,13 @@ bool DeviceTexture::Loaded() const
     return texid && glIsTexture(texid);
 }
 
-static bool IsAlphaType(int blend)
-{
-    switch (blend)
-    {
-    case GL_SRC_ALPHA:
-    case GL_ONE_MINUS_SRC_ALPHA:
-    case GL_DST_ALPHA:
-    case GL_ONE_MINUS_DST_ALPHA:
-    case GL_SRC_ALPHA_SATURATE:
-#ifdef GL_CONSTANT_COLOR        
-    case GL_CONSTANT_ALPHA:
-    case GL_ONE_MINUS_CONSTANT_ALPHA:
-#endif
-        return true;
-    default: break;
-    }
-    return false;
-}
-
 void DeviceTexture::SetMipMapped(bool value)
 {
-    glBindTexture(GL_TEXTURE_2D, texid);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, value ? GL_LINEAR_MIPMAP_NEAREST : GL_LINEAR);
+    GLBindTexture2d(texid);
+    _GLv(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, value ? GL_LINEAR_MIPMAP_NEAREST : GL_LINEAR));
 }
 
-void DeviceTexture::Set(GraphicsDevice &device, unsigned int blendsrc, unsigned int blenddst)
+void DeviceTexture::Set(GraphicsDevice &device, unsigned int blend_src, unsigned int blend_dst)
 {
     if (!Loaded())
         return;
@@ -61,12 +43,12 @@ void DeviceTexture::Set(GraphicsDevice &device, unsigned int blendsrc, unsigned 
     {    
         GLStates::texture.Set(true);
         if (device.HasGlobalAlpha()) {
-            blenddst = GL_ONE_MINUS_SRC_ALPHA;
+            blend_dst = GL_ONE_MINUS_SRC_ALPHA;
         }
         // Set a blending function to use
-        glBlendFunc(blendsrc, blenddst);
+        GLBlendFunc(blend_src, blend_dst);
         // Enable blending
-        GLStates::blend.Set(IsAlphaType(blendsrc) || IsAlphaType(blenddst));
-        glBindTexture(GL_TEXTURE_2D, texid);
+        GLStates::blend.Set(GLIsBlendAlphaType(blend_src) || GLIsBlendAlphaType(blend_dst));
+        GLBindTexture2d(texid);
     }
 }

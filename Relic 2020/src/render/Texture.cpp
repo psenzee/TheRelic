@@ -4,6 +4,8 @@
 #include "render/GLStates.h"
 #include "render/GLIncludes.h"
 #include "DeviceTexture.h"
+#include "GLAbstract.h"
+#include "glError.h"
 
 /*
  
@@ -139,14 +141,16 @@ void Texture::Initialize(ContentLoader *content, const char *filename, const cha
              alphaOpValue  = GetCombineOpFromName(alphaOp);
     if (blendSrcValue == ~0u)
     {
-        if (blendSrc)
-            printf("Unrecognized blend-source name '%s'!\n", blendSrc);        
+        if (blendSrc) {
+            printf("Unrecognized blend-source name '%s'!\n", blendSrc);
+        }
         blendSrcValue = GL_ONE;
     }
     if (blendDstValue == ~0u)
     {
-        if (blendDst)
+        if (blendDst) {
             printf("Unrecognized blend-destination name '%s'!\n", blendDst);
+        }
         blendDstValue = GL_ZERO;
     }
     if (colorOpValue == ~0u) colorOpValue = GL_MODULATE;
@@ -158,8 +162,9 @@ Texture::~Texture()
 {
     printf("Deleting texture %s\n", filename.c_str());
     // todo
-    if (texture)
+    if (texture) {
         delete texture;
+    }
     texture = 0;
 }
 
@@ -170,16 +175,16 @@ void Texture::Set(GraphicsDevice &device)
     {
         if (!combineTexture)
         {
-//            SetActiveTexture(GL_TEXTURE0);
+//            GLSetActiveTexture(GL_TEXTURE0);
 //            glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
             texture->Set(device, blendSrc, blendDst);
-//SetActiveTexture(GL_TEXTURE1);
+//GLSetActiveTexture(GL_TEXTURE1);
 //            glDisable(GL_TEXTURE_2D);
-//            SetActiveTexture(GL_TEXTURE0);
+//            GLSetActiveTexture(GL_TEXTURE0);
             // clear out second texture stage only if necessary
             //if (!textureStage1Cleared)
             {
-                //SetAsTexture1(0);
+                //GLSetAsTextureN(0, 0);
                 textureStage1Cleared = true;
             }
         }
@@ -188,24 +193,24 @@ void Texture::Set(GraphicsDevice &device)
             textureStage1Cleared = false;
             //GLStates::texture.Set(true);
             // Set a blending function to use
-            glBlendFunc(blendSrc, blendDst);
+            _GLv(glBlendFunc(blendSrc, blendDst));
 
-            SetActiveTexture(GL_TEXTURE0);
-            glEnable(GL_TEXTURE_2D);
+            GLSetActiveTexture(GL_TEXTURE0);
+            _GLv(glEnable(GL_TEXTURE_2D));
             //texture->Set(device, blendSrc, blendDst);
-            glBindTexture(GL_TEXTURE_2D, texture->GetId());
-            glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+            _GLv(glBindTexture(GL_TEXTURE_2D, texture->GetId()));
+            _GLv(glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE));
 
-            SetActiveTexture(GL_TEXTURE1);
-            glEnable(GL_TEXTURE_2D);
+            GLSetActiveTexture(GL_TEXTURE1);
+            _GLv(glEnable(GL_TEXTURE_2D));
             //combineTexture->Set(device, blendSrc, blendDst);
-            glBindTexture(GL_TEXTURE_2D, combineTexture->GetId());
-            glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+            _GLv(glBindTexture(GL_TEXTURE_2D, combineTexture->GetId()));
+            _GLv(glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE));
 
-            SetColorCombineMode(colorOp);
-            SetAlphaCombineMode(alphaOp);
+            GLSetColorCombineMode(colorOp);
+            GLSetAlphaCombineMode(alphaOp);
 
-            SetActiveTexture(GL_TEXTURE0);
+            GLSetActiveTexture(GL_TEXTURE0);
         }
     }
 }

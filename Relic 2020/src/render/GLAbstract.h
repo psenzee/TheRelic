@@ -1,2 +1,48 @@
 #pragma once
 
+#include <array>
+#include <span>
+
+//#define _OPENGLES_2
+
+class Matrix4f;
+class Tuple4f;
+
+enum NormalAction { NORMALIZE_ACTION_NONE = 0, NORMALIZE_ACTION_RESCALE, NORMALIZE_ACTION_NORMALIZE };
+
+void                     GLLoadMatrix(const Matrix4f &matrix);
+void                     GLMultMatrix(const Matrix4f &matrix);
+void                     GLLoadModelViewMatrix(const Matrix4f &matrix);
+void                     GLLoadIdentityMatrix();
+void                     GLLoadTextureMatrix(const Matrix4f &matrix);
+void                     GLLoadProjectionMatrix(const Matrix4f &matrix);
+void                     GLLoadProjectionIdentityMatrix();
+void                     GLLoadModelViewIdentityMatrix();
+void                     GLLoadModelViewProjectionMatrix(const Matrix4f &projection, const Matrix4f &modelView);
+void                     GLLoadBaseTextureMatrix();
+void                     GLSetActiveTexture(int value);
+void                     GLSetAsTextureN(int id, int n);
+void                     GLSetColorCombineMode(int combine);
+void                     GLSetAlphaCombineMode(int combine);
+void                     GLSetEnabled(int id, bool enabled);
+void                     GLSetEnabledClientState(int id, bool enabled);
+std::array<unsigned, 2>  GLCreateBuffers(const void *interleaved_data, const void *indices_data, int interleaved_size, int indices_size);
+void                    *GLMapBuffer();
+void                     GLUnmapBuffer();
+void                     GLSetNormalAction(bool use_normals, NormalAction action, bool enable);
+void                     GLClearAll();
+void                     GLClearZBuffer();
+void                     GLSetLight(int id, int state, float value);
+void                     GLSetLight4(int id, int state, const float *value);
+void                     GLSetMaterial(int state, float value);
+void                     GLSetMaterial4(int state, const float *value);
+void                     GLSetMaterial4(int state, const Tuple4f &value);
+bool                     GLIsBlendAlphaType(int blend);
+void                     GLDestroyBuffer(unsigned id);
+void                     GLDestroyBuffers(std::span<unsigned> ids);
+void                     GLSetDepthWrite(bool value);
+void                     GLBlendFunc(int blend_src, int blend_dst);
+void                     GLBindTexture2d(int texid);
+void                     GLDrawElements(int listStripOrFan, size_t indexCount);
+void                     GLBindBufferForElements(unsigned vb, unsigned ib);
+void                     GLShadeModelSmooth();

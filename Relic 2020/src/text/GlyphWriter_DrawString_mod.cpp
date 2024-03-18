@@ -10,6 +10,7 @@
 #include "render/GraphicsDevice.h"
 #include "render/Material.h"
 #include "render/RenderContext.h"
+#include "GLAbstract.h"
 
 extern void ClearCachedPointers();
 
@@ -39,7 +40,9 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
 
 static void _RenderString(RenderContext &context, float *vertices, float *uvs, int count, const Vector4 &color)
 {
-    if (!count || !vertices || !uvs || color.w < 0.1f) return;
+    if (!count || !vertices || !uvs || color.w < 0.1f) {
+        return;
+    }
         
     // RENDER DRAW LIST
     //glColor4f(color.x, color.y, color.z, color.w);
@@ -52,10 +55,10 @@ static void _RenderString(RenderContext &context, float *vertices, float *uvs, i
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (GLfloat *)&diffuse);
     */
     
-    glVertexPointer  (3, GL_FLOAT,         0, (GLfloat *)&vertices[0]);
-    glTexCoordPointer(2, GL_FLOAT,         0, (GLfloat *)&uvs[0]);
+    _GLv(glVertexPointer  (3, GL_FLOAT,         0, (GLfloat *)&vertices[0]));
+    _GLv(glTexCoordPointer(2, GL_FLOAT,         0, (GLfloat *)&uvs[0]));
 
-    glDrawArrays(GL_TRIANGLES, 0, count);
+    _GLv(glDrawArrays(GL_TRIANGLES, 0, count));
 }
 
 struct quad_t
@@ -82,8 +85,7 @@ int    char_index[256];
 
 void GlyphWriter::Update()
 {
-    for (int i = 0; i < 256; i++)
-    {
+    for (int i = 0; i < 256; i++) {
         char_index[i]++;
         char_index[i] %= 16;
     }
@@ -132,17 +134,17 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
                         *puvs      = uvs;
     uint32_t             vcount    = 0;
 
-    glLoadMatrixf((GLfloat *)view.data);
-    glMultMatrixf((GLfloat *)transform.data);
+    GLLoadMatrix(view);
+    GLMultMatrix(transform);
 
     ClearCachedPointers();
     texture->Set(context.device, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glDisableClientState(GL_NORMAL_ARRAY);  
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    _GLv(glDisableClientState(GL_NORMAL_ARRAY));
+    _GLv(glEnableClientState(GL_VERTEX_ARRAY));
+    _GLv(glEnableClientState(GL_TEXTURE_COORD_ARRAY));
 
-    glDisable(GL_CULL_FACE);  // we can eliminate this if we ensure the correct orientation of the vertices
+    _GLv(glDisable(GL_CULL_FACE));  // we can eliminate this if we ensure the correct orientation of the vertices
     GLStates::depthWrite.Set(false);
     GLStates::depthTest.Set(false);        
     
@@ -236,16 +238,20 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
 
     if (vcount) 
     {
+        auto render_color = _hack_override_color ? *_hack_override_color : (prev * color);
+        /*
         if (_hack_override_color)
             _RenderString(context, vertices, uvs, vcount, *_hack_override_color);
         else
-        _RenderString(context, vertices, uvs, vcount, prev * color);  
+         */
+        _RenderString(context, vertices, uvs, vcount, render_color/*prev * color*/);
     }
 
     GLStates::depthWrite.Set(true);
     GLStates::depthTest.Set(true);
-    glEnable(GL_CULL_FACE); // we can eliminate this if we ensure the correct orientation of the vertices   
+    _GLv(glEnable(GL_CULL_FACE)); // we can eliminate this if we ensure the correct orientation of the vertices
     
-    if (!buffer)
+    if (!buffer) {
         delete [] (unsigned *)data;
+    }
 }

@@ -1180,6 +1180,7 @@
 		DA7AB2B623B82A1100DDC4AF /* tick_new.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7AB2B523B82A1100DDC4AF /* tick_new.png */; };
 		DA7AB2B823B9376100DDC4AF /* black_button_ring.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7AB2B723B9376100DDC4AF /* black_button_ring.png */; };
 		DA9CAEA92BA6201A0062B8E1 /* GLAbstract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9CAEA72BA620190062B8E1 /* GLAbstract.cpp */; };
+		DA9CAEAD2BA63DCA0062B8E1 /* glError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9CAEAB2BA63DCA0062B8E1 /* glError.cpp */; };
 		DAEFF7F123BC17540062B630 /* tick_new_2.png in Resources */ = {isa = PBXBuildFile; fileRef = DAEFF7F023BC17540062B630 /* tick_new_2.png */; };
 		DAEFF7F323BD04670062B630 /* globals.lua in Resources */ = {isa = PBXBuildFile; fileRef = DAEFF7F223BD04670062B630 /* globals.lua */; };
 		DAEFF7F623BD2F390062B630 /* GameDimensions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAEFF7F423BD2F390062B630 /* GameDimensions.cpp */; };
@@ -2635,6 +2636,8 @@
 		DA7AB2B723B9376100DDC4AF /* black_button_ring.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = black_button_ring.png; path = data/textures/black_button_ring.png; sourceTree = "<group>"; };
 		DA9CAEA72BA620190062B8E1 /* GLAbstract.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLAbstract.cpp; path = src/render/GLAbstract.cpp; sourceTree = "<group>"; };
 		DA9CAEA82BA620190062B8E1 /* GLAbstract.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLAbstract.h; path = src/render/GLAbstract.h; sourceTree = "<group>"; };
+		DA9CAEAB2BA63DCA0062B8E1 /* glError.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glError.cpp; path = src/render/glError.cpp; sourceTree = "<group>"; };
+		DA9CAEAC2BA63DCA0062B8E1 /* glError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glError.h; path = src/render/glError.h; sourceTree = "<group>"; };
 		DAEFF7F023BC17540062B630 /* tick_new_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tick_new_2.png; path = data/textures/tick_new_2.png; sourceTree = "<group>"; };
 		DAEFF7F223BD04670062B630 /* globals.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = globals.lua; path = data/lua/globals.lua; sourceTree = "<group>"; };
 		DAEFF7F423BD2F390062B630 /* GameDimensions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameDimensions.cpp; path = src/GameDimensions.cpp; sourceTree = "<group>"; };
@@ -3987,6 +3990,8 @@
 		439DB96612DE412600B06546 /* render */ = {
 			isa = PBXGroup;
 			children = (
+				DA9CAEAB2BA63DCA0062B8E1 /* glError.cpp */,
+				DA9CAEAC2BA63DCA0062B8E1 /* glError.h */,
 				439DBAF612DE4B8900B06546 /* Animator.cpp */,
 				439DBAF712DE4B8900B06546 /* Animator.h */,
 				439DBAF812DE4B8900B06546 /* ContentLoader.cpp */,
@@ -5613,6 +5618,7 @@
 				439DBA9612DE487400B06546 /* lfunc.c in Sources */,
 				439DBA9712DE487400B06546 /* lgc.c in Sources */,
 				439DBA9812DE487400B06546 /* linit.c in Sources */,
+				DA9CAEAD2BA63DCA0062B8E1 /* glError.cpp in Sources */,
 				439DBA9912DE487400B06546 /* liolib.c in Sources */,
 				439DBA9A12DE487400B06546 /* llex.c in Sources */,
 				439DBA9B12DE487400B06546 /* lmathlib.c in Sources */,

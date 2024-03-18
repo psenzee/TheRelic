@@ -29,6 +29,8 @@
 #import "Profiler.h"
 #import "UIUtil.h"
 #import "GameDimensions.h"
+#import "GLAbstract.h"
+#import "glError.h"
 
 #import <stdio.h>
 #include <string>
@@ -466,13 +468,13 @@ extern "C" bool IsHiResDevice()
         
         if (defaultFramebuffer)
         {
-            glDeleteFramebuffers(1, &defaultFramebuffer);
+            _GLv(glDeleteFramebuffers(1, &defaultFramebuffer));
             defaultFramebuffer = 0;
         }
         
         if (colorRenderbuffer)
         {
-            glDeleteRenderbuffers(1, &colorRenderbuffer);
+            _GLv(glDeleteRenderbuffers(1, &colorRenderbuffer));
             colorRenderbuffer = 0;
         }
     }
@@ -542,10 +544,8 @@ int  g_frame = 0;
     
     [self setFramebuffer];
     
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+    GLLoadProjectionIdentityMatrix();
+    GLLoadModelViewIdentityMatrix();
     
     // I think this fixes the occasional stuck accelerometer issue
     // at least - I haven't seen it since
@@ -577,10 +577,7 @@ int  g_frame = 0;
     renderfps.StartFrame();
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glMatrixMode(GL_TEXTURE);
-    glLoadIdentity();
-    glScalef(1.f, -1.f, 1.f);
-    glTranslatef(0.f, 1.f, 0.f);
+    GLLoadBaseTextureMatrix();
     GameState::GetInstance()->Draw(GameTime(renderfps.TotalLastFrameTime()));
     renderfps.EndFrame();
     

@@ -29,6 +29,7 @@
 #import "Profiler.h"
 #import "TouchView.h"
 #import "UIUtil.h"
+#import "glError.h"
 
 // Uniform index.
 enum {
@@ -355,11 +356,11 @@ extern "C" void UnloadAll();
 
 - (BOOL)loadShaders
 {
-    GLuint vertShader, fragShader;
-    NSString *vertShaderPathname, *fragShaderPathname;
+    GLuint vertShader = 0, fragShader = 0;
+    NSString *vertShaderPathname = 0, *fragShaderPathname = 0;
     
     // Create shader program.
-    program = glCreateProgram();
+    program = _GL(glCreateProgram());
     
     // Create and compile vertex shader.
     vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"vsh"];
@@ -378,34 +379,30 @@ extern "C" void UnloadAll();
     }
     
     // Attach vertex shader to program.
-    glAttachShader(program, vertShader);
+    _GLv(glAttachShader(program, vertShader));
     
     // Attach fragment shader to program.
-    glAttachShader(program, fragShader);
+    _GLv(glAttachShader(program, fragShader));
     
     // Bind attribute locations.
     // This needs to be done prior to linking.
-    glBindAttribLocation(program, ATTRIB_VERTEX, "position");
-    glBindAttribLocation(program, ATTRIB_COLOR, "color");
+    _GLv(glBindAttribLocation(program, ATTRIB_VERTEX, "position"));
+    _GLv(glBindAttribLocation(program, ATTRIB_COLOR, "color"));
     
     // Link program.
-    if (![self linkProgram:program])
-    {
+    if (![self linkProgram:program]) {
         NSLog(@"Failed to link program: %d", program);
         
-        if (vertShader)
-        {
-            glDeleteShader(vertShader);
+        if (vertShader) {
+            _GLv(glDeleteShader(vertShader));
             vertShader = 0;
         }
-        if (fragShader)
-        {
-            glDeleteShader(fragShader);
+        if (fragShader) {
+            _GLv(glDeleteShader(fragShader));
             fragShader = 0;
         }
-        if (program)
-        {
-            glDeleteProgram(program);
+        if (program) {
+            _GLv(glDeleteProgram(program));
             program = 0;
         }
         
@@ -413,13 +410,15 @@ extern "C" void UnloadAll();
     }
     
     // Get uniform locations.
-    uniforms[UNIFORM_TRANSLATE] = glGetUniformLocation(program, "translate");
+    uniforms[UNIFORM_TRANSLATE] = _GL(glGetUniformLocation(program, "translate"));
     
     // Release vertex and fragment shaders.
-    if (vertShader)
-        glDeleteShader(vertShader);
-    if (fragShader)
-        glDeleteShader(fragShader);
+    if (vertShader) {
+        _GLv(glDeleteShader(vertShader));
+    }
+    if (fragShader) {
+        _GLv(glDeleteShader(fragShader));
+    }
     
     return TRUE;
 }
