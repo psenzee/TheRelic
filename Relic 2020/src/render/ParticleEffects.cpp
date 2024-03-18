@@ -47,9 +47,12 @@ static void _RenderQuads(RenderContext &context, float *vertices, float *uvs, in
     // RENDER DRAW LIST
     Vector4 ambient(color * Vector4(2.0f, 2.0f, 2.0f, 0.0f)),
             diffuse(1.0f, 1.0f, 1.0f, color.w);
+    
+    GLSetMaterial4(GL_AMBIENT, ambient);
+    GLSetMaterial4(GL_DIFFUSE, diffuse);
 
-    _GLv(glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, (GLfloat *)&ambient));
-    _GLv(glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (GLfloat *)&diffuse));
+    //_GLv(glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, (GLfloat *)&ambient));
+    //_GLv(glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (GLfloat *)&diffuse));
     
     _GLv(glVertexPointer  (3, GL_FLOAT,         0, (GLfloat *)&vertices[0]));
     _GLv(glTexCoordPointer(2, GL_FLOAT,         0, (GLfloat *)&uvs[0]));

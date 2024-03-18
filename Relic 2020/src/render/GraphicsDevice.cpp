@@ -83,7 +83,7 @@ void GraphicsDevice::SetColor(const Vector4 &color)
 {
     if (mColor.x != color.x || mColor.y != color.y || mColor.z != color.z || mColor.w != color.w) {
         mColor = color;
-        _GLv(glColor4f(mColor.x, mColor.y, mColor.z, mColor.w));
+        GLSetColor(mColor);
     }
 }
 
@@ -103,29 +103,6 @@ void GraphicsDevice::SetMaterial(const Material &m)
     GLSetMaterial4(GL_EMISSION,  m.emissive);
     GLSetMaterial4(GL_SPECULAR,  m.specular);
     GLSetMaterial (GL_SHININESS, m.shininess);
-}
-
-void GraphicsDevice::SetFog(const Vector4 &color, float density)
-{
-	/*
-//    EnableDepthTest(true);
-    glEnable(GL_FOG); //enable the fog
-    glFogi  (GL_FOG_MODE, GL_LINEAR); //set the fog mode to GL_EXP2
-    glFogfv (GL_FOG_COLOR, (const float *)&color); //set the fog color to our color chosen above
-    glFogf  (GL_FOG_DENSITY, density); //set the density to the value above
-    glHint  (GL_FOG_HINT, GL_NICEST); // set the fog to look the nicest, may slow down on older cards
-    glFogf  (GL_FOG_START, 550.0f);
-    glFogf  (GL_FOG_END,   750.0f);
-	 */
-}
-
-void GraphicsDevice::EnableFog(const TriState &value)
-{
-    if (!value.IsUnknown())
-    {
-        GLStates::fog.Set(value.ToBool());
-        mEnableFog = value;
-    }
 }
 
 void GraphicsDevice::EnableColorMaterial(bool v)

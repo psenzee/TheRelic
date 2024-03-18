@@ -541,7 +541,6 @@ void GameState::DrawLevel(const GameTime &time)
 
         leveldrawsubmit.StartFrame();
         RenderSet::GetInstance()->Render("level", renderContext);
-        device->EnableFog(false);
         RenderSet::GetInstance()->Render("level-floor", renderContext);
         RenderSet::GetInstance()->Render("level-floor-overlay", renderContext);
         RenderSet::GetInstance()->Render("fx", renderContext);

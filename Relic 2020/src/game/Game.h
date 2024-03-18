@@ -93,7 +93,6 @@ private:
     Multiplayer            *mMultiplayer;
     
     void                    Initialize();
-    void                    SetFog(bool enable);
 };
 
 #endif // _GAME_H

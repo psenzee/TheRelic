@@ -277,18 +277,6 @@ bool Game::Notify(const char *e, const char *info)
     return true;
 }
 
-void Game::SetFog(bool enable)
-{
-    GraphicsDevice *device = GraphicsDevice::GetInstance();
-    if (enable)
-    {
-        device->SetColor(Vector4(1.f, 1.f, 1.f, 0.5f));
-        device->SetFog(Vector4(0.2f, 0.2f, 0.4f, 0.0f), 0.3f);
-        device->SetFog(Vector4(0.1f, 0.1f, 0.2f, 0.0f), 0.3f);
-    }
-    device->EnableFog(enable);
-}
-
 void Game::Draw(const GameTime &time)
 {
     GraphicsDevice *device = GraphicsDevice::GetInstance();
@@ -320,7 +308,6 @@ void Game::Draw(const GameTime &time)
 
         game_leveldrawsubmit.StartFrame();
         RenderSet::GetInstance()->Render("level", renderContext);
-        device->EnableFog(false);
         RenderSet::GetInstance()->Render("level-floor", renderContext);
         if (!IsLowEndDevice())
             RenderSet::GetInstance()->Render("level-floor-overlay", renderContext);

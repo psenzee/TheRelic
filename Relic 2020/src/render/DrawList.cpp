@@ -103,13 +103,11 @@ if (item.breakFunction)
         }
         if (texture)
         {
-            TriState prevFogState = rc.device.GetEnableFog();
             if (item.states)
             {
                 item.states->Apply(context.device);
                 rc.device.SetUvTransform(item.states->UvTransform);
                 rc.device.SetColor(item.states->Color * item.color);
-                rc.device.EnableFog(item.states->Fog);
                 bool depthTest = rc.depthTest.IsUnknown() ? item.states->DepthTest : rc.depthTest.ToBool();
                 rc.device.EnableDepthTest(depthTest);
                 bool depthWrite = rc.depthWrite.IsUnknown() ? item.states->DepthWrite : rc.depthWrite.ToBool();
@@ -128,7 +126,6 @@ if (item.breakFunction)
             item.drawable->RenderImmediate(rc);
             if (item.states)
                 item.states->Unapply(context.device);
-            rc.device.EnableFog(prevFogState);
         }
     }
 }

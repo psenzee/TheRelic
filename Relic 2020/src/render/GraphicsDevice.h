@@ -28,8 +28,6 @@ public:
     void              EnableDepthWrite(bool v);
     void              EnableCullFace(bool v);
     void              EnableLighting(bool v);
-    void              EnableFog(const TriState &v);
-    TriState          GetEnableFog() const { return mEnableFog; }
 
     void              SetProjection(const Matrix &m);
     Matrix            GetProjection() const;
@@ -39,7 +37,6 @@ public:
     void              EnableLight(size_t slot, bool enable = true);
     bool              IsLightingEnabled() const;
     
-    void              SetFog(const Vector4 &color, float density = 0.3f);
     void              SetUvTransform(const Matrix &m);
 
     void              SetBaseUvTransform(const Matrix &m);
@@ -59,7 +56,6 @@ private:
     GraphicsDevice(const core::Size &frameSize) : mFrameSize(frameSize), mColor(1.f, 1.f, 1.f, 1.f), mUvTransformInvalid(true), mFrame(0) {}
 
     core::Size mFrameSize;
-    TriState   mEnableFog;
     Vector4    mColor;
     Matrix     mUvTransform;
     Matrix     mBaseUvTransform;

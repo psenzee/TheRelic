@@ -18,9 +18,9 @@ void RenderImmediate(const RenderContext   &context,
 
     ClearCachedPointers();
 
-    _GLv(glDisableClientState(GL_NORMAL_ARRAY));
-    _GLv(glEnableClientState(GL_VERTEX_ARRAY));
-    _GLv(glEnableClientState(GL_TEXTURE_COORD_ARRAY));
+    GLSetEnabledClientState(GL_NORMAL_ARRAY, false);
+    GLSetEnabledClientState(GL_VERTEX_ARRAY, true);
+    GLSetEnabledClientState(GL_TEXTURE_COORD_ARRAY, true);
 
     // Describe to OpenGL where the vertex and uv data is in the buffer
     _GLv(glVertexPointer  (3, GL_FLOAT, 20, reinterpret_cast<const char *>(vertices) + 0));
