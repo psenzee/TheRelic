@@ -301,6 +301,18 @@ void GLDestroyBuffers(std::span<unsigned> ids)
     _GLv(glDeleteBuffers(ids.size(), ids.data()));
 }
 
+void GLDestroyTexture(unsigned id)
+{
+    if (id) {
+        _GLv(glDeleteTextures(1, &id));
+    }
+}
+
+void GLDestroyTextures(std::span<unsigned> ids)
+{
+    _GLv(glDeleteTextures(ids.size(), ids.data()));
+}
+
 void GLBlendFunc(int blend_src, int blend_dst)
 {
     // Set a blending function to use
@@ -320,7 +332,7 @@ void GLSetAsTextureN(int id, int n)
 
 void GLDrawElements(int listStripOrFan, size_t indexCount)
 {
-    _GLv(glDrawElements(listStripOrFan, indexCount, GL_UNSIGNED_SHORT, 0));
+    _GLv(glDrawElements(listStripOrFan, int(indexCount), GL_UNSIGNED_SHORT, 0));
 }
 
 void GLBindBufferForElements(unsigned vb, unsigned ib)
@@ -333,4 +345,38 @@ void GLBindBufferForElements(unsigned vb, unsigned ib)
 void GLShadeModelSmooth()
 {
     _GLv(glShadeModel(GL_SMOOTH));
+}
+
+void GLTextureSetMipMapFilters(int texid, bool value)
+{
+    GLBindTexture2d(texid);
+    _GLv(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, value ? GL_LINEAR_MIPMAP_NEAREST : GL_LINEAR));
+}
+
+void GLSetVertexPointersInterleaved(bool has_normals)
+{
+    int size = 20 + (has_normals ? 12 : 0);
+    // Describe to OpenGL where the vertex data is in the buffer
+    _GLv(glVertexPointer  (3, GL_FLOAT, size, ((char*)NULL + 0)));
+    // Describe to OpenGL where the uv data is in the buffer
+    _GLv(glTexCoordPointer(2, GL_FLOAT, size, ((char*)NULL + 12)));
+    // Describe to OpenGL where the normal data is in the buffer
+    if (has_normals) {
+        _GLv(glNormalPointer(GL_FLOAT, size, ((char*)NULL + 20)));
+    }
+}
+
+void GLSetColor(const float *color)
+{
+    _GLv(glColor4f(color[0], color[1], color[2], color[2]));
+}
+
+void GLSetColor(const Tuple4f &color)
+{
+    GLSetColor(color.data());
+}
+
+void GLSetTextureEnvMode(int mode)
+{
+    _GLv(glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, mode));
 }
