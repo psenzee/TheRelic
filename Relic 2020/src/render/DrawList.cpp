@@ -13,11 +13,11 @@ DrawList *DrawList::instance = 0;
 
 void DrawList::Add(const DrawItem &item)
 {
-    if (item.drawable)
-    {
+    if (item.drawable) {
         item.drawable->Retain();
-        if (item.texture)
+        if (item.texture) {
             item.texture->Retain();
+        }
         list.push_back(item);
     }
 }
@@ -31,11 +31,11 @@ inline unsigned round_pow2(unsigned x)
 
 void DrawList::Clear()
 {
-    for (std::vector<DrawItem>::iterator i = list.begin(), e = list.end(); i != e; ++i)
-    {
+    for (std::vector<DrawItem>::iterator i = list.begin(), e = list.end(); i != e; ++i) {
         (*i).drawable->Release();
-        if ((*i).texture)
+        if ((*i).texture) {
             (*i).texture->Release();
+        }
     }
     unsigned minsz = 128, sz = round_pow2((unsigned)list.size());
     sz = minsz > sz ? minsz : sz;
@@ -47,10 +47,12 @@ class DrawItemComparator
 {
     inline bool ComparePostTransparency(const DrawItem &a, const DrawItem &b) const
     {
-        if (a.states && b.states && a.states->RenderOrder != b.states->RenderOrder)
+        if (a.states && b.states && a.states->RenderOrder != b.states->RenderOrder) {
             return a.states->RenderOrder < b.states->RenderOrder;
-        if (a.texture != b.texture)
+        }
+        if (a.texture != b.texture) {
             return a.texture < b.texture;
+        }
         return a.drawable < b.drawable;
     }
 
@@ -66,16 +68,17 @@ public:
              bTrans = b.transparent || (b.states ? b.states->Transparent : false);
         if (aTrans && aTrans == bTrans)
         {
-            if      (a.transparentz > b.transparentz)
+            if (a.transparentz > b.transparentz) {
                 return true;
-            else if (a.transparentz < b.transparentz)
+            } else if (a.transparentz < b.transparentz) {
                 return false;
+            }
             return a.drawable < b.drawable;
-        }
-        else if (aTrans)
+        } else if (aTrans) {
             return false;
-        else if (bTrans)
+        } else if (bTrans) {
             return true;
+        }
         return ComparePostTransparency(a, b);
     }
 };
@@ -88,47 +91,40 @@ void DrawList::Render(RenderContext &context)
     DrawItem item;
     RenderContext rc(context);
 
-    for (std::vector<DrawItem>::iterator i = list.begin(), e = list.end(); i != e; ++i)
-    {
+    for (std::vector<DrawItem>::iterator i = list.begin(), e = list.end(); i != e; ++i) {
         item = *i;
-if (item.breakFunction)
-    item.breakFunction();
-        if (item.blur && !item.states->Blurrable)
-            continue;
-        if ((item.transparent || (item.states && item.states->Transparent)) || item.texture != texture)
-        {
-            texture = item.texture;
-            if (texture)
-                texture->Set(context.device);
+        if (item.breakFunction) {
+            item.breakFunction();
         }
-        if (texture)
-        {
-            TriState prevFogState = rc.device.GetEnableFog();
-            if (item.states)
-            {
+        if (item.blur && !item.states->Blurrable) {
+            continue;
+        } if ((item.transparent || (item.states && item.states->Transparent)) || item.texture != texture) {
+            texture = item.texture;
+            if (texture) {
+                texture->Set(context.device);
+            }
+        }
+        if (texture) {
+            if (item.states) {
                 item.states->Apply(context.device);
                 rc.device.SetUvTransform(item.states->UvTransform);
                 rc.device.SetColor(item.states->Color * item.color);
-                rc.device.EnableFog(item.states->Fog);
                 bool depthTest = rc.depthTest.IsUnknown() ? item.states->DepthTest : rc.depthTest.ToBool();
                 rc.device.EnableDepthTest(depthTest);
                 bool depthWrite = rc.depthWrite.IsUnknown() ? item.states->DepthWrite : rc.depthWrite.ToBool();
                 rc.device.EnableDepthWrite(depthWrite);
                 rc.device.EnableCullFace(item.states->CullFace);
-            }
-            else
-            {
+            } else {
                 rc.device.SetColor(item.color);
             }
-            if (item.material)
-            {
+            if (item.material) {
                 context.device.SetMaterial(*item.material);
             }
             rc.transform = item.transform;
             item.drawable->RenderImmediate(rc);
-            if (item.states)
+            if (item.states) {
                 item.states->Unapply(context.device);
-            rc.device.EnableFog(prevFogState);
+            }
         }
     }
 }

@@ -19,8 +19,7 @@ ImmediateDrawable::ImmediateDrawable(const ImmediateVertex *vertices, int count)
     memcpy(mVertices, vertices, mCount * sizeof(ImmediateVertex));
     // calculate bounds
     AABox bounds;
-    for (int i = 0; i < mCount; i++)
-    {
+    for (int i = 0; i < mCount; i++) {
         ImmediateVertex &v = mVertices[i];
         bounds.insert(Vector3(v.x, v.y, v.z));
     }
@@ -29,8 +28,9 @@ ImmediateDrawable::ImmediateDrawable(const ImmediateVertex *vertices, int count)
 
 ImmediateDrawable::~ImmediateDrawable()
 {
-    if (mVertices)
+    if (mVertices) {
         soa_free(mVertices);
+    }
     mVertices = 0;
     mCount = 0;
     mBounds = AABox();
@@ -64,6 +64,7 @@ void ImmediateDrawable::Retain()
 
 void ImmediateDrawable::Release() 
 {
-    if (!--mRef)
+    if (!--mRef) {
         delete this;
+    }
 }

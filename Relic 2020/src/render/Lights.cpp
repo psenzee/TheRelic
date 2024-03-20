@@ -27,18 +27,22 @@ void Lights::_Sort()
 typename Lights::list_const_iter_t Lights::_Find(size_t id) const
 {
     // use binary search when mSorted==true for an optimization if mLights ever gets large enough
-    for (auto i = mLights.begin(), e = mLights.end(); i != e; ++i)
-        if ((*i).id == id)
+    for (auto i = mLights.begin(), e = mLights.end(); i != e; ++i) {
+        if ((*i).id == id) {
             return i;
+        }
+    }
     return mLights.end();
 }
 
 typename Lights::list_iter_t Lights::_Find(size_t id)
 {
     // possible TODO use binary search when mSorted==true for an optimization if mLights ever gets large enough
-    for (auto i = mLights.begin(), e = mLights.end(); i != e; ++i)
-        if ((*i).id == id)
+    for (auto i = mLights.begin(), e = mLights.end(); i != e; ++i) {
+        if ((*i).id == id) {
             return i;
+        }
+    }
     return mLights.end();
 }
 
@@ -129,8 +133,9 @@ void Lights::Apply(GraphicsDevice &device, const OverheadCamera &camera)
     _Sort();
     size_t slot = 0;
     for (const auto &light : mLights) {
-        if (light.enabled)
+        if (light.enabled) {
             device.SetLight(camera, slot++, light, true);
+        }
     }
     for (size_t max = GetMaxActiveLights(); slot < max; slot++) {
         device.EnableLight(slot, false);

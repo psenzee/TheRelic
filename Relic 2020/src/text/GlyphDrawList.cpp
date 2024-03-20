@@ -54,9 +54,9 @@ void GlyphDrawList::Render(RenderContext &context, const Matrix &transform, cons
     
     ClearCachedPointers();
 
-    _GLv(glDisable(GL_CULL_FACE));
+    GLSetEnabled(GL_CULL_FACE, false);
 
-    static Vector4  zeros(0.0f, 0.0f, 0.0f, 1.0f);
+    //static Vector4  zeros(0.0f, 0.0f, 0.0f, 1.0f);
     /*
     static Material m(zeros, zeros, zeros, zeros, 0.0f);
     m.ambient = clr * Vector4(2.0f, 2.0f, 2.0f, 0.0f);
@@ -72,13 +72,19 @@ void GlyphDrawList::Render(RenderContext &context, const Matrix &transform, cons
     GLStates::depthWrite.Set(false);
     GLStates::depthTest.Set(false);    
     
-    _GLv(glVertexPointer  (3, GL_FLOAT, 0, (GLfloat *)&vertices[0]));
-    _GLv(glTexCoordPointer(2, GL_FLOAT, 0, (GLfloat *)&uvs[0]));
+    GLSetVertexPointer((const float *)vertices.data());
+    GLSetTexCoordPointer((const float *)uvs.data());
 
-    GLLoadMatrix(context.camera.GetView());
-    GLMultMatrix(transform.data);
+    //GLLoadMatrix(context.camera.GetView());
+    //GLMultMatrix(transform.data);
+    GLLoadMatrixStack(
+        context.camera.GetProjection(),
+        context.camera.GetView(),
+        transform
+    );
     
-    _GLv(glDrawArrays(GL_TRIANGLES, 0, (GLsizei)vertices.size()));
+    //_GLv(glDrawArrays(GL_TRIANGLES, 0, (GLsizei)vertices.size()));
+    GLDrawArrays(GL_TRIANGLES, vertices.size());
     
     GLStates::depthWrite.Set(true);
     GLStates::depthTest.Set(true);    

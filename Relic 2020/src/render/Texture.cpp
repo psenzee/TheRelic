@@ -175,37 +175,27 @@ void Texture::Set(GraphicsDevice &device)
     {
         if (!combineTexture)
         {
-//            GLSetActiveTexture(GL_TEXTURE0);
-//            glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
             texture->Set(device, blendSrc, blendDst);
-//GLSetActiveTexture(GL_TEXTURE1);
-//            glDisable(GL_TEXTURE_2D);
-//            GLSetActiveTexture(GL_TEXTURE0);
-            // clear out second texture stage only if necessary
-            //if (!textureStage1Cleared)
-            {
-                //GLSetAsTextureN(0, 0);
-                textureStage1Cleared = true;
-            }
+            textureStage1Cleared = true;
         }
         else
         {
             textureStage1Cleared = false;
             //GLStates::texture.Set(true);
             // Set a blending function to use
-            _GLv(glBlendFunc(blendSrc, blendDst));
+            GLBlendFunc(blendSrc, blendDst);
 
             GLSetActiveTexture(GL_TEXTURE0);
-            _GLv(glEnable(GL_TEXTURE_2D));
+            GLSetEnabled(GL_TEXTURE_2D, true);
             //texture->Set(device, blendSrc, blendDst);
-            _GLv(glBindTexture(GL_TEXTURE_2D, texture->GetId()));
-            _GLv(glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE));
+            GLBindTexture2d(texture->GetId());
+            GLSetTextureEnvMode(GL_MODULATE);
 
             GLSetActiveTexture(GL_TEXTURE1);
-            _GLv(glEnable(GL_TEXTURE_2D));
+            GLSetEnabled(GL_TEXTURE_2D, true);
             //combineTexture->Set(device, blendSrc, blendDst);
-            _GLv(glBindTexture(GL_TEXTURE_2D, combineTexture->GetId()));
-            _GLv(glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE));
+            GLBindTexture2d(combineTexture->GetId());
+            GLSetTextureEnvMode(GL_COMBINE);
 
             GLSetColorCombineMode(colorOp);
             GLSetAlphaCombineMode(alphaOp);

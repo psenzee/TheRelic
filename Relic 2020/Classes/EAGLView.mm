@@ -31,6 +31,7 @@
 #import "GameDimensions.h"
 #import "GLAbstract.h"
 #import "glError.h"
+#import "GLAbstract.h"
 
 #import <stdio.h>
 #include <string>
@@ -383,7 +384,11 @@ extern "C" bool IsHiResDevice()
     EAGLContext *aContext = NULL;
         
     if (!aContext) {
-        aContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
+        EAGLRenderingAPI api = kEAGLRenderingAPIOpenGLES1;
+#ifdef _OPENGLES_2
+        api = kEAGLRenderingAPIOpenGLES2;
+#endif
+        aContext = [[EAGLContext alloc] initWithAPI:api];
     }
         
     if (!aContext) {

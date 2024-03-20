@@ -1181,6 +1181,7 @@
 		DA7AB2B823B9376100DDC4AF /* black_button_ring.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7AB2B723B9376100DDC4AF /* black_button_ring.png */; };
 		DA9CAEA92BA6201A0062B8E1 /* GLAbstract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9CAEA72BA620190062B8E1 /* GLAbstract.cpp */; };
 		DA9CAEAD2BA63DCA0062B8E1 /* glError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9CAEAB2BA63DCA0062B8E1 /* glError.cpp */; };
+		DA9CAEB02BAB1BB00062B8E1 /* MatrixStack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9CAEAE2BAB1BAF0062B8E1 /* MatrixStack.cpp */; };
 		DAEFF7F123BC17540062B630 /* tick_new_2.png in Resources */ = {isa = PBXBuildFile; fileRef = DAEFF7F023BC17540062B630 /* tick_new_2.png */; };
 		DAEFF7F323BD04670062B630 /* globals.lua in Resources */ = {isa = PBXBuildFile; fileRef = DAEFF7F223BD04670062B630 /* globals.lua */; };
 		DAEFF7F623BD2F390062B630 /* GameDimensions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAEFF7F423BD2F390062B630 /* GameDimensions.cpp */; };
@@ -2638,6 +2639,8 @@
 		DA9CAEA82BA620190062B8E1 /* GLAbstract.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLAbstract.h; path = src/render/GLAbstract.h; sourceTree = "<group>"; };
 		DA9CAEAB2BA63DCA0062B8E1 /* glError.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glError.cpp; path = src/render/glError.cpp; sourceTree = "<group>"; };
 		DA9CAEAC2BA63DCA0062B8E1 /* glError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glError.h; path = src/render/glError.h; sourceTree = "<group>"; };
+		DA9CAEAE2BAB1BAF0062B8E1 /* MatrixStack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MatrixStack.cpp; path = src/render/MatrixStack.cpp; sourceTree = "<group>"; };
+		DA9CAEAF2BAB1BB00062B8E1 /* MatrixStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MatrixStack.h; path = src/render/MatrixStack.h; sourceTree = "<group>"; };
 		DAEFF7F023BC17540062B630 /* tick_new_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tick_new_2.png; path = data/textures/tick_new_2.png; sourceTree = "<group>"; };
 		DAEFF7F223BD04670062B630 /* globals.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = globals.lua; path = data/lua/globals.lua; sourceTree = "<group>"; };
 		DAEFF7F423BD2F390062B630 /* GameDimensions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameDimensions.cpp; path = src/GameDimensions.cpp; sourceTree = "<group>"; };
@@ -4029,6 +4032,8 @@
 				439DBB1412DE4B8900B06546 /* LocalGameServices.h */,
 				439DBB1512DE4B8900B06546 /* Material.cpp */,
 				439DBB1612DE4B8900B06546 /* Material.h */,
+				DA9CAEAE2BAB1BAF0062B8E1 /* MatrixStack.cpp */,
+				DA9CAEAF2BAB1BB00062B8E1 /* MatrixStack.h */,
 				439DBB1712DE4B8900B06546 /* Object.cpp */,
 				439DBB1812DE4B8900B06546 /* Object.h */,
 				439DBB1912DE4B8900B06546 /* OpenGLESMesh.cpp */,
@@ -5712,6 +5717,7 @@
 				439DBBBD12DE4DD600B06546 /* Character.cpp in Sources */,
 				439DBBBE12DE4DD600B06546 /* CircleEffect.cpp in Sources */,
 				439DBBBF12DE4DD600B06546 /* CylinderEffect.cpp in Sources */,
+				DA9CAEB02BAB1BB00062B8E1 /* MatrixStack.cpp in Sources */,
 				439DBBC012DE4DD600B06546 /* Game.cpp in Sources */,
 				439DBBC112DE4DD600B06546 /* GameState.cpp in Sources */,
 				439DBBC212DE4DD600B06546 /* IBehavior.cpp in Sources */,

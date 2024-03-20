@@ -77,8 +77,8 @@
             filePath = "src/render/ParticleEffects.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "228"
-            endingLineNumber = "228"
+            startingLineNumber = "232"
+            endingLineNumber = "232"
             landmarkName = "ParticleSystem::RenderParticles(context)"
             landmarkType = "7">
          </BreakpointContent>
@@ -412,8 +412,8 @@
             filePath = "src/render/Lights.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "133"
-            endingLineNumber = "133"
+            startingLineNumber = "137"
+            endingLineNumber = "137"
             landmarkName = "Lights::Apply(device, camera)"
             landmarkType = "7">
          </BreakpointContent>
@@ -428,9 +428,9 @@
             filePath = "src/render/Lights.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "125"
-            endingLineNumber = "125"
-            landmarkName = "Lights::Apply(device, camera)"
+            startingLineNumber = "129"
+            endingLineNumber = "129"
+            landmarkName = "Lights::_Find(id)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

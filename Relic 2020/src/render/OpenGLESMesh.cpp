@@ -170,6 +170,5 @@ void OpenGLESMesh::Render()
     SetBuffersInterleaved(mVb, mIb, static_cast<unsigned>(mVerticesCount), useNormals);
     // This is the actual draw command
     GLDrawElements(mType == INTERLEAVED_STRIP ? GL_TRIANGLE_STRIP : GL_TRIANGLES, mIndicesCount);
-    //_GLv(glDrawElements(mType == INTERLEAVED_STRIP ? GL_TRIANGLE_STRIP : GL_TRIANGLES, mIndicesCount, GL_UNSIGNED_SHORT, 0));
     GLSetNormalAction(useNormals, mNormalAction, false);
 }

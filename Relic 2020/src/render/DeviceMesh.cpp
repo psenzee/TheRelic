@@ -78,8 +78,11 @@ DeviceMesh::~DeviceMesh()
 void DeviceMesh::RenderImmediate(RenderContext &context)
 {
     if (mMesh) {
-        GLLoadMatrix(context.camera.GetView());
-        GLMultMatrix(context.transform);
+        GLLoadMatrixStack(
+            context.camera.GetProjection(),
+            context.camera.GetView(),
+            context.transform
+        );
         mMesh->Render();
     }
 }

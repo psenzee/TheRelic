@@ -53,11 +53,11 @@ void QuadRenderer::RenderDeferred()
 void QuadRenderer::RenderScreenAlignedQuad(DeviceTexture *texture, const Vector4 &color, const Vector3 &start, const Vector3 &end,
                                            const Vector2 &t0, const Vector2 &t1)
 {
-    if (color.w <= 0.01f)
+    if (color.w <= 0.01f) {
         return;
+    }
 
-    float vertices[] =
-    { 
+    float vertices[] = {
         start.x,  end.y,    start.z,
         end.x,    start.y,  start.z,        
         start.x,  start.y,  start.z,
@@ -67,8 +67,7 @@ void QuadRenderer::RenderScreenAlignedQuad(DeviceTexture *texture, const Vector4
         end.x,    start.y,  start.z
     };
     
-    float uvs[] =
-    {
+    float uvs[] = {
         t0.x, t1.y,
         t1.x, t0.y,
         t0.x, t0.y,
@@ -88,8 +87,7 @@ void QuadRenderer::RenderScreenAlignedQuadRotate(DeviceTexture *texture, const V
         return;
     }
 
-    float vertices[] =
-    { 
+    float vertices[] = {
         start.x,  end.y,    start.z,
         end.x,    start.y,  start.z,        
         start.x,  start.y,  start.z,
@@ -99,8 +97,7 @@ void QuadRenderer::RenderScreenAlignedQuadRotate(DeviceTexture *texture, const V
         end.x,    start.y,  start.z
     };
     
-    float uvs[] =
-    {
+    float uvs[] = {
         t0.x, t1.y,
         t1.x, t0.y,
         t0.x, t0.y,
@@ -118,8 +115,7 @@ void QuadRenderer::RenderScreenAlignedQuadRotate(DeviceTexture *texture, const V
     m = m * mn;
     mn.translate(center);
     m = m * mn;
-    for (int i = 0; i < 6 * 3; i += 3)
-    {
+    for (int i = 0; i < 6 * 3; i += 3) {
         Vector3 v(vertices[i + 0], vertices[i + 1], vertices[i + 2]);
         v = m * v;
         vertices[i + 0] = v.x;
@@ -300,34 +296,36 @@ void QuadRenderer::RenderScreenAligned(DeviceTexture *texture, const Vector4 &co
 
     context.device.EnableDepthTest(true);
     context.device.EnableDepthWrite(false);
-    
-    GLLoadModelViewMatrix(context.camera.GetView());
-    
-    _GLv(glDisable(GL_CULL_FACE));
-    
+
+    GLLoadMatrixStack(
+        context.camera.GetProjection(),
+        context.camera.GetView(),
+        context.transform
+    );
+
+    GLSetEnabledClientState(GL_CULL_FACE, false);
+
     ClearCachedPointers();
-    
-    _GLv(glEnableClientState(GL_VERTEX_ARRAY));
-    _GLv(glDisableClientState(GL_NORMAL_ARRAY));
-    _GLv(glEnableClientState(GL_TEXTURE_COORD_ARRAY));
-    
-    _GLv(glVertexPointer(3, GL_FLOAT, 0, vertices));
-    
-    _GLv(glEnable(GL_BLEND));
-    
-    _GLv(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-    
+
+    GLSetEnabledClientState(GL_VERTEX_ARRAY, true);
+    GLSetEnabledClientState(GL_NORMAL_ARRAY, false);
+    GLSetEnabledClientState(GL_TEXTURE_COORD_ARRAY, true);
+
+    GLSetVertexPointer(vertices);
+
+    GLSetEnabled(GL_BLEND, true);
+    GLBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     if (!texture || !texture->Loaded()) {
-        _GLv(glDisableClientState(GL_TEXTURE_COORD_ARRAY));
-        _GLv(glDisable(GL_TEXTURE_2D));
+        GLSetEnabledClientState(GL_TEXTURE_COORD_ARRAY, false);
+        GLSetEnabled(GL_TEXTURE_2D, false);
     } else {
-        _GLv(glTexCoordPointer(2, GL_FLOAT, 0, uvs));
-        _GLv(glEnable(GL_TEXTURE_2D));
-      //texture->Set(context.device, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+        GLSetTexCoordPointer(uvs);
+        GLSetEnabled(GL_TEXTURE_2D, true);
         texture->Set(context.device, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
-    _GLv(glDrawArrays(GL_TRIANGLES, 0, count));
-    _GLv(glEnable(GL_CULL_FACE));
+    GLDrawArrays(GL_TRIANGLES, count);
+    GLSetEnabledClientState(GL_CULL_FACE, true);
     context.device.EnableDepthWrite(true);
 }
 
@@ -340,10 +338,13 @@ void QuadRenderer::RenderScreenQuad(DeviceTexture *texture, const Vector4 &color
     RenderContext &context = GetGlobalRenderContext();
     GraphicsDevice::GetInstance()->SetColor(color); // clear color
 
-    //GLLoadMatrix(context.camera.GetView());
-    GLLoadModelViewMatrix(context.camera.GetView());
+    GLLoadMatrixStack(
+        context.camera.GetProjection(),
+        context.camera.GetView(),
+        context.transform
+    );
 
-    _GLv(glDisable(GL_CULL_FACE));
+    GLSetEnabled(GL_CULL_FACE, false);
     GLStates::depthTest.Set(false);
     
     float halfw = width  * 0.5f, halfh = height * 0.5f;
@@ -372,34 +373,28 @@ void QuadRenderer::RenderScreenQuad(DeviceTexture *texture, const Vector4 &color
     
     ClearCachedPointers();
     
-    _GLv(glEnableClientState(GL_VERTEX_ARRAY));
-    _GLv(glDisableClientState(GL_NORMAL_ARRAY));
-    _GLv(glEnableClientState(GL_TEXTURE_COORD_ARRAY));
+    GLSetEnabledClientState(GL_VERTEX_ARRAY, true);
+    GLSetEnabledClientState(GL_NORMAL_ARRAY, false);
+    GLSetEnabledClientState(GL_TEXTURE_COORD_ARRAY, true);
     
-    _GLv(glVertexPointer(3, GL_FLOAT, 0, vertices));
+    GLSetVertexPointer(vertices);
 
-    _GLv(glEnable(GL_BLEND));
-
-    _GLv(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+    GLSetEnabled(GL_BLEND, true);
+    GLBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     if (!texture || !texture->Loaded()) {
-        _GLv(glDisableClientState(GL_TEXTURE_COORD_ARRAY));
-        _GLv(glDisable(GL_TEXTURE_2D));
+        GLSetEnabledClientState(GL_TEXTURE_COORD_ARRAY, false);
+        GLSetEnabled(GL_TEXTURE_2D, false);
     } else {
-        _GLv(glTexCoordPointer(2, GL_FLOAT, 0, uvs));
-        _GLv(glEnable(GL_TEXTURE_2D));
-#ifdef WIN32
-        _GLv(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-        _GLv(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
-#else
+        GLSetTexCoordPointer(uvs);
+        GLSetEnabled(GL_TEXTURE_2D, true);
         _GLv(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
         _GLv(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
-#endif
         texture->Set(context.device, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
-    _GLv(glDrawArrays(GL_TRIANGLES, 0, 6));
+    GLDrawArrays(GL_TRIANGLES, 6);
     GLStates::depthTest.Set(true);
-    _GLv(glEnable(GL_CULL_FACE));
+    GLSetEnabled(GL_CULL_FACE, true);
 }
 
 void QuadRenderer::RenderBackground(DeviceTexture *texture, float alpha)

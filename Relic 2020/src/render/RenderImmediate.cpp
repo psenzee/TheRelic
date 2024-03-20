@@ -13,20 +13,23 @@ void RenderImmediate(const RenderContext   &context,
                      const ImmediateVertex *vertices,
                      int                    count)
 {
-    GLLoadMatrix(context.camera.GetView());
-    GLMultMatrix(context.transform);
+    GLLoadMatrixStack(
+        context.camera.GetProjection(),
+        context.camera.GetView(),
+        context.transform
+    );
 
     ClearCachedPointers();
 
-    _GLv(glDisableClientState(GL_NORMAL_ARRAY));
-    _GLv(glEnableClientState(GL_VERTEX_ARRAY));
-    _GLv(glEnableClientState(GL_TEXTURE_COORD_ARRAY));
+    GLSetEnabledClientState(GL_NORMAL_ARRAY, false);
+    GLSetEnabledClientState(GL_VERTEX_ARRAY, true);
+    GLSetEnabledClientState(GL_TEXTURE_COORD_ARRAY, true);
 
     // Describe to OpenGL where the vertex and uv data is in the buffer
-    _GLv(glVertexPointer  (3, GL_FLOAT, 20, reinterpret_cast<const char *>(vertices) + 0));
-    _GLv(glTexCoordPointer(2, GL_FLOAT, 20, reinterpret_cast<const char *>(vertices) + sizeof(float) * 3));
+    GLSetVertexPointer((const float *)vertices, 20);
+    GLSetTexCoordPointer((const float *)vertices + 3, 20);
 
-    _GLv(glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(count)));
+    GLDrawArrays(GL_TRIANGLES, count);
 }
 
 void RenderImmediate(const RenderContext   &context,

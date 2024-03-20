@@ -4,7 +4,9 @@
 
 #include "matrix4f.h"
 #include "tuple4f.h"
+#include "MatrixStack.h"
 
+/*
 void GLLoadMatrix(const Matrix4f &matrix)
 {
 #ifndef _OPENGLES_2
@@ -13,7 +15,20 @@ void GLLoadMatrix(const Matrix4f &matrix)
     
 #endif
 }
-
+*/
+void GLLoadMatrixStack(const Matrix4f &projection, const Matrix4f &view, const Matrix4f &model)
+{
+#ifndef _OPENGLES_2
+    _GLv(glMatrixMode(GL_PROJECTION));
+    _GLv(glLoadMatrixf(projection.data));
+    _GLv(glMatrixMode(GL_MODELVIEW)); // reset default matrix
+    _GLv(glLoadMatrixf(view.data));
+    _GLv(glMultMatrixf(model.data));
+#else
+    
+#endif
+}
+/*
 void GLMultMatrix(const Matrix4f &matrix)
 {
 #ifndef _OPENGLES_2
@@ -22,7 +37,7 @@ void GLMultMatrix(const Matrix4f &matrix)
     
 #endif
 }
-
+*/
 void GLLoadTextureMatrix(const Matrix4f &matrix)
 {
 #ifndef _OPENGLES_2
@@ -368,7 +383,7 @@ void GLSetVertexPointersInterleaved(bool has_normals)
 
 void GLSetColor(const float *color)
 {
-    _GLv(glColor4f(color[0], color[1], color[2], color[2]));
+    _GLv(glColor4f(color[0], color[1], color[2], color[3]));
 }
 
 void GLSetColor(const Tuple4f &color)
@@ -379,4 +394,49 @@ void GLSetColor(const Tuple4f &color)
 void GLSetTextureEnvMode(int mode)
 {
     _GLv(glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, mode));
+}
+
+void GLDrawArrays(int type, unsigned count)
+{
+    _GLv(glDrawArrays(type, 0, count));
+}
+
+void GLSetVertexPointer(const float *vertices, size_t stride)
+{
+    _GLv(glVertexPointer(3, GL_FLOAT, stride, vertices));
+}
+
+void GLSetTexCoordPointer(const float *uvs, size_t stride)
+{
+    _GLv(glTexCoordPointer(2, GL_FLOAT, stride, uvs));
+}
+
+bool GLIsTexture(int texid)
+{
+    return texid && _GL(glIsTexture(texid));
+}
+/*
+inline static void _append(const Vector3 &pos, float u, float v, float **ppos, float **puv)
+{
+    *((Vector3  *)*ppos)   = pos;    (*ppos) += 3;
+    *((float    *)*puv)    = u;      (*puv)++;
+    *((float    *)*puv)    = v;      (*puv)++;
+}
+*/
+
+void GLRenderQuads(const float *vertices, const float *uvs, size_t count, const Tuple4f &color)
+{
+    if (!count || !vertices || !uvs) return;
+        
+    // RENDER DRAW LIST
+    Vector4 ambient(color * Vector4(2.0f, 2.0f, 2.0f, 0.0f)),
+            diffuse(1.0f, 1.0f, 1.0f, color.w);
+    
+    GLSetMaterial4(GL_AMBIENT, ambient);
+    GLSetMaterial4(GL_DIFFUSE, diffuse);
+    
+    GLSetVertexPointer(vertices);
+    GLSetTexCoordPointer(uvs);
+
+    GLDrawArrays(GL_TRIANGLES, count);
 }

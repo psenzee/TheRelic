@@ -16,23 +16,20 @@ DeviceTexture::DeviceTexture(const char *filename) : texid(0), size(0, 0)
 DeviceTexture::~DeviceTexture()
 {
     printf("Deleting texture %p\n", this);
-    if (Loaded())
-    {
-        GLuint tid = texid;
-        _GLv(glDeleteTextures(1, &tid));
+    if (Loaded()) {
+        GLDestroyTexture(texid);
         texid = 0;
     }
 }
 
 bool DeviceTexture::Loaded() const
 {
-    return texid && glIsTexture(texid);
+    return GLIsTexture(texid);
 }
 
 void DeviceTexture::SetMipMapped(bool value)
 {
-    GLBindTexture2d(texid);
-    _GLv(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, value ? GL_LINEAR_MIPMAP_NEAREST : GL_LINEAR));
+    GLTextureSetMipMapFilters(texid, value);
 }
 
 void DeviceTexture::Set(GraphicsDevice &device, unsigned int blend_src, unsigned int blend_dst)

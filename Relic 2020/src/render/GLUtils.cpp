@@ -163,20 +163,7 @@ void SetBuffersInterleaved(unsigned vb, unsigned ib, unsigned vertices, bool nor
 
     // Activate the VBOs to draw
     GLBindBufferForElements(vb, ib);
-
-    int size = 20;
-    if (normals) {
-        size += 12;
-    }
-
-    // Describe to OpenGL where the vertex data is in the buffer
-    _GLv(glVertexPointer  (3, GL_FLOAT, size, ((char*)NULL + 0)));
-    // Describe to OpenGL where the uv data is in the buffer
-    _GLv(glTexCoordPointer(2, GL_FLOAT, size, ((char*)NULL + 12)));
-    // Describe to OpenGL where the normal data is in the buffer
-    if (normals) {
-        _GLv(glNormalPointer(GL_FLOAT, size, ((char*)NULL + 20)));
-    }
+    GLSetVertexPointersInterleaved(normals);
 
     // This could actually be moved into the setup since we never disable it
     GLStates::vertices.Set(true);

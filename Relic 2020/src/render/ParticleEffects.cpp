@@ -16,6 +16,7 @@
 #include "game/GameState.h"
 #include "game/Game.h"
 #include "level/Level.h"
+#include "GLAbstract.h"
 
 extern Game *GetGlobalGame();
 
@@ -40,21 +41,21 @@ inline static void _append(const Vector3 &pos, float u, float v, float **ppos, f
     *((float    *)*puv)    = v;      (*puv)++;
 }
 
-static void _RenderQuads(RenderContext &context, float *vertices, float *uvs, int count, const Vector4 &color)
+static void _RenderQuads(RenderContext &context, const float *vertices, const float *uvs, int count, const Vector4 &color)
 {
     if (!count || !vertices || !uvs) return;
         
     // RENDER DRAW LIST
     Vector4 ambient(color * Vector4(2.0f, 2.0f, 2.0f, 0.0f)),
             diffuse(1.0f, 1.0f, 1.0f, color.w);
-
-    _GLv(glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, (GLfloat *)&ambient));
-    _GLv(glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (GLfloat *)&diffuse));
     
-    _GLv(glVertexPointer  (3, GL_FLOAT,         0, (GLfloat *)&vertices[0]));
-    _GLv(glTexCoordPointer(2, GL_FLOAT,         0, (GLfloat *)&uvs[0]));
+    GLSetMaterial4(GL_AMBIENT, ambient);
+    GLSetMaterial4(GL_DIFFUSE, diffuse);
+    
+    GLSetVertexPointer(vertices);
+    GLSetTexCoordPointer(uvs);
 
-    _GLv(glDrawArrays(GL_TRIANGLES, 0, count));
+    GLDrawArrays(GL_TRIANGLES, count);
 }
 
 ParticleSystem::ParticleSystem() : mUpdater(0), mGenerator(0), mBuffer(0), mColor(1.f, 1.f, 1.f, 1.f), mTexture(0), mNeedsReorder(false), mOnEnd(0), mOnEndUser(0), mBlendType(PARTICLE_BLEND_DARK)
@@ -218,8 +219,11 @@ int ParticleSystem::RenderParticles(RenderContext &context)
                         *puvs      = uvs;
     uint32_t             vcount    = 0;
 
-    GLLoadMatrix(context.camera.GetView());
-    GLMultMatrix(context.transform);
+    GLLoadMatrixStack(
+        context.camera.GetProjection(),
+        context.camera.GetView(),
+        context.transform
+    );
 
     ClearCachedPointers();
     if (mBlendType == PARTICLE_BLEND_DARK) {
@@ -265,11 +269,10 @@ int ParticleSystem::RenderParticles(RenderContext &context)
 
     GLStates::depthWrite.Set(false);
 
-    if (vcount)
-    {
+    if (vcount) {
         Vector4 color(mColor);
         //color = color * 0.5;
-        _RenderQuads(context, vertices, uvs, vcount, color);
+        GLRenderQuads(vertices, uvs, vcount, color);
     }
     
     GLStates::depthWrite.Set(true);
@@ -281,8 +284,7 @@ int ParticleSystem::RenderParticles(RenderContext &context)
         mTexture->Set(context.device, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
     
-    if (!buffer)
-    {
+    if (!buffer) {
         delete [] (unsigned *)data;
     }
 

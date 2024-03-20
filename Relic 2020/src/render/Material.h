@@ -4,10 +4,8 @@
 #include "core/core.h"
 #include "fast/Allocator.h"
 
-class Material
+struct Material
 {
-public:
-    
     CLASS_NEW_DELETE()
     
     Vector4 ambient,

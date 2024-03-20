@@ -11,6 +11,7 @@
 #include "render/Material.h"
 #include "render/RenderContext.h"
 #include "GLAbstract.h"
+#include "OverheadCamera.h"
 
 extern void ClearCachedPointers();
 
@@ -107,10 +108,12 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
     {
         inited = true;
         unrotated_point.rotate(0.f);
-        for (int i = 0; i < 16; i++)
+        for (int i = 0; i < 16; i++) {
             rotated_points[i].rotate((float)(sin(2.0 * 3.141592653589793 * i / 16.0)) * 0.1f);
-        for (int i = 0; i < 256; i++)
+        }
+        for (int i = 0; i < 256; i++) {
             char_index[i] = rand() % 16;
+        }
     }
        
     enum { VERTICES_PER_QUAD = 6 }; // for now, non-indexed, non-stripped
@@ -134,8 +137,13 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
                         *puvs      = uvs;
     uint32_t             vcount    = 0;
 
-    GLLoadMatrix(view);
-    GLMultMatrix(transform);
+    //GLLoadMatrix(view);
+    //GLMultMatrix(transform);
+    GLLoadMatrixStack(
+        context.camera.GetProjection(),
+        view,
+        transform
+    );
 
     ClearCachedPointers();
     texture->Set(context.device, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -170,16 +178,13 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
         break;
     }
     
-    while (*s)
-    {   
-        if (*s == '\n')
-        {
+    while (*s) {
+        if (*s == '\n') {
             position.y += SCALE.y;
             position.x  = initial.x;
             s++;
             newlinestart = s;
-            switch (justify)
-            {
+            switch (justify) {
             case TEXT_JUSTIFY_LEFT:
                 break;
             case TEXT_JUSTIFY_CENTER:
@@ -195,18 +200,14 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
                 }
                 break;
             }
-        }
-        else if (ParseColor(&s, scolor) && !_hack_override_color)
-        {
+        } else if (ParseColor(&s, scolor) && !_hack_override_color) {
             // flush
             _RenderString(context, vertices, uvs, vcount, useInlineColor ? (prev * color) : color);
             pvertices = vertices;
             puvs      = uvs;
             vcount    = 0;
             prev      = scolor;
-        }   
-        else
-        {
+        } else {
             int c = (unsigned char)*s - GLYPH_START;
             if (c < 0 || c >= MAX_GLYPHS)
                 c = 0;
@@ -230,14 +231,13 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
                 
                 vcount += VERTICES_PER_QUAD;
             }
-    
             position.x += ex.width * SCALE.x;
             s++;
         }
     }
 
-    if (vcount) 
-    {
+    if (vcount) {
+
         auto render_color = _hack_override_color ? *_hack_override_color : (prev * color);
         /*
         if (_hack_override_color)
