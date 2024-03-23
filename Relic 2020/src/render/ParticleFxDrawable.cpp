@@ -1,4 +1,5 @@
 #include "ParticleFxDrawable.h"
+#include "ParticleSystem.h"
 
 #include "core/core.h"
 #include "core/aabox.h"

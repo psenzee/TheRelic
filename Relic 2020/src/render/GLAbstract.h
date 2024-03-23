@@ -2,6 +2,8 @@
 
 #include <array>
 #include <span>
+#include "GLIncludes.h"
+#include "glError.h"
 
 //#define _OPENGLES_2
 
@@ -27,6 +29,7 @@ void                     GLSetColorCombineMode(int combine);
 void                     GLSetAlphaCombineMode(int combine);
 void                     GLSetEnabled(int id, bool enabled);
 void                     GLSetEnabledClientState(int id, bool enabled);
+std::array<unsigned, 2>  GLGenerateBuffers(bool has_indices);
 std::array<unsigned, 2>  GLCreateBuffers(const void *interleaved_data, const void *indices_data, int interleaved_size, int indices_size);
 void                    *GLMapBuffer();
 void                     GLUnmapBuffer();
@@ -59,3 +62,36 @@ void                     GLSetVertexPointer(const float *vertices, size_t stride
 void                     GLSetTexCoordPointer(const float *uvs, size_t stride = 0);
 bool                     GLIsTexture(int texid);
 void                     GLRenderQuads(const float *vertices, const float *uvs, size_t count, const Tuple4f &color);
+
+template <typename Vertex>
+void GLSetVertexSetupInterleaved()
+{
+    const char *base     = (const char *)nullptr,
+               *position = base + Vertex::OFFSET_POSITION,
+               *texture  = base + Vertex::OFFSET_TEXTURE,
+               *normal   = base + Vertex::OFFSET_NORMAL;
+    size_t stride = sizeof(Vertex);
+#ifndef _OPENGLES_2
+    // Describe to OpenGL where the vertex data is in the buffer
+    _GLv(glVertexPointer(3, GL_FLOAT, stride, position));
+    // Describe to OpenGL where the uv data is in the buffer
+    _GLv(glTexCoordPointer(2, GL_FLOAT, stride, texture));
+    // Describe to OpenGL where the normal data is in the buffer
+    if (Vertex::OFFSET_NORMAL > 0) {
+        _GLv(glNormalPointer(GL_FLOAT, stride, normal));
+    }
+#else
+    int count = (Vertex::OFFSET_NORMAL > 0) ? 3 : 2;
+    for (int i = 0; i < count; i++) {
+        _GLv(glEnableVertexAttribArray(i));
+    }
+    // Describe to OpenGL where the vertex data is in the buffer
+    _GLv(glVertexAttribPointer(0, 3, GL_FLOAT, stride, GL_FALSE, position));
+    // Describe to OpenGL where the uv data is in the buffer
+    _GLv(glVertexAttribPointer(1, 2, GL_FLOAT, stride, GL_FALSE, texture));
+    // Describe to OpenGL where the normal data is in the buffer
+    if (Vertex::OFFSET_NORMAL > 0) {
+        _GLv(glVertexAttribPointer(2, 3, GL_FLOAT, stride, GL_FALSE, normal));
+    }
+#endif
+}

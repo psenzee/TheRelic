@@ -1182,6 +1182,7 @@
 		DA9CAEA92BA6201A0062B8E1 /* GLAbstract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9CAEA72BA620190062B8E1 /* GLAbstract.cpp */; };
 		DA9CAEAD2BA63DCA0062B8E1 /* glError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9CAEAB2BA63DCA0062B8E1 /* glError.cpp */; };
 		DA9CAEB02BAB1BB00062B8E1 /* MatrixStack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9CAEAE2BAB1BAF0062B8E1 /* MatrixStack.cpp */; };
+		DA9CAEB42BAB93680062B8E1 /* ParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9CAEB32BAB93680062B8E1 /* ParticleSystem.cpp */; };
 		DAEFF7F123BC17540062B630 /* tick_new_2.png in Resources */ = {isa = PBXBuildFile; fileRef = DAEFF7F023BC17540062B630 /* tick_new_2.png */; };
 		DAEFF7F323BD04670062B630 /* globals.lua in Resources */ = {isa = PBXBuildFile; fileRef = DAEFF7F223BD04670062B630 /* globals.lua */; };
 		DAEFF7F623BD2F390062B630 /* GameDimensions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAEFF7F423BD2F390062B630 /* GameDimensions.cpp */; };
@@ -2629,6 +2630,7 @@
 		DA3BDDDF23E47F9A0078F549 /* keyButton128W.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = keyButton128W.png; path = data/textures/keyButton128W.png; sourceTree = "<group>"; };
 		DA3BDDE023E47F9A0078F549 /* keyButton128Y.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = keyButton128Y.png; path = data/textures/keyButton128Y.png; sourceTree = "<group>"; };
 		DA4A54B52B90D27D00094E78 /* Lights.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Lights.cpp; path = src/render/Lights.cpp; sourceTree = "<group>"; };
+		DA4FFACA2BACA1EC0053A227 /* DynamicBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DynamicBuffer.h; path = src/render/DynamicBuffer.h; sourceTree = "<group>"; };
 		DA65A76E2B8F68D40041B6F5 /* Lights.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Lights.h; path = src/render/Lights.h; sourceTree = "<group>"; };
 		DA65A76F2B8F9FED0041B6F5 /* PauseState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PauseState.h; path = src/level/PauseState.h; sourceTree = "<group>"; };
 		DA7AB2B123B8208000DDC4AF /* black_button_sword.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = black_button_sword.png; path = data/textures/black_button_sword.png; sourceTree = "<group>"; };
@@ -2641,6 +2643,9 @@
 		DA9CAEAC2BA63DCA0062B8E1 /* glError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glError.h; path = src/render/glError.h; sourceTree = "<group>"; };
 		DA9CAEAE2BAB1BAF0062B8E1 /* MatrixStack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MatrixStack.cpp; path = src/render/MatrixStack.cpp; sourceTree = "<group>"; };
 		DA9CAEAF2BAB1BB00062B8E1 /* MatrixStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MatrixStack.h; path = src/render/MatrixStack.h; sourceTree = "<group>"; };
+		DA9CAEB22BAB93680062B8E1 /* ParticleSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticleSystem.h; path = src/render/ParticleSystem.h; sourceTree = "<group>"; };
+		DA9CAEB32BAB93680062B8E1 /* ParticleSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParticleSystem.cpp; path = src/render/ParticleSystem.cpp; sourceTree = "<group>"; };
+		DA9CAEB52BAB98D30062B8E1 /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Particle.h; path = src/render/Particle.h; sourceTree = "<group>"; };
 		DAEFF7F023BC17540062B630 /* tick_new_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tick_new_2.png; path = data/textures/tick_new_2.png; sourceTree = "<group>"; };
 		DAEFF7F223BD04670062B630 /* globals.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = globals.lua; path = data/lua/globals.lua; sourceTree = "<group>"; };
 		DAEFF7F423BD2F390062B630 /* GameDimensions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameDimensions.cpp; path = src/GameDimensions.cpp; sourceTree = "<group>"; };
@@ -3993,6 +3998,7 @@
 		439DB96612DE412600B06546 /* render */ = {
 			isa = PBXGroup;
 			children = (
+				DA9CAEB12BAB84920062B8E1 /* particles */,
 				DA9CAEAB2BA63DCA0062B8E1 /* glError.cpp */,
 				DA9CAEAC2BA63DCA0062B8E1 /* glError.h */,
 				439DBAF612DE4B8900B06546 /* Animator.cpp */,
@@ -4040,10 +4046,6 @@
 				439DBB1A12DE4B8900B06546 /* OpenGLESMesh.h */,
 				439DBB1B12DE4B8900B06546 /* OverheadCamera.cpp */,
 				439DBB1C12DE4B8900B06546 /* OverheadCamera.h */,
-				439DBB1D12DE4B8900B06546 /* ParticleEffects.cpp */,
-				439DBB1E12DE4B8900B06546 /* ParticleEffects.h */,
-				439DBB1F12DE4B8900B06546 /* ParticleFxDrawable.cpp */,
-				439DBB2012DE4B8900B06546 /* ParticleFxDrawable.h */,
 				439DBB2112DE4B8900B06546 /* QuadRenderer.cpp */,
 				439DBB2212DE4B8900B06546 /* QuadRenderer.h */,
 				439DBB2312DE4B8900B06546 /* RenderContext.h */,
@@ -4524,6 +4526,21 @@
 			children = (
 			);
 			name = video;
+			sourceTree = "<group>";
+		};
+		DA9CAEB12BAB84920062B8E1 /* particles */ = {
+			isa = PBXGroup;
+			children = (
+				DA4FFACA2BACA1EC0053A227 /* DynamicBuffer.h */,
+				DA9CAEB52BAB98D30062B8E1 /* Particle.h */,
+				DA9CAEB32BAB93680062B8E1 /* ParticleSystem.cpp */,
+				DA9CAEB22BAB93680062B8E1 /* ParticleSystem.h */,
+				439DBB1D12DE4B8900B06546 /* ParticleEffects.cpp */,
+				439DBB1E12DE4B8900B06546 /* ParticleEffects.h */,
+				439DBB1F12DE4B8900B06546 /* ParticleFxDrawable.cpp */,
+				439DBB2012DE4B8900B06546 /* ParticleFxDrawable.h */,
+			);
+			name = particles;
 			sourceTree = "<group>";
 		};
 		DAF0EB1123B29D330003BACB /* cocoaui */ = {
@@ -5734,6 +5751,7 @@
 				439DBBCC12DE4DD600B06546 /* UiInstance.cpp in Sources */,
 				439DBBD312DE4E4600B06546 /* Glyph.cpp in Sources */,
 				439DBBD412DE4E4600B06546 /* GlyphDrawList.cpp in Sources */,
+				DA9CAEB42BAB93680062B8E1 /* ParticleSystem.cpp in Sources */,
 				439DBBD512DE4E4600B06546 /* GlyphWriter_DrawString_mod.cpp in Sources */,
 				439DBBD612DE4E4600B06546 /* Text.cpp in Sources */,
 				439DBBDC12DE4E6500B06546 /* FrameRateTracker.cpp in Sources */,
@@ -5793,6 +5811,7 @@
 				GCC_THUMB_SUPPORT = NO;
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
 				INFOPLIST_FILE = "Relic-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.1;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -5821,6 +5840,7 @@
 				GCC_THUMB_SUPPORT = NO;
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
 				INFOPLIST_FILE = "Relic-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.1;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-all_load",

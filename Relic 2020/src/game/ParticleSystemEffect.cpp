@@ -1,4 +1,5 @@
 #include "ParticleSystemEffect.h"
+#include "ParticleSystem.h"
 
 #include "core/core.h"
 #include "core/gametime.h"

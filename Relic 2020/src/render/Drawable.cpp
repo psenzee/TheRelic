@@ -24,8 +24,9 @@ Drawable *CreateMesh(const String            &renderName,
                      const RenderStates      &states,
                      const Material          &material)
 {
-    if (!loader || !file)
+    if (!loader || !file) {
         return 0;
+    }
     DeviceMesh *mesh = loader->GetMesh(file);
     return new Drawable(renderName, mesh, transform, uvtransform, material, states, texture);
 }
@@ -71,10 +72,12 @@ IDrawable *Drawable::GetDrawable()
 
 void Drawable::SetDrawable(IDrawable *drawable)
 {
-    if (drawable)
+    if (drawable) {
         drawable->Retain();
-    if (mDrawable)
+    }
+    if (mDrawable) {
         mDrawable->Release();
+    }
     mDrawable = drawable;
 }
 
@@ -85,10 +88,12 @@ Texture *Drawable::GetTexture()
 
 void Drawable::SetTexture(Texture *texture)
 {
-    if (texture)
+    if (texture) {
         texture->Retain();
-    if (mTexture)
+    }
+    if (mTexture) {
         mTexture->Release();
+    }
     mTexture = texture;
 }    
 
@@ -113,8 +118,9 @@ void Drawable::RenderImmediate(RenderContext &context)
     {
         RenderContext rc(context);
         //rc.transform = mTransform * context.transform;        
-        if (mTexture)
+        if (mTexture) {
             mTexture->Set(rc.device);
+        }
         mDrawable->RenderImmediate(rc);
     }
 }
@@ -125,17 +131,16 @@ void Drawable::Update(const GameTime &time)
 
 void Drawable::Render(RenderContext &context)
 {
-    if (mDrawable)
-    {
+    if (mDrawable) {
         RenderContext rc(context);
         rc.transform = mTransform * context.transform;
-        if (!mStates.TestVisible || IsVisible(rc))
-        {
+        if (!mStates.TestVisible || IsVisible(rc)) {
             Vector3 center(rc.transform * mCenter);
             DrawItem item(rc.transform, mDrawable, mTexture, &mStates, &mMaterial, rc.color, context.blur, center.z);
             item.breakFunction = rc.breakFunction;
-            if (rc.transparent)
-               item.transparent = true;
+            if (rc.transparent) {
+                item.transparent = true;
+            }
             RenderSet::GetInstance()->Add(mRenderName, item);
         }
     }

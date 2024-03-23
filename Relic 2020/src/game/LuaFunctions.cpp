@@ -37,6 +37,7 @@ LUALIB_API void *luaL_checkudataornil(lua_State *L, int ud, const char *tname);
 #include "render/LocalGameServices.h"
 #include "render/ContentLoader.h"
 #include "render/ParticleEffects.h"
+#include "render/ParticleSystem.h"
 #include "render/GLUtils.h"
 #include "render/Light.h"
 #include "render/GLStates.h"

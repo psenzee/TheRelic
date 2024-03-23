@@ -152,9 +152,9 @@ bool OpenGLESMesh::ReadFromData(const char *data, int size, bool asCompact)
     p += sz;
     uint32_t indicesSize = sz;
     mIndicesCount = sz / sizeof(unsigned short);
-    if ((uint32_t)(p - (char *)mData) != totalsz)
+    if ((uint32_t)(p - (char *)mData) != totalsz) {
         return false;
-
+    }
     CreateBuffers(dataSize, indicesSize);
     return true;
 }

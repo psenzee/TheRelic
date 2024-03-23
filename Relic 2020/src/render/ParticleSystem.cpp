@@ -1,0 +1,369 @@
+#include "ParticleSystem.h"
+
+#include "core/core.h"
+#include "core/random.h"
+
+#include "render/GLUtils.h"
+#include "render/GLStates.h"
+#include "render/GLIncludes.h"
+#include "render/DeviceTexture.h"
+#include "render/GraphicsDevice.h"
+#include "render/OverheadCamera.h"
+#include "render/Material.h"
+#include "render/RenderContext.h"
+
+// the following are for testing collision with particle effects
+#include "map/Map.h" 
+#include "game/GameState.h"
+#include "game/Game.h"
+#include "level/Level.h"
+#include "GLAbstract.h"
+
+#include <algorithm>
+
+struct ZComparator
+{
+    inline bool operator()(const Particle &a, const Particle &b) const
+    {
+        return a.position.z > b.position.z;
+    }
+};
+
+extern void ClearCachedPointers();
+
+inline static void _append(const Vector3 &pos, float u, float v, float **ppos, float **puv)
+{
+    *((Vector3  *)*ppos)   = pos;    (*ppos) += 3;
+    *((float    *)*puv)    = u;      (*puv)++;
+    *((float    *)*puv)    = v;      (*puv)++;
+}
+
+static void _RenderQuads(RenderContext &context, const float *vertices, const float *uvs, int count, const Vector4 &color)
+{
+    if (!count || !vertices || !uvs) return;
+        
+    // RENDER DRAW LIST
+    Vector4 ambient(color * Vector4(2.0f, 2.0f, 2.0f, 0.0f)),
+            diffuse(1.0f, 1.0f, 1.0f, color.w);
+    
+    GLSetMaterial4(GL_AMBIENT, ambient);
+    GLSetMaterial4(GL_DIFFUSE, diffuse);
+    
+    GLSetVertexPointer(vertices);
+    GLSetTexCoordPointer(uvs);
+
+    GLDrawArrays(GL_TRIANGLES, count);
+}
+
+ParticleSystem::ParticleSystem() : mUpdater(0), mGenerator(0), mBuffer(0), mColor(1.f, 1.f, 1.f, 1.f), mTexture(0), mNeedsReorder(false), mOnEnd(0), mOnEndUser(0), mBlendType(PARTICLE_BLEND_DARK)
+{
+    mBuffer = new char [BUFFER_BYTES];    
+}
+
+ParticleSystem::~ParticleSystem()
+{
+    delete [] mBuffer;
+    mBuffer = 0;
+}
+
+void ParticleSystem::Add(const Particle &p)
+{
+    std::vector<Particle>::iterator i = FindFirstDeadParticle();
+    if (i == mParticles.end()) {
+        if (mNeedsReorder) { // if it needs sorting anyway, just stick it in the end
+            mParticles.push_back(p);
+        } else { // otherwise, preserve the ordering
+            ZComparator comparator;
+            std::vector<Particle>::iterator i = std::upper_bound(mParticles.begin(), mParticles.end(), p, comparator);
+            mParticles.insert(i, p);
+        }
+    } else {
+        (*i) = p;
+        mNeedsReorder = true;
+    }
+}
+
+void ParticleSystem::SetPosition(const Vector3 &p)
+{ 
+    mPosition = p;
+}
+
+void ParticleSystem::Clear()
+{ 
+    mParticles.clear();
+}
+
+void ParticleSystem::SetUpdater(ParticleFunction f)
+{
+    mUpdater = f;
+}
+
+void ParticleSystem::SetOnEnd(OnEndFunction f, void *user)
+{
+    mOnEnd = f; mOnEndUser = user;
+}
+
+void ParticleSystem::SetGenerator(ParticleFunction f)
+{
+    mGenerator = f;
+}
+
+void ParticleSystem::SetTexture(DeviceTexture *t)
+{
+    mTexture = t;
+}
+
+void ParticleSystem::SetColor(const Vector4 &c)
+{
+    mColor = c;
+}
+
+int ParticleSystem::Render(RenderContext &context, const GameTime &time)
+{
+	//printf("elapsed %dms\n", time.elapsed);
+    UpdateOrder();
+    if (!UpdateParticles((float)time.elapsed) && mOnEnd) {
+        mOnEnd(this, mOnEndUser); // mOnEnd could delete -this-, don't do anything that requires -this-
+                                  // after calling it
+        return 0;
+    }
+    return RenderParticles(context);
+}
+
+void ParticleSystem::UpdateOrder()
+{
+    if (mNeedsReorder) {
+        ZComparator comparator;
+        std::sort(mParticles.begin(), mParticles.end(), comparator);
+        mNeedsReorder = false;
+    }
+}
+
+int ParticleSystem::UpdateParticles(float ms)
+{
+    if (!mUpdater) {
+        // if no updater is set, still keep it alive
+        return 1;
+    }
+    int count = 0;
+    for (std::vector<Particle>::iterator i = mParticles.begin(), e = mParticles.end(); i != e; ++i) {
+        Particle &p = *i;
+        if (p.time < p.expire) { // not dead yet
+            p.time += ms;
+            mUpdater(*i, mPosition);
+            count++;
+        } else if (mGenerator) { // dead - rebirths
+            mGenerator(p, mPosition);
+            count++;
+        }
+    }
+    return count;
+}
+
+std::vector<Particle>::iterator ParticleSystem::FindFirstDeadParticle()
+{
+    for (std::vector<Particle>::iterator i = mParticles.begin(), e = mParticles.end(); i != e; ++i)
+    {
+        Particle &p = *i;
+        if (p.time >= p.expire)
+            return i;
+    }
+    return mParticles.end();
+}
+
+int ParticleSystem::RenderParticles(RenderContext &context)
+{
+    if (mColor.w < 0.01f || !mTexture) return 0;
+    
+    Vector3              position(mPosition);
+
+    void                *buffer = mBuffer;
+        
+    static const Vector3 SCALE(-1.0f, -1.0f, 1.0f);
+    static const Vector3 UL(Vector3(-0.5f, -0.5f, 0.0f) * SCALE), UR(Vector3( 0.5f, -0.5f, 0.0f) * SCALE),
+                         LL(Vector3(-0.5f,  0.5f, 0.0f) * SCALE), LR(Vector3( 0.5f,  0.5f, 0.0f) * SCALE);
+          
+    enum { VERTICES_PER_QUAD = 6 }; // for now, non-indexed, non-stripped
+
+    size_t               particles = mParticles.size(),
+                         count     = particles * VERTICES_PER_QUAD,
+                         bytes     = (count * 3 /* vertices */ + count * 2 /* uvs */) * sizeof(float);
+    
+    void                *data      = buffer;
+
+    if (!buffer || bytes > BUFFER_BYTES) {
+        // if no buffer is supplied or it's too small
+        buffer = 0;
+        data   = new unsigned [bytes / sizeof(uint32_t)]; // 1 single allocation
+    }
+
+    float               *vertices  = ((float *)data),
+                        *pvertices = vertices,
+                        *uvs       = ((float *)data) + count * 3,
+                        *puvs      = uvs;
+    uint32_t             vcount    = 0;
+
+    mDynamicBuffer.reserve(mParticles.size() * 4, mParticles.size() * 6); /* indexed */
+    
+    GLLoadMatrixStack(
+        context.camera.GetProjection(),
+        context.camera.GetView(),
+        context.transform
+    );
+
+    ClearCachedPointers();
+    if (mBlendType == PARTICLE_BLEND_DARK) {
+        mTexture->Set(context.device, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    } else {
+        mTexture->Set(context.device, GL_SRC_ALPHA, /*GL_DST_ALPHA*/GL_ONE);
+    }
+    //mTexture->Set(context.device, GL_SRC_ALPHA, GL_DST_COLOR);
+
+    GLSetEnabledClientState(GL_NORMAL_ARRAY, false);
+    GLSetEnabledClientState(GL_VERTEX_ARRAY, true);
+    GLSetEnabledClientState(GL_TEXTURE_COORD_ARRAY, true);
+
+    GLSetEnabled(GL_CULL_FACE, false);  // we can eliminate this if we can always ensure the correct orientation of the vertices
+
+    int renderedCount = 0;
+    
+    for (std::vector<Particle>::const_iterator i = mParticles.begin(), e = mParticles.end(); i != e; ++i) {
+        const Particle &particle = *i;
+
+        if (particle.time < particle.expire) { // if not dead..
+            position = /*mPosition +*/ particle.position;
+
+            float u0   = particle.uv0.x, v0 = particle.uv0.y,
+                  u1   = particle.uv1.x, v1 = particle.uv1.y,
+                  size = particle.size;
+
+            _append(position + UL * size, u0, v0, &pvertices, &puvs);
+            _append(position + LL * size, u0, v1, &pvertices, &puvs);
+            _append(position + LR * size, u1, v1, &pvertices, &puvs);
+
+            _append(position + UL * size, u0, v0, &pvertices, &puvs);
+            _append(position + LR * size, u1, v1, &pvertices, &puvs);
+            _append(position + UR * size, u1, v0, &pvertices, &puvs);
+
+            vcount += VERTICES_PER_QUAD;
+
+            renderedCount++;
+        }
+    }
+
+    GLStates::depthWrite.Set(false);
+
+    if (vcount) {
+        Vector4 color(mColor);
+        //color = color * 0.5;
+        GLRenderQuads(vertices, uvs, vcount, color);
+    }
+    
+    GLStates::depthWrite.Set(true);
+    GLSetEnabled(GL_CULL_FACE, true);  // we can eliminate this if we can always ensure the correct orientation of the vertices
+    
+    //mTexture->Set(context.device, GL_ONE, GL_ONE);
+    if (mBlendType != PARTICLE_BLEND_DARK) {
+        // set it back
+        mTexture->Set(context.device, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+    
+    if (!buffer) {
+        delete [] (unsigned *)data;
+    }
+
+    return renderedCount;
+}
+/*
+void CloudUpdater(Particle &p, const Vector3 &position)
+{
+    p.position += p.velocity;
+    p.alpha =  1.f - (p.time / p.expire);
+    p.size  = (1.f - (p.time / p.expire)) * p._maxSize;
+}
+
+void CloudGenerator(Particle &p, const Vector3 &position)
+{
+    p.position   = position;
+    p.velocity   = p._direction * (rand() * p._maxSpeed / (float)RAND_MAX);
+    p.time       = 0.f;
+    p.expire     = rand() * p._maxExpire / (float)RAND_MAX;
+    if (p._isShadow)
+        p.position.z += p._maxZ - 1;
+    else
+        p.position.z += rand() * p._maxZ / (float)RAND_MAX;
+    p.alpha      =  1.f - (p.time / p.expire);
+    p.size       = (1.f - (p.time / p.expire)) * p._maxSize;
+}
+
+void OnEndDestroy(ParticleSystem *ps, void *user)
+{
+    ParticleEffects *fx = reinterpret_cast<ParticleEffects *>(user);
+    fx->Destroy(ps);
+}
+
+void CircleUpdater(Particle &p, const Vector3 &position)
+{
+    p.position += p.velocity;
+    p.alpha = 1.f - (p.time / p.expire);
+    p.size  = p._maxSize;
+}
+
+void CircleGenerator(Particle &p, const Vector3 &position)
+{
+    p.position   = position;
+    p.velocity   = p._direction * p._maxSpeed;
+    p.time       = 0.f;
+    p.expire     = p._maxExpire;
+    if (p._isShadow)
+        p.position.z += p._maxZ - 1;
+    else
+        p.position.z += rand() * p._maxZ / (float)RAND_MAX;
+    p.alpha      = 1.f - (p.time / p.expire);
+    p.size       = p._maxSize;
+}
+
+struct MapAndParticleSystem
+{
+    Map            *map;
+    ParticleSystem *effect;
+
+    inline MapAndParticleSystem(ParticleSystem *ps) : map(GetGlobalMap()), effect(ps) {}
+};
+
+void CollisionUpdater(Particle &p, const Vector3 &position)
+{
+    if (p._user)
+    {
+        MapAndParticleSystem *map = reinterpret_cast<MapAndParticleSystem *>(p._user);
+        Vector3 at;
+        ICollidable::Classification classify = map->map->Collision(p.position + map->effect->GetPosition(), p.size, at);
+        if (classify == ICollidable::CLASS_ON || classify == ICollidable::CLASS_IN)
+        {
+            // stop
+            p.velocity = Vector3();
+        }
+        else
+        {
+            p.velocity = p._direction * p._maxSpeed;
+        }
+    }
+    p.position += p.velocity;
+    p.alpha = 1.f - (p.time / p.expire);
+    p.size  = p._maxSize;
+}
+
+void CollisionGenerator(Particle &p, const Vector3 &position)
+{
+    p.position   = position;
+    p.velocity   = p._direction * p._maxSpeed;
+    p.time       = 0.f;
+    p.expire     = p._maxExpire;
+    if (p._isShadow)
+        p.position.z = p._maxZ - 1;
+    else
+        p.position.z = rand() * p._maxZ / (float)RAND_MAX;
+    p.alpha      = 1.f - (p.time / p.expire);
+    p.size       = p._maxSize;
+}
+*/

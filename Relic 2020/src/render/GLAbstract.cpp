@@ -200,14 +200,14 @@ void GLSetNormalAction(bool use_normals, NormalAction action, bool enable)
 #endif
 }
 
-void *GLMapBuffer()
+void *GLMapBuffer(int type)
 {
-    return _GL(glMapBufferOES(GL_ARRAY_BUFFER, GL_WRITE_ONLY_OES));
+    return _GL(glMapBufferOES(type, GL_WRITE_ONLY_OES));
 }
 
-void GLUnmapBuffer()
+void GLUnmapBuffer(int type)
 {
-    _GLv(glUnmapBufferOES(GL_ARRAY_BUFFER));
+    _GLv(glUnmapBufferOES(type));
 }
 
 void GLClearAll()
@@ -220,39 +220,47 @@ void GLClearZBuffer()
     _GLv(glClear(GL_DEPTH_BUFFER_BIT));
 }
 
+std::array<unsigned, 2> GLGenerateBuffers(bool has_indices)
+{
+    std::array<unsigned, 2> ids { 0 };
+    
+    // allocate a new buffer
+    _GLv(glGenBuffers(has_indices ? 2 : 1, ids.data()));
+
+    return ids;
+}
+
+void GLCopyIntoBuffer(int buffer_id, int type, const void *data, size_t bytes_count)
+{
+    // bind the buffer object to use
+    _GLv(glBindBuffer(type, buffer_id));
+    
+    // allocate enough space for the vbo
+    _GLv(glBufferData(type, bytes_count, 0, GL_STATIC_DRAW));
+
+    void *buffer = GLMapBuffer(type);
+    // transfer the data to the buffer object
+    memcpy(buffer, data, bytes_count);
+    GLUnmapBuffer(type);
+
+    _GLv(glBindBuffer(type, 0));
+}
+
 std::array<unsigned, 2> GLCreateBuffers(const void *interleaved_data, const void *indices_data, int interleaved_size, int indices_size)
 {
     // BEGIN CREATE BUFFERS
     // http://playcontrol.net/ewing/jibberjabber/opengl_vertex_buffer_object.html
     
-    unsigned vb_id = 0, ib_id = 0;
-    
     // allocate a new buffer
-    _GLv(glGenBuffers(1, &vb_id));
+    std::array<unsigned, 2> ids = GLGenerateBuffers(bool(indices_size));
     
-    // bind the buffer object to use
-    _GLv(glBindBuffer(GL_ARRAY_BUFFER, vb_id));
-    
-    // allocate enough space for the VBO
-    _GLv(glBufferData(GL_ARRAY_BUFFER, interleaved_size, 0, GL_STATIC_DRAW));
+    GLCopyIntoBuffer(ids[0], GL_ARRAY_BUFFER, interleaved_data, interleaved_size);
 
-    void *vbuffer = GLMapBuffer();
-    // transfer the vertex data to the VBO
-    memcpy(vbuffer, interleaved_data, interleaved_size);
-    GLUnmapBuffer();
-
-    _GLv(glBindBuffer(GL_ARRAY_BUFFER, 0));
-
-    if (indices_data && indices_size) {
-        // create index buffer
-        _GLv(glGenBuffers(1, &ib_id));
-        _GLv(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib_id));
-        // instead of glBufferSubData and glMapBuffer, we can directly supply the data in one-shot
-        _GLv(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_size, indices_data, GL_STATIC_DRAW));
-        _GLv(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+    if (ids[1]) {
+        GLCopyIntoBuffer(ids[1], GL_ELEMENT_ARRAY_BUFFER, indices_data, indices_size);
     }
 
-    return std::array<unsigned, 2> { vb_id, ib_id };
+    return ids;
 }
 
 void GLSetLight(int id, int state, float value)

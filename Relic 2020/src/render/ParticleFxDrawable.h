@@ -1,5 +1,4 @@
-#ifndef _PARTICLEFXDRAWABLE_H
-#define _PARTICLEFXDRAWABLE_H
+#pragma once
 
 #include "core/core.h"
 #include "core/aabox.h"
@@ -41,5 +40,3 @@ private:
     AABox            mBounds;
     int              mRef;
 };
-
-#endif // _PARTICLEFXDRAWABLE_H

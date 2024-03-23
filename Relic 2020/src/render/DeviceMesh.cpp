@@ -10,18 +10,14 @@
 
 DeviceMesh::DeviceMesh(const char *filename, bool compact) : mMesh(0)
 {
-    char newname[1024];
+    char name[1024];
     mMesh = new OpenGLESMesh;
-    snprintf(newname, sizeof(newname) - 1, "%s.ips", filename);
-    if (!mMesh->Read(newname, compact))
-    {
+    snprintf(name, sizeof(name) - 1, "%s.ips", filename);
+    if (!mMesh->Read(name, compact)) {
         delete mMesh;
-        mMesh = 0;
-
         mMesh = new OpenGLESMesh;
-        snprintf(newname, sizeof(newname) - 1, "%s.ipi", filename);
-        if (!mMesh->Read(newname, compact))
-        {
+        snprintf(name, sizeof(name) - 1, "%s.ipi", filename);
+        if (!mMesh->Read(name, compact)) {
             printf("Unable to read file '%s'!\n", filename);
             delete mMesh;
             mMesh = 0;
@@ -32,8 +28,7 @@ DeviceMesh::DeviceMesh(const char *filename, bool compact) : mMesh(0)
 DeviceMesh::DeviceMesh(const void *data, int size, bool compact) : mMesh(0)
 {
     mMesh = new OpenGLESMesh;
-    if (!mMesh->ReadFromData((const char *)data, size, compact))
-    {
+    if (!mMesh->ReadFromData((const char *)data, size, compact)) {
         printf("Unable to read mesh from data!\n");
         delete mMesh;
         mMesh = 0;
@@ -46,7 +41,7 @@ bool DeviceMesh::SetNormalAction(const char *action)
 
     if      (!action) return false;
     else if (strcmp(action, "NORMALIZE") == 0) { mMesh->SetNormalAction(NORMALIZE_ACTION_NORMALIZE); return true; }
-    else if (strcmp(action, "true")      == 0) { mMesh->SetNormalAction(NORMALIZE_ACTION_NORMALIZE); return true; }
+    else if (strcmp(action, "true"     ) == 0) { mMesh->SetNormalAction(NORMALIZE_ACTION_NORMALIZE); return true; }
     else if (strcmp(action, "RESCALE"  ) == 0) { mMesh->SetNormalAction(NORMALIZE_ACTION_RESCALE);   return true; }
     else if (strcmp(action, "NONE"     ) == 0) { mMesh->SetNormalAction(NORMALIZE_ACTION_NONE);      return true; }
     else if (strcmp(action, "false"    ) == 0) { mMesh->SetNormalAction(NORMALIZE_ACTION_NONE);      return true; }
@@ -55,7 +50,7 @@ bool DeviceMesh::SetNormalAction(const char *action)
 
 bool DeviceMesh::SetProperty(const char *key, const char *value)
 {
-    if (!key) return false;
+    if (!key)                               return false;
     else if (strcmp(key, "normalize") == 0) return SetNormalAction(value);
     return false;
 }
@@ -63,15 +58,17 @@ bool DeviceMesh::SetProperty(const char *key, const char *value)
 const AABox &DeviceMesh::GetBounds() const
 {
     const static AABox empty;
-    if (!mMesh)
+    if (!mMesh) {
         return empty;
+    }
     return mMesh->GetBounds();
 }
 
 DeviceMesh::~DeviceMesh()
 {
-    if (mMesh)
+    if (mMesh) {
         delete mMesh;
+    }
     mMesh = 0;
 }
 
@@ -89,8 +86,9 @@ void DeviceMesh::RenderImmediate(RenderContext &context)
 
 bool DeviceMesh::IsVisible(const RenderContext &context) const
 {
-    if (!mMesh)
+    if (!mMesh) {
         return false;
+    }
     return Visibility::IsVisible(context.camera.GetViewProjection(), context.transform, mMesh->GetBounds());
 }
 
@@ -101,6 +99,7 @@ void DeviceMesh::Retain()
 
 void DeviceMesh::Release() 
 {
-    if (!--mRef)
+    if (!--mRef) {
         delete this;
+    }
 }
