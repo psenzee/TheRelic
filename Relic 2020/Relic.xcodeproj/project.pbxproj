@@ -1175,6 +1175,7 @@
 		DA3BDDE323E47F9A0078F549 /* keyButton128W.png in Resources */ = {isa = PBXBuildFile; fileRef = DA3BDDDF23E47F9A0078F549 /* keyButton128W.png */; };
 		DA3BDDE423E47F9A0078F549 /* keyButton128Y.png in Resources */ = {isa = PBXBuildFile; fileRef = DA3BDDE023E47F9A0078F549 /* keyButton128Y.png */; };
 		DA4A54B62B90D27D00094E78 /* Lights.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA4A54B52B90D27D00094E78 /* Lights.cpp */; };
+		DA5E71902BBEE47000243EE7 /* Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA5E718F2BBEE46F00243EE7 /* Buffer.cpp */; };
 		DA7AB2B223B8208100DDC4AF /* black_button_sword.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7AB2B123B8208000DDC4AF /* black_button_sword.png */; };
 		DA7AB2B423B826C300DDC4AF /* black_button_potion.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7AB2B323B826C300DDC4AF /* black_button_potion.png */; };
 		DA7AB2B623B82A1100DDC4AF /* tick_new.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7AB2B523B82A1100DDC4AF /* tick_new.png */; };
@@ -1183,6 +1184,8 @@
 		DA9CAEAD2BA63DCA0062B8E1 /* glError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9CAEAB2BA63DCA0062B8E1 /* glError.cpp */; };
 		DA9CAEB02BAB1BB00062B8E1 /* MatrixStack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9CAEAE2BAB1BAF0062B8E1 /* MatrixStack.cpp */; };
 		DA9CAEB42BAB93680062B8E1 /* ParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9CAEB32BAB93680062B8E1 /* ParticleSystem.cpp */; };
+		DAAC8D312BB5075800CDEAC5 /* ImposterSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAAC8D302BB5075800CDEAC5 /* ImposterSet.cpp */; };
+		DAAC8D332BB5131D00CDEAC5 /* ImposterRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAAC8D322BB5131C00CDEAC5 /* ImposterRenderer.cpp */; };
 		DAEFF7F123BC17540062B630 /* tick_new_2.png in Resources */ = {isa = PBXBuildFile; fileRef = DAEFF7F023BC17540062B630 /* tick_new_2.png */; };
 		DAEFF7F323BD04670062B630 /* globals.lua in Resources */ = {isa = PBXBuildFile; fileRef = DAEFF7F223BD04670062B630 /* globals.lua */; };
 		DAEFF7F623BD2F390062B630 /* GameDimensions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAEFF7F423BD2F390062B630 /* GameDimensions.cpp */; };
@@ -2631,6 +2634,11 @@
 		DA3BDDE023E47F9A0078F549 /* keyButton128Y.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = keyButton128Y.png; path = data/textures/keyButton128Y.png; sourceTree = "<group>"; };
 		DA4A54B52B90D27D00094E78 /* Lights.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Lights.cpp; path = src/render/Lights.cpp; sourceTree = "<group>"; };
 		DA4FFACA2BACA1EC0053A227 /* DynamicBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DynamicBuffer.h; path = src/render/DynamicBuffer.h; sourceTree = "<group>"; };
+		DA5E718A2BB90E2300243EE7 /* std_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = std_utils.h; path = src/render/std_utils.h; sourceTree = "<group>"; };
+		DA5E718D2BBEE02E00243EE7 /* VertexOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexOptions.h; path = src/render/VertexOptions.h; sourceTree = "<group>"; };
+		DA5E718E2BBEE44700243EE7 /* Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Buffer.h; path = src/render/Buffer.h; sourceTree = "<group>"; };
+		DA5E718F2BBEE46F00243EE7 /* Buffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Buffer.cpp; path = src/render/Buffer.cpp; sourceTree = "<group>"; };
+		DA5E71912BBEE4B500243EE7 /* CommonVertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommonVertex.h; path = src/render/CommonVertex.h; sourceTree = "<group>"; };
 		DA65A76E2B8F68D40041B6F5 /* Lights.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Lights.h; path = src/render/Lights.h; sourceTree = "<group>"; };
 		DA65A76F2B8F9FED0041B6F5 /* PauseState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PauseState.h; path = src/level/PauseState.h; sourceTree = "<group>"; };
 		DA7AB2B123B8208000DDC4AF /* black_button_sword.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = black_button_sword.png; path = data/textures/black_button_sword.png; sourceTree = "<group>"; };
@@ -2646,6 +2654,12 @@
 		DA9CAEB22BAB93680062B8E1 /* ParticleSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticleSystem.h; path = src/render/ParticleSystem.h; sourceTree = "<group>"; };
 		DA9CAEB32BAB93680062B8E1 /* ParticleSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParticleSystem.cpp; path = src/render/ParticleSystem.cpp; sourceTree = "<group>"; };
 		DA9CAEB52BAB98D30062B8E1 /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Particle.h; path = src/render/Particle.h; sourceTree = "<group>"; };
+		DAAC8D292BB095DA00CDEAC5 /* ImposterRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImposterRenderer.h; path = src/render/ImposterRenderer.h; sourceTree = "<group>"; };
+		DAAC8D2D2BB12CA300CDEAC5 /* Imposter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Imposter.h; path = src/render/Imposter.h; sourceTree = "<group>"; };
+		DAAC8D2E2BB12CA300CDEAC5 /* ImposterAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImposterAttributes.h; path = src/render/ImposterAttributes.h; sourceTree = "<group>"; };
+		DAAC8D2F2BB5073100CDEAC5 /* ImposterSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImposterSet.h; path = src/render/ImposterSet.h; sourceTree = "<group>"; };
+		DAAC8D302BB5075800CDEAC5 /* ImposterSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ImposterSet.cpp; path = src/render/ImposterSet.cpp; sourceTree = "<group>"; };
+		DAAC8D322BB5131C00CDEAC5 /* ImposterRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ImposterRenderer.cpp; path = src/render/ImposterRenderer.cpp; sourceTree = "<group>"; };
 		DAEFF7F023BC17540062B630 /* tick_new_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tick_new_2.png; path = data/textures/tick_new_2.png; sourceTree = "<group>"; };
 		DAEFF7F223BD04670062B630 /* globals.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = globals.lua; path = data/lua/globals.lua; sourceTree = "<group>"; };
 		DAEFF7F423BD2F390062B630 /* GameDimensions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameDimensions.cpp; path = src/GameDimensions.cpp; sourceTree = "<group>"; };
@@ -3998,6 +4012,7 @@
 		439DB96612DE412600B06546 /* render */ = {
 			isa = PBXGroup;
 			children = (
+				DA5E71932BC2119B00243EE7 /* buffer */,
 				DA9CAEB12BAB84920062B8E1 /* particles */,
 				DA9CAEAB2BA63DCA0062B8E1 /* glError.cpp */,
 				DA9CAEAC2BA63DCA0062B8E1 /* glError.h */,
@@ -4528,10 +4543,28 @@
 			name = video;
 			sourceTree = "<group>";
 		};
+		DA5E71932BC2119B00243EE7 /* buffer */ = {
+			isa = PBXGroup;
+			children = (
+				DA5E718A2BB90E2300243EE7 /* std_utils.h */,
+				DA5E718D2BBEE02E00243EE7 /* VertexOptions.h */,
+				DA5E71912BBEE4B500243EE7 /* CommonVertex.h */,
+				DA5E718E2BBEE44700243EE7 /* Buffer.h */,
+				DA5E718F2BBEE46F00243EE7 /* Buffer.cpp */,
+				DA4FFACA2BACA1EC0053A227 /* DynamicBuffer.h */,
+			);
+			name = buffer;
+			sourceTree = "<group>";
+		};
 		DA9CAEB12BAB84920062B8E1 /* particles */ = {
 			isa = PBXGroup;
 			children = (
-				DA4FFACA2BACA1EC0053A227 /* DynamicBuffer.h */,
+				DAAC8D2F2BB5073100CDEAC5 /* ImposterSet.h */,
+				DAAC8D302BB5075800CDEAC5 /* ImposterSet.cpp */,
+				DAAC8D2D2BB12CA300CDEAC5 /* Imposter.h */,
+				DAAC8D2E2BB12CA300CDEAC5 /* ImposterAttributes.h */,
+				DAAC8D292BB095DA00CDEAC5 /* ImposterRenderer.h */,
+				DAAC8D322BB5131C00CDEAC5 /* ImposterRenderer.cpp */,
 				DA9CAEB52BAB98D30062B8E1 /* Particle.h */,
 				DA9CAEB32BAB93680062B8E1 /* ParticleSystem.cpp */,
 				DA9CAEB22BAB93680062B8E1 /* ParticleSystem.h */,
@@ -5586,7 +5619,9 @@
 				DA9CAEA92BA6201A0062B8E1 /* GLAbstract.cpp in Sources */,
 				439DB9CF12DE43CC00B06546 /* Profiler.cpp in Sources */,
 				439DB9D012DE43CC00B06546 /* quaternion.cpp in Sources */,
+				DA5E71902BBEE47000243EE7 /* Buffer.cpp in Sources */,
 				439DB9D112DE43CC00B06546 /* simplexml.cpp in Sources */,
+				DAAC8D332BB5131D00CDEAC5 /* ImposterRenderer.cpp in Sources */,
 				DAF0EB4923B454C20003BACB /* strs_c.c in Sources */,
 				439DB9D212DE43CC00B06546 /* streams.cpp in Sources */,
 				439DB9D312DE43CC00B06546 /* strs.cpp in Sources */,
@@ -5780,6 +5815,7 @@
 				439DBC2812DE4EBE00B06546 /* inftrees.c in Sources */,
 				439DBC2912DE4EBE00B06546 /* trees.c in Sources */,
 				439DBC2A12DE4EBE00B06546 /* uncompr.c in Sources */,
+				DAAC8D312BB5075800CDEAC5 /* ImposterSet.cpp in Sources */,
 				439DBC2B12DE4EBE00B06546 /* zutil.c in Sources */,
 				439DBC5712DE608000B06546 /* global.cpp in Sources */,
 				439DBC5812DE608000B06546 /* LoadTexture.mm in Sources */,

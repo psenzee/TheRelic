@@ -13,6 +13,7 @@
 #include "events/EventTimer.h"
 #include "events/EventDispatcher.h"
 #include "events/IEventListener.h"
+#include "render/ImposterRenderer.h"
 
 #include "game/Multiplayer.h"
 
@@ -60,6 +61,8 @@ public:
     UiCore                 *GetUiCore();
     void                    LoadRenderables();
     void                    StartAudio();
+    
+    ImposterRenderer       *GetImposterRenderer();
 
     bool                    Update(const GameTime &time);
     void                    Draw(const GameTime &time);
@@ -125,6 +128,8 @@ private:
     GameEffects        mEffects;
     GameUI            *mGameUi;
 
+    ImposterRenderer  *mImposters;
+    
     DeviceTexture     *mBackground;
     GameInput         *mInput;
     QuadRenderer      *mQuads;

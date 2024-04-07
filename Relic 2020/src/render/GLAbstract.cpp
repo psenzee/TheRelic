@@ -5,6 +5,7 @@
 #include "matrix4f.h"
 #include "tuple4f.h"
 #include "MatrixStack.h"
+#include "VertexOptions.h"
 
 /*
 void GLLoadMatrix(const Matrix4f &matrix)
@@ -230,13 +231,14 @@ std::array<unsigned, 2> GLGenerateBuffers(bool has_indices)
     return ids;
 }
 
-void GLCopyIntoBuffer(int buffer_id, int type, const void *data, size_t bytes_count)
+void GLCopyIntoBuffer(int buffer_id, int type, const void *data, size_t bytes_count, int usage)
 {
     // bind the buffer object to use
     _GLv(glBindBuffer(type, buffer_id));
     
     // allocate enough space for the vbo
-    _GLv(glBufferData(type, bytes_count, 0, GL_STATIC_DRAW));
+    _GLv(glBufferData(type, bytes_count, 0, usage));
+    //_GLv(glBufferData(type, bytes_count, data, usage));
 
     void *buffer = GLMapBuffer(type);
     // transfer the data to the buffer object
@@ -246,20 +248,17 @@ void GLCopyIntoBuffer(int buffer_id, int type, const void *data, size_t bytes_co
     _GLv(glBindBuffer(type, 0));
 }
 
-std::array<unsigned, 2> GLCreateBuffers(const void *interleaved_data, const void *indices_data, int interleaved_size, int indices_size)
+std::array<unsigned, 2> GLCreateBuffers(const void *interleaved_data, const void *indices_data, size_t interleaved_size, size_t indices_size)
 {
     // BEGIN CREATE BUFFERS
     // http://playcontrol.net/ewing/jibberjabber/opengl_vertex_buffer_object.html
     
     // allocate a new buffer
     std::array<unsigned, 2> ids = GLGenerateBuffers(bool(indices_size));
-    
     GLCopyIntoBuffer(ids[0], GL_ARRAY_BUFFER, interleaved_data, interleaved_size);
-
     if (ids[1]) {
         GLCopyIntoBuffer(ids[1], GL_ELEMENT_ARRAY_BUFFER, indices_data, indices_size);
     }
-
     return ids;
 }
 
@@ -353,9 +352,12 @@ void GLSetAsTextureN(int id, int n)
     GLBindTexture2d(id);
 }
 
-void GLDrawElements(int listStripOrFan, size_t indexCount)
+void GLDrawElements(int listStripOrFan, size_t indexCount, int sizeOfIndexType)
 {
-    _GLv(glDrawElements(listStripOrFan, int(indexCount), GL_UNSIGNED_SHORT, 0));
+    static const int types[] = { -1, GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT, -1, GL_UNSIGNED_INT, -1 };
+    static std::span<const int> t(types);
+    int type = (sizeOfIndexType > t.size() || t[sizeOfIndexType] == -1) ? GL_UNSIGNED_SHORT : t[sizeOfIndexType];
+    _GLv(glDrawElements(listStripOrFan, int(indexCount), type, 0));
 }
 
 void GLBindBufferForElements(unsigned vb, unsigned ib)
@@ -404,9 +406,9 @@ void GLSetTextureEnvMode(int mode)
     _GLv(glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, mode));
 }
 
-void GLDrawArrays(int type, unsigned count)
+void GLDrawArrays(int type, size_t count)
 {
-    _GLv(glDrawArrays(type, 0, count));
+    _GLv(glDrawArrays(type, 0, unsigned(count)));
 }
 
 void GLSetVertexPointer(const float *vertices, size_t stride)
@@ -423,19 +425,11 @@ bool GLIsTexture(int texid)
 {
     return texid && _GL(glIsTexture(texid));
 }
-/*
-inline static void _append(const Vector3 &pos, float u, float v, float **ppos, float **puv)
-{
-    *((Vector3  *)*ppos)   = pos;    (*ppos) += 3;
-    *((float    *)*puv)    = u;      (*puv)++;
-    *((float    *)*puv)    = v;      (*puv)++;
-}
-*/
 
 void GLRenderQuads(const float *vertices, const float *uvs, size_t count, const Tuple4f &color)
 {
     if (!count || !vertices || !uvs) return;
-        
+
     // RENDER DRAW LIST
     Vector4 ambient(color * Vector4(2.0f, 2.0f, 2.0f, 0.0f)),
             diffuse(1.0f, 1.0f, 1.0f, color.w);
@@ -447,4 +441,46 @@ void GLRenderQuads(const float *vertices, const float *uvs, size_t count, const 
     GLSetTexCoordPointer(uvs);
 
     GLDrawArrays(GL_TRIANGLES, count);
+}
+
+void GLConfigureVertexInterleavedOptions(const VertexOptions &options)
+{
+#ifndef _OPENGLES_2
+
+    if (options.has_offset_pointer(VertexOptions::POSITION)) {
+        GLSetEnabledClientState(GL_VERTEX_ARRAY, true);
+        _GLv(glVertexPointer(3, GL_FLOAT, options.stride, options.offset_pointer(VertexOptions::POSITION)));
+    } else {
+        GLSetEnabledClientState(GL_VERTEX_ARRAY, false);
+    }
+
+    if (options.has_offset_pointer(VertexOptions::TEXTURE_0)) {
+        GLSetEnabledClientState(GL_TEXTURE_COORD_ARRAY, true);
+        _GLv(glTexCoordPointer(2, GL_FLOAT, options.stride, options.offset_pointer(VertexOptions::TEXTURE_0)));
+    } else {
+        GLSetEnabledClientState(GL_TEXTURE_COORD_ARRAY, false);
+    }
+
+    if (options.has_offset_pointer(VertexOptions::NORMAL)) {
+        GLSetEnabledClientState(GL_NORMAL_ARRAY, true);
+        _GLv(glNormalPointer(GL_FLOAT, options.stride, options.offset_pointer(VertexOptions::NORMAL)));
+    } else {
+        GLSetEnabledClientState(GL_NORMAL_ARRAY, false);
+    }
+
+#else
+    // TODO UPDATE
+    int count = (Vertex::OFFSET_NORMAL > 0) ? 3 : 2;
+    for (int i = 0; i < count; i++) {
+        _GLv(glEnableVertexAttribArray(i));
+    }
+    // Describe to OpenGL where the vertex data is in the buffer
+    _GLv(glVertexAttribPointer(0, 3, GL_FLOAT, stride, GL_FALSE, position));
+    // Describe to OpenGL where the uv data is in the buffer
+    _GLv(glVertexAttribPointer(1, 2, GL_FLOAT, stride, GL_FALSE, texture));
+    // Describe to OpenGL where the normal data is in the buffer
+    if (Vertex::OFFSET_NORMAL > 0) {
+        _GLv(glVertexAttribPointer(2, 3, GL_FLOAT, stride, GL_FALSE, normal));
+    }
+#endif
 }

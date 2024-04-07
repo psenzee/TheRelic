@@ -2,8 +2,9 @@
 #define _TUPLE2F_H
 
 #include "mathcore.h"
-
-extern "C" double sqrt(double);
+#include <iostream>
+#include <iomanip>
+#include <cmath>
 
 class Tuple2f
 {
@@ -54,9 +55,9 @@ public:
     inline self &operator/=(float p)             { x /= p; y /= p; return *this; }
 
     inline float lengthsq()                const { return x * x + y * y; }
-    inline float length()                  const { return sqrtf(lengthsq()); }
+    inline float length()                  const { return std::sqrt(lengthsq()); }
     inline float distancesq(const self &p) const { float dx = p.x - x, dy = p.y - y; return dx * dx + dy * dy; }
-    inline float distance(const self &p)   const { return sqrtf(distancesq(p)); }
+    inline float distance(const self &p)   const { return std::sqrt(distancesq(p)); }
 
     inline void set(float x, float y, float z)   { this->x = x; this->y = y; }
 
@@ -69,6 +70,8 @@ public:
 
     inline self          xy() const { return self(x, y); }
     inline self          yx() const { return self(y, x); }
+    
+    inline size_t        hash()                                            const { return math::hash(data, 2); }
 
     inline self          minimum(const self &u)                            const { return self(x < u.x ? x : u.x, y < u.y ? y : u.y); }
     inline self          maximum(const self &u)                            const { return self(x > u.x ? x : u.x, y > u.y ? y : u.y); }
@@ -85,6 +88,11 @@ private:
     inline bool          m_gt(const self &t)  const;
     inline bool          m_gte(const self &t) const;
 };
+
+inline std::ostream &operator<<(std::ostream &os, const Tuple2f &v)
+{
+    return os << std::setw(5) << std::setprecision(4) << std::fixed << v.x << "," << v.y;
+}
 
 bool Tuple2f::m_lt(const self &t) const
 {

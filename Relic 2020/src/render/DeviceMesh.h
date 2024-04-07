@@ -17,8 +17,8 @@ public:
     
     CLASS_NEW_DELETE()
 
-    DeviceMesh(const char *filename, bool compact);
-    DeviceMesh(const void *data, int size, bool compact);
+    DeviceMesh(const char *filename);
+    DeviceMesh(const void *data, int size);
     ~DeviceMesh();
     
     void          RenderImmediate(RenderContext &context);

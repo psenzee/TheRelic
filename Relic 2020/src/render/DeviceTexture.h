@@ -26,8 +26,8 @@ public:
     
 private:
     
-    volatile unsigned texid;
-    core::Size        size;
+    unsigned    texid;
+    core::Size  size;
 };
 
 #endif // _DEVICETEXTURE_H

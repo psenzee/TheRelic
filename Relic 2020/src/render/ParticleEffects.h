@@ -6,6 +6,7 @@
 class RenderContext;
 class DeviceTexture;
 class ParticleSystem;
+class ImposterRenderer;
 
 class ParticleEffects
 {
@@ -24,6 +25,8 @@ public:
     void                    DeferredDestroy(ParticleSystem *ps);
 
     int                     Render(RenderContext &context, const GameTime &time);
+    
+    ImposterRenderer       *GetImposterRenderer() { return mImposterRenderer; }
 
     static void             CreateInstance()  { if (!mInstance) mInstance = new ParticleEffects; }
     static ParticleEffects *GetInstance()     { return mInstance; }
@@ -31,9 +34,12 @@ public:
 
 private:
 
+    ParticleEffects();
+    
     static ParticleEffects *mInstance;
-
-    std::vector<ParticleSystem *> mParticleSystems;
-    std::vector<ParticleSystem *> mDeferred;
+    
+    ImposterRenderer              *mImposterRenderer;
+    std::vector<ParticleSystem *>  mParticleSystems;
+    std::vector<ParticleSystem *>  mDeferred;
 };
 

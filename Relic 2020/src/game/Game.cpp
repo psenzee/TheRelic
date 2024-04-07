@@ -14,6 +14,7 @@
 #include "render/GraphicsDevice.h"
 #include "render/RenderContext.h"
 #include "render/ParticleEffects.h"
+#include "render/ImposterRenderer.h"
 #include "render/RenderSet.h"
 #include "render/ContentLoader.h"
 #include "render/QuadRenderer.h"
@@ -293,9 +294,11 @@ void Game::Draw(const GameTime &time)
 
     SetGlobalRenderContext(renderContext);
 
-    if (GetPlayer())
-       GetGlobalCamera()->SetLookAt(GetPlayer()->GetPosition());
-    else GetGlobalCamera()->SetLookAt(Vector3(0.f, 0.f, 0.f));
+    if (GetPlayer()) {
+        GetGlobalCamera()->SetLookAt(GetPlayer()->GetPosition());
+    } else {
+        GetGlobalCamera()->SetLookAt(Vector3(0.f, 0.f, 0.f));
+    }
 
     device->SetProjection(GetGlobalCamera()->GetProjection());
     device->SetMaterial(material);
@@ -309,8 +312,9 @@ void Game::Draw(const GameTime &time)
         game_leveldrawsubmit.StartFrame();
         RenderSet::GetInstance()->Render("level", renderContext);
         RenderSet::GetInstance()->Render("level-floor", renderContext);
-        if (!IsLowEndDevice())
+        if (!IsLowEndDevice()) {
             RenderSet::GetInstance()->Render("level-floor-overlay", renderContext);
+        }
         RenderSet::GetInstance()->Render("fx", renderContext);
         RenderSet::GetInstance()->Render("main",  renderContext);
         game_leveldrawsubmit.EndFrame();

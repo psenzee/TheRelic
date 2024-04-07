@@ -155,7 +155,7 @@ DeviceMesh *ContentLoader::LoadMesh(const char *name)
     if (file.data)
     {
         printf(".");
-        DeviceMesh *mesh = new DeviceMesh(file.data, file.size, false);
+        DeviceMesh *mesh = new DeviceMesh(file.data, file.size);
         LogLoadEnd(name, mesh->IsLoaded(), true);
         return mesh;
     }

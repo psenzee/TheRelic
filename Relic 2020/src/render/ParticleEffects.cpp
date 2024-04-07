@@ -19,12 +19,19 @@
 #include "game/Game.h"
 #include "level/Level.h"
 #include "GLAbstract.h"
+#include "Timer.h"
 
 #include <algorithm>
+#include <iostream>
 
 extern Game *GetGlobalGame();
 
 static Map *GetGlobalMap(){ return GetGlobalGame()->GetLevel()->GetMap(); }
+
+ParticleEffects::ParticleEffects() : mImposterRenderer(0)
+{
+    mImposterRenderer = new ImposterRenderer();
+}
 
 void CloudUpdater(Particle &p, const Vector3 &position)
 {
@@ -89,13 +96,10 @@ void CollisionUpdater(Particle &p, const Vector3 &position)
         MapAndParticleSystem *map = reinterpret_cast<MapAndParticleSystem *>(p._user);
         Vector3 at;
         ICollidable::Classification classify = map->map->Collision(p.position + map->effect->GetPosition(), p.size, at);
-        if (classify == ICollidable::CLASS_ON || classify == ICollidable::CLASS_IN)
-        {
+        if (classify == ICollidable::CLASS_ON || classify == ICollidable::CLASS_IN) {
             // stop
             p.velocity = Vector3();
-        }
-        else
-        {
+        } else {
             p.velocity = p._direction * p._maxSpeed;
         }
     }
@@ -110,10 +114,7 @@ void CollisionGenerator(Particle &p, const Vector3 &position)
     p.velocity   = p._direction * p._maxSpeed;
     p.time       = 0.f;
     p.expire     = p._maxExpire;
-    if (p._isShadow)
-        p.position.z = p._maxZ - 1;
-    else
-        p.position.z = rand() * p._maxZ / (float)RAND_MAX;
+    p.position.z = p._isShadow ? (p._maxZ - 1) : (rand() * p._maxZ / (float)RAND_MAX);
     p.alpha      = 1.f - (p.time / p.expire);
     p.size       = p._maxSize;
 }
@@ -267,19 +268,17 @@ extern void SetDefaultLightingType(int);
 int ParticleEffects::Render(RenderContext &context, const GameTime &time)
 {
     int count = 0;
-//  SetDefaultLightingType(1);
-    std::vector<ParticleSystem *> fx = mParticleSystems; // we make a copy, because we're going to delete from the original
+    //SetDefaultLightingType(1);
+    mImposterRenderer->clear();
+    std::vector<ParticleSystem *> fx(mParticleSystems); // make a copy, because we're going to delete from the original
+    append(std::span<ParticleSystem *>(mDeferred.data(), mDeferred.size()), fx);
     for (std::vector<ParticleSystem *>::iterator i = fx.begin(), e = fx.end(); i != e; ++i) {
-       count += (*i)->Render(context, time);
-    }
-    fx = mDeferred; // we make a copy, because we're going to delete from the original
-    for (std::vector<ParticleSystem *>::iterator i = fx.begin(), e = fx.end(); i != e; ++i) {
-       count += (*i)->Render(context, time);
+        //count += (*i)->Render(context, time);
+        count += (*i)->prepare(*mImposterRenderer, time);
     }
     mDeferred.clear();
-//  if (count) {
-//     printf("Particles rendered: %d\n", count);
-//  }
-//  SetDefaultLightingType(0);
+    mImposterRenderer->prepare();
+    mImposterRenderer->render(context);
+    //SetDefaultLightingType(0);
     return count;
 }

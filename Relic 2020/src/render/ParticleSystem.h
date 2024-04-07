@@ -4,6 +4,7 @@
 #include "fast/Allocator.h"
 #include "Particle.h"
 #include "DynamicBuffer.h"
+#include "ImposterRenderer.h"
 
 class RenderContext;
 class DeviceTexture;
@@ -36,16 +37,17 @@ public:
     void SetGenerator(ParticleFunction f);
     void SetOnEnd(OnEndFunction f, void *user);
 
-    int  Render(RenderContext &context, const GameTime &time);
+    //int  Render(RenderContext &context, const GameTime &time);
+    int  prepare(ImposterRenderer &ir, const GameTime &time);
 
 private:
 
-    int                             UpdateParticles(float ms);
-    void                            UpdateOrder();
+    void insertImposters(ImposterRenderer &ir);
+    int  UpdateParticles(float ms);
+    void UpdateOrder();
+    //int  RenderParticles(RenderContext &context);
 
     std::vector<Particle>::iterator FindFirstDeadParticle();
-
-    int                             RenderParticles(RenderContext &context);
 
     std::vector<Particle>  mParticles;
     ParticleFunction       mUpdater,

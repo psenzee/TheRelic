@@ -119,7 +119,7 @@ void GraphicsDevice::SetLight(const OverheadCamera &camera, size_t slot, const L
 {
     GLLoadIdentityMatrix();
 
-    int id = GL_LIGHT0 + slot;
+    int id = GL_LIGHT0 + int(slot);
 
     Vector4 world = light.vectors[Light::V4_WORLD_POSITION];
     Vector3 pos = camera.GetLightPositionFromWorld(world.xyz());

@@ -9,8 +9,9 @@ Profiler  *RenderSet::sProfiler = 0;
 
 RenderSet *RenderSet::GetInstance()
 {
-    if (!sInstance)
+    if (!sInstance) {
         sInstance = new RenderSet;
+    }
     return sInstance;
 }
 
@@ -22,16 +23,16 @@ void RenderSet::SetProfiler(Profiler *profiler)
 void RenderSet::Add(const String &name, const DrawItem &item)
 {
     DrawList *list = mMap[name];
-    if (!list)
+    if (!list) {
         mMap[name] = list = new DrawList;
+    }
     list->Add(item);
 }
 
 void RenderSet::Render(const String &name, RenderContext &context)
 {
     DrawList *list = mMap[name];
-    if (list)
-    {
+    if (list) {
         if (sProfiler) {
             sProfiler->StartTime(name.c_str());
         }

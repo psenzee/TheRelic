@@ -5,6 +5,8 @@
 #include "core/aabox.h"
 #include "fast/Allocator.h"
 #include "GLAbstract.h"
+#include "Buffer.h"
+#include "RenderContext.h"
 
 //#define NORMALS 1 // no
 
@@ -37,13 +39,13 @@ public:
     OpenGLESMesh();
     ~OpenGLESMesh();
         
-    bool                Read(const char *filename, bool asCompact);
+    bool                Read(const char *filename);
     void                Clear();
-    void                Render();
+    void                Render(RenderContext &context);
 
     // Note if you use ReadFromData, the data MUST continue to exist,
     // OpenGLESMesh does NOT copy it
-    bool                ReadFromData(const char *data, int size, bool asCompact);
+    bool                ReadFromData(const char *data, int size);
     inline void         SetNormalAction(NormalAction action) { mNormalAction = action; }
     inline const AABox &GetBounds() const { return mBounds; }
 
@@ -51,21 +53,19 @@ private:
 
     enum Type { NONINTERLEAVED_LIST = 0, INTERLEAVED_LIST = 1, INTERLEAVED_STRIP = 2, _ = 0x7fffffff };
     
-    unsigned        mVb, mIb;
     bool            mOwner;
     void           *mData;
     Type            mType;
     NormalAction    mNormalAction;
-    GLVertexSmall  *mCompact; // this is for smaller geometry
     GLVertex       *mInterleaved;
     unsigned short *mIndices;
     size_t          mVerticesCount,
                     mIndicesCount;
     AABox           mBounds;
+    
+    Buffer          mBuffer;
 
     void CreateBuffers(int dataSize, int indicesSize);
-    void DestroyBuffers();
-    void Compact();
     void CalculateBounds();
 };
 

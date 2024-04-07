@@ -165,6 +165,13 @@ EXPLICIT_INLINE unsigned int hash(float v)
     }
     return 0;
 }
+
+EXPLICIT_INLINE size_t hash(const float *v, size_t count)
+{
+    size_t h = 0;
+    for (size_t i = 0; i < count; i++) { h <<= 5; h ^= hash(v[i]); }
+    return h;
+}
     
 template <typename T> EXPLICIT_INLINE std::pair<T, T> min_max(const T *values, int count)
 {

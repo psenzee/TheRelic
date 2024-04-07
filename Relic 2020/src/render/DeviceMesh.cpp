@@ -8,16 +8,16 @@
 #include "render/glError.h"
 #include "GLAbstract.h"
 
-DeviceMesh::DeviceMesh(const char *filename, bool compact) : mMesh(0)
+DeviceMesh::DeviceMesh(const char *filename) : mMesh(0)
 {
     char name[1024];
     mMesh = new OpenGLESMesh;
     snprintf(name, sizeof(name) - 1, "%s.ips", filename);
-    if (!mMesh->Read(name, compact)) {
+    if (!mMesh->Read(name)) {
         delete mMesh;
         mMesh = new OpenGLESMesh;
         snprintf(name, sizeof(name) - 1, "%s.ipi", filename);
-        if (!mMesh->Read(name, compact)) {
+        if (!mMesh->Read(name)) {
             printf("Unable to read file '%s'!\n", filename);
             delete mMesh;
             mMesh = 0;
@@ -25,10 +25,10 @@ DeviceMesh::DeviceMesh(const char *filename, bool compact) : mMesh(0)
     }
 }
 
-DeviceMesh::DeviceMesh(const void *data, int size, bool compact) : mMesh(0)
+DeviceMesh::DeviceMesh(const void *data, int size) : mMesh(0)
 {
     mMesh = new OpenGLESMesh;
-    if (!mMesh->ReadFromData((const char *)data, size, compact)) {
+    if (!mMesh->ReadFromData((const char *)data, size)) {
         printf("Unable to read mesh from data!\n");
         delete mMesh;
         mMesh = 0;
@@ -80,7 +80,7 @@ void DeviceMesh::RenderImmediate(RenderContext &context)
             context.camera.GetView(),
             context.transform
         );
-        mMesh->Render();
+        mMesh->Render(context);
     }
 }
 

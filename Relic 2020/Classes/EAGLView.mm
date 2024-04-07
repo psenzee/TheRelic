@@ -573,7 +573,7 @@ int  g_frame = 0;
     [EAGLContext setCurrentContext:context];
     
     GameState::GetInstance()->GetCamera()->SetTilt(Vector2(0.f/*200.0f*/, 400.0f));
-    //GameState::GetInstance()->GetCamera()->SetTilt(Vector2(200.0f, 400.0f));
+  //GameState::GetInstance()->GetCamera()->SetTilt(Vector2(200.0f, 400.0f));
     
     updatefps.StartFrame();
     GameState::GetInstance()->Update(GameTime(updatefps.TotalLastFrameTime()));

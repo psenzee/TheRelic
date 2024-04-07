@@ -34,10 +34,7 @@ void DeviceTexture::SetMipMapped(bool value)
 
 void DeviceTexture::Set(GraphicsDevice &device, unsigned int blend_src, unsigned int blend_dst)
 {
-    if (!Loaded())
-        return;
-    if (texid != 0)
-    {    
+    if (Loaded() && texid != 0) {
         GLStates::texture.Set(true);
         if (device.HasGlobalAlpha()) {
             blend_dst = GL_ONE_MINUS_SRC_ALPHA;
