@@ -64,7 +64,7 @@ int ImposterSet::prepare()
 
     _buffer.reserve(imposter_count * VERTICES_PER_QUAD, imposter_count * INDICES_PER_QUAD);
 
-    int quads = 0, indices = 0;
+    int quads = 0;
 
     typedef CommonVertex v_t;
 
@@ -83,20 +83,13 @@ int ImposterSet::prepare()
         const Tuple2f &uv0  = imposter.texture_uv[0],
                       &uv1  = imposter.texture_uv[1];
 
-        const v_t vertices_data[] = {
+        const std::array<v_t, 4> vertices = {
             v_t { pos + UL * size, uv0 }, v_t { pos + LL * size, Tuple2f(uv0.x, uv1.y) },
             v_t { pos + LR * size, uv1 }, v_t { pos + UR * size, Tuple2f(uv1.x, uv0.y) },
         };
+        
+        _buffer.add_indexed_quad(vertices);
 
-        const uint16_t indices_data[] = {
-            uint16_t(indices + 0), uint16_t(indices + 1), uint16_t(indices + 2),
-            uint16_t(indices + 2), uint16_t(indices + 1), uint16_t(indices + 3)
-        };
-
-        _buffer.add_vertices(vertices_data);
-        _buffer.add_indices(indices_data);
-
-        indices += VERTICES_PER_QUAD;
         quads++;
     }
 
@@ -119,14 +112,14 @@ bool ImposterSet::render(RenderContext &context)
     if (attr.blend_type == ImposterAttributes::BLEND_DARK) {
         _texture->Set(context.device, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     } else {
-        _texture->Set(context.device, GL_SRC_ALPHA, /*GL_DST_ALPHA*/ GL_ONE);
+        _texture->Set(context.device, GL_SRC_ALPHA, GL_DST_ALPHA /*GL_ONE*/);
     }
 
     if (transparent()) {
         GLSetDepthWrite(false);
     }
 
-    Vector4 color(attr.color/* * 0.5*/);
+    Vector4 color(attr.color * 0.5);
     GraphicsDevice::GetInstance()->SetColor(color);
 
     GLSetEnabled(GL_TEXTURE_2D, true);
@@ -138,9 +131,6 @@ bool ImposterSet::render(RenderContext &context)
     }
 
     _texture->Set(context.device, GL_ONE, GL_ONE);
-    if (attr.blend_type != ImposterAttributes::BLEND_DARK) {
-    //    _texture->Set(context.device, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    }
 
     return true;
 }

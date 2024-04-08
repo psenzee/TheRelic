@@ -17,7 +17,7 @@ void     ClearCachedPointers();
 //void     SetUvPointer(void *data);
 
 // these are our main rendering functions
-void     SetBuffersInterleaved(unsigned vb, unsigned ib, unsigned vertices, bool normals);
+//void     SetBuffersInterleaved(unsigned vb, unsigned ib, unsigned vertices, bool normals);
 
 void     Print(const Vector3 &v);
 void     Print(const char *label, const Vector3 &v);

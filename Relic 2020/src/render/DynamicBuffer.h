@@ -16,6 +16,7 @@ template <typename Vertex, typename Index = uint16_t>
 struct DynamicBuffer
 {
     typedef std::array<uint32_t, 2> array_u32_t;
+    typedef std::array<Vertex, 4>   quad_positions_t;
 
     inline DynamicBuffer() : _reserves({ 0 }), _buffer(options<Index>(Vertex(), GL_TRIANGLES)) {}
 
@@ -39,6 +40,19 @@ struct DynamicBuffer
     inline void          add_indices(std::span<uint16_t> s)       { _invalidate(); append(s, _indices); }
     inline void          add_indices(std::span<const uint16_t> s) { _invalidate(); append(s, _indices); }
     inline void          add_last_index()                         { if (!_vertices.empty()) add_index(_vertices.size() - 1); }
+
+    inline void          add_indexed_quad(const quad_positions_t &positions)
+    {
+        size_t last = _vertices.size();
+        static constexpr std::array<Index, 6> indices = { 0, 1, 2, 2, 1, 3 };
+        for (const auto &p : positions) {
+            _vertices.push_back(p);
+        }
+        for (auto i : indices) {
+            _indices.push_back(i + last);
+        }
+        _invalidate();
+    }
     
     void render(RenderContext &context)
     {

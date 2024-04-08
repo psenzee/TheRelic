@@ -236,6 +236,21 @@
                   endingLineNumber = "235"
                   offsetFromSymbolStart = "20">
                </Location>
+               <Location
+                  uuid = "FD0D3AAF-73A1-40CD-99B0-FFB87A8F5434 - 37b3dd1d2eee447b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Game::Visit(core::Rectangle const&amp;)"
+                  moduleName = "Relic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/Relic%202020/src/game/Game.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "236"
+                  endingLineNumber = "236"
+                  offsetFromSymbolStart = "52">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>

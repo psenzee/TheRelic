@@ -147,7 +147,7 @@ void ClearCachedPointers()
     memset(&cachedPointers[0], 0, sizeof(cachedPointers));
     ClearBuffers();
 }
-
+/*
 void SetBuffersInterleaved(unsigned vb, unsigned ib, unsigned vertices, bool normals)
 {
     memset(&cachedPointers[0], 0, sizeof(cachedPointers));    
@@ -172,7 +172,7 @@ void SetBuffersInterleaved(unsigned vb, unsigned ib, unsigned vertices, bool nor
 
     cachedBuffers[0] = vb; cachedBuffers[1] = ib;
 }
-
+*/
 void Print(const char *label, const Vector3 &v)
 {
     printf("%s (%.2f, %.2f, %.2f)\n", label, v.x, v.y, v.z);
