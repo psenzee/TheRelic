@@ -212,7 +212,6 @@
 		439DBB3F12DE4B8900B06546 /* OpenGLESMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 439DBB1912DE4B8900B06546 /* OpenGLESMesh.cpp */; };
 		439DBB4012DE4B8900B06546 /* OverheadCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 439DBB1B12DE4B8900B06546 /* OverheadCamera.cpp */; };
 		439DBB4112DE4B8900B06546 /* ParticleEffects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 439DBB1D12DE4B8900B06546 /* ParticleEffects.cpp */; };
-		439DBB4212DE4B8900B06546 /* ParticleFxDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 439DBB1F12DE4B8900B06546 /* ParticleFxDrawable.cpp */; };
 		439DBB4312DE4B8900B06546 /* QuadRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 439DBB2112DE4B8900B06546 /* QuadRenderer.cpp */; };
 		439DBB4412DE4B8900B06546 /* RenderImmediate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 439DBB2412DE4B8900B06546 /* RenderImmediate.cpp */; };
 		439DBB4512DE4B8900B06546 /* RenderSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 439DBB2612DE4B8900B06546 /* RenderSet.cpp */; };
@@ -1186,6 +1185,10 @@
 		DA9CAEB42BAB93680062B8E1 /* ParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9CAEB32BAB93680062B8E1 /* ParticleSystem.cpp */; };
 		DAAC8D312BB5075800CDEAC5 /* ImposterSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAAC8D302BB5075800CDEAC5 /* ImposterSet.cpp */; };
 		DAAC8D332BB5131D00CDEAC5 /* ImposterRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAAC8D322BB5131C00CDEAC5 /* ImposterRenderer.cpp */; };
+		DAADF57F2BC375D600396F8E /* IParticleController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAADF57D2BC375D500396F8E /* IParticleController.cpp */; };
+		DAADF5822BC379F800396F8E /* ParticleCircle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAADF5802BC379F800396F8E /* ParticleCircle.cpp */; };
+		DAADF5852BC3879100396F8E /* ParticleSystem2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAADF5832BC3879000396F8E /* ParticleSystem2.cpp */; };
+		DAADF5882BC38A1800396F8E /* ParticleEffects2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAADF5872BC38A1700396F8E /* ParticleEffects2.cpp */; };
 		DAEFF7F123BC17540062B630 /* tick_new_2.png in Resources */ = {isa = PBXBuildFile; fileRef = DAEFF7F023BC17540062B630 /* tick_new_2.png */; };
 		DAEFF7F323BD04670062B630 /* globals.lua in Resources */ = {isa = PBXBuildFile; fileRef = DAEFF7F223BD04670062B630 /* globals.lua */; };
 		DAEFF7F623BD2F390062B630 /* GameDimensions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAEFF7F423BD2F390062B630 /* GameDimensions.cpp */; };
@@ -1572,8 +1575,6 @@
 		439DBB1C12DE4B8900B06546 /* OverheadCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OverheadCamera.h; path = src/render/OverheadCamera.h; sourceTree = "<group>"; };
 		439DBB1D12DE4B8900B06546 /* ParticleEffects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParticleEffects.cpp; path = src/render/ParticleEffects.cpp; sourceTree = "<group>"; };
 		439DBB1E12DE4B8900B06546 /* ParticleEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticleEffects.h; path = src/render/ParticleEffects.h; sourceTree = "<group>"; };
-		439DBB1F12DE4B8900B06546 /* ParticleFxDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParticleFxDrawable.cpp; path = src/render/ParticleFxDrawable.cpp; sourceTree = "<group>"; };
-		439DBB2012DE4B8900B06546 /* ParticleFxDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticleFxDrawable.h; path = src/render/ParticleFxDrawable.h; sourceTree = "<group>"; };
 		439DBB2112DE4B8900B06546 /* QuadRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = QuadRenderer.cpp; path = src/render/QuadRenderer.cpp; sourceTree = "<group>"; };
 		439DBB2212DE4B8900B06546 /* QuadRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QuadRenderer.h; path = src/render/QuadRenderer.h; sourceTree = "<group>"; };
 		439DBB2312DE4B8900B06546 /* RenderContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderContext.h; path = src/render/RenderContext.h; sourceTree = "<group>"; };
@@ -2660,6 +2661,14 @@
 		DAAC8D2F2BB5073100CDEAC5 /* ImposterSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImposterSet.h; path = src/render/ImposterSet.h; sourceTree = "<group>"; };
 		DAAC8D302BB5075800CDEAC5 /* ImposterSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ImposterSet.cpp; path = src/render/ImposterSet.cpp; sourceTree = "<group>"; };
 		DAAC8D322BB5131C00CDEAC5 /* ImposterRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ImposterRenderer.cpp; path = src/render/ImposterRenderer.cpp; sourceTree = "<group>"; };
+		DAADF57D2BC375D500396F8E /* IParticleController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IParticleController.cpp; path = src/render/IParticleController.cpp; sourceTree = "<group>"; };
+		DAADF57E2BC375D500396F8E /* IParticleController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IParticleController.h; path = src/render/IParticleController.h; sourceTree = "<group>"; };
+		DAADF5802BC379F800396F8E /* ParticleCircle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParticleCircle.cpp; path = src/render/ParticleCircle.cpp; sourceTree = "<group>"; };
+		DAADF5812BC379F800396F8E /* ParticleCircle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticleCircle.h; path = src/render/ParticleCircle.h; sourceTree = "<group>"; };
+		DAADF5832BC3879000396F8E /* ParticleSystem2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParticleSystem2.cpp; path = src/render/ParticleSystem2.cpp; sourceTree = "<group>"; };
+		DAADF5842BC3879000396F8E /* ParticleSystem2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticleSystem2.h; path = src/render/ParticleSystem2.h; sourceTree = "<group>"; };
+		DAADF5862BC38A1700396F8E /* ParticleEffects2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticleEffects2.h; path = src/render/ParticleEffects2.h; sourceTree = "<group>"; };
+		DAADF5872BC38A1700396F8E /* ParticleEffects2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParticleEffects2.cpp; path = src/render/ParticleEffects2.cpp; sourceTree = "<group>"; };
 		DAEFF7F023BC17540062B630 /* tick_new_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tick_new_2.png; path = data/textures/tick_new_2.png; sourceTree = "<group>"; };
 		DAEFF7F223BD04670062B630 /* globals.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = globals.lua; path = data/lua/globals.lua; sourceTree = "<group>"; };
 		DAEFF7F423BD2F390062B630 /* GameDimensions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameDimensions.cpp; path = src/GameDimensions.cpp; sourceTree = "<group>"; };
@@ -4012,6 +4021,7 @@
 		439DB96612DE412600B06546 /* render */ = {
 			isa = PBXGroup;
 			children = (
+				DA5E71942BC3704400243EE7 /* quads */,
 				DA5E71932BC2119B00243EE7 /* buffer */,
 				DA9CAEB12BAB84920062B8E1 /* particles */,
 				DA9CAEAB2BA63DCA0062B8E1 /* glError.cpp */,
@@ -4556,7 +4566,7 @@
 			name = buffer;
 			sourceTree = "<group>";
 		};
-		DA9CAEB12BAB84920062B8E1 /* particles */ = {
+		DA5E71942BC3704400243EE7 /* quads */ = {
 			isa = PBXGroup;
 			children = (
 				DAAC8D2F2BB5073100CDEAC5 /* ImposterSet.h */,
@@ -4565,13 +4575,26 @@
 				DAAC8D2E2BB12CA300CDEAC5 /* ImposterAttributes.h */,
 				DAAC8D292BB095DA00CDEAC5 /* ImposterRenderer.h */,
 				DAAC8D322BB5131C00CDEAC5 /* ImposterRenderer.cpp */,
+			);
+			name = quads;
+			sourceTree = "<group>";
+		};
+		DA9CAEB12BAB84920062B8E1 /* particles */ = {
+			isa = PBXGroup;
+			children = (
+				DAADF5872BC38A1700396F8E /* ParticleEffects2.cpp */,
+				DAADF5862BC38A1700396F8E /* ParticleEffects2.h */,
+				DAADF5832BC3879000396F8E /* ParticleSystem2.cpp */,
+				DAADF5842BC3879000396F8E /* ParticleSystem2.h */,
+				DAADF5802BC379F800396F8E /* ParticleCircle.cpp */,
+				DAADF5812BC379F800396F8E /* ParticleCircle.h */,
+				DAADF57D2BC375D500396F8E /* IParticleController.cpp */,
+				DAADF57E2BC375D500396F8E /* IParticleController.h */,
 				DA9CAEB52BAB98D30062B8E1 /* Particle.h */,
 				DA9CAEB32BAB93680062B8E1 /* ParticleSystem.cpp */,
 				DA9CAEB22BAB93680062B8E1 /* ParticleSystem.h */,
 				439DBB1D12DE4B8900B06546 /* ParticleEffects.cpp */,
 				439DBB1E12DE4B8900B06546 /* ParticleEffects.h */,
-				439DBB1F12DE4B8900B06546 /* ParticleFxDrawable.cpp */,
-				439DBB2012DE4B8900B06546 /* ParticleFxDrawable.h */,
 			);
 			name = particles;
 			sourceTree = "<group>";
@@ -5644,6 +5667,7 @@
 				439DBA1312DE459500B06546 /* LuaTable.cpp in Sources */,
 				439DBA1412DE459500B06546 /* LuaThread.cpp in Sources */,
 				439DBA1512DE459500B06546 /* LuaUtils.cpp in Sources */,
+				DAADF5822BC379F800396F8E /* ParticleCircle.cpp in Sources */,
 				439DBA1612DE459500B06546 /* LuaValue.cpp in Sources */,
 				439DBA3912DE469E00B06546 /* CoreTileMap.cpp in Sources */,
 				439DBA3A12DE469E00B06546 /* DebrisMap.cpp in Sources */,
@@ -5680,6 +5704,7 @@
 				439DBA9A12DE487400B06546 /* llex.c in Sources */,
 				439DBA9B12DE487400B06546 /* lmathlib.c in Sources */,
 				439DBA9C12DE487400B06546 /* lmem.c in Sources */,
+				DAADF5852BC3879100396F8E /* ParticleSystem2.cpp in Sources */,
 				439DBA9D12DE487400B06546 /* loadlib.c in Sources */,
 				DA4A54B62B90D27D00094E78 /* Lights.cpp in Sources */,
 				439DBA9E12DE487400B06546 /* lobject.c in Sources */,
@@ -5725,6 +5750,7 @@
 				439DBB3312DE4B8900B06546 /* DeviceTexture.cpp in Sources */,
 				439DBB3412DE4B8900B06546 /* Drawable.cpp in Sources */,
 				439DBB3512DE4B8900B06546 /* DrawableUtils.cpp in Sources */,
+				DAADF57F2BC375D600396F8E /* IParticleController.cpp in Sources */,
 				439DBB3612DE4B8900B06546 /* DrawList.cpp in Sources */,
 				439DBB3712DE4B8900B06546 /* GameEffects.cpp in Sources */,
 				439DBB3812DE4B8900B06546 /* GLStates.cpp in Sources */,
@@ -5736,7 +5762,6 @@
 				439DBB3F12DE4B8900B06546 /* OpenGLESMesh.cpp in Sources */,
 				439DBB4012DE4B8900B06546 /* OverheadCamera.cpp in Sources */,
 				439DBB4112DE4B8900B06546 /* ParticleEffects.cpp in Sources */,
-				439DBB4212DE4B8900B06546 /* ParticleFxDrawable.cpp in Sources */,
 				439DBB4312DE4B8900B06546 /* QuadRenderer.cpp in Sources */,
 				439DBB4412DE4B8900B06546 /* RenderImmediate.cpp in Sources */,
 				439DBB4512DE4B8900B06546 /* RenderSet.cpp in Sources */,
@@ -5804,6 +5829,7 @@
 				439DBC0112DE4E8600B06546 /* UiTransition.cpp in Sources */,
 				439DBC0712DE4E9A00B06546 /* XmlObjectReader.cpp in Sources */,
 				439DBC0812DE4E9A00B06546 /* XmlUtil.cpp in Sources */,
+				DAADF5882BC38A1800396F8E /* ParticleEffects2.cpp in Sources */,
 				439DBC2012DE4EBE00B06546 /* adler32.c in Sources */,
 				439DBC2112DE4EBE00B06546 /* compress.c in Sources */,
 				439DBC2212DE4EBE00B06546 /* crc32.c in Sources */,

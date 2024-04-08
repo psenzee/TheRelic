@@ -39,7 +39,6 @@
 #include "luautil/LuaThread.h"
 
 #include "serialize/LuaSerialize.h"
-#include "render/ParticleFxDrawable.h"
 
 extern "C"
 {
@@ -289,7 +288,6 @@ void Game::Draw(const GameTime &time)
 
     device->EnableColorMaterial(false);
 
-    ParticleFxDrawable::SetGameTime(time);
     RenderContext renderContext(*device, *GetGlobalCamera());
 
     SetGlobalRenderContext(renderContext);

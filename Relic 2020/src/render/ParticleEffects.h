@@ -22,6 +22,7 @@ public:
 
     void                    DeferRender(ParticleSystem *ps) { mDeferred.push_back(ps); }
     void                    Destroy(ParticleSystem *ps);
+    void                    Remove(const ParticleSystem *ps);
     void                    DeferredDestroy(ParticleSystem *ps);
 
     int                     Render(RenderContext &context, const GameTime &time);

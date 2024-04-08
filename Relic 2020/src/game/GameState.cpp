@@ -45,7 +45,6 @@
 
 #include "core/Dictionary.h"
 #include "serialize/LuaSerialize.h"
-#include "render/ParticleFxDrawable.h"
 
 #include "level/PauseState.h"
 
@@ -438,7 +437,6 @@ void GameState::DrawParticles(const GameTime &time)
     GraphicsDevice *device = GraphicsDevice::GetInstance();
     SetDefaultLightingType(2);
     //GetLights(PASS_PARTICLES).Apply(*device);
-    ParticleFxDrawable::SetGameTime(time);
     profiler->StartTime("particles");
     //PushLightingType();
 

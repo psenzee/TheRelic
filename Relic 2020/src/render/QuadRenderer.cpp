@@ -214,7 +214,7 @@ void QuadRenderer::RenderScreenAlignedPanoramaRotate(DeviceTexture *texture, con
         1.f, 0.25f,
     };
 
-    if (fabsf(angle > 0.001f)) {
+    if (fabsf(angle) > 0.001f) {
         Vector3 center((start + end) * 0.5f);
         Matrix m;
         m.translate(-center);

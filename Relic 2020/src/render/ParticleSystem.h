@@ -9,11 +9,11 @@
 class RenderContext;
 class DeviceTexture;
 
+class IParticleController;
+
 class ParticleSystem
 {
 public:
-    
-    typedef DynamicBuffer<CommonVertex> dyn_buffer_t;
     
     CLASS_NEW_DELETE()
     
@@ -25,27 +25,28 @@ public:
     ParticleSystem();
     ~ParticleSystem();
 
-    void Add(const Particle &p);
-    void SetPosition(const Vector3 &p);
-    const Vector3 &GetPosition() const { return mPosition; }
-    void SetTexture(DeviceTexture *t);
-    void SetColor(const Vector4 &c);
-    void SetBlendType(ParticleBlendType type) { mBlendType = type; }
-    void Clear();
+    void           SetPosition(const Vector3 &p)                       { mPosition = p; }
+    const Vector3 &GetPosition()                                 const { return mPosition; }
+    void           Clear()                                             { mParticles.clear(); }
+    
+    void           SetUpdater(ParticleFunction f)                      { mUpdater = f; }
+    void           SetOnEnd(OnEndFunction f, void *user)               { mOnEnd = f; mOnEndUser = user; }
+    void           SetGenerator(ParticleFunction f)                    { mGenerator = f; }
+    
+    void           SetController(IParticleController *controller)      { mController = controller; }
 
-    void SetUpdater(ParticleFunction f);
-    void SetGenerator(ParticleFunction f);
-    void SetOnEnd(OnEndFunction f, void *user);
-
-    //int  Render(RenderContext &context, const GameTime &time);
-    int  prepare(ImposterRenderer &ir, const GameTime &time);
+    void           SetTexture(DeviceTexture *t)                        { mTexture = t; }
+    void           SetColor(const Vector4 &c)                          { mColor = c; }
+    void           SetBlendType(ParticleBlendType type)                { mBlendType = type; }
+    
+    void           Add(const Particle &p);
+    int            prepare(ImposterRenderer &ir, const GameTime &time);
 
 private:
 
     void insertImposters(ImposterRenderer &ir);
     int  UpdateParticles(float ms);
     void UpdateOrder();
-    //int  RenderParticles(RenderContext &context);
 
     std::vector<Particle>::iterator FindFirstDeadParticle();
 
@@ -56,11 +57,8 @@ private:
     void                  *mOnEndUser;
     Vector3                mPosition;
     Vector4                mColor;
-    char                  *mBuffer;
     DeviceTexture         *mTexture;
     ParticleBlendType      mBlendType;
     bool                   mNeedsReorder;
-    dyn_buffer_t           mDynamicBuffer;
-
-    enum { BUFFER_BYTES = 65536 };
+    IParticleController   *mController;
 };

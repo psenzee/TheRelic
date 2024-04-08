@@ -19,6 +19,7 @@
 #include "level/Level.h"
 #include "GLAbstract.h"
 #include "std_utils.h"
+#include "IParticleController.h"
 
 #include <algorithm>
 
@@ -30,41 +31,14 @@ struct ZComparator
     }
 };
 
-extern void ClearCachedPointers();
-
-inline static void _append(const Vector3 &pos, float u, float v, float **ppos, float **puv)
-{
-    *((Vector3  *)*ppos)   = pos;    (*ppos) += 3;
-    *((float    *)*puv)    = u;      (*puv)++;
-    *((float    *)*puv)    = v;      (*puv)++;
-}
-
-static void _RenderQuads(RenderContext &context, const float *vertices, const float *uvs, int count, const Vector4 &color)
-{
-    if (!count || !vertices || !uvs) return;
-        
-    // RENDER DRAW LIST
-    Vector4 ambient(color * Vector4(2.0f, 2.0f, 2.0f, 0.0f)),
-            diffuse(1.0f, 1.0f, 1.0f, color.w);
-    
-    GLSetMaterial4(GL_AMBIENT, ambient);
-    GLSetMaterial4(GL_DIFFUSE, diffuse);
-    
-    GLSetVertexPointer(vertices);
-    GLSetTexCoordPointer(uvs);
-
-    GLDrawArrays(GL_TRIANGLES, count);
-}
-
-ParticleSystem::ParticleSystem() : mUpdater(0), mGenerator(0), mBuffer(0), mColor(1.f, 1.f, 1.f, 1.f), mTexture(0), mNeedsReorder(false), mOnEnd(0), mOnEndUser(0), mBlendType(PARTICLE_BLEND_DARK)
-{
-    mBuffer = new char [BUFFER_BYTES];    
-}
+ParticleSystem::ParticleSystem() : mUpdater(0), mGenerator(0), mColor(1.f, 1.f, 1.f, 1.f), mTexture(0), mNeedsReorder(false), mOnEnd(0), mOnEndUser(0), mBlendType(PARTICLE_BLEND_DARK), mController(nullptr) {}
 
 ParticleSystem::~ParticleSystem()
 {
-    delete [] mBuffer;
-    mBuffer = 0;
+    if (mController) {
+        delete mController;
+    }
+    mController = nullptr;
 }
 
 void ParticleSystem::Add(const Particle &p)
@@ -82,41 +56,6 @@ void ParticleSystem::Add(const Particle &p)
         (*i) = p;
         mNeedsReorder = true;
     }
-}
-
-void ParticleSystem::SetPosition(const Vector3 &p)
-{ 
-    mPosition = p;
-}
-
-void ParticleSystem::Clear()
-{ 
-    mParticles.clear();
-}
-
-void ParticleSystem::SetUpdater(ParticleFunction f)
-{
-    mUpdater = f;
-}
-
-void ParticleSystem::SetOnEnd(OnEndFunction f, void *user)
-{
-    mOnEnd = f; mOnEndUser = user;
-}
-
-void ParticleSystem::SetGenerator(ParticleFunction f)
-{
-    mGenerator = f;
-}
-
-void ParticleSystem::SetTexture(DeviceTexture *t)
-{
-    mTexture = t;
-}
-
-void ParticleSystem::SetColor(const Vector4 &c)
-{
-    mColor = c;
 }
 
 int ParticleSystem::prepare(ImposterRenderer &ir, const GameTime &time)

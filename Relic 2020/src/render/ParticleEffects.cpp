@@ -245,10 +245,15 @@ ParticleSystem *ParticleEffects::CreateCloudIndependent(DeviceTexture *texture, 
     return ps;
 }
 
-void ParticleEffects::Destroy(ParticleSystem *ps)
+void ParticleEffects::Remove(const ParticleSystem *ps)
 {
     mParticleSystems.erase(
         std::remove(mParticleSystems.begin(), mParticleSystems.end(), ps), mParticleSystems.end());
+}
+
+void ParticleEffects::Destroy(ParticleSystem *ps)
+{
+    Remove(ps);
     delete ps;
 }
 
@@ -273,7 +278,6 @@ int ParticleEffects::Render(RenderContext &context, const GameTime &time)
     std::vector<ParticleSystem *> fx(mParticleSystems); // make a copy, because we're going to delete from the original
     append(std::span<ParticleSystem *>(mDeferred.data(), mDeferred.size()), fx);
     for (std::vector<ParticleSystem *>::iterator i = fx.begin(), e = fx.end(); i != e; ++i) {
-        //count += (*i)->Render(context, time);
         count += (*i)->prepare(*mImposterRenderer, time);
     }
     mDeferred.clear();
