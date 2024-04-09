@@ -2,15 +2,18 @@
 
 #include "core/core.h"
 #include "fast/Allocator.h"
+#include "ImposterRenderer.h"
+#include "CommonVertex.h"
 
 class RenderContext;
 class DeviceTexture;
 class ParticleSystem;
-class ImposterRenderer;
 
 class ParticleEffects
 {
 public:
+    
+    typedef ImposterRenderer<CommonVertex> renderer_t;
 
     // create types of ParticleSystems here
     ParticleSystem         *CreateCloud(DeviceTexture *texture, const Vector3 &position, float time, float speed, bool perpetual, bool autodestroy, bool light);
@@ -26,7 +29,7 @@ public:
 
     int                     Render(RenderContext &context, const GameTime &time);
     
-    ImposterRenderer       *GetImposterRenderer() { return mImposterRenderer; }
+    renderer_t             *GetImposterRenderer() { return mImposterRenderer; }
 
     static void             CreateInstance()  { if (!mInstance) mInstance = new ParticleEffects; }
     static ParticleEffects *GetInstance()     { return mInstance; }
@@ -38,7 +41,7 @@ private:
     
     static ParticleEffects *mInstance;
     
-    ImposterRenderer              *mImposterRenderer;
+    renderer_t                    *mImposterRenderer;
     std::vector<ParticleSystem *>  mParticleSystems;
     std::vector<ParticleSystem *>  mDeferred;
 };

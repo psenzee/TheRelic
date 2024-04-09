@@ -119,7 +119,7 @@ void ParticleSystem::SetColor(const Vector4 &c)
     mColor = c;
 }
 
-int ParticleSystem::prepare(ImposterRenderer &ir, const GameTime &time)
+int ParticleSystem::prepare(renderer_t &ir, const GameTime &time)
 {
     if (!UpdateParticles((float)time.elapsed) && mOnEnd) {
         mOnEnd(this, mOnEndUser); // mOnEnd could delete -this-, don't do anything that requires -this-  after calling it
@@ -159,9 +159,9 @@ int ParticleSystem::UpdateParticles(float ms)
     return count;
 }
 
-void ParticleSystem::insertImposters(ImposterRenderer &ir)
+void ParticleSystem::insertImposters(renderer_t &ir)
 {
-    Imposter imp;
+    imposter_t imp;
     ImposterAttributes attrs;
     attrs.texture_id = attrs.program_id = 0;
     attrs.color = mColor;
@@ -181,9 +181,8 @@ void ParticleSystem::insertImposters(ImposterRenderer &ir)
     for (std::vector<Particle>::const_iterator i = mParticles.begin(), e = mParticles.end(); i != e; ++i) {
         const Particle &particle = *i;
         if (particle.time < particle.expire) { // if not dead..
-            imp.position = particle.position;
-            imp.size = particle.size;
-            imp.texture_uv = { particle.uv0, particle.uv1 };
+            std::array<Tuple2f, 2> uvs { particle.uv0, particle.uv1 };
+            imp.set(particle.position, uvs, particle.size);
             set->add(imp);
         }
     }

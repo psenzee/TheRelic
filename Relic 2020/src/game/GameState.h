@@ -49,6 +49,8 @@ class GameState : public IEventListener
 {
 public:
     
+    typedef ImposterRenderer<CommonVertex> renderer_t;
+    
     enum Pass { PASS_UI = 0, PASS_LEVEL, PASS_OVERLAY, PASS_PARTICLES, PASS_COUNT };
     
     static GameState       *GetInstance();
@@ -62,7 +64,7 @@ public:
     void                    LoadRenderables();
     void                    StartAudio();
     
-    ImposterRenderer       *GetImposterRenderer();
+    renderer_t             *GetImposterRenderer();
 
     bool                    Update(const GameTime &time);
     void                    Draw(const GameTime &time);
@@ -128,7 +130,7 @@ private:
     GameEffects        mEffects;
     GameUI            *mGameUi;
 
-    ImposterRenderer  *mImposters;
+    renderer_t        *mImposters;
     
     DeviceTexture     *mBackground;
     GameInput         *mInput;

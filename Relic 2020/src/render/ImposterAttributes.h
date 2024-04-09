@@ -26,6 +26,11 @@ struct ImposterAttributes
         return h;
     }
     
+    inline bool renderable() const
+    {
+        return color.w > 0.01f && texture_id /* && program_id [TODO] */;
+    }
+    
     inline bool operator==(const ImposterAttributes &a) const
     {
         return texture_id == a.texture_id && program_id == a.program_id && color == a.color && emissive == a.emissive &&

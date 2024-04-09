@@ -16,7 +16,7 @@ class Texture;
 
 GameTime ParticleFxDrawable::sTime(0);
 
-ParticleFxDrawable::ParticleFxDrawable(ParticleSystem *fx, ImposterRenderer &ir) : mFx(fx), mImposterRenderer(ir)
+ParticleFxDrawable::ParticleFxDrawable(ParticleSystem *fx, renderer_t &ir) : mFx(fx), mImposterRenderer(ir)
 {
     AABox bounds;
     mBounds = bounds;

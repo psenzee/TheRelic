@@ -62,7 +62,7 @@ static void _RenderString(RenderContext &context, float *vertices, float *uvs, i
     _GLv(glDrawArrays(GL_TRIANGLES, 0, count));
 }
 
-struct Quad
+struct Quad_
 {
     Vector3 point[4];
     
@@ -81,9 +81,9 @@ struct Quad
     }
 };
 
-Quad unrotated_point;
-Quad rotated_points[16];
-int  char_index[256];
+Quad_ unrotated_point;
+Quad_ rotated_points[16];
+int   char_index[256];
 
 void GlyphWriter::Update()
 {
@@ -220,7 +220,7 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
                 float u0 = ex.uv0.x, v0 = ex.uv0.y,
                       u1 = ex.uv1.x, v1 = ex.uv1.y;
                 
-                Quad &q = /*c > (128 - GLYPH_START) ? */unrotated_point; //: rotated_points[char_index[c]]; // hacked to not rotate glyphs > 128
+                Quad_ &q = /*c > (128 - GLYPH_START) ? */unrotated_point; //: rotated_points[char_index[c]]; // hacked to not rotate glyphs > 128
                 
                 _append(position + q.point[0], u0, v0, &pvertices, &puvs);
                 _append(position + q.point[2], u0, v1, &pvertices, &puvs);

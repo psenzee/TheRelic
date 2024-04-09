@@ -13,7 +13,9 @@ class ParticleSystem
 {
 public:
     
-    typedef DynamicBuffer<CommonVertex> dyn_buffer_t;
+    typedef DynamicBuffer<CommonVertex>    dyn_buffer_t;
+    typedef ImposterRenderer<CommonVertex> renderer_t;
+    typedef Imposter<CommonVertex>         imposter_t;
     
     CLASS_NEW_DELETE()
     
@@ -38,11 +40,11 @@ public:
     void SetOnEnd(OnEndFunction f, void *user);
 
     //int  Render(RenderContext &context, const GameTime &time);
-    int  prepare(ImposterRenderer &ir, const GameTime &time);
+    int  prepare(renderer_t &ir, const GameTime &time);
 
 private:
 
-    void insertImposters(ImposterRenderer &ir);
+    void insertImposters(renderer_t &ir);
     int  UpdateParticles(float ms);
     void UpdateOrder();
     //int  RenderParticles(RenderContext &context);

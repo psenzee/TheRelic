@@ -30,7 +30,7 @@ static Map *GetGlobalMap(){ return GetGlobalGame()->GetLevel()->GetMap(); }
 
 ParticleEffects::ParticleEffects() : mImposterRenderer(0)
 {
-    mImposterRenderer = new ImposterRenderer();
+    mImposterRenderer = new renderer_t();
 }
 
 void CloudUpdater(Particle &p, const Vector3 &position)

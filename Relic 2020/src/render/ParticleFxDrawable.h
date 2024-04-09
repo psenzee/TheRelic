@@ -15,10 +15,12 @@ class Texture;
 class ParticleFxDrawable : public IDrawable
 {
 public:
+    
+    typedef ImposterRenderer<CommonVertex> renderer_t;
 
     CLASS_NEW_DELETE()
 
-    ParticleFxDrawable(ParticleSystem *fx, ImposterRenderer &ir);
+    ParticleFxDrawable(ParticleSystem *fx, renderer_t &ir);
     ~ParticleFxDrawable();
 
     void         RenderImmediate(RenderContext &context);
@@ -37,7 +39,7 @@ private:
     static GameTime  sTime;
 
     ParticleSystem   *mFx;
-    ImposterRenderer &mImposterRenderer;
+    renderer_t       &mImposterRenderer;
     int               mCount;
     AABox             mBounds;
     int               mRef;
