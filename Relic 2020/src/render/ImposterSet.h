@@ -35,7 +35,7 @@ public:
     inline bool                      transparent()                                const { return true; /* TODO */ }
     inline void                      add(const imposter_t &imp)                         { _imposters.push_back(imp); }
     inline void                      clear()                                            { _imposters.clear(); _buffer.clear(); }
-    inline int                       prepare()                                          { return _prepare(); }
+    inline size_t                    prepare()                                          { return _prepare(); }
     inline bool                      render(RenderContext &context)                     { return _render(context); }
 
 private:
@@ -57,7 +57,7 @@ private:
     Vector3              _camera_position;
     bool                 _changed;
     
-    int _prepare()
+    size_t _prepare()
     {
         const ImposterAttributes &attr = attributes();
         if (!attr.renderable() || _imposters.empty()) {
