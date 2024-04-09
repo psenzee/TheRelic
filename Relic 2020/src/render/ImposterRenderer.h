@@ -12,7 +12,6 @@ struct ImposterRenderer
 {
     ImposterRenderer();
 
-
     ImposterSet *get_set(const ImposterAttributes &attributes, DeviceTexture *texture);
 
     void add(const ImposterAttributes &attr, DeviceTexture *texture, const Imposter &imposter);

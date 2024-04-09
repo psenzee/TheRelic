@@ -44,7 +44,7 @@ static void _RenderString(RenderContext &context, float *vertices, float *uvs, i
     if (!count || !vertices || !uvs || color.w < 0.1f) {
         return;
     }
-        
+
     // RENDER DRAW LIST
     //glColor4f(color.x, color.y, color.z, color.w);
     GraphicsDevice::GetInstance()->SetColor(color);
@@ -55,7 +55,7 @@ static void _RenderString(RenderContext &context, float *vertices, float *uvs, i
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, (GLfloat *)&ambient);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (GLfloat *)&diffuse);
     */
-    
+
     _GLv(glVertexPointer  (3, GL_FLOAT,         0, (GLfloat *)&vertices[0]));
     _GLv(glTexCoordPointer(2, GL_FLOAT,         0, (GLfloat *)&uvs[0]));
 
@@ -75,8 +75,9 @@ struct Quad
                                           Vector3( 0.5f,  0.5f, 0.0f) * SCALE };
         Matrix m;
         m.rotationz(x);
-        for (int i = 0; i < 4; i++)
-            point[i] = m * POINTS[i];        
+        for (int i = 0; i < 4; i++) {
+            point[i] = m * POINTS[i];
+        }
     }
 };
 
@@ -104,8 +105,7 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
     
     static bool inited = false;
     
-    if (!inited)
-    {
+    if (!inited) {
         inited = true;
         unrotated_point.rotate(0.f);
         for (int i = 0; i < 16; i++) {
@@ -152,7 +152,7 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
     _GLv(glEnableClientState(GL_VERTEX_ARRAY));
     _GLv(glEnableClientState(GL_TEXTURE_COORD_ARRAY));
 
-    _GLv(glDisable(GL_CULL_FACE));  // we can eliminate this if we ensure the correct orientation of the vertices
+    //_GLv(glDisable(GL_CULL_FACE));  // we can eliminate this if we ensure the correct orientation of the vertices
     GLStates::depthWrite.Set(false);
     GLStates::depthTest.Set(false);        
     
@@ -209,13 +209,14 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
             prev      = scolor;
         } else {
             int c = (unsigned char)*s - GLYPH_START;
-            if (c < 0 || c >= MAX_GLYPHS)
+            if (c < 0 || c >= MAX_GLYPHS) {
                 c = 0;
+            }
 
             GlyphExtent &ex = extents[c];
             
-            if (c != 0)  // zero is space, don't bother rendering it..
-            {
+            if (c != 0) { // zero is space, don't bother rendering it..
+
                 float u0 = ex.uv0.x, v0 = ex.uv0.y,
                       u1 = ex.uv1.x, v1 = ex.uv1.y;
                 
@@ -249,7 +250,7 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
 
     GLStates::depthWrite.Set(true);
     GLStates::depthTest.Set(true);
-    _GLv(glEnable(GL_CULL_FACE)); // we can eliminate this if we ensure the correct orientation of the vertices
+    //_GLv(glEnable(GL_CULL_FACE)); // we can eliminate this if we ensure the correct orientation of the vertices
     
     if (!buffer) {
         delete [] (unsigned *)data;

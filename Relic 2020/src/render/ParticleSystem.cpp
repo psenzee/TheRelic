@@ -168,6 +168,15 @@ void ParticleSystem::insertImposters(ImposterRenderer &ir)
     attrs.emissive = Tuple4f(0.f, 0.f, 0.f, 0.f);
     attrs.average_distance = 0;
     attrs.blend_type = ImposterAttributes::BLEND_LIGHT;
+    switch (mBlendType)
+    {
+    case PARTICLE_BLEND_DARK:
+        attrs.blend_type = ImposterAttributes::BLEND_DARK;
+        break;
+    case PARTICLE_BLEND_LIGHT:
+        attrs.blend_type = ImposterAttributes::BLEND_LIGHT;
+        break;
+    }
     auto set = ir.get_set(attrs, mTexture);
     for (std::vector<Particle>::const_iterator i = mParticles.begin(), e = mParticles.end(); i != e; ++i) {
         const Particle &particle = *i;

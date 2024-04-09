@@ -22,10 +22,7 @@ struct ImposterAttributes
         static std::hash<float> hf;
         static std::hash<int> hi;
         size_t h = 0, values[] = { hi(program_id), hi(texture_id), color.hash(), emissive.hash(), hi(int(blend_type)), hf(average_distance) };
-        for (size_t v : std::span<size_t>(values)) {
-            h <<= 2;
-            h ^= v;
-        }
+        for (size_t v : std::span<size_t>(values)) { h <<= 2; h ^= v; }
         return h;
     }
     
@@ -46,8 +43,15 @@ struct ImposterAttributes
     }
 };
 
+inline std::ostream &operator<<(std::ostream &os, const ImposterAttributes &ia)
+{
+    return os << "tid " << ia.texture_id << " pid " << ia.program_id << " color " <<
+           ia.color << " emissive " << ia.emissive << " av dist " <<
+           ia.average_distance << " blend_type " << ia.blend_type << " hash " << ia.hash();
+}
+
 template <typename ValueHashMember>
 struct hasher_t
 {
-  inline size_t operator() (const ValueHashMember &value) const { return value.hash(); }
+  inline size_t operator()(const ValueHashMember &value) const { return value.hash(); }
 };

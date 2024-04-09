@@ -2,17 +2,18 @@
 #include <unordered_map>
 #include "GLAbstract.h"
 #include "ImposterRenderer.h"
+#include "DeviceTexture.h"
 
-ImposterRenderer::ImposterRenderer()
-{
-}
+ImposterRenderer::ImposterRenderer() {}
 
 ImposterSet *ImposterRenderer::get_set(const ImposterAttributes &attributes, DeviceTexture *texture)
 {
-    if (_sets.contains(attributes)) {
-        return _sets[attributes];
+    ImposterAttributes attr(attributes);
+    attr.texture_id = texture->GetId();
+    if (_sets.contains(attr)) {
+        return _sets[attr];
     }
-    return (_sets[attributes] = new ImposterSet(attributes, texture));
+    return (_sets[attr] = new ImposterSet(attr, texture));
 }
 
 void ImposterRenderer::add(const ImposterAttributes &attr, DeviceTexture *texture, const Imposter &imposter)
@@ -23,7 +24,7 @@ void ImposterRenderer::add(const ImposterAttributes &attr, DeviceTexture *textur
 
 void ImposterRenderer::clear()
 {
-    for (auto const & [attr, set] : _sets) {
+    for (const auto & [attr, set] : _sets) {
         set->clear();
     }
 }

@@ -28,47 +28,47 @@ GlyphWriter::GlyphWriter(const char *filename) : glyphSize(0, 0), buffer(0), _ha
 
 GlyphWriter::~GlyphWriter()
 {
-    if (buffer)
+    if (buffer) {
         delete [] (uint32_t *)buffer;
+    }
     buffer = 0;
 }
 
 Vector2 GlyphWriter::GetSize(const char *s, const Vector2 &scale, bool stopAtNewline)
 {
     Vector2 position(0.0f, 0.0f);
-    if (!s || !*s)
+    if (!s || !*s) {
         return position;
+    }
     float maxx = 0.0f;
     const char *ends = s + strlen(s);
     uint32_t color = 0;
-    for (; s < ends; )
-    {
-        if (*s == '\n')
-        {
-            if (stopAtNewline)
+    for (; s < ends; ) {
+        if (*s == '\n') {
+            if (stopAtNewline) {
                 break;
+            }
             position.y += scale.y;
-            if (fabsf(position.x) > maxx)
+            if (fabsf(position.x) > maxx) {
                 maxx = fabsf(position.x);
+            }
             position.x = 0.0f;
             s++;
-        }
-        else if (ParseColor(&s, color))
-        {
+        } else if (ParseColor(&s, color)) {
             // skip this
-        }
-        else
-        {
+        } else {
             int32_t c = ((uint8_t)*s) - GLYPH_START;
-            if (c < 0 || c >= MAX_GLYPHS)
+            if (c < 0 || c >= MAX_GLYPHS) {
                 c = 0;
+            }
             GlyphExtent &ex = extents[c];
             position.x += ex.width * scale.x;
             s++;
         }
     }
-    if (fabsf(position.x) > maxx)
+    if (fabsf(position.x) > maxx) {
         maxx = fabsf(position.x);
+    }
     return Vector2(maxx, position.y);
 }
 
@@ -85,18 +85,15 @@ GlyphDrawList *GlyphWriter::Write(const char *s, const Vector2 &start, const Vec
     Vector3        initial = v3(start), position(v3(pos));
     list->SetInitialPosition(initial);
     list->SetCursor(position);
-    for (uint32_t i = 0, sz = (uint32_t)strlen(s); i < sz; i++)
-    {
-        if (s[i] == '\n')
-        {
+    for (uint32_t i = 0, sz = (uint32_t)strlen(s); i < sz; i++) {
+        if (s[i] == '\n') {
             position.y += scale.y;
             position.x  = initial.x;
-        }
-        else
-        {
+        } else {
             int32_t c = (uint8_t)s[i] - GLYPH_START;
-            if (c < 0 || c >= MAX_GLYPHS)
+            if (c < 0 || c >= MAX_GLYPHS) {
                 c = 0;
+            }
             GlyphExtent &ex = extents[c];
             list->Add(Glyph(ex, Vector2(position.x + ex.offset * scale.x, position.y), scale, 0xffffffff));
             position.x += ex.width * scale.x;
@@ -136,8 +133,7 @@ GlyphExtent GlyphWriter::ReadExtent(XmlElement *glyphs, int32_t character)
     ge.width  = defaultWidth;
     ge.offset = defaultOffset;
     XmlElement *e = XmlUtil::GetFirstElementWithKeyValue(glyphs, "glyph", "character", (const char *)s);
-    if (e)
-    {
+    if (e) {
         ge.width  = XmlUtil::GetFloat(e, "width",  defaultWidth);
         ge.offset = XmlUtil::GetFloat(e, "offset", defaultOffset);
     }
@@ -151,8 +147,7 @@ void GlyphWriter::ReadExtentsFile(XmlElement *xml, GlyphExtent *extents, const c
     Vector2 inverse(1.0f / perRow, 1.0f / perCol);
     int32_t a = MAX_GLYPHS, b = perRow * perCol;
     int32_t count = a < b ? a : b;
-    for (int32_t i = 0; i < std::min(count + GLYPH_START, 255); i++)
-    {
+    for (int32_t i = 0; i < std::min(count + GLYPH_START, 255); i++) {
         GlyphExtent ge = ReadExtent(xml, i);
         Vector2 at((float)(i % perRow), (float)(i / perRow));
         ge.uv0 = at * inverse;
@@ -167,8 +162,9 @@ ge.uv1.y = 1.0f - ge.uv1.y;
 static int32_t hex(char c)
 {
     c = toupper(c);
-    if ((c < '0' || c > '9') && (c < 'A' || c > 'F'))
+    if ((c < '0' || c > '9') && (c < 'A' || c > 'F')) {
         return -1;
+    }
     return (int32_t)(c <= '9' ? (c - '0') : ((c - 'A') + 10));
 }
 
@@ -178,10 +174,10 @@ static int32_t hex(const char **s, int32_t sz)
     const char *p = *s;
     int32_t v = 0, u = 0;
     char c = 0;
-    for (int32_t i = 0; i < sz; i++, p++)
-    {
-        if (!(c = *p) || (u = hex(c)) == -1)
+    for (int32_t i = 0; i < sz; i++, p++) {
+        if (!(c = *p) || (u = hex(c)) == -1) {
             return -1;
+        }
         v *= 16;
         v += u;
     }
@@ -201,12 +197,17 @@ bool GlyphWriter::ParseColor(const char **s, uint32_t &color)
     alpha = (c == '%');
     color = alpha ? 0 : 0x000000ff; // if no alpha, set it to full    
     int32_t u = 0;
-    if ((u = hex(&p, 2)) == -1) return false; color |= uint32_t(u) << 24; // red
-    if ((u = hex(&p, 2)) == -1) return false; color |= uint32_t(u) << 16; // green
-    if ((u = hex(&p, 2)) == -1) return false; color |= uint32_t(u) <<  8; // blue
-    if (alpha)
-    {
-        if ((u = hex(&p, 2)) == -1) return false; color |= uint32_t(u); // alpha
+    if ((u = hex(&p, 2)) == -1) { return false; }
+    color |= uint32_t(u) << 24; // red
+    if ((u = hex(&p, 2)) == -1) { return false; }
+    color |= uint32_t(u) << 16; // green
+    if ((u = hex(&p, 2)) == -1) { return false; }
+    color |= uint32_t(u) <<  8; // blue
+    if (alpha) {
+        if ((u = hex(&p, 2)) == -1) {
+            return false;
+        }
+        color |= uint32_t(u); // alpha
     }
     *s = p;
     return true;

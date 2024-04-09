@@ -101,8 +101,7 @@ const Matrix &TextAnimator::GetMatrix() const
 const Matrix &TextAnimator::Update(const GameTime &time)
 {
     elapsed += time.elapsed;
-    if (elapsed > 16)
-    {
+    if (elapsed > 16) {
         elapsed = 0;
         ForceUpdate(time);
     }
@@ -158,19 +157,19 @@ const Matrix &TimedAnimator::GetMatrix() const
 
 const Matrix &TimedAnimator::Update(const GameTime &time)
 {
-    if (!fired)
-    {
+    if (!fired) {
         msElapsed += time.elapsed;
-        if (msElapsed < msMaximum)
+        if (msElapsed < msMaximum) {
             matrix = animator->Update(time);
-        else
-        {
+        } else {
             fired = true;
             matrix = IDENTITY;
-            if (complete != 0)
+            if (complete != 0) {
                 complete(this, user);
-            if (loop)
+            }
+            if (loop) {
                 Reset();
+            }
         }
     }
     return matrix;
@@ -178,8 +177,9 @@ const Matrix &TimedAnimator::Update(const GameTime &time)
 
 const Matrix &TimedAnimator::ForceUpdate(const GameTime &time)
 {
-    if (!fired)
+    if (!fired) {
         matrix = animator->ForceUpdate(time);
+    }
     return matrix;
 }
 
