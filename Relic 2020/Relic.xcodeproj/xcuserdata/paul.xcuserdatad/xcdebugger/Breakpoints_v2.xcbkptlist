@@ -488,8 +488,8 @@
             filePath = "src/render/ParticleEffects.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "277"
-            endingLineNumber = "277"
+            startingLineNumber = "274"
+            endingLineNumber = "274"
             landmarkName = "ParticleEffects::Render(context, time)"
             landmarkType = "7">
          </BreakpointContent>
@@ -506,7 +506,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "128"
             endingLineNumber = "128"
-            landmarkName = "ParticleSystem::prepare(ir, time)"
+            landmarkName = "ParticleSystem::prepare(qr, time)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

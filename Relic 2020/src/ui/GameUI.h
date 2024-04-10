@@ -3,7 +3,7 @@
 
 #include "core/core.h"
 #include "core/aabox.h"
-#include "text/Glyph.h"
+#include "text/GlyphWriter.h"
 
 class GameState;
 class Text;

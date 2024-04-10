@@ -1,4 +1,6 @@
+#include "GlyphWriter.h"
 #include "Glyph.h"
+#include "GlyphDrawList.h"
 
 #include "core/random.h"
 #include "core/simplexml.h"
@@ -11,10 +13,7 @@
 #include "render/DeviceTexture.h"
 #include "render/Material.h"
 
-Glyph::Glyph(const GlyphExtent &extent, const Vector2 &position, const Vector2 &scale, uint32_t color)
-    : extent(extent), position(position), scale(scale), color(color)
-{
-}
+#include "parse_color.h"
 
 GlyphWriter::GlyphWriter(const char *filename) : glyphSize(0, 0), buffer(0), _hack_override_color(0)
 {
@@ -54,7 +53,7 @@ Vector2 GlyphWriter::GetSize(const char *s, const Vector2 &scale, bool stopAtNew
             }
             position.x = 0.0f;
             s++;
-        } else if (ParseColor(&s, color)) {
+        } else if (parse_color(&s, color)) {
             // skip this
         } else {
             int32_t c = ((uint8_t)*s) - GLYPH_START;
@@ -157,70 +156,4 @@ ge.uv0.y = 1.0f - ge.uv0.y;
 ge.uv1.y = 1.0f - ge.uv1.y;
         extents[i] = ge;
     }
-}
-
-static int32_t hex(char c)
-{
-    c = toupper(c);
-    if ((c < '0' || c > '9') && (c < 'A' || c > 'F')) {
-        return -1;
-    }
-    return (int32_t)(c <= '9' ? (c - '0') : ((c - 'A') + 10));
-}
-
-static int32_t hex(const char **s, int32_t sz)
-{
-    if (!s) return -1;
-    const char *p = *s;
-    int32_t v = 0, u = 0;
-    char c = 0;
-    for (int32_t i = 0; i < sz; i++, p++) {
-        if (!(c = *p) || (u = hex(c)) == -1) {
-            return -1;
-        }
-        v *= 16;
-        v += u;
-    }
-    *s = p;
-    return v;
-}
-
-bool GlyphWriter::ParseColor(const char **s, uint32_t &color)
-{
-    const char *p = *s;
-    bool alpha = false;
-    if (*p++ != '\\')
-        return false;
-    char c = *p++;
-    if (c != '#' && c != '%')
-        return false;
-    alpha = (c == '%');
-    color = alpha ? 0 : 0x000000ff; // if no alpha, set it to full    
-    int32_t u = 0;
-    if ((u = hex(&p, 2)) == -1) { return false; }
-    color |= uint32_t(u) << 24; // red
-    if ((u = hex(&p, 2)) == -1) { return false; }
-    color |= uint32_t(u) << 16; // green
-    if ((u = hex(&p, 2)) == -1) { return false; }
-    color |= uint32_t(u) <<  8; // blue
-    if (alpha) {
-        if ((u = hex(&p, 2)) == -1) {
-            return false;
-        }
-        color |= uint32_t(u); // alpha
-    }
-    *s = p;
-    return true;
-}
-
-bool GlyphWriter::ParseColor(const char **s, Vector4 &color)
-{
-    uint32_t uc = 0;
-    if (!ParseColor(s, uc))
-        return false;
-    color.x = ((uc >> 24) & 0x0ff) / 255.0f;
-    color.y = ((uc >> 16) & 0x0ff) / 255.0f;
-    color.z = ((uc >>  8) & 0x0ff) / 255.0f;
-    color.w = ((uc >>  0) & 0x0ff) / 255.0f;
-    return true;
 }

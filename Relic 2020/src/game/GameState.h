@@ -13,7 +13,7 @@
 #include "events/EventTimer.h"
 #include "events/EventDispatcher.h"
 #include "events/IEventListener.h"
-#include "render/ImposterRenderer.h"
+#include "render/QuadListRenderer.h"
 
 #include "game/Multiplayer.h"
 
@@ -49,8 +49,6 @@ class GameState : public IEventListener
 {
 public:
     
-    typedef ImposterRenderer<CommonVertex> renderer_t;
-    
     enum Pass { PASS_UI = 0, PASS_LEVEL, PASS_OVERLAY, PASS_PARTICLES, PASS_COUNT };
     
     static GameState       *GetInstance();
@@ -63,8 +61,6 @@ public:
     UiCore                 *GetUiCore();
     void                    LoadRenderables();
     void                    StartAudio();
-    
-    renderer_t             *GetImposterRenderer();
 
     bool                    Update(const GameTime &time);
     void                    Draw(const GameTime &time);
@@ -129,8 +125,6 @@ private:
 
     GameEffects        mEffects;
     GameUI            *mGameUi;
-
-    renderer_t        *mImposters;
     
     DeviceTexture     *mBackground;
     GameInput         *mInput;

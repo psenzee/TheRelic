@@ -3,6 +3,7 @@
 
 #include "core/core.h"
 #include "text/Glyph.h"
+#include "text/GlyphWriter.h"
 #include "text/Text.h"
 
 #include "render/OverheadCamera.h"

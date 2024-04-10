@@ -4,7 +4,7 @@
 #include "fast/Allocator.h"
 #include "Particle.h"
 #include "DynamicBuffer.h"
-#include "ImposterRenderer.h"
+#include "QuadListRenderer.h"
 
 class RenderContext;
 class DeviceTexture;
@@ -14,8 +14,8 @@ class ParticleSystem
 public:
     
     typedef DynamicBuffer<CommonVertex>    dyn_buffer_t;
-    typedef ImposterRenderer<CommonVertex> renderer_t;
-    typedef Imposter<CommonVertex>         imposter_t;
+    typedef QuadListRenderer<CommonVertex> renderer_t;
+    typedef Quad<CommonVertex>             quad_t;
     
     CLASS_NEW_DELETE()
     
@@ -44,7 +44,7 @@ public:
 
 private:
 
-    void insertImposters(renderer_t &ir);
+    void insert_quads(renderer_t &qr);
     int  UpdateParticles(float ms);
     void UpdateOrder();
     //int  RenderParticles(RenderContext &context);

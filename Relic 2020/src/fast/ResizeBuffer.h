@@ -1,18 +1,17 @@
-#ifndef _DYNAMICBUFFER_H
-#define _DYNAMICBUFFER_H
+#pragma once
 
 #include <stdlib.h> // for size_t
 
-class DynamicBuffer
+class ResizeBuffer
 {
 public:
 
-    DynamicBuffer(size_t size);
-    DynamicBuffer(const void *data, size_t size);
-    DynamicBuffer(const DynamicBuffer &other);
-    ~DynamicBuffer();
+    ResizeBuffer(size_t size);
+    ResizeBuffer(const void *data, size_t size);
+    ResizeBuffer(const ResizeBuffer &other);
+    ~ResizeBuffer();
 
-    DynamicBuffer &operator=(const DynamicBuffer &other);
+    ResizeBuffer &operator=(const ResizeBuffer &other);
 
     void               reserve(size_t size);
     void               clear();
@@ -28,5 +27,3 @@ private:
     char   *mData;
     size_t  mSize;
 };
-
-#endif // _DYNAMICBUFFER_H

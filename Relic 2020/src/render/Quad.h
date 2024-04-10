@@ -7,9 +7,11 @@
 #include <array>
 
 template <typename Vertex>
-struct Imposter
+struct Quad
 {
     typedef std::array<Vertex,  4> vertices_t;
+    
+    enum { VERTICES_PER_QUAD = 4, INDICES_PER_QUAD = 6 };
 
     vertices_t             vertices;
     float                  distance;

@@ -28,9 +28,9 @@ extern Game *GetGlobalGame();
 
 static Map *GetGlobalMap(){ return GetGlobalGame()->GetLevel()->GetMap(); }
 
-ParticleEffects::ParticleEffects() : mImposterRenderer(0)
+ParticleEffects::ParticleEffects() : mRenderer(0)
 {
-    mImposterRenderer = new renderer_t();
+    mRenderer = new renderer_t();
 }
 
 void CloudUpdater(Particle &p, const Vector3 &position)
@@ -263,22 +263,18 @@ void ParticleEffects::DeferredDestroy(ParticleSystem *ps)
     }
 }
 
-extern void SetDefaultLightingType(int);
-
 int ParticleEffects::Render(RenderContext &context, const GameTime &time)
 {
     int count = 0;
-    //SetDefaultLightingType(1);
-    mImposterRenderer->clear();
+    mRenderer->clear();
     std::vector<ParticleSystem *> fx(mParticleSystems); // make a copy, because we're going to delete from the original
     append(std::span<ParticleSystem *>(mDeferred.data(), mDeferred.size()), fx);
     for (std::vector<ParticleSystem *>::iterator i = fx.begin(), e = fx.end(); i != e; ++i) {
         //count += (*i)->Render(context, time);
-        count += (*i)->prepare(*mImposterRenderer, time);
+        count += (*i)->prepare(*mRenderer, time);
     }
     mDeferred.clear();
-    mImposterRenderer->prepare();
-    mImposterRenderer->render(context);
-    //SetDefaultLightingType(0);
+    mRenderer->prepare();
+    mRenderer->render(context);
     return count;
 }

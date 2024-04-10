@@ -16,7 +16,7 @@ class ParticleFxDrawable : public IDrawable
 {
 public:
     
-    typedef ImposterRenderer<CommonVertex> renderer_t;
+    typedef QuadListRenderer<CommonVertex> renderer_t;
 
     CLASS_NEW_DELETE()
 
@@ -39,7 +39,7 @@ private:
     static GameTime  sTime;
 
     ParticleSystem   *mFx;
-    renderer_t       &mImposterRenderer;
+    renderer_t       &mRenderer;
     int               mCount;
     AABox             mBounds;
     int               mRef;

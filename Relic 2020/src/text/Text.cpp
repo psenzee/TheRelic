@@ -1,9 +1,11 @@
 #include "Text.h"
 #include "Glyph.h"
+#include "GlyphWriter.h"
 
 #include "core/random.h"
 #include "core/simplexml.h"
 #include "core/global.h"
+#include "parse_color.h"
 
 #include "render/OverheadCamera.h"
 #include "render/DeviceTexture.h"
@@ -21,14 +23,11 @@ Text::Text(GlyphWriter *writer, const char *s, const Vector2 &pos, const Vector2
                  *pcur      = current;
     
     memset(current, 0, sz + 1);    
-    while (*s)
-    {
-        if (!GlyphWriter::ParseColor(&s, color))
+    while (*s) {
+        if (!parse_color(&s, color)) {
             *pcur++ = *s++;
-        else
-        {
-            if (*current)
-            {
+        } else {
+            if (*current) {
                 Add(current, p, scale, lastColor);
                 p = lists.back()->GetCursor();
             }
@@ -73,9 +72,11 @@ void Text::StripColor(const char *s, char *buffer)
 {
     char    *p = buffer;
     Vector4  color;
-    while (*s)
-        if (!GlyphWriter::ParseColor(&s, color))
+    while (*s) {
+        if (!parse_color(&s, color)) {
             *p++ = *s++;
+        }
+    }
     *p = 0;
 }
 
@@ -141,8 +142,7 @@ const Vector3 &Text::GetRenderAnchorPosition() const
 
 void Text::Add(const char *s, const Vector3 &pos, const Vector2 &scale, const Vector4 &color)
 {
-    if (s && *s)
-    {
+    if (s && *s) {
         Vector3 initial(pos);
         if (!lists.empty())
             initial = lists[0]->GetInitialPosition();

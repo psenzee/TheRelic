@@ -3,6 +3,7 @@
 #include "core/core.h"
 #include "core/random.h"
 #include "core/strs.h"
+#include "parse_color.h"
 
 #include "render/GLUtils.h"
 #include "render/GLStates.h"
@@ -138,8 +139,6 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
                         *puvs      = uvs;
     uint32_t             vcount    = 0;
 
-    //GLLoadMatrix(view);
-    //GLMultMatrix(transform);
     GLLoadMatrixStack(
         context.camera.GetProjection(),
         view,
@@ -153,10 +152,9 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
     GLSetEnabledClientState(GL_TEXTURE_COORD_ARRAY, true);
     GLSetEnabledClientState(GL_NORMAL_ARRAY, true);
 
-    //_GLv(glDisable(GL_CULL_FACE));  // we can eliminate this if we ensure the correct orientation of the vertices
     GLStates::depthWrite.Set(false);
     GLStates::depthTest.Set(false);        
-    
+
     Vector4 scolor(1.0f, 1.0f, 1.0f, 1.0f), prev(scolor);
 
     const char *newlinestart = s;
@@ -201,7 +199,7 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
                 }
                 break;
             }
-        } else if (ParseColor(&s, scolor) && !_hack_override_color) {
+        } else if (parse_color(&s, scolor) && !_hack_override_color) {
             // flush
             _RenderString(context, vertices, uvs, vcount, useInlineColor ? (prev * color) : color);
             pvertices = vertices;
@@ -231,6 +229,10 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
                 _append(position + q.point[3], u1, v1, &pvertices, &puvs);
                 _append(position + q.point[1], u1, v0, &pvertices, &puvs);
                 
+                std::array<CommonVertex, 4> vertices;
+
+                _buffer.add_indexed_quad(vertices);
+                
                 vcount += VERTICES_PER_QUAD;
             }
             position.x += ex.width * SCALE.x;
@@ -251,7 +253,6 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
 
     GLStates::depthWrite.Set(true);
     GLStates::depthTest.Set(true);
-    //_GLv(glEnable(GL_CULL_FACE)); // we can eliminate this if we ensure the correct orientation of the vertices
     
     if (!buffer) {
         delete [] (unsigned *)data;

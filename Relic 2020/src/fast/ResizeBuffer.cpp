@@ -1,36 +1,36 @@
-#include "DynamicBuffer.h"
+#include "ResizeBuffer.h"
 
 #include <string.h>
 #include "core/core_assert.h"
 
-DynamicBuffer::DynamicBuffer(size_t size) : mData(0), mSize(0)
-{ 
+ResizeBuffer::ResizeBuffer(size_t size) : mData(0), mSize(0)
+{
     reserve(size);
 }
 
-DynamicBuffer::DynamicBuffer(const void *data, size_t size) : mData(0), mSize(0)
-{ 
+ResizeBuffer::ResizeBuffer(const void *data, size_t size) : mData(0), mSize(0)
+{
     assign(data, size);
 }
 
-DynamicBuffer::DynamicBuffer(const DynamicBuffer &other) : mData(0), mSize(0)
-{ 
+ResizeBuffer::ResizeBuffer(const ResizeBuffer &other) : mData(0), mSize(0)
+{
     assign(other.data(), other.size());
 }
 
-DynamicBuffer::~DynamicBuffer()
+ResizeBuffer::~ResizeBuffer()
 {
     clear();
 }
 
-DynamicBuffer &DynamicBuffer::operator=(const DynamicBuffer &other)
+ResizeBuffer &ResizeBuffer::operator=(const ResizeBuffer &other)
 {
     if (this != &other)
         assign(other.data(), other.size());
     return *this;
 }
 
-void DynamicBuffer::reserve(size_t size)
+void ResizeBuffer::reserve(size_t size)
 {
     if (mSize < size)
     {
@@ -43,14 +43,14 @@ void DynamicBuffer::reserve(size_t size)
     }
 }
 
-void DynamicBuffer::clear()
-{ 
+void ResizeBuffer::clear()
+{
     mSize = 0;
     delete [] mData;
     mData = 0;
 }
 
-void DynamicBuffer::assign(const void *data, size_t size)
+void ResizeBuffer::assign(const void *data, size_t size)
 {
     reserve(size);
     memcpy(mData, data, size);

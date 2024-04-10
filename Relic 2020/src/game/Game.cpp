@@ -14,7 +14,7 @@
 #include "render/GraphicsDevice.h"
 #include "render/RenderContext.h"
 #include "render/ParticleEffects.h"
-#include "render/ImposterRenderer.h"
+#include "render/QuadListRenderer.h"
 #include "render/RenderSet.h"
 #include "render/ContentLoader.h"
 #include "render/QuadRenderer.h"

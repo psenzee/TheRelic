@@ -1,8 +1,7 @@
-#ifndef _FASTBUFFER_H
-#define _FASTBUFFER_H
+#pragma
 
 #include "FixedBuffer.h"
-#include "DynamicBuffer.h"
+#include "ResizeBuffer.h"
 
 template <unsigned short SIZE>
 class FastBuffer
@@ -42,8 +41,7 @@ public:
 private:
 
     FixedBuffer<SIZE> mFixed;
-    DynamicBuffer     mDynamic;
+    ResizeBuffer      mDynamic;
     size_t            mSize;
 };
 
-#endif // _FASTSTRING_H

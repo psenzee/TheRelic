@@ -119,13 +119,13 @@ void ParticleSystem::SetColor(const Vector4 &c)
     mColor = c;
 }
 
-int ParticleSystem::prepare(renderer_t &ir, const GameTime &time)
+int ParticleSystem::prepare(renderer_t &qr, const GameTime &time)
 {
     if (!UpdateParticles((float)time.elapsed) && mOnEnd) {
         mOnEnd(this, mOnEndUser); // mOnEnd could delete -this-, don't do anything that requires -this-  after calling it
         return 0;
     }
-    insertImposters(ir);
+    insert_quads(qr);
     return 1;
 }
 
@@ -159,30 +159,25 @@ int ParticleSystem::UpdateParticles(float ms)
     return count;
 }
 
-void ParticleSystem::insertImposters(renderer_t &ir)
+void ParticleSystem::insert_quads(renderer_t &qr)
 {
-    imposter_t imp;
-    ImposterAttributes attrs;
-    attrs.texture_id = attrs.program_id = 0;
-    attrs.color = mColor;
-    attrs.emissive = Tuple4f(0.f, 0.f, 0.f, 0.f);
-    attrs.average_distance = 0;
-    attrs.blend_type = ImposterAttributes::BLEND_LIGHT;
+    quad_t imp;
+    QuadListAttributes attrs;
+    attrs.set_color(mColor);
     switch (mBlendType)
     {
     case PARTICLE_BLEND_DARK:
-        attrs.blend_type = ImposterAttributes::BLEND_DARK;
+        attrs.set_blend_type(QuadListAttributes::BLEND_DARK);
         break;
     case PARTICLE_BLEND_LIGHT:
-        attrs.blend_type = ImposterAttributes::BLEND_LIGHT;
+        attrs.set_blend_type(QuadListAttributes::BLEND_LIGHT);
         break;
     }
-    auto set = ir.get_set(attrs, mTexture);
-    for (std::vector<Particle>::const_iterator i = mParticles.begin(), e = mParticles.end(); i != e; ++i) {
-        const Particle &particle = *i;
-        if (particle.time < particle.expire) { // if not dead..
-            std::array<Tuple2f, 2> uvs { particle.uv0, particle.uv1 };
-            imp.set(particle.position, uvs, particle.size);
+    auto set = qr.get_draw_list(attrs, mTexture);
+    for (const auto &p : mParticles) {
+        if (p.time < p.expire) { // if not dead..
+            std::array<Tuple2f, 2> uvs { p.uv0, p.uv1 };
+            imp.set(p.position, uvs, p.size);
             set->add(imp);
         }
     }

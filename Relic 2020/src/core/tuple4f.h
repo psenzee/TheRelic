@@ -2,6 +2,7 @@
 #define _TUPLE4F_H
 
 #include "mathcore.h"
+#include "tuple3f.h"
 #include <cmath>
 #include <iostream>
 #include <iomanip>

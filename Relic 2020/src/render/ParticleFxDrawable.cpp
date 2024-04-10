@@ -16,7 +16,7 @@ class Texture;
 
 GameTime ParticleFxDrawable::sTime(0);
 
-ParticleFxDrawable::ParticleFxDrawable(ParticleSystem *fx, renderer_t &ir) : mFx(fx), mImposterRenderer(ir)
+ParticleFxDrawable::ParticleFxDrawable(ParticleSystem *fx, renderer_t &qr) : mFx(fx), mRenderer(qr)
 {
     AABox bounds;
     mBounds = bounds;
@@ -31,7 +31,7 @@ ParticleFxDrawable::~ParticleFxDrawable()
 void ParticleFxDrawable::RenderImmediate(RenderContext &context)
 {
   //  mFx->Render(context, sTime);
-    mFx->prepare(mImposterRenderer, sTime);
+    mFx->prepare(mRenderer, sTime);
 }
 
 bool ParticleFxDrawable::IsVisible(const RenderContext &context) const
