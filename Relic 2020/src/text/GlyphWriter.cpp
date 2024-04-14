@@ -15,7 +15,7 @@
 
 #include "parse_color.h"
 
-GlyphWriter::GlyphWriter(const char *filename) : glyphSize(0, 0), buffer(0), _hack_override_color(0)
+GlyphWriter::GlyphWriter(const char *filename, bool flipped_vertical) : glyphSize(0, 0), buffer(0), _hack_override_color(0), flipped_vertical(flipped_vertical)
 {
     buffer = new uint32_t [BUFFER_BYTES / sizeof(uint32_t)]; // text render buffer
     memset(buffer, 0, BUFFER_BYTES);
@@ -78,7 +78,9 @@ GlyphDrawList *GlyphWriter::Write(const char *s, const Vector2 &pos, const Vecto
 
 GlyphDrawList *GlyphWriter::Write(const char *s, const Vector2 &start, const Vector2 &pos, const Vector2 &scale, const Vector4 &color)
 {
-    if (!s) return 0;
+    if (!s) {
+        return 0;
+    }
   //const uint8_t *us = static_cast<const uint8_t *>(s);
     GlyphDrawList *list    = new GlyphDrawList(texture, Vector3(scale.x, scale.y, 1.0f), color);
     Vector3        initial = v3(start), position(v3(pos));
@@ -139,7 +141,7 @@ GlyphExtent GlyphWriter::ReadExtent(XmlElement *glyphs, int32_t character)
     return ge;
 }
         
-void GlyphWriter::ReadExtentsFile(XmlElement *xml, GlyphExtent *extents, const core::Size &textureSize, const core::Size &glyphSize)
+void GlyphWriter::ReadExtentsFile(XmlElement *xml, GlyphExtent *extents, const core::Size &textureSize, const core::Size &glyphSize, bool flippedVertical)
 {
     int32_t perRow = textureSize.width  / glyphSize.width,
             perCol = textureSize.height / glyphSize.height;
@@ -151,9 +153,11 @@ void GlyphWriter::ReadExtentsFile(XmlElement *xml, GlyphExtent *extents, const c
         Vector2 at((float)(i % perRow), (float)(i / perRow));
         ge.uv0 = at * inverse;
         ge.uv1 = at * inverse + inverse;
-// these two lines for image that's not flipped top-to-bottom
-ge.uv0.y = 1.0f - ge.uv0.y;
-ge.uv1.y = 1.0f - ge.uv1.y;
+        if (!flippedVertical) {
+            // these two lines for image that's not flipped top-to-bottom
+            ge.uv0.y = 1.0f - ge.uv0.y;
+            ge.uv1.y = 1.0f - ge.uv1.y;
+        }
         extents[i] = ge;
     }
 }

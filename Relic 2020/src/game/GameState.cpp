@@ -28,6 +28,8 @@
 #include "luautil/LuaDefer.h"
 #include "luautil/LocationEvents.h"
 
+#include "Glyphs.h"
+
 #include "LuaFunctions.h"
 
 #include "game/UiInstance.h"
@@ -207,6 +209,9 @@ GameState::GameState(const GameDimensions &dimensions) :
     }
     if (!ContentLoader::GetInstance()) {
         ContentLoader::CreateInstance();
+    }
+    if (!Glyphs::GetInstance()) {
+        Glyphs::CreateInstance();
     }
     mUiInstance = new UiInstance;
     Initialize(dimensions);
@@ -516,6 +521,7 @@ void GameState::DrawOverlay(const GameTime &time)
         QuadRenderer::RenderScreenAlignedQuad(mOverlay, mOverlayColor,
                                               Vector3(size.x, size.y, distance), Vector3(-size.x, -size.y, distance),
                                               Vector2(0.f, 1.f), Vector2(1.f, 0.f));
+        Glyphs::GetInstance()->Render(rc, time);
         device->EnableDepthTest(true);
     }
 }

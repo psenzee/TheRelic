@@ -77,8 +77,8 @@
             filePath = "src/game/GameState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "327"
-            endingLineNumber = "327"
+            startingLineNumber = "332"
+            endingLineNumber = "332"
             landmarkName = "GameState::LoadRenderables()"
             landmarkType = "7">
          </BreakpointContent>
@@ -488,8 +488,8 @@
             filePath = "src/render/ParticleEffects.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "274"
-            endingLineNumber = "274"
+            startingLineNumber = "271"
+            endingLineNumber = "271"
             landmarkName = "ParticleEffects::Render(context, time)"
             landmarkType = "7">
          </BreakpointContent>
@@ -520,8 +520,8 @@
             filePath = "src/render/ParticleEffects.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "133"
-            endingLineNumber = "133"
+            startingLineNumber = "130"
+            endingLineNumber = "130"
             landmarkName = "ParticleEffects::CreateCircleIndependent(texture, position, time, _speed, perpetual, autodestroy)"
             landmarkType = "7">
             <Locations>
@@ -555,6 +555,36 @@
                   endingLineNumber = "133"
                   offsetFromSymbolStart = "63">
                </Location>
+               <Location
+                  uuid = "103D3B49-FA19-4F8F-890A-FF6B81DA8893 - 5ce320024313aa1e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ParticleEffects::CreateCircleIndependent(DeviceTexture*, Tuple3f const&amp;, float, float, bool, bool)"
+                  moduleName = "Relic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/Relic%202020/src/render/ParticleEffects.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "130"
+                  endingLineNumber = "130"
+                  offsetFromSymbolStart = "76">
+               </Location>
+               <Location
+                  uuid = "103D3B49-FA19-4F8F-890A-FF6B81DA8893 - 5ce320024313aa1e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ParticleEffects::CreateCircleIndependent(DeviceTexture*, Tuple3f const&amp;, float, float, bool, bool)"
+                  moduleName = "Relic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/Relic%202020/src/render/ParticleEffects.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "130"
+                  endingLineNumber = "130"
+                  offsetFromSymbolStart = "63">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -568,8 +598,8 @@
             filePath = "src/render/ParticleEffects.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "153"
-            endingLineNumber = "153"
+            startingLineNumber = "150"
+            endingLineNumber = "150"
             landmarkName = "ParticleEffects::CreateCircleIndependent(texture, position, time, _speed, perpetual, autodestroy)"
             landmarkType = "7">
             <Locations>
@@ -601,6 +631,36 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "153"
                   endingLineNumber = "153"
+                  offsetFromSymbolStart = "543">
+               </Location>
+               <Location
+                  uuid = "344E4A2B-97C9-42A6-BE62-0ACF6A16A24C - 5ce320024313a88a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ParticleEffects::CreateCircleIndependent(DeviceTexture*, Tuple3f const&amp;, float, float, bool, bool)"
+                  moduleName = "Relic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/Relic%202020/src/render/ParticleEffects.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "150"
+                  endingLineNumber = "150"
+                  offsetFromSymbolStart = "476">
+               </Location>
+               <Location
+                  uuid = "344E4A2B-97C9-42A6-BE62-0ACF6A16A24C - 5ce320024313a88a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ParticleEffects::CreateCircleIndependent(DeviceTexture*, Tuple3f const&amp;, float, float, bool, bool)"
+                  moduleName = "Relic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/Relic%202020/src/render/ParticleEffects.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "150"
+                  endingLineNumber = "150"
                   offsetFromSymbolStart = "543">
                </Location>
             </Locations>

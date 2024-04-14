@@ -29,7 +29,7 @@ public:
 
     int                     Render(RenderContext &context, const GameTime &time);
     
-    renderer_t             *GetRenderer()     { return mRenderer; }
+    renderer_t             &GetQuadRenderer() { return mRenderer; }
 
     static void             CreateInstance()  { if (!mInstance) mInstance = new ParticleEffects; }
     static ParticleEffects *GetInstance()     { return mInstance; }
@@ -41,7 +41,7 @@ private:
     
     static ParticleEffects *mInstance;
     
-    renderer_t                    *mRenderer;
+    renderer_t                     mRenderer;
     std::vector<ParticleSystem *>  mParticleSystems;
     std::vector<ParticleSystem *>  mDeferred;
 };

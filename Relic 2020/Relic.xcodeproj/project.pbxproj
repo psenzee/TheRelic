@@ -1185,6 +1185,7 @@
 		DAADF5942BC6B53D00396F8E /* GlyphWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAADF5932BC6B53D00396F8E /* GlyphWriter.cpp */; };
 		DAADF59A2BC6BA2600396F8E /* ResizeBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAADF5992BC6BA2500396F8E /* ResizeBuffer.cpp */; };
 		DAADF5A02BC6BED300396F8E /* parse_color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAADF59F2BC6BED300396F8E /* parse_color.cpp */; };
+		DAADF5A32BC6C50B00396F8E /* Glyphs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAADF5A22BC6C50B00396F8E /* Glyphs.cpp */; };
 		DAEFF7F123BC17540062B630 /* tick_new_2.png in Resources */ = {isa = PBXBuildFile; fileRef = DAEFF7F023BC17540062B630 /* tick_new_2.png */; };
 		DAEFF7F323BD04670062B630 /* globals.lua in Resources */ = {isa = PBXBuildFile; fileRef = DAEFF7F223BD04670062B630 /* globals.lua */; };
 		DAEFF7F623BD2F390062B630 /* GameDimensions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAEFF7F423BD2F390062B630 /* GameDimensions.cpp */; };
@@ -2661,6 +2662,8 @@
 		DAADF5992BC6BA2500396F8E /* ResizeBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ResizeBuffer.cpp; path = src/fast/ResizeBuffer.cpp; sourceTree = "<group>"; };
 		DAADF59E2BC6BED300396F8E /* parse_color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = parse_color.h; path = src/text/parse_color.h; sourceTree = "<group>"; };
 		DAADF59F2BC6BED300396F8E /* parse_color.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = parse_color.cpp; path = src/text/parse_color.cpp; sourceTree = "<group>"; };
+		DAADF5A12BC6C50B00396F8E /* Glyphs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Glyphs.h; path = src/text/Glyphs.h; sourceTree = "<group>"; };
+		DAADF5A22BC6C50B00396F8E /* Glyphs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Glyphs.cpp; path = src/text/Glyphs.cpp; sourceTree = "<group>"; };
 		DAEFF7F023BC17540062B630 /* tick_new_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tick_new_2.png; path = data/textures/tick_new_2.png; sourceTree = "<group>"; };
 		DAEFF7F223BD04670062B630 /* globals.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = globals.lua; path = data/lua/globals.lua; sourceTree = "<group>"; };
 		DAEFF7F423BD2F390062B630 /* GameDimensions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameDimensions.cpp; path = src/GameDimensions.cpp; sourceTree = "<group>"; };
@@ -3913,6 +3916,8 @@
 		439DB96212DE411000B06546 /* text */ = {
 			isa = PBXGroup;
 			children = (
+				DAADF5A22BC6C50B00396F8E /* Glyphs.cpp */,
+				DAADF5A12BC6C50B00396F8E /* Glyphs.h */,
 				DAADF59F2BC6BED300396F8E /* parse_color.cpp */,
 				DAADF59E2BC6BED300396F8E /* parse_color.h */,
 				439DBBCE12DE4E4600B06546 /* Glyph.h */,
@@ -5669,6 +5674,7 @@
 				439DBA4412DE469E00B06546 /* SimpleTileMapModel.cpp in Sources */,
 				439DBA4512DE469E00B06546 /* TileMapRenderer.cpp in Sources */,
 				439DBA4612DE469E00B06546 /* TileMaps.cpp in Sources */,
+				DAADF5A32BC6C50B00396F8E /* Glyphs.cpp in Sources */,
 				439DBA4712DE469E00B06546 /* VectorFieldMap.cpp in Sources */,
 				439DBA4B12DE46D100B06546 /* MathUtil.cpp in Sources */,
 				DAF0EB5123B525020003BACB /* TouchView.mm in Sources */,

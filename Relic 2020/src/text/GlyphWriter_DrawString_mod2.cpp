@@ -14,6 +14,8 @@
 #include "render/RenderContext.h"
 #include "GLAbstract.h"
 #include "OverheadCamera.h"
+#include "Glyphs.h"
+#include "QuadListRenderer.h"
 
 extern void ClearCachedPointers();
 
@@ -41,15 +43,15 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
     DrawString(context, s, Vector2(-0.5f, 0.0f), Vector2(-0.5f, 0.0f), color, m, view, buffer, useInlineColor, justify);
 }
 
-static void _RenderString(RenderContext &context, float *vertices, float *uvs, int count, const Vector4 &color)
+static void _RenderString(RenderContext &context, float *vertices, float *uvs, int count, const Vector4 &color, DeviceTexture *texture)
 {
-    if (!count || !vertices || !uvs || color.w < 0.1f) {
+    if (!count || !vertices || !uvs || color.w < 0.1f || !texture) {
         return;
     }
 
     // RENDER DRAW LIST
     //glColor4f(color.x, color.y, color.z, color.w);
-    GraphicsDevice::GetInstance()->SetColor(color);
+    //GraphicsDevice::GetInstance()->SetColor(color);
     /*
     Vector4 ambient(color * Vector4(2.0f, 2.0f, 2.0f, 0.0f)),
             diffuse(1.0f, 1.0f, 1.0f, color.w);
@@ -57,11 +59,72 @@ static void _RenderString(RenderContext &context, float *vertices, float *uvs, i
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, (GLfloat *)&ambient);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (GLfloat *)&diffuse);
     */
+    Glyphs *instance = Glyphs::GetInstance();
+    QuadListRenderer<CommonVertex> &renderer = instance->GetQuadRenderer();
+    QuadListAttributes attr;
+    attr.set_color(color);
+    attr.set_texture_id(texture->GetId());
+    QuadDrawList<CommonVertex> *list = renderer.get_draw_list(attr, texture);
+    typedef typename QuadDrawList<CommonVertex>::quad_t quad_t;
+    quad_t quad;
+    for (size_t i = 0; i < count; i++) {
+        size_t p = i * 3, t = i * 2, q = p % 4;
+        if (i != 0 && q == 0) {
+            list->add(quad);
+        }
+        quad.vertices[q].position = Tuple3f(vertices[p], vertices[p + 1], vertices[p + 2]);
+        quad.vertices[q].texture_coors = Tuple2f(uvs[t], uvs[t + 1]);
+    }
+    list->add(quad);
 
+/*
     _GLv(glVertexPointer  (3, GL_FLOAT,         0, (GLfloat *)&vertices[0]));
     _GLv(glTexCoordPointer(2, GL_FLOAT,         0, (GLfloat *)&uvs[0]));
 
     _GLv(glDrawArrays(GL_TRIANGLES, 0, count));
+ */
+}
+
+static void _RenderString(RenderContext &context, float *vertices, float *uvs, int count, const Vector4 &color, DeviceTexture *texture)
+{
+    if (!count || !vertices || !uvs || color.w < 0.1f || !texture) {
+        return;
+    }
+
+    // RENDER DRAW LIST
+    //glColor4f(color.x, color.y, color.z, color.w);
+    //GraphicsDevice::GetInstance()->SetColor(color);
+    /*
+    Vector4 ambient(color * Vector4(2.0f, 2.0f, 2.0f, 0.0f)),
+            diffuse(1.0f, 1.0f, 1.0f, color.w);
+
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, (GLfloat *)&ambient);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (GLfloat *)&diffuse);
+    */
+    Glyphs *instance = Glyphs::GetInstance();
+    QuadListRenderer<CommonVertex> &renderer = instance->GetQuadRenderer();
+    QuadListAttributes attr;
+    attr.set_color(color);
+    attr.set_texture_id(texture->GetId());
+    QuadDrawList<CommonVertex> *list = renderer.get_draw_list(attr, texture);
+    typedef typename QuadDrawList<CommonVertex>::quad_t quad_t;
+    quad_t quad;
+    for (size_t i = 0; i < count; i++) {
+        size_t p = i * 3, t = i * 2, q = p % 4;
+        if (i != 0 && q == 0) {
+            list->add(quad);
+        }
+        quad.vertices[q].position = Tuple3f(vertices[p], vertices[p + 1], vertices[p + 2]);
+        quad.vertices[q].texture_coors = Tuple2f(uvs[t], uvs[t + 1]);
+    }
+    list->add(quad);
+
+/*
+    _GLv(glVertexPointer  (3, GL_FLOAT,         0, (GLfloat *)&vertices[0]));
+    _GLv(glTexCoordPointer(2, GL_FLOAT,         0, (GLfloat *)&uvs[0]));
+
+    _GLv(glDrawArrays(GL_TRIANGLES, 0, count));
+ */
 }
 
 struct Quad_
@@ -201,7 +264,7 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
             }
         } else if (parse_color(&s, scolor) && !_hack_override_color) {
             // flush
-            _RenderString(context, vertices, uvs, vcount, useInlineColor ? (prev * color) : color);
+            _RenderString(context, vertices, uvs, vcount, useInlineColor ? (prev * color) : color, texture);
             pvertices = vertices;
             puvs      = uvs;
             vcount    = 0;
@@ -221,6 +284,7 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
                 
                 Quad_ &q = /*c > (128 - GLYPH_START) ? */unrotated_point; //: rotated_points[char_index[c]]; // hacked to not rotate glyphs > 128
                 
+                /*
                 _append(position + q.point[0], u0, v0, &pvertices, &puvs);
                 _append(position + q.point[2], u0, v1, &pvertices, &puvs);
                 _append(position + q.point[3], u1, v1, &pvertices, &puvs);
@@ -228,12 +292,15 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
                 _append(position + q.point[0], u0, v0, &pvertices, &puvs);
                 _append(position + q.point[3], u1, v1, &pvertices, &puvs);
                 _append(position + q.point[1], u1, v0, &pvertices, &puvs);
+                 */
                 
-                std::array<CommonVertex, 4> vertices;
-
-                _buffer.add_indexed_quad(vertices);
+                _append(position + q.point[0], u0, v0, &pvertices, &puvs);
+                _append(position + q.point[1], u1, v0, &pvertices, &puvs);
+                _append(position + q.point[2], u0, v1, &pvertices, &puvs);
+                _append(position + q.point[3], u1, v1, &pvertices, &puvs);
                 
-                vcount += VERTICES_PER_QUAD;
+                //vcount += VERTICES_PER_QUAD;
+                vcount += 4;
             }
             position.x += ex.width * SCALE.x;
             s++;
@@ -245,10 +312,10 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
         auto render_color = _hack_override_color ? *_hack_override_color : (prev * color);
         /*
         if (_hack_override_color)
-            _RenderString(context, vertices, uvs, vcount, *_hack_override_color);
+            _RenderString(context, vertices, uvs, vcount, *_hack_override_color, texture);
         else
          */
-        _RenderString(context, vertices, uvs, vcount, render_color/*prev * color*/);
+        _RenderString(context, vertices, uvs, vcount, render_color/*prev * color*/, texture);
     }
 
     GLStates::depthWrite.Set(true);

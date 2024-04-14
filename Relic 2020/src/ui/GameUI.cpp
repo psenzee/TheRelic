@@ -66,6 +66,11 @@ void GameUI::DrawString(RenderContext &context, const char *s, const Vector2 &at
 
     if (!IsLowEndDevice())
     {
+        if (flags & TEXT_DROP_SHADOW)
+        {
+            writer->DrawString(context, s, v2(context.camera.GetLookAt()), at - Vector2(1.f, 1.f), Vector4(0.f, 0.f, 0.f, 1.f) * color, size, context.camera.GetView(), false, justify);
+        }
+
         if (flags & TEXT_GLOW)
         {
             float glow = 0.15f;
@@ -73,11 +78,6 @@ void GameUI::DrawString(RenderContext &context, const char *s, const Vector2 &at
             writer->DrawString(context, s, v2(context.camera.GetLookAt()), at - Vector2(-2.f, -2.f), Vector4(1.f, 1.f, 1.f, glow * color.w), size, context.camera.GetView(), false, justify);
             writer->DrawString(context, s, v2(context.camera.GetLookAt()), at - Vector2(-2.f,  2.f), Vector4(1.f, 1.f, 1.f, glow * color.w), size, context.camera.GetView(), false, justify);
             writer->DrawString(context, s, v2(context.camera.GetLookAt()), at - Vector2( 2.f, -2.f), Vector4(1.f, 1.f, 1.f, glow * color.w), size, context.camera.GetView(), false, justify);
-        }
-
-        if (flags & TEXT_DROP_SHADOW)
-        {
-            writer->DrawString(context, s, v2(context.camera.GetLookAt()), at - Vector2(1.f, 1.f), Vector4(0.f, 0.f, 0.f, 1.f) * color, size, context.camera.GetView(), false, justify);
         }
     }
     writer->DrawString(context, s, v2(context.camera.GetLookAt()), at, color, size, context.camera.GetView(), useInlineColor, justify);

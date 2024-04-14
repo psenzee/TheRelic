@@ -28,10 +28,7 @@ extern Game *GetGlobalGame();
 
 static Map *GetGlobalMap(){ return GetGlobalGame()->GetLevel()->GetMap(); }
 
-ParticleEffects::ParticleEffects() : mRenderer(0)
-{
-    mRenderer = new renderer_t();
-}
+ParticleEffects::ParticleEffects() {}
 
 void CloudUpdater(Particle &p, const Vector3 &position)
 {
@@ -266,15 +263,15 @@ void ParticleEffects::DeferredDestroy(ParticleSystem *ps)
 int ParticleEffects::Render(RenderContext &context, const GameTime &time)
 {
     int count = 0;
-    mRenderer->clear();
+    mRenderer.clear();
     std::vector<ParticleSystem *> fx(mParticleSystems); // make a copy, because we're going to delete from the original
     append(std::span<ParticleSystem *>(mDeferred.data(), mDeferred.size()), fx);
     for (std::vector<ParticleSystem *>::iterator i = fx.begin(), e = fx.end(); i != e; ++i) {
         //count += (*i)->Render(context, time);
-        count += (*i)->prepare(*mRenderer, time);
+        count += (*i)->prepare(mRenderer, time);
     }
     mDeferred.clear();
-    mRenderer->prepare();
-    mRenderer->render(context);
+    mRenderer.prepare();
+    mRenderer.render(context);
     return count;
 }
