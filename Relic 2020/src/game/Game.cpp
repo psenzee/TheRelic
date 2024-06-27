@@ -280,6 +280,7 @@ bool Game::Notify(const char *e, const char *info)
 
 void Game::Draw(const GameTime &time)
 {
+    // not used!
     GraphicsDevice *device = GraphicsDevice::GetInstance();
 
     game_total.EndFrame();

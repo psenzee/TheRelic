@@ -5,7 +5,7 @@ Glyphs *Glyphs::_instance;
 int Glyphs::Render(RenderContext &context, const GameTime &time)
 {
     int count = 0;
-    _renderer.clear();
+//    _renderer.clear();
     /*
     std::vector<ParticleSystem *> fx(mParticleSystems); // make a copy, because we're going to delete from the original
     append(std::span<ParticleSystem *>(mDeferred.data(), mDeferred.size()), fx);
@@ -14,7 +14,9 @@ int Glyphs::Render(RenderContext &context, const GameTime &time)
         count += (*i)->prepare(_renderer, time);
     }
     */
+    GLSetEnabled(GL_CULL_FACE, false);
     _renderer.prepare();
     _renderer.render(context);
+    _renderer.clear();
     return count;
 }

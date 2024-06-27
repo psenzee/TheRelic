@@ -85,48 +85,6 @@ static void _RenderString(RenderContext &context, float *vertices, float *uvs, i
  */
 }
 
-static void _RenderString(RenderContext &context, float *vertices, float *uvs, int count, const Vector4 &color, DeviceTexture *texture)
-{
-    if (!count || !vertices || !uvs || color.w < 0.1f || !texture) {
-        return;
-    }
-
-    // RENDER DRAW LIST
-    //glColor4f(color.x, color.y, color.z, color.w);
-    //GraphicsDevice::GetInstance()->SetColor(color);
-    /*
-    Vector4 ambient(color * Vector4(2.0f, 2.0f, 2.0f, 0.0f)),
-            diffuse(1.0f, 1.0f, 1.0f, color.w);
-
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, (GLfloat *)&ambient);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (GLfloat *)&diffuse);
-    */
-    Glyphs *instance = Glyphs::GetInstance();
-    QuadListRenderer<CommonVertex> &renderer = instance->GetQuadRenderer();
-    QuadListAttributes attr;
-    attr.set_color(color);
-    attr.set_texture_id(texture->GetId());
-    QuadDrawList<CommonVertex> *list = renderer.get_draw_list(attr, texture);
-    typedef typename QuadDrawList<CommonVertex>::quad_t quad_t;
-    quad_t quad;
-    for (size_t i = 0; i < count; i++) {
-        size_t p = i * 3, t = i * 2, q = p % 4;
-        if (i != 0 && q == 0) {
-            list->add(quad);
-        }
-        quad.vertices[q].position = Tuple3f(vertices[p], vertices[p + 1], vertices[p + 2]);
-        quad.vertices[q].texture_coors = Tuple2f(uvs[t], uvs[t + 1]);
-    }
-    list->add(quad);
-
-/*
-    _GLv(glVertexPointer  (3, GL_FLOAT,         0, (GLfloat *)&vertices[0]));
-    _GLv(glTexCoordPointer(2, GL_FLOAT,         0, (GLfloat *)&uvs[0]));
-
-    _GLv(glDrawArrays(GL_TRIANGLES, 0, count));
- */
-}
-
 struct Quad_
 {
     Vector3 point[4];
@@ -167,7 +125,7 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
     static const Vector3 SCALE(-1.0f, -1.0f, 1.0f);
     static const Vector3 UL(Vector3(-0.5f, -0.5f, 0.0f) * SCALE), UR(Vector3( 0.5f, -0.5f, 0.0f) * SCALE),
                          LL(Vector3(-0.5f,  0.5f, 0.0f) * SCALE), LR(Vector3( 0.5f,  0.5f, 0.0f) * SCALE);
-    
+
     static bool inited = false;
     
     if (!inited) {
@@ -201,24 +159,22 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
                         *uvs       = ((float *)data) + count * 3,
                         *puvs      = uvs;
     uint32_t             vcount    = 0;
-
+/*
     GLLoadMatrixStack(
         context.camera.GetProjection(),
         view,
         transform
     );
-
-    ClearCachedPointers();
-    texture->Set(context.device, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    GLSetEnabledClientState(GL_VERTEX_ARRAY, true);
-    GLSetEnabledClientState(GL_TEXTURE_COORD_ARRAY, true);
-    GLSetEnabledClientState(GL_NORMAL_ARRAY, true);
-
-    GLStates::depthWrite.Set(false);
-    GLStates::depthTest.Set(false);        
-
+*/
     Vector4 scolor(1.0f, 1.0f, 1.0f, 1.0f), prev(scolor);
+    
+    Quad_ &q = /*c > (128 - GLYPH_START) ? */unrotated_point; //: rotated_points[char_index[c]]; // hacked to not rotate glyphs > 128
+    Glyphs *instance = Glyphs::GetInstance();
+    QuadListRenderer<CommonVertex> &renderer = instance->GetQuadRenderer();
+    QuadListAttributes attr;
+    attr.set_color(scolor);
+    attr.set_texture_id(texture->GetId());
+    QuadDrawList<CommonVertex> *list = renderer.get_draw_list(attr, texture);
 
     const char *newlinestart = s;
 
@@ -264,7 +220,7 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
             }
         } else if (parse_color(&s, scolor) && !_hack_override_color) {
             // flush
-            _RenderString(context, vertices, uvs, vcount, useInlineColor ? (prev * color) : color, texture);
+            //_RenderString(context, vertices, uvs, vcount, useInlineColor ? (prev * color) : color, texture);
             pvertices = vertices;
             puvs      = uvs;
             vcount    = 0;
@@ -278,29 +234,29 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
             GlyphExtent &ex = extents[c];
             
             if (c != 0) { // zero is space, don't bother rendering it..
+                
+                typedef typename QuadDrawList<CommonVertex>::quad_t quad_t;
+                quad_t quad;
 
                 float u0 = ex.uv0.x, v0 = ex.uv0.y,
                       u1 = ex.uv1.x, v1 = ex.uv1.y;
                 
-                Quad_ &q = /*c > (128 - GLYPH_START) ? */unrotated_point; //: rotated_points[char_index[c]]; // hacked to not rotate glyphs > 128
+                quad.vertices[0].position = q.point[0] + position;
+                quad.vertices[0].texture_coors = Tuple2f(u0, v0);
                 
-                /*
-                _append(position + q.point[0], u0, v0, &pvertices, &puvs);
-                _append(position + q.point[2], u0, v1, &pvertices, &puvs);
-                _append(position + q.point[3], u1, v1, &pvertices, &puvs);
+                quad.vertices[1].position = q.point[1] + position;
+                quad.vertices[1].texture_coors = Tuple2f(u1, v0);
                 
-                _append(position + q.point[0], u0, v0, &pvertices, &puvs);
-                _append(position + q.point[3], u1, v1, &pvertices, &puvs);
-                _append(position + q.point[1], u1, v0, &pvertices, &puvs);
-                 */
+                quad.vertices[2].position = q.point[2] + position;
+                quad.vertices[2].texture_coors = Tuple2f(u1, v1);
                 
-                _append(position + q.point[0], u0, v0, &pvertices, &puvs);
-                _append(position + q.point[1], u1, v0, &pvertices, &puvs);
-                _append(position + q.point[2], u0, v1, &pvertices, &puvs);
-                _append(position + q.point[3], u1, v1, &pvertices, &puvs);
+                quad.vertices[3].position = q.point[3] + position;
+                quad.vertices[3].texture_coors = Tuple2f(u0, v1);
                 
-                //vcount += VERTICES_PER_QUAD;
-                vcount += 4;
+                //std::cout << "glyph position " << position << std::endl;
+                //std::cout << "glyph corner   " << (q.point[0] + position) << std::endl;
+
+                list->add(quad);
             }
             position.x += ex.width * SCALE.x;
             s++;
@@ -315,11 +271,11 @@ void GlyphWriter::DrawString(RenderContext &context, const char *s, const Vector
             _RenderString(context, vertices, uvs, vcount, *_hack_override_color, texture);
         else
          */
-        _RenderString(context, vertices, uvs, vcount, render_color/*prev * color*/, texture);
+        //_RenderString(context, vertices, uvs, vcount, render_color/*prev * color*/, texture);
     }
 
-    GLStates::depthWrite.Set(true);
-    GLStates::depthTest.Set(true);
+    //GLStates::depthWrite.Set(true);
+    //GLStates::depthTest.Set(true);
     
     if (!buffer) {
         delete [] (unsigned *)data;

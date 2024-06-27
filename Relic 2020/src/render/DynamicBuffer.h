@@ -23,44 +23,48 @@ struct DynamicBuffer
 
     inline DynamicBuffer() : _reserves({ 0 }), _buffer(options<IndexType>(VertexType(), GL_TRIANGLES)) {}
 
-    inline VertexType       *vertex_data()                                    { return _vertices.data(); }
-    inline const VertexType *vertex_data()                              const { return _vertices.data(); }
-    inline size_t            vertex_count()                             const { return _vertices.size(); }
-    inline size_t            vertex_bytes_size()                        const { return _vertices.size() * sizeof(VertexType); }
+    inline VertexType       *vertex_data()                                     { return _vertices.data(); }
+    inline const VertexType *vertex_data()                               const { return _vertices.data(); }
+    inline size_t            vertex_count()                              const { return _vertices.size(); }
+    inline size_t            vertex_bytes_size()                         const { return _vertices.size() * sizeof(VertexType); }
 
-    inline IndexType       *index_data()                                      { return _indices.data(); }
-    inline const IndexType *index_data()                                const { return _indices.data(); }
-    inline size_t           index_count()                               const { return _indices.size(); }
-    inline size_t           index_bytes_size()                          const { return _indices.size() * sizeof(IndexType); }
+    inline IndexType        *index_data()                                      { return _indices.data(); }
+    inline const IndexType  *index_data()                                const { return _indices.data(); }
+    inline size_t            index_count()                               const { return _indices.size(); }
+    inline size_t            index_bytes_size()                          const { return _indices.size() * sizeof(IndexType); }
 
-    inline void             clear()                                           { _vertices.clear(); _indices.clear(); }
-    inline void             reserve(size_t vcount, size_t icount)             { _reserves = array_u32_t { uint32_t(vcount), uint32_t(icount) }; _invalidate(); }
-    
-    inline void             add_vertex(const VertexType &v)                   { _invalidate(); _vertices.push_back(v); }
-    inline void             add_vertices(std::span<VertexType> s)             { _invalidate(); append(s, _vertices); }
-    inline void             add_vertices(std::span<const VertexType> s)       { _invalidate(); append(s, _vertices); }
-    inline void             add_index(IndexType i)                            { _invalidate(); _indices.push_back(i); }
-    inline void             add_indices(std::span<IndexType> s)               { _invalidate(); append(s, _indices); }
-    inline void             add_indices(std::span<const IndexType> s)         { _invalidate(); append(s, _indices); }
-    inline void             add_last_index()                                  { if (!_vertices.empty()) add_index(_vertices.size() - 1); }
+    inline void              clear()                                           { _vertices.clear(); _indices.clear(); }
+    inline void              reserve(size_t vcount, size_t icount)             { _reserves = array_u32_t { uint32_t(vcount), uint32_t(icount) }; _invalidate(); }
 
-    inline void             add_indexed_quad(const quad_vertices_t &positions)
+    inline void              add_vertex(const VertexType &v)                   { _invalidate(); _vertices.push_back(v); }
+    inline void              add_vertices(std::span<VertexType> s)             { _invalidate(); append(s, _vertices); }
+    inline void              add_vertices(std::span<const VertexType> s)       { _invalidate(); append(s, _vertices); }
+    inline void              add_index(IndexType i)                            { _invalidate(); _indices.push_back(i); }
+    inline void              add_indices(std::span<IndexType> s)               { _invalidate(); append(s, _indices); }
+    inline void              add_indices(std::span<const IndexType> s)         { _invalidate(); append(s, _indices); }
+    inline void              add_last_index()                                  { if (!_vertices.empty()) add_index(last_index()); }
+
+    inline IndexType         last_index()                                const { return IndexType(_vertices.size() - 1); }
+
+    inline void              add_indexed_quad(const quad_vertices_t &pos)
     {
-        size_t last = _vertices.size();
-        static constexpr std::array<IndexType, 6> indices = { 0, 1, 2, 2, 1, 3 };
-        for (const auto &p : positions) { _vertices.push_back(p); }
-        for (auto i : indices) { _indices.push_back(i + last); }
+        IndexType next(_vertices.size());
+        static constexpr std::array<IndexType, 6> indices = { 0, 2, 1, 1, 2, 3 };
+        for (const auto &p : pos) { _vertices.push_back(p); }
+        for (auto i : indices) { _indices.push_back(i + next); }
         _invalidate();
     }
-    
+
     void render(RenderContext &context)
     {
         if (!_vertices.empty() && !_indices.empty()) {
             _buffer.set(vertex_data(), vertex_bytes_size(), index_data(), index_bytes_size());
+            GLSetEnabled(GL_TEXTURE_2D, false);
+            GLSetEnabled(GL_CULL_FACE, true);
             _buffer.render(context);
         }
     }
-    
+
     std::ostream &print(std::ostream &os, size_t count = 0)
     {
         os << "vertices ";
@@ -76,7 +80,7 @@ private:
     std::vector<VertexType> _vertices;
     std::vector<IndexType>  _indices;
     array_u32_t             _reserves;
-    
+
     inline void _invalidate()
     {
         _buffer.invalidate();

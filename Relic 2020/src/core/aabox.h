@@ -1,5 +1,4 @@
-#ifndef _AABOX_H
-#define _AABOX_H
+#pragma once
 
 #include "tuple3f.h"
 #include "plane.h"
@@ -15,7 +14,11 @@ public:
     Tuple3f minimum, maximum;
         
     inline AABox(const Tuple3f &a, const Tuple3f &b) : minimum(a.minimum(b)), maximum(a.maximum(b)) {}
-    inline AABox() : minimum(FLT_MAX, FLT_MAX, FLT_MAX), maximum(-FLT_MAX, -FLT_MAX, -FLT_MAX) {}    
+    inline AABox(const AABox &u) : minimum(u.minimum), maximum(u.maximum) {}
+    inline AABox() : minimum(FLT_MAX, FLT_MAX, FLT_MAX), maximum(-FLT_MAX, -FLT_MAX, -FLT_MAX) {}
+    
+    inline AABox &operator=(const AABox &u) { minimum = u.minimum; maximum = u.maximum; return *this; }
+    
     
     inline Tuple3f  size()   const { return maximum - minimum; }
     inline bool     empty()  const { return minimum.x >= maximum.x || minimum.y >= maximum.y || minimum.z >= maximum.z; }
@@ -55,11 +58,19 @@ public:
     
     inline void    insert(const AABox &box)
     {
-        insert(box.minimum);
-        insert(box.maximum);
+        if (valid() && box.valid()) {
+            minimum = minimum.minimum(box.minimum);
+            maximum = maximum.maximum(box.maximum);
+        } else if (box.valid()) {
+            minimum = box.minimum;
+            maximum = box.maximum;
+        }
     }
     inline void    insert(const Tuple3f &point)
     {
+        if (abs(point.x) == FLT_MAX) {
+            std::cout << "setting max";
+        }
         minimum = minimum.minimum(point);
         maximum = maximum.maximum(point);
     }
@@ -104,11 +115,18 @@ public:
     {
         return plane(outside_plane_enum(p));
     }
-    void print()
+
+    std::ostream &print(std::ostream &os) const
     {
-        printf("aabox (%.2f, %.2f, %.2f)-(%.2f, %.2f, %.2f)\n",
-               minimum.x, minimum.y, minimum.z, maximum.x, maximum.y, maximum.z);
+        if (empty()) {
+            return os;
+        }
+        os << "aabox ";
+        if (empty()) {
+            return os << "empty" << std::endl;
+        }
+        return os << "(" << minimum << " " << maximum << ")" << std::endl;
     }
 };
-    
-#endif // _AABOX_H
+
+inline std::ostream &operator<<(std::ostream &os, const AABox &u) { return u.print(os); }

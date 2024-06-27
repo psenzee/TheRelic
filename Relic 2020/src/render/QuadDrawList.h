@@ -9,6 +9,7 @@
 #include "DeviceTexture.h"
 #include "RenderContext.h"
 #include "OverheadCamera.h"
+#include "aabox.h"
 
 class RenderContext;
 class DeviceTexture;
@@ -33,10 +34,12 @@ public:
     inline const Vector3            &camera_position()                            const { return _camera_position; }
     inline void                      mark_changed()                                     { _changed = true; }
     inline bool                      transparent()                                const { return true; /* TODO */ }
-    inline void                      add(const quad_t &imp)                             { _quads.push_back(imp); }
-    inline void                      clear()                                            { _quads.clear(); _buffer.clear(); }
+    inline void                      add(const quad_t &imp)                             { _quads.push_back(imp); _add_to_aabox(imp); }
+    inline void                      clear()                                            { _quads.clear(); _buffer.clear(); _aabox = AABox(); }
     inline size_t                    prepare()                                          { return _prepare(); }
     inline bool                      render(RenderContext &context)                     { return _render(context); }
+    inline size_t                    count()                                      const { return _quads.size(); }
+    inline const AABox              &aabox()                                      const { return _aabox; }
 
 private:
     
@@ -55,7 +58,15 @@ private:
     buffer_t            _buffer;
     quad_array_t        _quads;
     Vector3             _camera_position;
+    AABox               _aabox;
     bool                _changed;
+    
+    void _add_to_aabox(const quad_t &q)
+    {
+        for (const auto &v : q.vertices) {
+            _aabox.insert(v.position);
+        }
+    }
     
     size_t _prepare()
     {

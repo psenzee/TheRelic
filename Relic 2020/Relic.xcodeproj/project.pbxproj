@@ -1346,7 +1346,6 @@
 		439DB9C012DE43CC00B06546 /* tuple2f.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tuple2f.h; path = src/core/tuple2f.h; sourceTree = "<group>"; };
 		439DB9C112DE43CC00B06546 /* tuple3f.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tuple3f.h; path = src/core/tuple3f.h; sourceTree = "<group>"; };
 		439DB9C212DE43CC00B06546 /* tuple4f.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tuple4f.h; path = src/core/tuple4f.h; sourceTree = "<group>"; };
-		439DB9C312DE43CC00B06546 /* vectors3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vectors3.h; path = src/core/vectors3.h; sourceTree = "<group>"; };
 		439DB9D412DE43EC00B06546 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = src/events/Event.h; sourceTree = "<group>"; };
 		439DB9D512DE43EC00B06546 /* EventDispatcher.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EventDispatcher.cpp; path = src/events/EventDispatcher.cpp; sourceTree = "<group>"; };
 		439DB9D612DE43EC00B06546 /* EventDispatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventDispatcher.h; path = src/events/EventDispatcher.h; sourceTree = "<group>"; };
@@ -4417,7 +4416,6 @@
 				439DB9C012DE43CC00B06546 /* tuple2f.h */,
 				439DB9C112DE43CC00B06546 /* tuple3f.h */,
 				439DB9C212DE43CC00B06546 /* tuple4f.h */,
-				439DB9C312DE43CC00B06546 /* vectors3.h */,
 			);
 			name = core;
 			sourceTree = "<group>";

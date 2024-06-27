@@ -521,7 +521,6 @@ void GameState::DrawOverlay(const GameTime &time)
         QuadRenderer::RenderScreenAlignedQuad(mOverlay, mOverlayColor,
                                               Vector3(size.x, size.y, distance), Vector3(-size.x, -size.y, distance),
                                               Vector2(0.f, 1.f), Vector2(1.f, 0.f));
-        Glyphs::GetInstance()->Render(rc, time);
         device->EnableDepthTest(true);
     }
 }
@@ -579,6 +578,14 @@ void GameState::Draw(const GameTime &time)
     DrawHud(time);
     DrawUi(time);
     DrawOverlay(time);
+
+    //GLSetDepthWrite(false);
+    //GLDepthTest(false);
+    //QuadListRenderer<CommonVertex> &r = Glyphs::GetInstance()->GetQuadRenderer();
+    Matrix4f m;
+    m.scale(50.1);
+    renderContext.transform = m;
+    Glyphs::GetInstance()->Render(renderContext, time);
 
     device->EndFrame();
 }

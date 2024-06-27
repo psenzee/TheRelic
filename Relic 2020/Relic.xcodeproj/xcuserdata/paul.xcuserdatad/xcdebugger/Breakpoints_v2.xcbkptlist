@@ -70,22 +70,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "6CA08F12-D2AA-4D06-870E-036A61C9FFB2"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "src/game/GameState.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "332"
-            endingLineNumber = "332"
-            landmarkName = "GameState::LoadRenderables()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "BB8D02CD-D525-47D0-999D-D4536341C33C"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -474,7 +458,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "129"
             endingLineNumber = "129"
-            landmarkName = "Lights::_Find(id)"
+            landmarkName = "Lights::Apply(device, camera)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -662,6 +646,117 @@
                   startingLineNumber = "150"
                   endingLineNumber = "150"
                   offsetFromSymbolStart = "543">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "302E70C2-8B51-445E-AED4-61A1075E511A"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/game/Game.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "328"
+            endingLineNumber = "328"
+            landmarkName = "Game::Draw(time)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "302E70C2-8B51-445E-AED4-61A1075E511A - fce94165abb8ccf0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Game::Draw(GameTime const&amp;)"
+                  moduleName = "Relic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/Relic%202020/src/game/Game.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "327"
+                  endingLineNumber = "327"
+                  offsetFromSymbolStart = "1328">
+               </Location>
+               <Location
+                  uuid = "302E70C2-8B51-445E-AED4-61A1075E511A - fce94165abb8ccd1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Game::Draw(GameTime const&amp;)"
+                  moduleName = "Relic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/Relic%202020/src/game/Game.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "328"
+                  endingLineNumber = "328"
+                  offsetFromSymbolStart = "1328">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D243BF22-F8BD-4B50-8548-24AC9D856EF7"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/core/aabox.h"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "128"
+            endingLineNumber = "128"
+            landmarkName = "print(os)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "D243BF22-F8BD-4B50-8548-24AC9D856EF7 - 5286357eb4864b5f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "AABox::print(std::__1::basic_ostream&lt;char, std::__1::char_traits&lt;char&gt;&gt;&amp;) const"
+                  moduleName = "Relic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/Relic%202020/src/core/aabox.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "120"
+                  endingLineNumber = "120"
+                  offsetFromSymbolStart = "133">
+               </Location>
+               <Location
+                  uuid = "D243BF22-F8BD-4B50-8548-24AC9D856EF7 - 5286357eb4864bf8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "AABox::print(std::__1::basic_ostream&lt;char, std::__1::char_traits&lt;char&gt;&gt;&amp;) const"
+                  moduleName = "Relic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/Relic%202020/src/core/aabox.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "123"
+                  endingLineNumber = "123"
+                  offsetFromSymbolStart = "133">
+               </Location>
+               <Location
+                  uuid = "D243BF22-F8BD-4B50-8548-24AC9D856EF7 - 5286357eb4864a57"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "AABox::print(std::__1::basic_ostream&lt;char, std::__1::char_traits&lt;char&gt;&gt;&amp;) const"
+                  moduleName = "Relic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/Relic%202020/src/core/aabox.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "128"
+                  endingLineNumber = "128"
+                  offsetFromSymbolStart = "133">
                </Location>
             </Locations>
          </BreakpointContent>

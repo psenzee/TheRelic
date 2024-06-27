@@ -83,8 +83,8 @@ public:
     inline self_t       &normalize()                                               { float d = length(); if (d != 0.0f) { d = 1.0f / d; x *= d; y *= d; z *= d; } return *this; }
     inline self_t        normal()                                            const { self_t r(*this); r.normalize(); return r; }
 
-    inline self_t        minimum(const self_t &u)                            const { return self_t(x < u.x ? x : u.x, y < u.y ? y : u.y, z < u.z ? z : u.z); }
-    inline self_t        maximum(const self_t &u)                            const { return self_t(x > u.x ? x : u.x, y > u.y ? y : u.y, z > u.z ? z : u.z); }
+    inline self_t        minimum(const self_t &u)                            const { return self_t(std::min(x, u.x), std::min(y, u.y), std::min(z, u.z)); }
+    inline self_t        maximum(const self_t &u)                            const { return self_t(std::max(x, u.x), std::max(y, u.y), std::max(z, u.z)); }
   
     inline Tuple2f       xy()                                                const { return Tuple2f(x, y); }
     inline Tuple2f       xz()                                                const { return Tuple2f(x, z); }

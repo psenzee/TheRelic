@@ -5,6 +5,7 @@
 #include "GLAbstract.h"
 #include "QuadDrawList.h"
 #include "DeviceTexture.h"
+#include "AABox.h"
 
 class RenderContext;
 class DeviceTexture;
@@ -30,13 +31,16 @@ struct QuadListRenderer
         get_draw_list(attr, texture)->add(quad);
     }
 
-    void clear()                   { for (const auto & [attr, set] : _sets) { set->clear(); } }
-    void prepare()                 { for (const auto & [attr, set] : _sets) { set->prepare(); } }
-    void render(RenderContext &rc) { for (const auto & [attr, set] : _sets) { set->render(rc); } }
+    void    clear()                         { for (const auto & [attr, set] : _sets) { set->clear(); } }
+    void    prepare()                       { for (const auto & [attr, set] : _sets) { set->prepare(); } }
+    void    render(RenderContext &rc)       { for (const auto & [attr, set] : _sets) { set->render(rc); } }
+    size_t  count()                   const { size_t count = 0; for (const auto & [attr, set] : _sets) { count += set->count(); } return count; }
+    AABox   aabox()                   const { AABox aab; for (const auto & [attr, set] : _sets) { const auto &ab = set->aabox(); ab.print(std::cout); aab.insert(ab); } return aab; }
 
 private:
 
     typedef std::unordered_map<QuadListAttributes, quad_list_t *, hasher_t<QuadListAttributes> > map_t;
 
     map_t _sets;
+    AABox _aabox;
 };
