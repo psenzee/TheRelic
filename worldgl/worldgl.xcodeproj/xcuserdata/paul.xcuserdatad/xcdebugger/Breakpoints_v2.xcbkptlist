@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "592D0D68-76CB-42D2-B443-CE64AF29B22E"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4BD8C343-73F3-4540-A981-BBAD40EF60A5"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "worldgl/main.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "95"
+            endingLineNumber = "95"
+            landmarkName = "draw()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "4BD8C343-73F3-4540-A981-BBAD40EF60A5 - bbdf4abb523ede62"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "UiBase::draw()"
+                  moduleName = "worldgl"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/worldgl/worldgl/main.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "89"
+                  endingLineNumber = "89"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  uuid = "4BD8C343-73F3-4540-A981-BBAD40EF60A5 - bbdf4abb523edfa4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "UiBase::draw()"
+                  moduleName = "worldgl"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/repo_p/TheRelic/worldgl/worldgl/main.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "91"
+                  endingLineNumber = "91"
+                  offsetFromSymbolStart = "59">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
